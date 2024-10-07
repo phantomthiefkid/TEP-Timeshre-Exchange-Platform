@@ -2,45 +2,54 @@ import React, { useState } from 'react';
 import bgSignIn from '../../assets/bgSignInSignUp.png';
 import logoTEP from '../../assets/logoTEPblack.png';
 import { useDispatch, useSelector } from "react-redux";
-import { loginAccount } from '../../redux/UserSlice/SignIn';
 import { useNavigate } from 'react-router-dom';
-
+import { postLogin } from '../../service/accountAPI/accountService';
+import { setError, setIsLoading, setIsLogin, setRoleName, setUserId } from '../../redux/UserSlice/SignIn';
+import { jwtDecode } from 'jwt-decode';
 const SignIn = () => {
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const { loading, error } = useSelector((state) => state.isLogin);
-    
-    const isLogin = useSelector((state) => state.isLogin.isLogin);
-    
-    // const roleName = localStorage.getItem('roleName') || useSelector((state) => state.isLogin.roleName);
-    const handleLoginEvent = (e) => {
+    const error = useSelector((state) => state.isLogin.isError)
+    const handleLoginEvent = async (e) => {
         e.preventDefault();
 
         let userCredentials = {
             email, password
         };
 
-        dispatch(loginAccount(userCredentials)).then((result) => {
-            if (result.payload) {
-               
-                // Clear the email and password input fields
-                setEmail('');
-                setPassword('');
-                const roleName = localStorage.getItem('roleName');
-                console.log('ADMIN:' , roleName)
-                // Navigate based on role
-                if (roleName === 'ADMIN') {
-                    navigate('/admin');
-                } else if (roleName === 'SYSTEMSTAFF') {
-                    navigate('/systemstaff');
-                } else {
-                    navigate('/signin'); // If the role is unrecognized, navigate back to the sign-in page
-                }
+        // Gọi API để đăng nhập
+        let data = await postLogin(userCredentials);
+
+        if (data && data.data && data.data.accessToken) {
+            // Giải mã accessToken để lấy RoleName
+            const decodedToken = jwtDecode(data.data.accessToken);
+            const roleName = decodedToken.RoleName; // Giả sử token có trường RoleName
+            localStorage.setItem("token", data.data.accessToken)
+            localStorage.setItem("roleName", roleName)
+            // Dispatch thông tin login vào Redux
+            dispatch(setIsLogin(true)); // Đánh dấu trạng thái đăng nhập là true
+            dispatch(setRoleName(roleName)); // Lưu RoleName vào Redux
+            dispatch(setIsLoading(false));
+            dispatch(setError(false))
+            dispatch(setUserId(decodedToken.userId))
+           
+            // Điều hướng sau khi đăng nhập thành công
+            if (roleName === "ADMIN") {
+                navigate("/admin")
+            } else if (roleName === "SYSTEMSTAFF") {
+                navigate("/systemstaff")
+            }else if (roleName === "TIMESHARECOMPANY") {
+                navigate("/TIMESHARECOMPANY")
+            } else {
+                navigate("/")
             }
-        });
+        } else {
+            dispatch(setError(true));
+            console.error("Login failed:", data.error || "Unknown error");
+        }
     };
 
     return (
@@ -110,12 +119,12 @@ const SignIn = () => {
 
                         {/* Sign In Button */}
                         <div className='space-y-3'>
-                            <span className='text-red-600'>{error ? "Tài khoản hoặc mật khẩu không đúng!!" : ""}</span>
+                        <span className='text-red-600'>{error ? "Tài khoản hoặc mật khẩu không đúng!!" : ""}</span>
                             <button
                                 type='submit'
                                 className='w-full py-2 px-4 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500'
                             >
-                                {loading ? 'Loading' : 'Đăng nhập'}
+                                Đăng nhập
                             </button>
                         </div>
                     </form>

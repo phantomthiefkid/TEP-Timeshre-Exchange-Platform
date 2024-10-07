@@ -22,13 +22,35 @@ import FeeddbackList from './pages/timeshareStaffLayout/feedbackList';
 import RentalListManagement from './pages/timeshareStaffLayout/rentalListManagement';
 import RequestListManagement from './pages/timeshareStaffLayout/requestListManagement';
 import TimeshareStaffLayout from './pages/timeshareStaffLayout/timeshareStaffLayout';
-import { useSelector } from 'react-redux';
-
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect, useState } from 'react';
+import { jwtDecode } from 'jwt-decode';
+import { setIsLogin, setRoleName, setUserId } from './redux/UserSlice/SignIn';
+import Loading from './components/LoadingComponent/loading';
 function App() {
-  
-  const roleName = localStorage.getItem('roleName') || useSelector((state) => state.isLogin.roleName);
-  const isLogin = useSelector((state) => state.isLogin.isLogin);
-  
+  const dispatch = useDispatch();
+  const { isLogin, role } = useSelector((state) => state.isLogin)
+  const [isLoading, setIsLoading] = useState(true);
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      try {
+        const decodedToken = jwtDecode(token);
+        localStorage.setItem("roleName", decodedToken.RoleName);
+        dispatch(setRoleName(decodedToken.RoleName));
+        dispatch(setIsLogin(true));
+        dispatch(setUserId(decodedToken.userId))
+      } catch (error) {
+        console.log("Invalid token", error);
+        localStorage.removeItem("token")
+        localStorage.removeItem("roleName")
+      }
+    }
+    setIsLoading(false);
+  }, [dispatch])
+  if (isLoading) {
+    return <Loading/>; // Hiển thị trạng thái chờ khi kiểm tra đăng nhập
+  }
   return (
     <BrowserRouter>
       <Routes>
@@ -41,7 +63,7 @@ function App() {
         <Route path="/timesharecompanydetail" element={<TimeshareCompanyDetail />} />
 
         {/* Admin routes */}
-        <Route path='/admin' element={<ProtectRoute isAllowed={roleName === 'ADMIN'} redirectPath='/signin' />}>
+        <Route path='/admin' element={<ProtectRoute isAllowed={isLogin && role === 'ADMIN'} redirectPath='/signin' />}>
           <Route path="/admin" element={<AdminLayout />}>
             <Route index element={<Navigate to="/admin/usermanagement" />} />
             <Route path="/admin/usermanagement" element={<UserManagement />} />
@@ -52,7 +74,7 @@ function App() {
 
 
         {/* System staff routes */}
-        <Route path='/systemstaff' element={<ProtectRoute isAllowed={roleName === 'SYSTEMSTAFF'} redirectPath='/signin' />}>
+        <Route path='/systemstaff' element={<ProtectRoute isAllowed={isLogin && role === 'SYSTEMSTAFF'} redirectPath='/signin' />}>
           <Route element={<SystemStaffLayout />}>
             <Route index element={<Dashboard />} />
             <Route path="dashboard" element={<Dashboard />} />

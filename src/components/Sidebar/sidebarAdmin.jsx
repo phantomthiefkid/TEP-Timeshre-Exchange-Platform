@@ -5,8 +5,8 @@ import { menuAdminItem } from '../../util/MenuSidebarItem';
 import logoUnwind from "../../assets/logoTEP.png";
 import logoOnly from "../../assets/LogoUnwind.png";
 import { motion } from 'framer-motion';
-import { logout } from '../../redux/UserSlice/SignIn';
 import { useDispatch } from "react-redux";
+import { setIsLogin, setRoleName } from '../../redux/UserSlice/SignIn';
 const SidebarAdmin = () => {
   const [isOpen, setIsOpen] = useState(true);
   const dispatch = useDispatch();
@@ -29,13 +29,13 @@ const SidebarAdmin = () => {
     }),
   };
 
-
   const handleLogout = () => {
-    dispatch(logout());
-    // Navigate right after dispatch (assuming logout doesn't need to wait for anything)
-    navigate("/signin");
-  };
-
+    localStorage.removeItem('token');
+    localStorage.removeItem('roleName');
+    dispatch(setIsLogin(false))
+    dispatch(setRoleName(""))
+    navigate("/signin")
+  }
 
   return (
     <div className="min-h-screen flex border-r-2 border-gray-200">

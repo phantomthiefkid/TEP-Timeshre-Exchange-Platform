@@ -1,16 +1,39 @@
-import React from 'react';
-import { SearchIcon, GlobeIcon, BellIcon } from '@heroicons/react/solid';
-
+import React, { useEffect, useState } from 'react';
+import { GlobeIcon, BellIcon } from '@heroicons/react/solid';
+import { getAccountInfo } from '../../service/accountAPI/accountService';
+import { useSelector } from 'react-redux';
 const HeaderAdmin = () => {
-  const adminName = 'Huỳnh Gia Vinh'; // You can replace this with dynamic data
-  const adminEgmail = 'admin@gmail.com';
+  const [info, setInfo] = useState();
+  const { userId } = useSelector((state) => state.isLogin)
+  console.log("Before: ", userId)
+  const fetchAccountInfo = async () => {
+    console.log("fetch: ", userId)
+    let data = await getAccountInfo(userId);
+    try {
+      if (data) {
+        setInfo(data.data);
+      }
+    } catch (error) {
+      console.error("Error fetching account info:", error);
+    }
+
+  };
+
+
+  useEffect(() => {
+    if (userId) {
+      console.log("UserId is now set, fetching account info");
+      fetchAccountInfo();
+    }
+  }, [userId]);  // Gọi lại useEffect khi userId được thay đổi
+
 
   return (
     <header className="bg-white shadow-md border py-4 px-6 flex justify-between items-center">
       {/* Welcome Message */}
       <div className='px-4'>
         <h1 className="text-lg text-gray-500 font-semibold">Welcome,</h1>
-        <h1 className='font-medium text-xl text-gray-600'> {adminName}!</h1>
+        <h1 className='font-medium text-xl text-gray-600'> {info? info.roleRoleName : ""}!</h1>
       </div>
 
       <div className="flex items-center space-x-10">
@@ -23,8 +46,8 @@ const HeaderAdmin = () => {
         {/* Admin Profile */}
         <div className="flex items-center space-x-8">
           <div className="text-left">
-            <h2 className="text-lg font-semibold">{adminName}</h2>
-            <p className="text-md text-gray-500">{adminEgmail}</p>
+            <h2 className="text-lg font-semibold">{info? info.roleRoleName : ""}</h2>
+            <p className="text-md text-gray-500">{info? info.email : ""}</p>
           </div>
           {/* Avatar */}
           <img
