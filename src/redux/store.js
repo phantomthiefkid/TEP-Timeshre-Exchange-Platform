@@ -1,7 +1,9 @@
 import { configureStore } from "@reduxjs/toolkit";
+import loginSlice from './UserSlice/SignIn'
 
-export const store =  configureStore({
+export default configureStore({
     reducer: {
-
+        isLogin: loginSlice
     }
 })
+
