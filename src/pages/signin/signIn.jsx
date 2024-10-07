@@ -1,27 +1,76 @@
-import React from 'react';
+import React, { useState } from 'react';
 import bgSignIn from '../../assets/bgSignInSignUp.png';
 import logoTEP from '../../assets/logoTEPblack.png';
-
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from 'react-router-dom';
+import { postLogin } from '../../service/accountAPI/accountService';
+import { setError, setIsLoading, setIsLogin, setRoleName, setUserId } from '../../redux/UserSlice/SignIn';
+import { jwtDecode } from 'jwt-decode';
 const SignIn = () => {
+
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const error = useSelector((state) => state.isLogin.isError)
+    const handleLoginEvent = async (e) => {
+        e.preventDefault();
+
+        let userCredentials = {
+            email, password
+        };
+
+        // Gọi API để đăng nhập
+        let data = await postLogin(userCredentials);
+
+        if (data && data.data && data.data.accessToken) {
+            // Giải mã accessToken để lấy RoleName
+            const decodedToken = jwtDecode(data.data.accessToken);
+            const roleName = decodedToken.RoleName; // Giả sử token có trường RoleName
+            localStorage.setItem("token", data.data.accessToken)
+            localStorage.setItem("roleName", roleName)
+            // Dispatch thông tin login vào Redux
+            dispatch(setIsLogin(true)); // Đánh dấu trạng thái đăng nhập là true
+            dispatch(setRoleName(roleName)); // Lưu RoleName vào Redux
+            dispatch(setIsLoading(false));
+            dispatch(setError(false))
+            dispatch(setUserId(decodedToken.userId))
+           
+            // Điều hướng sau khi đăng nhập thành công
+            if (roleName === "ADMIN") {
+                navigate("/admin")
+            } else if (roleName === "SYSTEMSTAFF") {
+                navigate("/systemstaff")
+            }else if (roleName === "TIMESHARECOMPANY") {
+                navigate("/TIMESHARECOMPANY")
+            } else {
+                navigate("/")
+            }
+        } else {
+            dispatch(setError(true));
+            console.error("Login failed:", data.error || "Unknown error");
+        }
+    };
+
     return (
         <div className='min-h-[100vh] grid grid-cols-1 lg:grid-cols-2'>
-            
+
             <div className='hidden lg:block w-full'>
                 <img className='max-h-[100vh] w-full object-cover' src={bgSignIn} alt='Background' />
             </div>
 
-          
+
             <div className='relative col-span-1 flex justify-center items-center p-6 lg:p-12'>
-             
+
                 <div className='absolute inset-0 lg:hidden bg-cover bg-center' style={{ backgroundImage: `url('https://scontent.fsgn2-10.fna.fbcdn.net/v/t39.30808-6/459368859_1954583321621123_4504985679253766720_n.jpg?stp=dst-jpg_p526x296&_nc_cat=109&ccb=1-7&_nc_sid=127cfc&_nc_eui2=AeEsBf99JUFPr7bnaNmK7uGVTpJOClJ7kVdOkk4KUnuRV3lUETciYH33_e0udy1dKsM1PJHm_-yxSdcpcn696HYX&_nc_ohc=12aThnS8KoAQ7kNvgFXlSC9&_nc_ht=scontent.fsgn2-10.fna&_nc_gid=Ax_0LO2-fjW_eWUY0Sni2qQ&oh=00_AYB2UIW2IYAJUr_-8hAy8dq-EcWEnYZnJ54ZntyzrSSNlQ&oe=66E7B493')` }} />
                 <div className='w-full max-w-md relative z-10'>
-                  
+
                     <div className='mb-8 text-center'>
-                    <a href='/'><img className='w-[200px] lg:w-[205px] mx-auto' src={logoTEP} alt='Logo' /></a>
+                        <a href='/'><img className='w-[200px] lg:w-[205px] mx-auto' src={logoTEP} alt='Logo' /></a>
                     </div>
 
-                  
-                    <form className='space-y-6 bg-white p-6'>
+
+                    <form className='space-y-6 bg-white p-6' onSubmit={handleLoginEvent}>
                         <div className='relative'>
                             <label htmlFor='email' className='block text-sm font-medium text-gray-700'>Email</label>
 
@@ -32,13 +81,15 @@ const SignIn = () => {
                                 </svg>
                             </div>
 
-                       
+
                             <input
                                 type='email'
                                 id='email'
                                 name='email'
                                 placeholder='Nhập địa chỉ email của bạn'
                                 required
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
                                 className='mt-1 block w-full pl-10 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm'
                             />
                         </div>
@@ -60,12 +111,15 @@ const SignIn = () => {
                                 name='password'
                                 placeholder='Nhập mật khẩu'
                                 required
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
                                 className='mt-1 block w-full pl-10 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm'
                             />
                         </div>
 
                         {/* Sign In Button */}
-                        <div>
+                        <div className='space-y-3'>
+                        <span className='text-red-600'>{error ? "Tài khoản hoặc mật khẩu không đúng!!" : ""}</span>
                             <button
                                 type='submit'
                                 className='w-full py-2 px-4 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500'

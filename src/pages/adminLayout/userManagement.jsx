@@ -1,11 +1,24 @@
 import { DocumentIcon, DotsVerticalIcon, PlusIcon } from '@heroicons/react/outline';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { userData } from '../../util/ResortData';
 import CountUp from 'react-countup'
 import HeaderAdmin from '../../components/Header/headerAdmin';
+import { getAllUser } from '../../service/adminAPIService/adminAPI';
 const UserManagement = () => {
-
+  const [allUser, setAllUser] = useState([]);
+  const fetchAllUser = async () => {
+    let data = await getAllUser();
+    try {
+      setAllUser(data.data.content)
+      console.log(data.data.content)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  useEffect(() => {
+    fetchAllUser();
+  }, [])
   return (
     <div>
       <HeaderAdmin />
@@ -17,10 +30,10 @@ const UserManagement = () => {
           <p className="text-md font-medium text-gray-600 mt-2">Quản lí tài khoản người dùng và quyền hạn tài khoản ở đây.</p>
         </div>
         <div className="flex space-x-4">
-        <span className="bg-red-100 text-red-600 px-2 py-1 rounded-full text-sm font-medium">Tất cả: <CountUp start={0} end={40} duration={2}/></span>
-          <span className="bg-blue-100 text-blue-600 px-2 py-1 rounded-full text-sm font-medium">Customer: <CountUp start={0} end={20} duration={2}/></span>
-          <span className="bg-green-100 text-green-600 px-2 py-1 rounded-full text-sm font-medium">System Staff: <CountUp start={0} end={10} duration={2}/></span>
-          <span className="bg-yellow-100 text-yellow-600 px-2 py-1 rounded-full text-sm font-medium">Timeshare Company: <CountUp start={0} end={10} duration={2}/></span>
+          <span className="bg-red-100 text-red-600 px-2 py-1 rounded-full text-sm font-medium">Tất cả: <CountUp start={0} end={40} duration={2} /></span>
+          <span className="bg-blue-100 text-blue-600 px-2 py-1 rounded-full text-sm font-medium">Customer: <CountUp start={0} end={20} duration={2} /></span>
+          <span className="bg-green-100 text-green-600 px-2 py-1 rounded-full text-sm font-medium">System Staff: <CountUp start={0} end={10} duration={2} /></span>
+          <span className="bg-yellow-100 text-yellow-600 px-2 py-1 rounded-full text-sm font-medium">Timeshare Company: <CountUp start={0} end={10} duration={2} /></span>
         </div>
       </div>
 
@@ -43,7 +56,7 @@ const UserManagement = () => {
 
           {/* Add New User */}
           <button className="px-6 flex items-center gap-4 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-500">
-            <PlusIcon className='w-7 h-7'/>
+            <PlusIcon className='w-7 h-7' />
             Thêm người dùng mới
           </button>
         </div>
@@ -63,22 +76,22 @@ const UserManagement = () => {
             </tr>
           </thead>
           <tbody className="bg-white">
-            {userData && userData.map((item, index) => (
+            {allUser && allUser.map((item, index) => (
               <tr key={index}>
                 <td className="p-4">{index + 1}</td>
                 <td className="p-4 flex items-center">
                   <img
-                    src={item.avatar}
+                    src="https://scontent.fsgn2-7.fna.fbcdn.net/v/t39.30808-6/457790295_1947970998949022_3066255129954259156_n.jpg?_nc_cat=108&ccb=1-7&_nc_sid=6ee11a&_nc_eui2=AeFoY4GYNi_qQDgWWYTVmkUJddJ_WJqplOh10n9YmqmU6A-DFFr1-u1kpgPXw4WLuc3ejG4XhxS9QWj-l3PSn8tF&_nc_ohc=GF-jF4aByOYQ7kNvgH44j7n&_nc_ht=scontent.fsgn2-7.fna&_nc_gid=AyHc8LeK2Ims_L1Rgaj2CbU&oh=00_AYDHhjUXq1VxCYQcpSWtwpX0zSw8lefq0FzEpUIg2uuszA&oe=670A0CD9            "
                     alt={`${item.name}'s avatar`}
                     className="w-10 h-10 rounded-full mr-2" // Adjust size as needed
                   />
                   <div>
-                    <p className="font-semibold text-gray-700 text-lg">{item.name}</p> {/* Display Name */}
+                    <p className="font-semibold text-gray-700 text-lg">{item.userName? item.userName : "Null"}</p> {/* Display Name */}
                     <p className="text-gray-500 text-md">{item.email}</p> {/* Display Email */}
                   </div>
                 </td>
                 <td className="p-4">{item.phone}</td>
-                <td className="p-4">{item.role}</td>
+                <td className="p-4">{item.roleRoleName}</td>
                 <td className="p-4 text-center">
                   {/* <input
                     type="checkbox"

@@ -21,7 +21,7 @@ const TimeshareCompany = () => {
             <Navigation />
             <div
                 style={{
-                    backgroundImage: "url('https://scontent.fsgn2-9.fna.fbcdn.net/v/t39.30808-6/461264804_1965790763833712_3625045724339746514_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=127cfc&_nc_eui2=AeHSbvO0imkv0UwNGpkAkMX7sL8keMoax1WwvyR4yhrHVe2crmTbS86_KO183YN41RMkN2djwHwfP6vZ0AM3Co6e&_nc_ohc=RS-5JbDeB7wQ7kNvgHmOpJL&_nc_ht=scontent.fsgn2-9.fna&_nc_gid=A2Fd6vbdcf9P86STO0h0eVQ&oh=00_AYAa_p_329SqMPimVTx4VQoCK2aem-who0S7AnVdKkuiuQ&oe=66F98E5E')",
+                    backgroundImage: "url('https://scontent.fsgn2-9.fna.fbcdn.net/v/t39.30808-6/461264804_1965790763833712_3625045724339746514_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=127cfc&_nc_eui2=AeHSbvO0imkv0UwNGpkAkMX7sL8keMoax1WwvyR4yhrHVe2crmTbS86_KO183YN41RMkN2djwHwfP6vZ0AM3Co6e&_nc_ohc=jwUgUEipcjwQ7kNvgGbTyW1&_nc_ht=scontent.fsgn2-9.fna&_nc_gid=Awv0VGGMltnjplQrbRVCxkt&oh=00_AYCQ8RkGj8VQ7Lt93iDIOTVww7IjFzPCPlZGF5ep2DRYOg&oe=6709281E')",
                     backgroundSize: 'cover',
                     backgroundPosition: 'center'
                 }}

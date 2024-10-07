@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
-import { NavLink } from "react-router-dom";
-import { ChevronLeftIcon, ChevronRightIcon, LogoutIcon,  } from '@heroicons/react/solid';
+import { NavLink, useNavigate } from "react-router-dom";
+import { ChevronLeftIcon, ChevronRightIcon, LogoutIcon, } from '@heroicons/react/solid';
 import { menuAdminItem } from '../../util/MenuSidebarItem';
 import logoUnwind from "../../assets/logoTEP.png";
 import logoOnly from "../../assets/LogoUnwind.png";
 import { motion } from 'framer-motion';
-
+import { useDispatch } from "react-redux";
+import { setIsLogin, setRoleName } from '../../redux/UserSlice/SignIn';
 const SidebarAdmin = () => {
   const [isOpen, setIsOpen] = useState(true);
-
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const toggleSidebar = () => setIsOpen(!isOpen);
 
   // Animation variants for menu items
@@ -26,6 +28,14 @@ const SidebarAdmin = () => {
       },
     }),
   };
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('roleName');
+    dispatch(setIsLogin(false))
+    dispatch(setRoleName(""))
+    navigate("/signin")
+  }
 
   return (
     <div className="min-h-screen flex border-r-2 border-gray-200">
@@ -116,19 +126,16 @@ const SidebarAdmin = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
+          onClick={handleLogout}
         >
-          <NavLink
-            to="/logout"
-            className={({ isActive }) =>
-              `flex items-center space-x-3 ml-4 p-3 hover:bg-red-600 duration-200 ease-in-out hover:rounded-l-full hover:text-white 
-              ${isActive ? 'bg-red-600 text-white rounded-l-full shadow-lg' : ''}`
-            }
+          <div
+            className="flex items-center space-x-3 ml-4 p-3 hover:bg-red-600 duration-200 ease-in-out hover:rounded-l-full hover:text-white"
           >
             <motion.div whileHover={{ rotate: -10 }}> {/* Add slight rotation on hover */}
               <LogoutIcon className="h-6 w-6" />
             </motion.div>
-            {isOpen && <span className="text-lg">Đăng xuất</span>}
-          </NavLink>
+            {isOpen && <button className="text-lg">Đăng xuất</button>}
+          </div>
         </motion.div>
       </motion.div>
     </div>
