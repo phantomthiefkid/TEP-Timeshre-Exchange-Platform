@@ -1,12 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import { ChevronLeftIcon, ChevronRightIcon, LogoutIcon, } from '@heroicons/react/solid';
-import { menuAdminItem } from '../../util/MenuSidebarItem';
+import {
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  LogoutIcon,
+} from "@heroicons/react/solid";
+import { menuAdminItem } from "../../util/MenuSidebarItem";
 import logoUnwind from "../../assets/logoTEP.png";
 import logoOnly from "../../assets/LogoUnwind.png";
-import { motion } from 'framer-motion';
+import { motion } from "framer-motion";
 import { useDispatch } from "react-redux";
-import { setIsLogin, setRoleName } from '../../redux/UserSlice/SignIn';
+import { setIsLogin, setRoleName } from "../../redux/UserSlice/SignIn";
 const SidebarAdmin = () => {
   const [isOpen, setIsOpen] = useState(true);
   const dispatch = useDispatch();
@@ -22,7 +26,7 @@ const SidebarAdmin = () => {
       x: 0,
       transition: {
         delay: index * 0.1,
-        type: 'spring',
+        type: "spring",
         stiffness: 300,
         damping: 20,
       },
@@ -30,19 +34,19 @@ const SidebarAdmin = () => {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('roleName');
-    dispatch(setIsLogin(false))
-    dispatch(setRoleName(""))
-    navigate("/signin")
-  }
+    localStorage.removeItem("token");
+    localStorage.removeItem("roleName");
+    dispatch(setIsLogin(false));
+    dispatch(setRoleName(""));
+    navigate("/signin");
+  };
 
   return (
     <div className="min-h-screen flex border-r-2 border-gray-200">
       {/* Sidebar */}
       <motion.div
-        initial={{ width: isOpen ? '6rem' : '18rem' }}
-        animate={{ width: isOpen ? '18rem' : '6rem' }}
+        initial={{ width: isOpen ? "6rem" : "18rem" }}
+        animate={{ width: isOpen ? "18rem" : "6rem" }}
         transition={{ duration: 0.5 }}
         className="relative bg-gradient-to-b from-custom-blue via-gray-700 to-gray-500 shadow-xl text-gray-900 space-y-6 min-h-screen flex flex-col justify-between"
       >
@@ -61,8 +65,12 @@ const SidebarAdmin = () => {
 
         {/* Logo and Title */}
         <div>
-          <motion.div className="flex items-center space-x-2 mb-8 px-6"
-            initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
+          <motion.div
+            className="flex items-center space-x-2 mb-8 px-6"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
+          >
             {isOpen ? (
               <img src={logoUnwind} className="w-auto" />
             ) : (
@@ -71,7 +79,9 @@ const SidebarAdmin = () => {
           </motion.div>
 
           <motion.div
-            initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
             className="text-center"
           >
             {isOpen ? (
@@ -83,7 +93,7 @@ const SidebarAdmin = () => {
           {/* Menu Items */}
           <ul className="space-y-4 py-6 border-t-2 border-gray-400">
             {menuAdminItem
-              .filter(item => item.visible)
+              .filter((item) => item.visible)
               .map((item, index) => (
                 <motion.li
                   key={index}
@@ -91,18 +101,22 @@ const SidebarAdmin = () => {
                   initial="hidden"
                   animate="visible"
                   variants={menuItemVariants}
-                  whileHover={{ scale: 1.05 }}  // Slight scale on hover
+                  whileHover={{ scale: 1.05 }} // Slight scale on hover
                 >
                   <NavLink
                     to={item.path}
                     className={({ isActive }) =>
                       `flex items-center space-x-3 ml-4 p-3 hover:bg-blue-800 duration-75 ease-in-out hover:rounded-l-3xl 
-          ${isActive ? 'bg-blue-800 text-white rounded-l-3xl shadow-xl' : 'text-gray-300'}`
+          ${
+            isActive
+              ? "bg-blue-800 text-white rounded-l-3xl shadow-xl"
+              : "text-gray-300"
+          }`
                     }
                   >
                     <motion.div
-                      style={{ color: item.color }}  // Apply the color from item.color
-                      whileHover={{ rotate: 10 }}  // Add slight rotation on hover
+                      style={{ color: item.color }} // Apply the color from item.color
+                      whileHover={{ rotate: 10 }} // Add slight rotation on hover
                     >
                       {item.icon}
                     </motion.div>
@@ -114,7 +128,6 @@ const SidebarAdmin = () => {
                   </NavLink>
                 </motion.li>
               ))}
-
           </ul>
         </div>
 
@@ -128,10 +141,10 @@ const SidebarAdmin = () => {
           transition={{ duration: 0.5 }}
           onClick={handleLogout}
         >
-          <div
-            className="flex items-center space-x-3 ml-4 p-3 hover:bg-red-600 duration-200 ease-in-out hover:rounded-l-full hover:text-white"
-          >
-            <motion.div whileHover={{ rotate: -10 }}> {/* Add slight rotation on hover */}
+          <div className="flex items-center space-x-3 ml-4 p-3 hover:bg-red-600 duration-200 ease-in-out hover:rounded-l-full hover:text-white">
+            <motion.div whileHover={{ rotate: -10 }}>
+              {" "}
+              {/* Add slight rotation on hover */}
               <LogoutIcon className="h-6 w-6" />
             </motion.div>
             {isOpen && <button className="text-lg">Đăng xuất</button>}
