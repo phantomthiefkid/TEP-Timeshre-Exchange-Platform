@@ -50,7 +50,14 @@ const getAllTimeshareCompany = async (
   }
 };
 
-const getTimeshareCompanyById = async () => {};
+const getTimeshareCompanyById = async (tsId = "") => {
+  try {
+    return await axiosConfig.get(`admin/timeshare-company/${tsId}`, {});
+  } catch (error) {
+    console.error("Get Timeshare Company Detail error:", error);
+    return error;
+  }
+};
 
 const getAllTimeshareCompanyAccount = async () => {};
 

@@ -1,17 +1,23 @@
 import { DotsVerticalIcon, PlusIcon } from "@heroicons/react/outline";
 import React, { useEffect, useState } from "react";
 import HeaderAdmin from "../../components/Header/headerAdmin";
-import { getAllTimeshareCompany } from "../../service/adminAPIService/adminAPI";
-import CreateUserModal from "../../components/Modal/createUserModal";
+import {
+  getAllTimeshareCompany,
+  getTimeshareCompanyById,
+} from "../../service/adminAPIService/adminAPI";
+import CreateTimeshareCompanyModal from "../../components/Modal/creatTimeshareCompanyModal";
+import DetailTimeshareCompanyModal from "../../components/Modal/detailTimeshareCompanyModal";
 import { toast, Toaster } from "react-hot-toast";
 
 const ResortManagement = () => {
   const [allTimeshareCompany, setAllTimeshareCompany] = useState([]);
-  const [page, setPage] = useState(0); // Pagination
-  const [size, setSize] = useState(6); // Page size
-  const [totalPages, setTotalPages] = useState(1); // Total pages
-  const [timeshareCompanyName, setTimeshareCompanyName] = useState(""); // Search input
+  const [page, setPage] = useState(0);
+  const [size, setSize] = useState(6);
+  const [totalPages, setTotalPages] = useState(1);
+  const [timeshareCompanyName, setTimeshareCompanyName] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
+  const [selectedCompany, setSelectedCompany] = useState(null);
 
   const fetchAllTimeshareCompany = async () => {
     try {
@@ -23,7 +29,16 @@ const ResortManagement = () => {
     }
   };
 
-  // Pagination handlers
+  const fetchCompanyDetails = async (id) => {
+    try {
+      const response = await getTimeshareCompanyById(id);
+      setSelectedCompany(response.data);
+      setIsDetailModalOpen(true);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const handleNextPage = () => {
     if (page < totalPages - 1) {
       setPage(page + 1);
@@ -45,21 +60,7 @@ const ResortManagement = () => {
     fetchAllTimeshareCompany();
   }, [page, timeshareCompanyName]);
 
-  // const handleCreateUser = async (newUser) => {
-  //   try {
-  //     if (newUser) {
-  //       let data = await createUser(newUser);
-  //       if (data.status === 200) {
-  //         toast.success("Tạo mới thành công", { duration: 2000 }); // Success toast
-  //       } else {
-  //         toast.error("Tạo mới thất bại", { duration: 2000 });
-  //       }
-  //     }
-  //   } catch (error) {
-  //     console.log(error);
-  //     toast.error("Có lỗi xảy ra trong lúc tạo", { duration: 2000 });
-  //   }
-  // };
+  const handleCreateNewTimeshareCompany = async () => {};
 
   return (
     <div>
@@ -83,7 +84,6 @@ const ResortManagement = () => {
             onChange={handleSearch}
           />
 
-          {/* Add New User */}
           <button
             onClick={() => setIsModalOpen(true)}
             className="px-6 flex items-center gap-4 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-500"
@@ -92,15 +92,14 @@ const ResortManagement = () => {
             Thêm đối tác mới
           </button>
 
-          {/* <CreateUserModal
+          <CreateTimeshareCompanyModal
             isOpen={isModalOpen}
             onClose={() => setIsModalOpen(false)}
-            onCreate={handleCreateUser}
-          /> */}
+            onCreate={handleCreateNewTimeshareCompany}
+          />
         </div>
       </div>
 
-      {/* User Table */}
       <div className="p-6">
         <table className="min-w-full">
           <thead className="bg-gray-100">
@@ -133,22 +132,21 @@ const ResortManagement = () => {
                   </td>
                   <td className="p-4">{item.address}</td>
                   <td className="p-4 text-center">
-                    <label class="flex items-center">
+                    <label className="flex items-center">
                       <input
                         type="checkbox"
                         checked={item.isActive}
-                        class="sr-only peer"
+                        className="sr-only peer"
                         disabled
                       />
-                      <div class="relative w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
-                      <span class="ms-3 text-sm font-medium text-gray-400 dark:text-gray-500">
+                      <div className="relative w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                      <span className="ms-3 text-sm font-medium text-gray-400 dark:text-gray-500">
                         {item.isActive ? "Đang hoạt động" : "Đã vô hiệu hóa"}
                       </span>
                     </label>
                   </td>
                   <td className="p-4 flex gap-4">
-                    <button>
-                      {/* edit and detail drop */}
+                    <button onClick={() => fetchCompanyDetails(item.id)}>
                       <DotsVerticalIcon className="w-6 h-6" />
                     </button>
                   </td>
@@ -191,6 +189,12 @@ const ResortManagement = () => {
           </button>
         </div>
       </div>
+
+      <DetailTimeshareCompanyModal
+        isOpen={isDetailModalOpen}
+        onClose={() => setIsDetailModalOpen(false)}
+        company={selectedCompany}
+      />
     </div>
   );
 };
