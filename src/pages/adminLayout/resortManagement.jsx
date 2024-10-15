@@ -1,10 +1,12 @@
-import React from 'react'
-import HeaderAdmin from '../../components/Header/headerAdmin'
+import React from "react";
+import HeaderAdmin from "../../components/Header/headerAdmin";
 
 const ResortManagement = () => {
   return (
-    <div><HeaderAdmin/></div>
-  )
-}
+    <div>
+      <HeaderAdmin />
+    </div>
+  );
+};
 
-export default ResortManagement
+export default ResortManagement;
