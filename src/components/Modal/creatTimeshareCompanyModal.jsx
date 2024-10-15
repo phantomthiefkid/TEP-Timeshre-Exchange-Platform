@@ -6,7 +6,6 @@ const creatTimeshareCompanyModal = ({ isOpen, onClose, onCreate }) => {
   const [timeshareCompanyName, setTimeshareCompanyName] = useState("");
   const [logo, setLogo] = useState("");
   const [address, setAddress] = useState("");
-  const [description, setDescription] = useState("");
   const [ownerId, setOwnerId] = useState("");
   const [contact, setContact] = useState("");
 
@@ -17,7 +16,6 @@ const creatTimeshareCompanyModal = ({ isOpen, onClose, onCreate }) => {
       timeshareCompanyName,
       logo,
       address,
-      description,
       ownerId,
       contact,
     };
@@ -26,7 +24,6 @@ const creatTimeshareCompanyModal = ({ isOpen, onClose, onCreate }) => {
     setTimeshareCompanyName("");
     setLogo("");
     setAddress("");
-    setDescription("");
     setOwnerId("");
     setContact("");
 
@@ -64,7 +61,7 @@ const creatTimeshareCompanyModal = ({ isOpen, onClose, onCreate }) => {
             <select
               value={ownerId}
               onChange={(e) => setOwnerId(e.target.value)}
-              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 h-16"
+              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 h-20"
               required
             >
               <option value="1">Acc1</option>
@@ -121,21 +118,9 @@ const creatTimeshareCompanyModal = ({ isOpen, onClose, onCreate }) => {
               required
             />
           </div>
-          <div className="mb-4 relative">
-            <label className="block text-gray-700 font-medium mb-2">
-              Mô tả
-            </label>
-            <textarea
-              type="text"
-              rows="5"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              className="resize-none w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
 
           {/* Buttons */}
-          <div className="flex justify-end space-x-4">
+          <div className="flex justify-end space-x-4 mt-8">
             <button
               type="button"
               onClick={onClose}

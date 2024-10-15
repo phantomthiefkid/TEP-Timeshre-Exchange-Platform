@@ -56,11 +56,11 @@ const ResortManagement = () => {
     setPage(0);
   };
 
+  const handleCreateNewTimeshareCompany = async () => {};
+
   useEffect(() => {
     fetchAllTimeshareCompany();
   }, [page, timeshareCompanyName]);
-
-  const handleCreateNewTimeshareCompany = async () => {};
 
   return (
     <div>
