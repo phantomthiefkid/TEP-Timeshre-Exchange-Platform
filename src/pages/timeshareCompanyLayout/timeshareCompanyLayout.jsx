@@ -6,7 +6,7 @@ const TimeshareCompanyLayout = () => {
   return (
     <div className="flex">
       <SidebarTimeshareCompany />
-      <div className="flex-grow p-6">
+      <div className="flex-grow">
         <Outlet />
       </div>
     </div>

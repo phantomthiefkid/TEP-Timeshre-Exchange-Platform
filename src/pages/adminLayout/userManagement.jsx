@@ -146,7 +146,7 @@ const UserManagement = () => {
               <th className="text-left p-4">Địa chỉ email</th>
               <th className="text-left p-4">Vai trò</th>
               <th className="text-left p-4">Trạng thái</th>
-              <th className="text-left p-4">Thao tác</th>
+              <th className="text-left p-4 rounded-r-xl">Thao tác</th>
             </tr>
           </thead>
           <tbody className="bg-white">
