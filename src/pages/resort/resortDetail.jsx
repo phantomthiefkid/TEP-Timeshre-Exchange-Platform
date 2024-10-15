@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import Footer from '../../components/Footer/footer';
 import Navigation from '../../components/Navbar/navigation';
 import { HeartIcon, LocationMarkerIcon, StarIcon, XIcon } from '@heroicons/react/solid';
@@ -7,10 +7,12 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
+import { getResortById } from '../../service/public/resortService/resortAPI';
 const ResortDetail = () => {
-    const navigate = useNavigate();
     const [isOpen, setIsOpen] = useState(false);
     const [selectedImage, setSelectedImage] = useState(0);
+    const { id } = useParams();
+    const [resort, setResort] = useState({});
     // Images array for the Swiper
     const images = [
         'https://media.architecturaldigest.com/photos/57e42de0fe422b3e29b7e78f/16:9/w_2560%2Cc_limit/JW_LosCabos_2015_MainExterior.jpg',
@@ -21,6 +23,26 @@ const ResortDetail = () => {
         'https://cafefcdn.com/203337114487263232/2023/4/29/440495612-1682757753771111360326-1682762017539-16827620176502127401821.jpg',
     ];
 
+    const fetchResortById = async () => {
+
+        try {
+            let data = await getResortById(id);
+            if (data && data.status === 200) {
+                setResort(data.data)
+                console.log(data.data)
+            }
+        } catch (error) {
+            throw error
+        }
+    }
+
+    useEffect(() => {
+        if (id) {
+            fetchResortById();
+        }
+
+    }, [id])
+
     const openModal = () => setIsOpen(true);
     const closeModal = () => setIsOpen(false);
     return (
@@ -29,25 +51,20 @@ const ResortDetail = () => {
             <div className='lg:px-32 md:px-24 py-10'>
                 {/* Back to Search Link */}
 
-                <span className='text-blue-500' onClick={() => navigate(-1)}><u>Quay lại tìm kiếm</u></span>
+                
 
 
                 {/* Resort Title and Favorite Button */}
                 <div className='flex justify-between py-4'>
-                    <h1 className='text-2xl md:text-3xl font-medium'>New World Hoiana</h1>
-                    <span className='flex gap-2 items-center'>
-                        <button>
-                            <HeartIcon className='w-6 h-6' color='gray' />
-                        </button>
-                        Yêu thích
-                    </span>
+                    <h1 className='text-2xl md:text-3xl font-medium'>{resort ? resort.resortName : ""}</h1>
+                   
                 </div>
 
                 {/* Location and Rating */}
                 <div className='flex justify-between py-4'>
                     <p className='font-medium flex items-center gap-2'>
                         <LocationMarkerIcon className='w-8 h-8 text-red-500' />
-                        Hội An, Việt Nam
+                        {resort ? resort.address : ""}
                     </p>
                     <span className='flex gap-2 items-center'>
                         <StarIcon className='w-6 h-6' color='yellow' />
@@ -102,7 +119,7 @@ const ResortDetail = () => {
                                 className='absolute top-2 right-2 text-white p-1 rounded-full'
                                 onClick={closeModal}
                             >
-                                <XIcon className='w-8'/>
+                                <XIcon className='w-8' />
                             </button>
 
                             {/* Large Image Display */}
@@ -118,9 +135,9 @@ const ResortDetail = () => {
                             <Swiper
                                 spaceBetween={10}
                                 slidesPerView={4}
-                                // navigation={true}
-                                // pagination={{ clickable: true }}
-                                // modules={[Navigation]}
+                            // navigation={true}
+                            // pagination={{ clickable: true }}
+                            // modules={[Navigation]}
                             >
                                 {images.map((image, index) => (
                                     <SwiperSlide key={index}>
@@ -139,7 +156,7 @@ const ResortDetail = () => {
 
                 <div className='py-8 px-6 rounded-lg '>
                     <h3 className='text-4xl font-bold text-gray-800 mb-6'>Giới thiệu</h3>
-                    <p className=' leading-relaxed mb-4'>
+                    {/* <p className=' leading-relaxed mb-4'>
                         Tọa lạc ở Hội An, cách Hội Quán Chi Hội Triều Châu Trung Quốc 12 km, New World Hoiana Hotel cung cấp chỗ nghỉ có xe đạp miễn phí, chỗ đậu xe riêng miễn phí, hồ bơi ngoài trời và trung tâm thể dục. Ngoài câu lạc bộ trẻ em, chỗ nghỉ này còn có nhà hàng, sòng bạc và sân hiên để phục vụ du khách. Chỗ nghỉ cung cấp lễ tân 24/24, dịch vụ đưa đón sân bay, dịch vụ phòng và Wi-Fi miễn phí.
                     </p>
                     <p className=' leading-relaxed mb-4'>
@@ -153,106 +170,48 @@ const ResortDetail = () => {
                     </p>
                     <p className=' leading-relaxed'>
                         Chỗ nghỉ cách Bảo tàng lịch sử Hội An 13 km và Chùa Cầu 13 km. Sân bay gần nhất là Sân bay Quốc tế Đà Nẵng, cách New World Hoiana Hotel 40 km.
+                    </p> */}
+                    <p className=' leading-relaxed mb-4'>
+                        {resort ? resort.description : ""}
                     </p>
                 </div>
                 <div className='py-2 px-6 rounded-lg space-y-4'>
                     <h3 className='text-3xl font-bold text-gray-800 mb-6'>Loại phòng</h3>
-                    <div className="grid grid-cols-2 gap-4 border px-4">
+                    {resort && resort.unitTypeDtoList && resort.unitTypeDtoList.map((item, index) => 
+                        ((<div className="grid grid-cols-2 gap-4 border px-4">
 
-                        <div className="p-2 grid grid-cols-2 gap-6">
-                            <img src='https://storage.timviec365.vn/timviec365/pictures/images/phong-doi-la-gi.jpg' className='w-full' alt='phòng đôi' />
-                            <div className='py-4 relative space-y-4'>
-                                <span className='text-2xl font-medium'>Thông tin phòng</span>
-                                <h3 className='text-4xl  text-gray-700 font-bold'>PHÒNG ĐÔI</h3>
-                                <a href='#' className='bottom-2 absolute hover:text-gray-600'><p><u>Xem chi tiết phòng</u></p></a>
-                            </div>
-                        </div>
-
-
-                        <div className="p-4 py-6 space-y-6 font-medium text-xl">
-
-                            <div className="text-xl font-medium">
-                                Đặc điểm phòng
+                            <div className="p-2 grid grid-cols-2 gap-6">
+                                <img src='https://storage.timviec365.vn/timviec365/pictures/images/phong-doi-la-gi.jpg' className='w-full' alt='phòng đôi' />
+                                <div className='py-4 relative space-y-4'>
+                                    <span className='text-2xl font-medium'>Thông tin phòng</span>
+                                    <h3 className='text-4xl  text-gray-700 font-bold'>{item.title}</h3>
+                                    <a href='#' className='bottom-2 absolute hover:text-gray-600'><p><u>Xem chi tiết phòng</u></p></a>
+                                </div>
                             </div>
 
-                            <div className="flex justify-left text-left">
-                                <div className='w-full'><span>Giường: 2</span></div>
-                                <div className='w-full'><span>Số người: 4</span></div>
+
+                            <div className="p-4 py-6 space-y-6 font-medium text-xl">
+
+                                <div className="text-xl font-medium">
+                                    Đặc điểm phòng
+                                </div>
+
+                                <div className="flex justify-left text-left">
+                                    <div className='w-full'><span>Phòng ngủ: {item.bedrooms}</span></div>
+                                    <div className='w-full'><span>Số người: 4</span></div>
+                                </div>
+
+                                <div>
+                                    Phòng tắm: {item.bathrooms}
+                                </div>
+
+                                <div>
+                                    Nhà bếp: {item.kitchen}
+                                </div>
                             </div>
+                        </div>))
+                    )}
 
-                            <div>
-                                Phòng tắm: 1
-                            </div>
-
-                            <div>
-                                Nhà bếp: Nhà bếp chung
-                            </div>
-                        </div>
-                    </div>
-                    <div className="grid grid-cols-2 gap-4 border px-4">
-
-                        <div className="p-2 grid grid-cols-2 gap-6">
-                            <img src='https://storage.timviec365.vn/timviec365/pictures/images/phong-doi-la-gi.jpg' className='w-full' alt='phòng đôi' />
-                            <div className='py-4 relative space-y-4'>
-                                <span className='text-2xl font-medium'>Thông tin phòng</span>
-                                <h3 className='text-4xl text-gray-700 font-bold'>PHÒNG ĐÔI</h3>
-                                <a href='#' className='bottom-2 absolute hover:text-gray-600'><p><u>Xem chi tiết phòng</u></p></a>
-                            </div>
-                        </div>
-
-
-                        <div className="p-4 py-6 space-y-6 font-medium text-xl">
-
-                            <div className="text-xl font-medium">
-                                Đặc điểm phòng
-                            </div>
-
-                            <div className="flex justify-left text-left">
-                                <div className='w-full'><span>Giường: 2</span></div>
-                                <div className='w-full'><span>Số người: 4</span></div>
-                            </div>
-
-                            <div>
-                                Phòng tắm: 1
-                            </div>
-
-                            <div>
-                                Nhà bếp: Nhà bếp chung
-                            </div>
-                        </div>
-                    </div>
-                    <div className="grid grid-cols-2 gap-4 border px-4">
-
-                        <div className="p-2 grid grid-cols-2 gap-6">
-                            <img src='https://storage.timviec365.vn/timviec365/pictures/images/phong-doi-la-gi.jpg' className='w-full' alt='phòng đôi' />
-                            <div className='py-4 relative space-y-4'>
-                                <span className='text-2xl font-medium'>Thông tin phòng</span>
-                                <h3 className='text-4xl  text-gray-700 font-bold'>PHÒNG ĐÔI</h3>
-                                <a href='#' className='bottom-2 absolute hover:text-gray-600'><p><u>Xem chi tiết phòng</u></p></a>
-                            </div>
-                        </div>
-
-
-                        <div className="p-4 py-6 space-y-6 font-medium text-xl">
-
-                            <div className="text-xl font-medium">
-                                Đặc điểm phòng
-                            </div>
-
-                            <div className="flex justify-left text-left">
-                                <div className='w-full'><span>Giường: 2</span></div>
-                                <div className='w-full'><span>Số người: 4</span></div>
-                            </div>
-
-                            <div>
-                                Phòng tắm: 1
-                            </div>
-
-                            <div>
-                                Nhà bếp: Nhà bếp chung
-                            </div>
-                        </div>
-                    </div>
 
                 </div>
                 <div className='py-10 w-2/3'>

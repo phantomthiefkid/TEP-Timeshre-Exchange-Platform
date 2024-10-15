@@ -1,26 +1,50 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import logoUnwind from '../../assets/Unwind.png'
-import resorts from '../../util/ResortData'
 import { Link } from 'react-router-dom'
+import { getAllResortByName } from '../../service/public/resortService/resortAPI'
 
 const Search = () => {
-    const [keyword, setKeyword] = useState('')
-    const [filteredResorts, setFilteredResorts] = useState([])
+    const [keyword, setKeyword] = useState('');
+    const [resort, setResort] = useState([]);
+    const [debounceTimeout, setDebounceTimeout] = useState(null); // Dùng để lưu timeout của debounce
 
     const handleSearch = (e) => {
         const searchInput = e.target.value;
         setKeyword(searchInput);
 
-        if (searchInput) {
-            const results = resorts.filter(resort =>
-                resort.name.toLowerCase().startsWith(searchInput.toLowerCase())
-            );
-            setFilteredResorts(results);
-        } else {
-            setFilteredResorts([]);
+        // Nếu không có từ khóa thì reset kết quả tìm kiếm
+        if (!searchInput) {
+            setResort([]);
+            clearTimeout(debounceTimeout); // Dừng timeout nếu không có từ khóa
         }
+
+        // Nếu có từ khóa, dùng debounce để chờ trước khi gọi API
+        if (debounceTimeout) {
+            clearTimeout(debounceTimeout); // Xóa timeout trước đó nếu có
+        }
+
+        const timeout = setTimeout(() => {
+            fetchResortList(searchInput);
+        }, 300); // Chờ 300ms sau khi người dùng dừng nhập
+
+        setDebounceTimeout(timeout); // Lưu timeout mới
     };
 
+    const fetchResortList = async (searchInput) => {
+        if (searchInput) { // Chỉ fetch khi có keyword
+            try {
+                let data = await getAllResortByName(0, 20, searchInput);
+                if (data.status) {
+                    setResort(data.data.content);
+                    console.log(data.data.content);
+                }
+            } catch (error) {
+                console.error(error);
+            }
+        } else {
+            setResort([]);
+        }
+    }
 
     return (
         <div className='h-h-landing-child-1'>
@@ -42,9 +66,7 @@ const Search = () => {
                                 placeholder="Search..."
                                 value={keyword}
                                 onChange={handleSearch}
-                            >
-
-                            </input>
+                            />
                         </div>
                         <button className="flex items-center bg-blue-500 justify-center px-4 border-l w-14">
                             <Link to={'/resortsearchlist'}>
@@ -54,13 +76,13 @@ const Search = () => {
                             </Link>
                         </button>
                     </div>
-                    {filteredResorts.length > 0 && (
+                    {resort && resort.length > 0 && (
                         <div className="absolute top-14 right-40 w-1/3 bg-gray-100 border shadow-xl rounded-lg z-10">
                             <ul>
-                                {filteredResorts.map(resort => (
-                                    <li key={resort.id} className="px-4 py-2 border-b hover:bg-gray-300">
-                                        <Link to={`/resortdetail/${resort.id}`}>
-                                            {resort.name} - {resort.location}
+                                {resort.map((item) => (
+                                    <li key={item.id} className="px-4 py-2 border-b hover:bg-gray-300">
+                                        <Link to={`/resortdetail/${item.id}`}>
+                                            {item.resortName} - {item.address}
                                         </Link>
                                     </li>
                                 ))}
@@ -73,4 +95,4 @@ const Search = () => {
     )
 }
 
-export default Search
+export default Search;

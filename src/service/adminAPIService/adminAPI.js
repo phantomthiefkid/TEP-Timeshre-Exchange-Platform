@@ -31,17 +31,30 @@ const createUser = async (data) => {
   }
 };
 
+const editUser = async (data) => {
+    try {
+        return await axiosConfig.put(`admin/users/${data.id}`, {
+            roleId: data.roleId,
+            isActive: data.isActive
+        }
+        )
+    } catch (error) {
+        console.error("editUser error!")
+        return error
+    }
+}
+
 const getAllTimeshareCompany = async (
   pageNo = 0,
   pageSize = 3,
-  timeshareCompanyName = ""
+  tsName = ""
 ) => {
   try {
     return await axiosConfig.get(`admin/timeshare-company`, {
       params: {
         pageNo,
         pageSize,
-        timeshareCompanyName,
+        tsName,
       },
     });
   } catch (error) {
@@ -67,6 +80,7 @@ const updateTimeshareCompany = async () => {};
 export {
   getAllUser,
   createUser,
+  editUser,
   getAllTimeshareCompany,
   getTimeshareCompanyById,
   getAllTimeshareCompanyAccount,
