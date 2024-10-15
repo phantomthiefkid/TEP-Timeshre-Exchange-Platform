@@ -31,4 +31,38 @@ const createUser = async (data) => {
   }
 };
 
-export { getAllUser, createUser };
+const getAllTimeshareCompany = async (
+  pageNo = 0,
+  pageSize = 3,
+  timeshareCompanyName = ""
+) => {
+  try {
+    return await axiosConfig.get(`admin/timeshare-company`, {
+      params: {
+        pageNo,
+        pageSize,
+        timeshareCompanyName,
+      },
+    });
+  } catch (error) {
+    console.error("Get all Timeshare Company error:", error);
+    return error;
+  }
+};
+
+const getTimeshareCompanyById = async () => {};
+
+const getAllTimeshareCompanyAccount = async () => {};
+
+const creatTimeshareCompany = async () => {};
+
+const updateTimeshareCompany = async () => {};
+export {
+  getAllUser,
+  createUser,
+  getAllTimeshareCompany,
+  getTimeshareCompanyById,
+  getAllTimeshareCompanyAccount,
+  creatTimeshareCompany,
+  updateTimeshareCompany,
+};
