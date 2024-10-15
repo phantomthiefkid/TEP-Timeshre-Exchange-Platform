@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   FaSignOutAlt,
   FaCity,
@@ -12,6 +12,8 @@ import {
   FaRegFileAlt,
   FaRegFile,
 } from "react-icons/fa";
+import { setIsLogin, setRoleName } from "../../redux/UserSlice/SignIn";
+import { useDispatch } from "react-redux";
 
 const MenuItem = ({ icon: Icon, title, children, path }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -70,6 +72,16 @@ const MenuItem = ({ icon: Icon, title, children, path }) => {
 };
 
 const SidebarTimeshareStaff = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("roleName");
+    dispatch(setIsLogin(false));
+    dispatch(setRoleName(""));
+    navigate("/signin");
+  };
   return (
     <div className="w-64 bg-white h-screen shadow-lg flex flex-col">
       <div className="flex items-center space-x-2 mb-8 px-6 mt-10">
@@ -91,7 +103,7 @@ const SidebarTimeshareStaff = () => {
 
       <div className="px-4 mb-4">
         <Link
-          to="/signin"
+          onClick={handleLogout}
           className="flex items-center p-2 text-gray-700 hover:bg-gray-200 transition duration-200 ease-in-out"
         >
           <FaSignOutAlt className="text-lg mr-2" />
