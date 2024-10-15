@@ -1,15 +1,16 @@
-import React from 'react'
-import { Outlet } from 'react-router-dom'
-import SidebarTimeshareCompany from '../../components/Sidebar/sidebarTimeshareCompany'
+import React from "react";
+import { Outlet } from "react-router-dom";
+import SidebarTimeshareCompany from "../../components/Sidebar/sidebarTimeshareCompany";
+import SidebarTimeshareStaff from "../../components/Sidebar/sidebarTimeshareStaff";
 const TimeshareCompanyLayout = () => {
-    return (
-        <div className='flex'>
-            <SidebarTimeshareCompany />
-            <div className='flex-grow p-6'>
-                <Outlet />
-            </div>
-        </div>
-    )
-}
+  return (
+    <div className="flex">
+      <SidebarTimeshareCompany />
+      <div className="flex-grow p-6">
+        <Outlet />
+      </div>
+    </div>
+  );
+};
 
-export default TimeshareCompanyLayout
+export default TimeshareCompanyLayout;
