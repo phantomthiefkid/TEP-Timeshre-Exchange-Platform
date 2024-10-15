@@ -31,7 +31,7 @@ import { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import { setIsLogin, setRoleName, setUserId } from "./redux/UserSlice/SignIn";
 import Loading from "./components/LoadingComponent/loading";
-import ScrollToTop from './components/ScrollToTop/ScrollToTop';
+import ScrollToTop from "./components/ScrollToTop/ScrollToTop"
 function App() {
   const dispatch = useDispatch();
   const { isLogin, role } = useSelector((state) => state.isLogin);

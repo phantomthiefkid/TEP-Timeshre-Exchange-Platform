@@ -44,8 +44,46 @@ const editUser = async (data) => {
     }
 }
 
+const getAllTimeshareCompany = async (
+  pageNo = 0,
+  pageSize = 3,
+  tsName = ""
+) => {
+  try {
+    return await axiosConfig.get(`admin/timeshare-company`, {
+      params: {
+        pageNo,
+        pageSize,
+        tsName,
+      },
+    });
+  } catch (error) {
+    console.error("Get all Timeshare Company error:", error);
+    return error;
+  }
+};
+
+const getTimeshareCompanyById = async (tsId = "") => {
+  try {
+    return await axiosConfig.get(`admin/timeshare-company/${tsId}`, {});
+  } catch (error) {
+    console.error("Get Timeshare Company Detail error:", error);
+    return error;
+  }
+};
+
+const getAllTimeshareCompanyAccount = async () => {};
+
+const creatTimeshareCompany = async () => {};
+
+const updateTimeshareCompany = async () => {};
 export {
-    getAllUser,
-    createUser,
-    editUser
-}
+  getAllUser,
+  createUser,
+  editUser,
+  getAllTimeshareCompany,
+  getTimeshareCompanyById,
+  getAllTimeshareCompanyAccount,
+  creatTimeshareCompany,
+  updateTimeshareCompany,
+};

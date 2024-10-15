@@ -11,8 +11,8 @@ const UserManagement = () => {
   const [page, setPage] = useState(0); // Pagination
   const [size, setSize] = useState(6); // Page size
   const [totalPages, setTotalPages] = useState(1); // Total pages
-  const [roleId, setRoleId] = useState(''); // Role filter
-  const [userName, setUserName] = useState(''); // Search input
+  const [roleId, setRoleId] = useState(""); // Role filter
+  const [userName, setUserName] = useState(""); // Search input
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
@@ -27,7 +27,6 @@ const UserManagement = () => {
       console.log(error);
     }
   };
-
 
   // Pagination handlers
   const handleNextPage = () => {
@@ -64,14 +63,13 @@ const UserManagement = () => {
         let data = await createUser(newUser);
         if (data.status === 200) {
           toast.success("Tạo mới thành công", { duration: 2000 }); // Success toast
-
         } else {
-          toast.error("Tạo mới thất bại", { duration: 2000 })
+          toast.error("Tạo mới thất bại", { duration: 2000 });
         }
       }
     } catch (error) {
-      console.log(error)
-      toast.error("Có lỗi xảy ra trong lúc tạo", { duration: 2000 })
+      console.log(error);
+      toast.error("Có lỗi xảy ra trong lúc tạo", { duration: 2000 });
     }
   };
 
@@ -82,21 +80,30 @@ const UserManagement = () => {
 
   return (
     <div>
-
-      <Toaster position="top-right"
-        reverseOrder={false} />
+      <Toaster position="top-right" reverseOrder={false} />
       <HeaderAdmin />
       <div className="p-6 flex justify-between items-center">
-
-        <div className='p-4'>
-          <h1 className="text-3xl text-gray-700 font-bold">Quản lí người dùng</h1>
-          <p className="text-md font-medium text-gray-600 mt-2">Quản lí tài khoản người dùng và quyền hạn tài khoản ở đây.</p>
+        <div className="p-4">
+          <h1 className="text-3xl text-gray-700 font-bold">
+            Quản lí người dùng
+          </h1>
+          <p className="text-md font-medium text-gray-600 mt-2">
+            Quản lí tài khoản người dùng và quyền hạn tài khoản ở đây.
+          </p>
         </div>
         <div className="flex space-x-4">
-          <span className="bg-red-100 text-red-600 px-2 py-1 rounded-full text-sm font-medium">Tất cả: <CountUp start={0} end={40} duration={2} /></span>
-          <span className="bg-blue-100 text-blue-600 px-2 py-1 rounded-full text-sm font-medium">Customer: <CountUp start={0} end={20} duration={2} /></span>
-          <span className="bg-green-100 text-green-600 px-2 py-1 rounded-full text-sm font-medium">System Staff: <CountUp start={0} end={10} duration={2} /></span>
-          <span className="bg-yellow-100 text-yellow-600 px-2 py-1 rounded-full text-sm font-medium">Timeshare Company: <CountUp start={0} end={10} duration={2} /></span>
+          <span className="bg-red-100 text-red-600 px-2 py-1 rounded-full text-sm font-medium">
+            Tất cả: <CountUp start={0} end={40} duration={2} />
+          </span>
+          <span className="bg-blue-100 text-blue-600 px-2 py-1 rounded-full text-sm font-medium">
+            Customer: <CountUp start={0} end={20} duration={2} />
+          </span>
+          <span className="bg-green-100 text-green-600 px-2 py-1 rounded-full text-sm font-medium">
+            System Staff: <CountUp start={0} end={10} duration={2} />
+          </span>
+          <span className="bg-yellow-100 text-yellow-600 px-2 py-1 rounded-full text-sm font-medium">
+            Timeshare Company: <CountUp start={0} end={10} duration={2} />
+          </span>
         </div>
       </div>
 
@@ -124,8 +131,11 @@ const UserManagement = () => {
           </select>
 
           {/* Add New User */}
-          <button onClick={() => setIsModalOpen(true)} className="px-6 flex items-center gap-4 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-500">
-            <PlusIcon className='w-7 h-7' />
+          <button
+            onClick={() => setIsModalOpen(true)}
+            className="px-6 flex items-center gap-4 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-500"
+          >
+            <PlusIcon className="w-7 h-7" />
             Thêm người dùng mới
           </button>
           <CreateUserModal
@@ -211,10 +221,11 @@ const UserManagement = () => {
               <button
                 key={index}
                 onClick={() => setPage(index)}
-                className={`px-4 py-2 rounded-lg ${index === page
-                  ? "bg-blue-500 text-white"
-                  : "bg-gray-300 text-gray-700 hover:bg-gray-400"
-                  }`}
+                className={`px-4 py-2 rounded-lg ${
+                  index === page
+                    ? "bg-blue-500 text-white"
+                    : "bg-gray-300 text-gray-700 hover:bg-gray-400"
+                }`}
               >
                 {index + 1}
               </button>
@@ -229,8 +240,6 @@ const UserManagement = () => {
             Trang sau
           </button>
         </div>
-
-
       </div>
     </div>
   );
