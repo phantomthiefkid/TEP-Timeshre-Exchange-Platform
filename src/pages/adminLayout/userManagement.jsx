@@ -5,6 +5,7 @@ import HeaderAdmin from '../../components/Header/headerAdmin';
 import { createUser, getAllUser } from '../../service/adminAPIService/adminAPI';
 import CreateUserModal from '../../components/Modal/createUserModal';
 import { toast, Toaster } from 'react-hot-toast';
+import DetailEditUserModal from '../../components/Modal/detailEditUserModal';
 const UserManagement = () => {
   const [allUser, setAllUser] = useState([]);
   const [page, setPage] = useState(0); // Pagination
@@ -13,10 +14,14 @@ const UserManagement = () => {
   const [roleId, setRoleId] = useState(''); // Role filter
   const [userName, setUserName] = useState(''); // Search input
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [flag, setFlag] = useState(false);
   const fetchAllUser = async () => {
     try {
       let data = await getAllUser(page, size, roleId, userName);
       setAllUser(data.data.content);
+      console.log(data.data.content)
       setTotalPages(data.data.totalPages); // Update total pages
     } catch (error) {
       console.log(error);
@@ -51,7 +56,7 @@ const UserManagement = () => {
 
   useEffect(() => {
     fetchAllUser();
-  }, [page, roleId, userName]);
+  }, [page, roleId, userName, flag]);
 
   const handleCreateUser = async (newUser) => {
     try {
@@ -69,6 +74,12 @@ const UserManagement = () => {
       toast.error("Có lỗi xảy ra trong lúc tạo", { duration: 2000 })
     }
   };
+
+  const handleOpenUpdateModal = (user) => {
+    setIsUpdateModalOpen(true)
+    setSelectedUser(user)
+  }
+
   return (
     <div>
 
@@ -132,7 +143,7 @@ const UserManagement = () => {
             <tr className="rounded-xl text-gray-500">
               <th className="text-left p-4 rounded-l-xl">STT</th>
               <th className="text-left p-4">Họ và tên</th>
-              <th className="text-left p-4">Số điện thoại</th>
+              <th className="text-left p-4">Địa chỉ email</th>
               <th className="text-left p-4">Vai trò</th>
               <th className="text-left p-4">Trạng thái</th>
               <th className="text-left p-4">Thao tác</th>
@@ -144,7 +155,7 @@ const UserManagement = () => {
                 <td className="p-4">{index + 1}</td>
                 <td className="p-4 flex items-center">
                   <img
-                    src="https://scontent.fsgn2-7.fna.fbcdn.net/v/t39.30808-6/457790295_1947970998949022_3066255129954259156_n.jpg?_nc_cat=108&ccb=1-7&_nc_sid=6ee11a&_nc_eui2=AeFoY4GYNi_qQDgWWYTVmkUJddJ_WJqplOh10n9YmqmU6A-DFFr1-u1kpgPXw4WLuc3ejG4XhxS9QWj-l3PSn8tF&_nc_ohc=GF-jF4aByOYQ7kNvgH44j7n&_nc_ht=scontent.fsgn2-7.fna&_nc_gid=AyHc8LeK2Ims_L1Rgaj2CbU&oh=00_AYDHhjUXq1VxCYQcpSWtwpX0zSw8lefq0FzEpUIg2uuszA&oe=670A0CD9            "
+                    src="https://scontent.fsgn2-7.fna.fbcdn.net/v/t39.30808-6/457790295_1947970998949022_3066255129954259156_n.jpg?_nc_cat=108&ccb=1-7&_nc_sid=6ee11a&_nc_eui2=AeFoY4GYNi_qQDgWWYTVmkUJddJ_WJqplOh10n9YmqmU6A-DFFr1-u1kpgPXw4WLuc3ejG4XhxS9QWj-l3PSn8tF&_nc_ohc=5dOtTlzsDu0Q7kNvgGmqM3K&_nc_ht=scontent.fsgn2-7.fna&_nc_gid=AQXge5qrw4LXdmvXPL5sfJg&oh=00_AYAmYlBZfq86NfBJdoNTVuTAUpyzWPKCwwJGACxjQJKi2w&oe=67118559"
                     alt={`${item.name}'s avatar`}
                     className="w-10 h-10 rounded-full mr-2" // Adjust size as needed
                   />
@@ -153,8 +164,8 @@ const UserManagement = () => {
                     <p className="text-gray-500 text-md">{item.email}</p> {/* Display Email */}
                   </div>
                 </td>
-                <td className="p-4">{item.phone}</td>
-                <td className="p-4">{item.roleRoleName}</td>
+                <td className="p-4">{item.email}</td>
+                <td className="p-4">{item.roleName}</td>
                 <td className="p-4 text-center">
                   {/* <input
                     type="checkbox"
@@ -169,7 +180,7 @@ const UserManagement = () => {
                 </td>
                 <td className="p-4 flex gap-4">
 
-                  <button><DocumentIcon color='gray' className='w-6 h-6' /></button>
+                  <button onClick={() => handleOpenUpdateModal(item)}><DocumentIcon color='gray' className='w-6 h-6' /></button>
                   <button><DotsVerticalIcon className='w-6 h-6' /></button>
 
                 </td>
@@ -177,11 +188,14 @@ const UserManagement = () => {
               </tr>
             ))}
 
-
-
-
           </tbody>
         </table>
+
+        <DetailEditUserModal isOpen={isUpdateModalOpen}
+          onClose={() => setIsUpdateModalOpen(false)}
+          userData={selectedUser} 
+          setFlag={() => setFlag(!flag)}
+          />
 
         <div className="flex justify-between items-center p-6">
           <button
@@ -189,7 +203,7 @@ const UserManagement = () => {
             disabled={page === 0}
             className="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400"
           >
-            Previous
+            Trang trước
           </button>
 
           <div className="flex space-x-2">
@@ -212,7 +226,7 @@ const UserManagement = () => {
             disabled={page === totalPages - 1}
             className="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400"
           >
-            Next
+            Trang sau
           </button>
         </div>
 

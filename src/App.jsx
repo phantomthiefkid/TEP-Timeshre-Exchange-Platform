@@ -27,6 +27,7 @@ import { useEffect, useState } from 'react';
 import { jwtDecode } from 'jwt-decode';
 import { setIsLogin, setRoleName, setUserId } from './redux/UserSlice/SignIn';
 import Loading from './components/LoadingComponent/loading';
+import ScrollToTop from './components/ScrollToTop/ScrollToTop';
 function App() {
   const dispatch = useDispatch();
   const { isLogin, role } = useSelector((state) => state.isLogin)
@@ -53,6 +54,7 @@ function App() {
   }
   return (
     <BrowserRouter>
+    <ScrollToTop/>
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/signin" element={<SignIn />} />

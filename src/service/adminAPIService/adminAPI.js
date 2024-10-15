@@ -26,7 +26,21 @@ const createUser = async (data) => {
     }
 }
 
+const editUser = async (data) => {
+    try {
+        return await axiosConfig.put(`admin/users/${data.id}`, {
+            roleId: data.roleId,
+            isActive: data.isActive
+        }
+        )
+    } catch (error) {
+        console.error("editUser error!")
+        return error
+    }
+}
+
 export {
     getAllUser,
-    createUser
+    createUser,
+    editUser
 }

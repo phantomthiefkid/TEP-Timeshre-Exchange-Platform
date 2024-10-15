@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 const HeaderAdmin = () => {
   const [info, setInfo] = useState();
   const { userId } = useSelector((state) => state.isLogin)
-  console.log("Before: ", userId)
+  
   const fetchAccountInfo = async () => {
     console.log("fetch: ", userId)
     let data = await getAccountInfo(userId);
@@ -33,7 +33,7 @@ const HeaderAdmin = () => {
       {/* Welcome Message */}
       <div className='px-4'>
         <h1 className="text-lg text-gray-500 font-semibold">Welcome,</h1>
-        <h1 className='font-medium text-xl text-gray-600'> {info? info.roleRoleName : ""}!</h1>
+        <h1 className='font-medium text-xl text-gray-600'> {info? info.roleName : ""}</h1>
       </div>
 
       <div className="flex items-center space-x-10">
@@ -46,7 +46,7 @@ const HeaderAdmin = () => {
         {/* Admin Profile */}
         <div className="flex items-center space-x-8">
           <div className="text-left">
-            <h2 className="text-lg font-semibold">{info? info.roleRoleName : ""}</h2>
+            <h2 className="text-lg font-semibold">{info? info.roleName : ""}</h2>
             <p className="text-md text-gray-500">{info? info.email : ""}</p>
           </div>
           {/* Avatar */}
