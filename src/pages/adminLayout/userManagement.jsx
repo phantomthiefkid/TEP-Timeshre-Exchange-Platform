@@ -9,11 +9,11 @@ import DetailEditUserModal from '../../components/Modal/detailEditUserModal';
 import Loading from '../../components/LoadingComponent/loading';
 const UserManagement = () => {
   const [allUser, setAllUser] = useState([]);
-  const [page, setPage] = useState(0); // Pagination
-  const [size, setSize] = useState(6); // Page size
-  const [totalPages, setTotalPages] = useState(1); // Total pages
-  const [roleId, setRoleId] = useState(""); // Role filter
-  const [userName, setUserName] = useState(""); // Search input
+  const [page, setPage] = useState(0); 
+  const [size, setSize] = useState(6); 
+  const [totalPages, setTotalPages] = useState(1); 
+  const [roleId, setRoleId] = useState("");
+  const [userName, setUserName] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
@@ -24,7 +24,7 @@ const UserManagement = () => {
       let data = await getAllUser(page, size, roleId, userName);
       if (data.status === 200) {
         setAllUser(data.data.content);
-        setTotalPages(data.data.totalPages); // Update total pages
+        setTotalPages(data.data.totalPages); 
         setLoading(false)
       }
     } catch (error) {
@@ -32,7 +32,6 @@ const UserManagement = () => {
     }
   };
 
-  // Pagination handlers
   const handleNextPage = () => {
     if (page < totalPages - 1) {
       setPage(page + 1);
@@ -45,16 +44,14 @@ const UserManagement = () => {
     }
   };
 
-  // Filter handler
   const handleRoleFilter = (e) => {
     setRoleId(e.target.value);
-    setPage(0); // Reset to first page
+    setPage(0); 
   };
 
-  // Search handler
   const handleSearch = (e) => {
     setUserName(e.target.value);
-    setPage(0); // Reset to first page
+    setPage(0); 
   };
 
   useEffect(() => {
@@ -66,7 +63,7 @@ const UserManagement = () => {
       if (newUser) {
         let data = await createUser(newUser);
         if (data.status === 200) {
-          toast.success("Tạo mới thành công", { duration: 2000 }); // Success toast
+          toast.success("Tạo mới thành công", { duration: 2000 }); 
         } else {
           toast.error("Tạo mới thất bại", { duration: 2000 });
         }
