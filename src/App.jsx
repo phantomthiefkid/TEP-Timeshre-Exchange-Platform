@@ -33,6 +33,7 @@ import { setIsLogin, setRoleName, setUserId } from "./redux/UserSlice/SignIn";
 import Loading from "./components/LoadingComponent/loading";
 import ScrollToTop from "./components/ScrollToTop/ScrollToTop"
 import CreateResort from "./pages/timeshareCompanyLayout/createResort/createResort";
+import Test from "./pages/timeshareCompanyLayout/createResort/test";
 function App() {
   const dispatch = useDispatch();
   const { isLogin, role } = useSelector((state) => state.isLogin);
@@ -61,6 +62,7 @@ function App() {
     <BrowserRouter>
       <ScrollToTop />
       <Routes>
+        <Route path="/test" element={<Test />} />
         <Route path="/" element={<LandingPage />} />
         <Route path="/signin" element={<SignIn />} />
         <Route path="/signup" element={<SignUp />} />

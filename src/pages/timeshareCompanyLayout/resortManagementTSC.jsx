@@ -12,13 +12,16 @@ const ResortManagementTSC = () => {
   const [totalPages, setTotalPages] = useState(1)
   const [resortName, setResortName] = useState("");
   const [loading, setLoading] = useState(true);
+  const [count, setCount] = useState(0)
   const fetAllResort = async () => {
     try {
       let data = await getAllResort(page, size, resortName);
+      let amount = await getAllResort(0, 100, "")
       if (data.status === 200) {
         setAllResort(data.data.content);
         setTotalPages(data.data.totalPages);
         setLoading(false)
+        setCount(amount.data.content.length)
       }
     } catch (error) {
       throw error
@@ -60,7 +63,7 @@ const ResortManagementTSC = () => {
           <p className="text-md font-medium text-gray-600 mt-2">Quản resort và các thông tin chi tiết</p>
         </div>
         <div className="flex space-x-4">
-          <span className="bg-red-100 text-red-600 px-2 py-1 rounded-full text-lg font-medium">Số lượng resort: <CountUp start={0} end={40} duration={2} /></span>
+          <span className="bg-red-100 text-red-600 px-2 py-1 rounded-full text-lg font-medium">Số lượng resort: <CountUp start={0} end={count} duration={2} /></span>
         </div>
       </div>
 

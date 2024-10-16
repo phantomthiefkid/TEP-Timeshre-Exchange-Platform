@@ -6,6 +6,7 @@ import { createUser, getAllUser } from '../../service/adminAPIService/adminAPI';
 import CreateUserModal from '../../components/Modal/createUserModal';
 import { toast, Toaster } from 'react-hot-toast';
 import DetailEditUserModal from '../../components/Modal/detailEditUserModal';
+import Loading from '../../components/LoadingComponent/loading';
 const UserManagement = () => {
   const [allUser, setAllUser] = useState([]);
   const [page, setPage] = useState(0); // Pagination
@@ -17,12 +18,15 @@ const UserManagement = () => {
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const [flag, setFlag] = useState(false);
+  const [loading, setLoading] = useState(true)
   const fetchAllUser = async () => {
     try {
       let data = await getAllUser(page, size, roleId, userName);
-      setAllUser(data.data.content);
-      console.log(data.data.content)
-      setTotalPages(data.data.totalPages); // Update total pages
+      if (data.status === 200) {
+        setAllUser(data.data.content);
+        setTotalPages(data.data.totalPages); // Update total pages
+        setLoading(false)
+      }
     } catch (error) {
       console.log(error);
     }
@@ -77,6 +81,9 @@ const UserManagement = () => {
     setIsUpdateModalOpen(true)
     setSelectedUser(user)
   }
+  if (loading) {
+    return <Loading/>
+  }
 
   return (
     <div>
@@ -93,16 +100,16 @@ const UserManagement = () => {
         </div>
         <div className="flex space-x-4">
           <span className="bg-red-100 text-red-600 px-2 py-1 rounded-full text-sm font-medium">
-            Tất cả: <CountUp start={0} end={40} duration={2} />
+            Tất cả: <CountUp start={0} end={21} duration={2} />
           </span>
           <span className="bg-blue-100 text-blue-600 px-2 py-1 rounded-full text-sm font-medium">
-            Customer: <CountUp start={0} end={20} duration={2} />
+            Customer: <CountUp start={0} end={10} duration={2} />
           </span>
           <span className="bg-green-100 text-green-600 px-2 py-1 rounded-full text-sm font-medium">
-            System Staff: <CountUp start={0} end={10} duration={2} />
+            System Staff: <CountUp start={0} end={3} duration={2} />
           </span>
           <span className="bg-yellow-100 text-yellow-600 px-2 py-1 rounded-full text-sm font-medium">
-            Timeshare Company: <CountUp start={0} end={10} duration={2} />
+            Timeshare Company: <CountUp start={0} end={7} duration={2} />
           </span>
         </div>
       </div>
@@ -203,9 +210,9 @@ const UserManagement = () => {
 
         <DetailEditUserModal isOpen={isUpdateModalOpen}
           onClose={() => setIsUpdateModalOpen(false)}
-          userData={selectedUser} 
+          userData={selectedUser}
           setFlag={() => setFlag(!flag)}
-          />
+        />
 
         <div className="flex justify-between items-center p-6">
           <button
@@ -221,11 +228,10 @@ const UserManagement = () => {
               <button
                 key={index}
                 onClick={() => setPage(index)}
-                className={`px-4 py-2 rounded-lg ${
-                  index === page
-                    ? "bg-blue-500 text-white"
-                    : "bg-gray-300 text-gray-700 hover:bg-gray-400"
-                }`}
+                className={`px-4 py-2 rounded-lg ${index === page
+                  ? "bg-blue-500 text-white"
+                  : "bg-gray-300 text-gray-700 hover:bg-gray-400"
+                  }`}
               >
                 {index + 1}
               </button>
