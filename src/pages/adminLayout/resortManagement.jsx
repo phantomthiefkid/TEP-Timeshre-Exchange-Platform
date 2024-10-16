@@ -8,6 +8,7 @@ import {
 import CreateTimeshareCompanyModal from "../../components/Modal/creatTimeshareCompanyModal";
 import DetailTimeshareCompanyModal from "../../components/Modal/detailTimeshareCompanyModal";
 import { toast, Toaster } from "react-hot-toast";
+import Loading from "../../components/LoadingComponent/loading";
 
 const ResortManagement = () => {
   const [allTimeshareCompany, setAllTimeshareCompany] = useState([]);
@@ -18,12 +19,16 @@ const ResortManagement = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
   const [selectedCompany, setSelectedCompany] = useState(null);
-
+  const [loading, setLoading] = useState(true)
   const fetchAllTimeshareCompany = async () => {
     try {
       let data = await getAllTimeshareCompany(page, size, timeshareCompanyName);
-      setAllTimeshareCompany(data.data.content);
-      setTotalPages(data.data.totalPages);
+      if (data.status === 200) {
+        setAllTimeshareCompany(data.data.content);
+        setTotalPages(data.data.totalPages);
+        setLoading(false)
+      }
+
     } catch (error) {
       console.log(error);
     }
@@ -60,7 +65,11 @@ const ResortManagement = () => {
     fetchAllTimeshareCompany();
   }, [page, timeshareCompanyName]);
 
-  const handleCreateNewTimeshareCompany = async () => {};
+  const handleCreateNewTimeshareCompany = async () => { };
+
+  if (loading) {
+    return (<Loading />)
+  }
 
   return (
     <div>
@@ -169,11 +178,10 @@ const ResortManagement = () => {
               <button
                 key={index}
                 onClick={() => setPage(index)}
-                className={`px-4 py-2 rounded-lg ${
-                  index === page
-                    ? "bg-blue-500 text-white"
-                    : "bg-gray-300 text-gray-700 hover:bg-gray-400"
-                }`}
+                className={`px-4 py-2 rounded-lg ${index === page
+                  ? "bg-blue-500 text-white"
+                  : "bg-gray-300 text-gray-700 hover:bg-gray-400"
+                  }`}
               >
                 {index + 1}
               </button>
