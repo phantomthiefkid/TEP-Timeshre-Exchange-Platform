@@ -3,6 +3,8 @@ import Header from '../../components/Header/headerOtherRole'
 import CountUp from 'react-countup'
 import { DocumentIcon, DotsVerticalIcon, PlusIcon } from '@heroicons/react/solid'
 import { getAllResort } from '../../service/tsCompanyService/tsCompanyAPI'
+import Loading from '../../components/LoadingComponent/loading'
+import { Link } from 'react-router-dom'
 const ResortManagementTSC = () => {
   const [allResort, setAllResort] = useState([]);
   const [page, setPage] = useState(0);
@@ -13,8 +15,11 @@ const ResortManagementTSC = () => {
   const fetAllResort = async () => {
     try {
       let data = await getAllResort(page, size, resortName);
-      setAllResort(data.data.content);
-      setTotalPages(data.data.totalPages);
+      if (data.status === 200) {
+        setAllResort(data.data.content);
+        setTotalPages(data.data.totalPages);
+        setLoading(false)
+      }
     } catch (error) {
       throw error
     }
@@ -42,7 +47,9 @@ const ResortManagementTSC = () => {
   useEffect(() => {
     fetAllResort();
   }, [page, resortName]);
-
+  if (loading) {
+    return(<Loading />)
+  }
   return (
     <div>
       <Header />
@@ -68,10 +75,10 @@ const ResortManagementTSC = () => {
           />
 
           {/* Add New User */}
-          <button className="px-6 flex items-center gap-4 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-500">
+          <Link to={`/timesharecompany/createresort`}><button className="px-6 flex items-center gap-4 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-500">
             <PlusIcon className='w-7 h-7' />
             Tạo mới resort
-          </button>
+          </button></Link>
 
         </div>
       </div>
@@ -88,7 +95,7 @@ const ResortManagementTSC = () => {
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {allResort &&
+            {allResort && allResort.length > 0 ? (
               allResort.map((item, index) => (
                 <tr
                   key={item.id}
@@ -108,8 +115,8 @@ const ResortManagementTSC = () => {
                   <td className="p-4">
                     <span
                       className={`px-2 py-1 rounded-full text-sm font-medium ${item.isActive
-                          ? 'bg-green-200 text-green-800'
-                          : 'bg-red-100 text-red-800'
+                        ? 'bg-green-200 text-green-800'
+                        : 'bg-red-100 text-red-800'
                         }`}
                     >
                       {item.isActive ? 'Đang hoạt động' : 'Ngừng hoạt động'}
@@ -124,8 +131,16 @@ const ResortManagementTSC = () => {
                     </button>
                   </td>
                 </tr>
-              ))}
+              ))
+            ) : !allResort? (<Loading/>) : (
+              <tr>
+                <td colSpan="5" className="p-4 text-center text-gray-500">
+                  Không tìm thấy gì
+                </td>
+              </tr>
+            )}
           </tbody>
+
         </table>
 
 

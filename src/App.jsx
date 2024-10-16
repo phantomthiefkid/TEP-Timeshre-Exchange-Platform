@@ -32,6 +32,7 @@ import { jwtDecode } from "jwt-decode";
 import { setIsLogin, setRoleName, setUserId } from "./redux/UserSlice/SignIn";
 import Loading from "./components/LoadingComponent/loading";
 import ScrollToTop from "./components/ScrollToTop/ScrollToTop"
+import CreateResort from "./pages/timeshareCompanyLayout/createResort/createResort";
 function App() {
   const dispatch = useDispatch();
   const { isLogin, role } = useSelector((state) => state.isLogin);
@@ -58,7 +59,7 @@ function App() {
   }
   return (
     <BrowserRouter>
-    <ScrollToTop/>
+      <ScrollToTop />
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/signin" element={<SignIn />} />
@@ -121,12 +122,22 @@ function App() {
         </Route>
 
         {/* Timeshare company routes */}
-        <Route path="/timesharecompany" element={<TimeshareCompanyLayout />}>
-          <Route index element={<ResortManagementTSC />} />
-          <Route path="resortmanagementtsc" element={<ResortManagementTSC />} />
-          <Route path="employeemanagement" element={<EmployeeManagement />} />
+        <Route
+          path="/timesharecompany"
+          element={
+            <ProtectRoute
+              isAllowed={isLogin && role === "TIMESHARECOMPANY"}
+              redirectPath="/signin"
+            />
+          }
+        >
+          <Route path="/timesharecompany" element={<TimeshareCompanyLayout />}>
+            <Route index element={<ResortManagementTSC />} />
+            <Route path="resortmanagementtsc" element={<ResortManagementTSC />} />
+            <Route path="employeemanagement" element={<EmployeeManagement />} />
+            <Route path="createresort" element={<CreateResort />} />
+          </Route>
         </Route>
-
         {/* Timeshare staff routes */}
         <Route path="/timesharestaff" element={<TimeshareStaffLayout />}>
           <Route index element={<RentalListManagement />} />
