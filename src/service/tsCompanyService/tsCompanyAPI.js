@@ -41,4 +41,18 @@ const createTimeshareStaff = async (data) => {
   }
 };
 
-export { getAllResort, getAllTimeshareStaff, createTimeshareStaff };
+const createResortByTSC = async (data) => {
+  try {
+    return await axiosConfig.post(`timeshare-company/resort`, data);
+  } catch (error) {
+    throw error;
+  }
+};
+const createResortUnitType = async (data) => {
+  try {
+    return await axiosConfig.post(`timeshare-company/resort/unit-type`, data);
+  } catch (error) {
+    throw error;
+  }
+};
+export { getAllResort, createResortByTSC, createResortUnitType };

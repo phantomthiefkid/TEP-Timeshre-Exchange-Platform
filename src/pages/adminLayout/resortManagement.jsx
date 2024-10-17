@@ -9,6 +9,7 @@ import {
 import CreateTimeshareCompanyModal from "../../components/Modal/creatTimeshareCompanyModal";
 import DetailTimeshareCompanyModal from "../../components/Modal/detailTimeshareCompanyModal";
 import { toast, Toaster } from "react-hot-toast";
+import Loading from "../../components/LoadingComponent/loading";
 
 const ResortManagement = () => {
   const [allTimeshareCompany, setAllTimeshareCompany] = useState([]);
@@ -19,6 +20,7 @@ const ResortManagement = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
   const [selectedCompany, setSelectedCompany] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const fetchAllTimeshareCompany = async () => {
     try {
@@ -32,8 +34,11 @@ const ResortManagement = () => {
         timeshareCompanyName,
         { headers }
       );
-      setAllTimeshareCompany(data.data.content);
-      setTotalPages(data.data.totalPages);
+      if (data.status === 200) {
+        setAllTimeshareCompany(data.data.content);
+        setTotalPages(data.data.totalPages);
+        setLoading(false);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -85,6 +90,10 @@ const ResortManagement = () => {
   useEffect(() => {
     fetchAllTimeshareCompany();
   }, [page, timeshareCompanyName]);
+
+  if (loading) {
+    return <Loading />;
+  }
 
   return (
     <div>

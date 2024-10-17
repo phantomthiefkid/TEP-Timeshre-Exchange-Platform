@@ -2,13 +2,18 @@ import React from 'react'
 
 const Loading = () => {
   return (
-    <div class="bg-gray-200 w-full min-h-screen flex justify-center items-center">
-      <div class="flex min-h-screen w-full items-center justify-center bg-gray-200">
-        <div class="flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-tr from-indigo-500 to-pink-500 animate-spin">
-          <div class="h-9 w-9 rounded-full bg-gray-200"></div>
+    <div className="bg-gray-100 w-full min-h-screen flex justify-center items-center">
+      <div className="flex flex-col items-center space-y-6">
+        <div className="relative">
+          <div className="w-16 h-16 border-4 border-dashed rounded-full animate-spin border-blue-400"></div>
+          <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center">
+            <div className="w-8 h-8 bg-blue-400 rounded-full"></div>
+          </div>
         </div>
+        <p className="text-gray-500 font-medium text-lg">Đang tải...</p>
       </div>
     </div>
+
   )
 }
 
