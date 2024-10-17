@@ -3,7 +3,7 @@ import logo from "../../assets/logoTEPblack.png";
 import { EyeIcon, EyeOffIcon } from "@heroicons/react/outline";
 import { FaXmark } from "react-icons/fa6";
 
-const createTimeshareStaff = ({ isOpen, onClose, onCreate }) => {
+const createTimeshareStaffModal = ({ isOpen, onClose, onCreate }) => {
   // State to hold form data
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -20,7 +20,6 @@ const createTimeshareStaff = ({ isOpen, onClose, onCreate }) => {
     onCreate(newUser);
 
     // Clear form fields after submission
-    setEmail("");
     setUsername("");
     setPassword("");
 
@@ -116,4 +115,4 @@ const createTimeshareStaff = ({ isOpen, onClose, onCreate }) => {
   );
 };
 
-export default createTimeshareStaff;
+export default createTimeshareStaffModal;

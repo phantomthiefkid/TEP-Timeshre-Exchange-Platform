@@ -5,7 +5,7 @@ import {
   getAllTimeshareCompany,
   getTimeshareCompanyById,
 } from "../../service/adminAPIService/adminAPI";
-import CreateTimeshareCompanyModal from "../../components/Modal/creatTimeshareCompanyModal";
+import CreateTimeshareCompanyModal from "../../components/Modal/createTimeshareCompanyModal";
 import DetailTimeshareCompanyModal from "../../components/Modal/detailTimeshareCompanyModal";
 import { toast, Toaster } from "react-hot-toast";
 import Loading from "../../components/LoadingComponent/loading";
@@ -70,7 +70,21 @@ const ResortManagement = () => {
     setPage(0);
   };
 
-  const handleCreateNewTimeshareCompany = async () => {};
+  const handleCreateNewTimeshareCompany = async (newTimeshareCompany) => {
+    try {
+      if (newTimeshareCompany) {
+        let data = await CreateTimeshareCompanyModal(newTimeshareCompany);
+        if (data.status === 200) {
+          toast.success("Tạo mới thành công", { duration: 2000 });
+        } else {
+          toast.error("Tạo mới thất bại", { duration: 2000 });
+        }
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Có lỗi xảy ra trong lúc tạo", { duration: 2000 });
+    }
+  };
 
   useEffect(() => {
     fetchAllTimeshareCompany();

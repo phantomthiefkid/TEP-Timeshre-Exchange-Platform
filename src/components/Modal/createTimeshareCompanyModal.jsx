@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import platformLogo from "../../assets/logoTEPblack.png";
 import { FaXmark } from "react-icons/fa6";
 
-const creatTimeshareCompanyModal = ({ isOpen, onClose, onCreate }) => {
+const createTimeshareCompanyModal = ({ isOpen, onClose, onCreate }) => {
   const [timeshareCompanyName, setTimeshareCompanyName] = useState("");
   const [logo, setLogo] = useState("");
   const [address, setAddress] = useState("");
@@ -141,4 +141,4 @@ const creatTimeshareCompanyModal = ({ isOpen, onClose, onCreate }) => {
   );
 };
 
-export default creatTimeshareCompanyModal;
+export default createTimeshareCompanyModal;
