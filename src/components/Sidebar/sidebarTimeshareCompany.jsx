@@ -77,7 +77,6 @@ const SidebarTimeshareCompany = () => {
     dispatch(setRoleName(""));
     navigate("/signin");
   };
-
   return (
     <div className="w-64 bg-white h-screen shadow-lg flex flex-col">
       <div className="flex items-center space-x-2 mb-8 px-6 mt-10">
@@ -99,13 +98,13 @@ const SidebarTimeshareCompany = () => {
       <hr className="my-4 border-gray-300" />
 
       <div className="px-4 mb-4">
-        <button
+        <Link
           onClick={handleLogout}
-          className="flex items-center p-2 text-gray-700 hover:bg-gray-200 transition duration-200 ease-in-out w-full"
+          className="flex items-center p-2 text-gray-700 hover:bg-gray-200 transition duration-200 ease-in-out"
         >
           <FaSignOutAlt className="text-lg mr-2" />
           <span>Đăng xuất</span>
-        </button>
+        </Link>
       </div>
     </div>
   );

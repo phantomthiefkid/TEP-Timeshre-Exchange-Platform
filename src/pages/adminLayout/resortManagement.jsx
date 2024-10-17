@@ -2,7 +2,6 @@ import { DotsVerticalIcon, PlusIcon } from "@heroicons/react/outline";
 import React, { useEffect, useState } from "react";
 import HeaderAdmin from "../../components/Header/headerAdmin";
 import {
-  createTimeshareCompany,
   getAllTimeshareCompany,
   getTimeshareCompanyById,
 } from "../../service/adminAPIService/adminAPI";
@@ -71,21 +70,7 @@ const ResortManagement = () => {
     setPage(0);
   };
 
-  const handleCreateNewTimeshareCompany = async (newTimeshareCompany) => {
-    try {
-      if (newTimeshareCompany) {
-        let data = await createTimeshareCompany(newTimeshareCompany);
-        if (data.status === 200) {
-          toast.success("Tạo mới thành công", { duration: 2000 });
-        } else {
-          toast.error("Tạo mới thất bại", { duration: 2000 });
-        }
-      }
-    } catch (error) {
-      console.log(error);
-      toast.error("Có lỗi xảy ra trong lúc tạo", { duration: 2000 });
-    }
-  };
+  const handleCreateNewTimeshareCompany = async () => {};
 
   useEffect(() => {
     fetchAllTimeshareCompany();
