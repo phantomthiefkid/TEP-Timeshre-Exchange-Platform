@@ -1,29 +1,32 @@
-import React, { useState } from 'react';
-import CreateResortBasic from './CreateResortBasic';
-import CreateResortAmenity from './CreateResortAmenity';
-import CreateUnitType from './CreateUnitType';
-import { createResortByTSC, createResortUnitType } from '../../../service/tsCompanyService/tsCompanyAPI';
+import React, { useState } from "react";
+import CreateResortBasic from "./createResortBasic";
+import CreateResortAmenity from "./createResortAmenity";
+import CreateUnitType from "./CreateUnitType";
+import {
+  createResortByTSC,
+  createResortUnitType,
+} from "../../../service/tsCompanyService/tsCompanyAPI";
 import { useDispatch } from "react-redux";
 import { setResortId } from "../../../redux/ResortSlice/Resort";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 const CreateResort = () => {
   const [step, setStep] = useState(1); // Quản lý bước hiện tại
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    resortName: '',
-    logo: '',
+    resortName: "",
+    logo: "",
     minPrice: 0,
     maxPrice: 0,
-    address: '',
-    description: '',
+    address: "",
+    description: "",
     resortAmenityList: [], // Dữ liệu tiện ích
   });
 
   const [unitType, setUnitType] = useState({
     resortId: 0,
-    title: '', // Initial value as a placeholder
-    area: '', // Initial value as a placeholder
+    title: "", // Initial value as a placeholder
+    area: "", // Initial value as a placeholder
     bathrooms: 0,
     bedrooms: 0,
     bedsFull: 0,
@@ -32,27 +35,26 @@ const CreateResort = () => {
     bedsMurphy: 0,
     bedsQueen: 0,
     bedsTwin: 0,
-    buildingsOption: '', // Initial value as a placeholder
+    buildingsOption: "", // Initial value as a placeholder
     price: 0,
-    description: '', // Initial value as a placeholder
-    kitchen: '', // Initial value as a placeholder
-    photos: '', // Initial value as a placeholder
+    description: "", // Initial value as a placeholder
+    kitchen: "", // Initial value as a placeholder
+    photos: "", // Initial value as a placeholder
     sleeps: 0,
-    view: '', // Initial value as a placeholder
+    view: "", // Initial value as a placeholder
     unitTypeAmenitiesDTOS: [
       {
-        name: '', // Initial value as a placeholder
-        type: '', // Initial value as a placeholder
+        name: "", // Initial value as a placeholder
+        type: "", // Initial value as a placeholder
       },
     ],
   });
-
 
   // Hàm để lưu dữ liệu nhập vào từ các component con
   const updateFormData = (newData) => {
     setFormData((prevData) => ({
       ...prevData,
-      ...newData
+      ...newData,
     }));
     console.log(formData, "parent");
   };
@@ -76,9 +78,9 @@ const CreateResort = () => {
     } else if (step === 3) {
       const status = await handleCreateUnitType();
       if (status === 200) {
-        navigate("/timesharecompany/resortmanagementtsc")
+        navigate("/timesharecompany/resortmanagementtsc");
       }
-      console.log(unitType)
+      console.log(unitType);
     }
   };
 
@@ -88,19 +90,19 @@ const CreateResort = () => {
       if (response.status === 200) {
         console.log(response);
         dispatch(setResortId(null));
-        return response.status
+        return response.status;
       }
     } catch (error) {
-      throw error
+      throw error;
     }
-  }
+  };
 
   const handleCreateResort = async () => {
     try {
       let response = await createResortByTSC(formData);
       if (response.status === 200) {
         console.log(response.data);
-        dispatch(setResortId(response.data.id));  // Dispatch action to save resortId in Redux
+        dispatch(setResortId(response.data.id)); // Dispatch action to save resortId in Redux
         return true;
       }
     } catch (error) {
@@ -115,7 +117,6 @@ const CreateResort = () => {
 
   return (
     <div className="w-full p-10 bg-white">
-
       <div className="flex justify-between">
         <h2 className="text-3xl font-bold mb-6">Thêm mới Resort</h2>
         <img
