@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import CreateResortBasic from "./createResortBasic";
 import CreateResortAmenity from "./createResortAmenity";
-import CreateUnitType from "./CreateUnitType";
+import CreateUnitType from "./createUnitType";
 import {
   createResortByTSC,
   createResortUnitType,
