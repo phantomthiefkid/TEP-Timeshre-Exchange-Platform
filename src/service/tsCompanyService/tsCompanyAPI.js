@@ -32,4 +32,13 @@ const getAllTimeshareStaff = async (
   }
 };
 
-export { getAllResort, getAllTimeshareStaff };
+const createTimeshareStaff = async (data) => {
+  try {
+    return await axiosConfig.post(`timeshare-company/staff`, data);
+  } catch (error) {
+    console.error("Post ts staff error:", error);
+    return error;
+  }
+};
+
+export { getAllResort, getAllTimeshareStaff, createTimeshareStaff };

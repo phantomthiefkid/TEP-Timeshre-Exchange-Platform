@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from "react";
 import Header from "../../components/Header/headerOtherRole";
-import { getAllTimeshareStaff } from "../../service/tsCompanyService/tsCompanyAPI";
+import {
+  createTimeshareStaff,
+  getAllTimeshareStaff,
+} from "../../service/tsCompanyService/tsCompanyAPI";
 import { DotsVerticalIcon, PlusIcon } from "@heroicons/react/solid";
-import CountUp from "react-countup";
+import toast from "react-hot-toast";
+import CreateTimeshareStaffModal from "../../components/Modal/createTimeshareStaff";
 
 const EmployeeManagement = () => {
   const [allTimeshareStaff, setAllTimeshareStaff] = useState([]);
@@ -10,10 +14,15 @@ const EmployeeManagement = () => {
   const [size, setSize] = useState(6);
   const [totalPages, setTotalPages] = useState(1);
   const [StaffName, setStaffName] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const fetchAllTimeshareStaff = async () => {
     try {
-      let data = await getAllTimeshareStaff(page, size, StaffName);
+      const token = localStorage.getItem("token");
+      const headers = {
+        Authorization: `Bearer ${token}`,
+      };
+      let data = await getAllTimeshareStaff(page, size, StaffName, { headers });
       setAllTimeshareStaff(data.data.content);
       setTotalPages(data.data.totalPages);
     } catch (error) {
@@ -38,6 +47,22 @@ const EmployeeManagement = () => {
     setPage(0);
   };
 
+  const handleCreateTimeshareStaff = async (newTimeshareStaff) => {
+    try {
+      if (newTimeshareStaff) {
+        let data = await createTimeshareStaff(newTimeshareStaff);
+        if (data.status === 200) {
+          toast.success("Tạo mới thành công", { duration: 2000 });
+        } else {
+          toast.error("Tạo mới thất bại", { duration: 2000 });
+        }
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Có lỗi xảy ra trong lúc tạo", { duration: 2000 });
+    }
+  };
+
   useEffect(() => {
     fetchAllTimeshareStaff();
   }, [page, StaffName]);
@@ -53,11 +78,6 @@ const EmployeeManagement = () => {
             Quản lí nhân viên của bạn.
           </p>
         </div>
-        <div className="flex space-x-4">
-          <span className="bg-red-100 text-red-600 px-2 py-1 rounded-full text-lg font-medium">
-            Số lượng nhân viên: <CountUp start={0} end={40} duration={2} />
-          </span>
-        </div>
       </div>
 
       <div className="flex justify-end items-center px-6">
@@ -71,10 +91,19 @@ const EmployeeManagement = () => {
           />
 
           {/* Add New User */}
-          <button className="px-6 flex items-center gap-4 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-500">
+          <button
+            onClick={() => setIsModalOpen(true)}
+            className="px-6 flex items-center gap-4 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-500"
+          >
             <PlusIcon className="w-7 h-7" />
             Thêm mới nhân viên
           </button>
+
+          <CreateTimeshareStaffModal
+            isOpen={isModalOpen}
+            onClose={() => setIsModalOpen(false)}
+            onCreate={handleCreateTimeshareStaff}
+          />
         </div>
       </div>
 
