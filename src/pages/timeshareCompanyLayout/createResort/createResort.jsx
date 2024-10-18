@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import CreateResortBasic from './CreateResortBasic';
 import CreateResortAmenity from './CreateResortAmenity';
 import CreateUnitType from './CreateUnitType';
@@ -20,32 +20,7 @@ const CreateResort = () => {
     resortAmenityList: [], // Dữ liệu tiện ích
   });
 
-  const [unitType, setUnitType] = useState({
-    resortId: 0,
-    title: '', // Initial value as a placeholder
-    area: '', // Initial value as a placeholder
-    bathrooms: 0,
-    bedrooms: 0,
-    bedsFull: 0,
-    bedsKing: 0,
-    bedsSofa: 0,
-    bedsMurphy: 0,
-    bedsQueen: 0,
-    bedsTwin: 0,
-    buildingsOption: '', // Initial value as a placeholder
-    price: 0,
-    description: '', // Initial value as a placeholder
-    kitchen: '', // Initial value as a placeholder
-    photos: '', // Initial value as a placeholder
-    sleeps: 0,
-    view: '', // Initial value as a placeholder
-    unitTypeAmenitiesDTOS: [
-      {
-        name: '', // Initial value as a placeholder
-        type: '', // Initial value as a placeholder
-      },
-    ],
-  });
+  const [unitType, setUnitType] = useState([]);
 
 
   // Hàm để lưu dữ liệu nhập vào từ các component con
@@ -54,16 +29,17 @@ const CreateResort = () => {
       ...prevData,
       ...newData
     }));
-    console.log(formData, "parent");
   };
 
+  useEffect(() => {
+    console.log(formData)
+  }, formData)
+
   const updateUnitType = (newData) => {
-    setUnitType((prevData) => ({
-      ...prevData,
-      ...newData,
-    }));
+    setUnitType(...newData);
+    console.log(unitType)
   };
-  // console.log(unitType, "unitType parent");
+
 
   const handleNext = async () => {
     if (step === 1) {
@@ -73,14 +49,12 @@ const CreateResort = () => {
       if (isResortCreated) {
         setStep(3);
       }
-    } else if (step === 3) {
-      const status = await handleCreateUnitType();
-      if (status === 200) {
-        navigate("/timesharecompany/resortmanagementtsc")
-      }
-      console.log(unitType)
-    }
+     
+      setStep(3)
+    } 
   };
+
+  
 
   const handleCreateUnitType = async () => {
     try {
