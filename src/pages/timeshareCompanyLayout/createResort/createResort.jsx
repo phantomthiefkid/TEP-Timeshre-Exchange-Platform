@@ -6,10 +6,11 @@ import { createResortByTSC, createResortUnitType } from '../../../service/tsComp
 import { useDispatch } from "react-redux";
 import { setResortId } from "../../../redux/ResortSlice/Resort";
 import { useNavigate } from 'react-router-dom';
+import { toast, Toaster } from 'react-hot-toast';
+
 const CreateResort = () => {
   const [step, setStep] = useState(1); // Quản lý bước hiện tại
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     resortName: '',
     logo: '',
@@ -17,13 +18,11 @@ const CreateResort = () => {
     maxPrice: 0,
     address: '',
     description: '',
-    resortAmenityList: [], // Dữ liệu tiện ích
+    resortAmenityList: [], 
   });
 
   const [unitType, setUnitType] = useState([]);
 
-
-  // Hàm để lưu dữ liệu nhập vào từ các component con
   const updateFormData = (newData) => {
     setFormData((prevData) => ({
       ...prevData,
@@ -48,26 +47,10 @@ const CreateResort = () => {
       const isResortCreated = await handleCreateResort();
       if (isResortCreated) {
         setStep(3);
+        toast.success("Tạo mới thành công. Vui lòng nhập loại phòng!", { duration: 2000 });
       }
-     
-      setStep(3)
-    } 
-  };
-
-  
-
-  const handleCreateUnitType = async () => {
-    try {
-      let response = await createResortUnitType(unitType);
-      if (response.status === 200) {
-        console.log(response);
-        dispatch(setResortId(null));
-        return response.status
-      }
-    } catch (error) {
-      throw error
     }
-  }
+  };
 
   const handleCreateResort = async () => {
     try {
@@ -86,10 +69,10 @@ const CreateResort = () => {
   const handleBack = () => {
     setStep((prevStep) => prevStep - 1);
   };
-
+ 
   return (
     <div className="w-full p-10 bg-white">
-
+      <Toaster position="top-right" reverseOrder={false} />
       <div className="flex justify-between">
         <h2 className="text-3xl font-bold mb-6">Thêm mới Resort</h2>
         <img

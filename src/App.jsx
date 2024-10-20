@@ -34,6 +34,7 @@ import Loading from "./components/LoadingComponent/loading";
 import ScrollToTop from "./components/ScrollToTop/ScrollToTop"
 import CreateResort from "./pages/timeshareCompanyLayout/createResort/createResort";
 import Test from "./pages/timeshareCompanyLayout/createResort/test";
+import UpdateResort from "./pages/timeshareCompanyLayout/updateResort/updateResort";
 function App() {
   const dispatch = useDispatch();
   const { isLogin, role } = useSelector((state) => state.isLogin);
@@ -138,6 +139,7 @@ function App() {
             <Route path="resortmanagementtsc" element={<ResortManagementTSC />} />
             <Route path="employeemanagement" element={<EmployeeManagement />} />
             <Route path="createresort" element={<CreateResort />} />
+            <Route path="updateresort" element={<UpdateResort />} />
           </Route>
         </Route>
         {/* Timeshare staff routes */}

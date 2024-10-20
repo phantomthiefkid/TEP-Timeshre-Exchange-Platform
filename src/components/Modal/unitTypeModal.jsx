@@ -7,21 +7,21 @@ const UnitTypeModal = ({ isOpen, onClose, onAddRoomType, selectedUnitType, onUpd
     const [formData, setFormData] = useState({
         title: '',
         area: '',
-        bathrooms: 1,
-        bedrooms: 1,
-        bedsFull: 1,
-        bedsKing: 1,
-        bedsSofa: 1,
-        bedsMurphy: 1,
-        bedsQueen: 1,
-        bedsTwin: 1,
+        bathrooms: 0,
+        bedrooms: 0,
+        bedsFull: 0,
+        bedsKing: 0,
+        bedsSofa: 0,
+        bedsMurphy: 0,
+        bedsQueen: 0,
+        bedsTwin: 0,
         buildingsOption: '',
         price: '',
         description: '',
         kitchen: '',
         photos: '',
-        resortId: resortId || -7,
-        sleeps: 1,
+        resortId: resortId || -1,
+        sleeps: 0,
         view: '',
         unitTypeAmenitiesDTOS: []
     });
@@ -41,21 +41,21 @@ const UnitTypeModal = ({ isOpen, onClose, onAddRoomType, selectedUnitType, onUpd
         setFormData({
             title: '',
             area: '',
-            bathrooms: 1,
-            bedrooms: 1,
-            bedsFull: 1,
-            bedsKing: 1,
-            bedsSofa: 1,
-            bedsMurphy: 1,
-            bedsQueen: 1,
-            bedsTwin: 1,
+            bathrooms: 0,
+            bedrooms: 0,
+            bedsFull: 0,
+            bedsKing: 0,
+            bedsSofa: 0,
+            bedsMurphy: 0,
+            bedsQueen: 0,
+            bedsTwin: 0,
             buildingsOption: '',
             price: '',
             description: '',
             kitchen: '',
             photos: '',
-            resortId: resortId || -7,
-            sleeps: 1,
+            resortId: resortId || -1,
+            sleeps: 0,
             view: '',
             unitTypeAmenitiesDTOS: []
         });
@@ -95,8 +95,9 @@ const UnitTypeModal = ({ isOpen, onClose, onAddRoomType, selectedUnitType, onUpd
         } else {
             onAddRoomType(formData); // Thêm mới room type
             console.log("Add", formData)
+            resetFormData()
         }
-        // onClose();
+        onClose();
     };
 
     const handleUploadFileImage = (e) => {
@@ -152,7 +153,7 @@ const UnitTypeModal = ({ isOpen, onClose, onAddRoomType, selectedUnitType, onUpd
                                             value={formData.bedrooms}
                                             onChange={handleChange}
                                         >
-                                            {[1, 2, 3, 4, 5].map((option) => (
+                                            {[0, 1, 2, 3, 4, 5, 6].map((option) => (
                                                 <option key={option} value={option}>
                                                     {option}
                                                 </option>
@@ -167,7 +168,7 @@ const UnitTypeModal = ({ isOpen, onClose, onAddRoomType, selectedUnitType, onUpd
                                             value={formData.sleeps}
                                             onChange={handleChange}
                                         >
-                                            {[1, 2, 3, 4, 5].map((option) => (
+                                            {[0, 1, 2, 3, 4, 5, 6].map((option) => (
                                                 <option key={option} value={option}>
                                                     {option}
                                                 </option>
@@ -227,7 +228,7 @@ const UnitTypeModal = ({ isOpen, onClose, onAddRoomType, selectedUnitType, onUpd
                                     value={formData.bedsKing}
                                     onChange={handleChange}
                                 >
-                                    {[1, 2, 3, 4, 5].map((option) => (
+                                    {[0, 1, 2, 3, 4, 5, 6].map((option) => (
                                         <option key={option} value={option}>
                                             {option}
                                         </option>
@@ -243,7 +244,7 @@ const UnitTypeModal = ({ isOpen, onClose, onAddRoomType, selectedUnitType, onUpd
                                     value={formData.bedsFull}
                                     onChange={handleChange}
                                 >
-                                    {[1, 2, 3, 4, 5].map((option) => (
+                                    {[0, 1, 2, 3, 4, 5, 6].map((option) => (
                                         <option key={option} value={option}>
                                             {option}
                                         </option>
@@ -259,7 +260,7 @@ const UnitTypeModal = ({ isOpen, onClose, onAddRoomType, selectedUnitType, onUpd
                                     value={formData.bedsSofa}
                                     onChange={handleChange}
                                 >
-                                    {[1, 2, 3, 4, 5].map((option) => (
+                                    {[0, 1, 2, 3, 4, 5, 6].map((option) => (
                                         <option key={option} value={option}>
                                             {option}
                                         </option>
@@ -269,12 +270,12 @@ const UnitTypeModal = ({ isOpen, onClose, onAddRoomType, selectedUnitType, onUpd
                             <div className="flex flex-col">
                                 <label className="mb-1">Số bedsMurphy:</label>
                                 <select
-                                    name="bedsSofa"
+                                    name="bedsMurphy"
                                     className="border p-2"
                                     value={formData.bedsMurphy}
                                     onChange={handleChange}
                                 >
-                                    {[1, 2, 3, 4, 5].map((option) => (
+                                    {[0, 1, 2, 3, 4, 5, 6].map((option) => (
                                         <option key={option} value={option}>
                                             {option}
                                         </option>
@@ -285,12 +286,12 @@ const UnitTypeModal = ({ isOpen, onClose, onAddRoomType, selectedUnitType, onUpd
                             <div className="flex flex-col">
                                 <label className="mb-1">Số bedsQueen:</label>
                                 <select
-                                    name="bedsSofa"
+                                    name="bedsQueen"
                                     className="border p-2"
                                     value={formData.bedsQueen}
                                     onChange={handleChange}
                                 >
-                                    {[1, 2, 3, 4, 5].map((option) => (
+                                    {[0, 1, 2, 3, 4, 5, 6].map((option) => (
                                         <option key={option} value={option}>
                                             {option}
                                         </option>
@@ -300,12 +301,12 @@ const UnitTypeModal = ({ isOpen, onClose, onAddRoomType, selectedUnitType, onUpd
                             <div className="flex flex-col">
                                 <label className="mb-1">Số giường đôi:</label>
                                 <select
-                                    name="bedsSofa"
+                                    name="bedsTwin"
                                     className="border p-2"
                                     value={formData.bedsTwin}
                                     onChange={handleChange}
                                 >
-                                    {[1, 2, 3, 4, 5].map((option) => (
+                                    {[0, 1, 2, 3, 4, 5, 6].map((option) => (
                                         <option key={option} value={option}>
                                             {option}
                                         </option>
@@ -320,12 +321,12 @@ const UnitTypeModal = ({ isOpen, onClose, onAddRoomType, selectedUnitType, onUpd
                             <div className="flex flex-col">
                                 <label className="mb-1">Số phòng tắm:</label>
                                 <select
-                                    name="bedsSofa"
+                                    name="bathrooms"
                                     className="border p-2"
                                     value={formData.bathrooms}
                                     onChange={handleChange}
                                 >
-                                    {[1, 2, 3, 4, 5].map((option) => (
+                                    {[0, 1, 2, 3, 4, 5, 6].map((option) => (
                                         <option key={option} value={option}>
                                             {option}
                                         </option>

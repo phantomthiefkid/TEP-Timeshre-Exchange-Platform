@@ -5,6 +5,7 @@ import { DocumentIcon, DotsVerticalIcon, PlusIcon } from '@heroicons/react/solid
 import { getAllResort } from '../../service/tsCompanyService/tsCompanyAPI'
 import Loading from '../../components/LoadingComponent/loading'
 import { Link } from 'react-router-dom'
+
 const ResortManagementTSC = () => {
   const [allResort, setAllResort] = useState([]);
   const [page, setPage] = useState(0);
@@ -50,14 +51,15 @@ const ResortManagementTSC = () => {
   useEffect(() => {
     fetAllResort();
   }, [page, resortName]);
+
   if (loading) {
-    return(<Loading />)
+    return (<Loading />)
   }
+
   return (
     <div>
       <Header />
       <div className="p-6 flex justify-between items-center">
-
         <div className='p-4'>
           <h1 className="text-3xl text-gray-700 font-bold">Quản lí resort</h1>
           <p className="text-md font-medium text-gray-600 mt-2">Quản resort và các thông tin chi tiết</p>
@@ -127,7 +129,7 @@ const ResortManagementTSC = () => {
                   </td>
                   <td className="p-4 flex gap-4">
                     <button className="hover:text-blue-500 transition duration-300 ease-in-out">
-                      <DocumentIcon color="gray" className="w-6 h-6" />
+                     <Link to={`/timesharecompany/updateresort`}> <DocumentIcon color="gray" className="w-6 h-6" /></Link>
                     </button>
                     <button className="hover:text-blue-500 transition duration-300 ease-in-out">
                       <DotsVerticalIcon className="w-6 h-6" />
@@ -135,7 +137,7 @@ const ResortManagementTSC = () => {
                   </td>
                 </tr>
               ))
-            ) : !allResort? (<Loading/>) : (
+            ) : !allResort ? (<Loading />) : (
               <tr>
                 <td colSpan="5" className="p-4 text-center text-gray-500">
                   Không tìm thấy gì

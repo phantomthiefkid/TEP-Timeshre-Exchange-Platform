@@ -1,9 +1,11 @@
 import { PlusIcon, XIcon } from '@heroicons/react/solid';
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import UnitTypeModal from '../../../components/Modal/unitTypeModal';
+import { setResortId } from '../../../redux/ResortSlice/Resort';
 import { createResortUnitType } from '../../../service/tsCompanyService/tsCompanyAPI';
+import { toast, Toaster } from 'react-hot-toast';
 const CreateUnitType = ({ onUpdateData, onNext, onBack, formData }) => {
   const { resortId } = useSelector((state) => state.resortId);
   const [selectedUnitType, setSelectedUnitType] = useState(null);
@@ -11,6 +13,8 @@ const CreateUnitType = ({ onUpdateData, onNext, onBack, formData }) => {
   const [roomTypes, setRoomTypes] = useState([]);
   const [indexSelected, setIndexSelected] = useState(-1)
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
   const handleAddUnitType = (newUnitType) => {
     setRoomTypes([...roomTypes, newUnitType]);
     setIsOpenModalUnitType(false)
@@ -24,25 +28,30 @@ const CreateUnitType = ({ onUpdateData, onNext, onBack, formData }) => {
     setIndexSelected(index);
     setIsOpenModalUnitType(true); // Mở modal
   };
-  
+
   const handleSubmit = async () => {
     try {
-      // Duyệt qua danh sách roomTypes và post từng phần tử
+      setLoading(true)
       for (const roomType of roomTypes) {
-       
+
 
         // Gọi API tạo loại phòng
         const response = await createResortUnitType(roomType);
 
         // Kiểm tra nếu POST thất bại
-        if (!response.status === 200) {
-          throw new Error(`Failed to create unit type: ${roomType.title}`);
+        if (response.status === 200) {
+          setLoading(false);
         }
 
       }
 
       // Nếu tất cả POST thành công, chuyển sang bước tiếp theo
-      navigate('/timesharecompany/resortmanagementtsc')
+
+      dispatch(setResortId(null))
+      toast.success("Tạo mới thành công!", { duration: 1000 })
+      setTimeout(() => {
+        navigate('/timesharecompany/resortmanagementtsc');
+      }, 1000);  // Delay of 1000 milliseconds = 1 second
 
     } catch (error) {
       console.error('Error creating unit types:', error);
@@ -51,13 +60,14 @@ const CreateUnitType = ({ onUpdateData, onNext, onBack, formData }) => {
   };
 
   const handleOpenModalAdd = () => {
-    
+
     setSelectedUnitType(null)
     setIsOpenModalUnitType(true)
   }
 
   return (
     <div>
+      <Toaster position="top-right" reverseOrder={false} />
       <div className='border p-6 rounded-xl'>
         <h2 className="text-xl font-bold mb-4">Loại phòng</h2>
         <div className='grid grid-cols-4 gap-4 p-4 min-h-96'>
