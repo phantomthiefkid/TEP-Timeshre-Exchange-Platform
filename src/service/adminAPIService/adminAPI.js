@@ -32,17 +32,16 @@ const createUser = async (data) => {
 };
 
 const editUser = async (data) => {
-    try {
-        return await axiosConfig.put(`admin/users/${data.id}`, {
-            roleId: data.roleId,
-            isActive: data.isActive
-        }
-        )
-    } catch (error) {
-        console.error("editUser error!")
-        return error
-    }
-}
+  try {
+    return await axiosConfig.put(`admin/users/${data.id}`, {
+      roleId: data.roleId,
+      isActive: data.isActive,
+    });
+  } catch (error) {
+    console.error("editUser error!");
+    return error;
+  }
+};
 
 const getAllTimeshareCompany = async (
   pageNo = 0,
@@ -72,11 +71,26 @@ const getTimeshareCompanyById = async (tsId = "") => {
   }
 };
 
-const getAllTimeshareCompanyAccount = async () => {};
+const getAllTimeshareCompanyAccount = async () => {
+  try {
+    return await axiosConfig.get(`admin/users/timeshare-company`, {});
+  } catch (error) {
+    console.error("Get Timeshare Company Account error:", error);
+    return error;
+  }
+};
 
-const creatTimeshareCompany = async () => {};
+const createTimeshareCompany = async (data) => {
+  try {
+    return await axiosConfig.post(`admin/timeshare-company`, data);
+  } catch (error) {
+    console.error("Create TS Company error:", error);
+    return error;
+  }
+};
 
 const updateTimeshareCompany = async () => {};
+
 export {
   getAllUser,
   createUser,
@@ -84,6 +98,6 @@ export {
   getAllTimeshareCompany,
   getTimeshareCompanyById,
   getAllTimeshareCompanyAccount,
-  creatTimeshareCompany,
+  createTimeshareCompany,
   updateTimeshareCompany,
 };

@@ -2,15 +2,16 @@ import { DotsVerticalIcon, PlusIcon } from "@heroicons/react/outline";
 import React, { useEffect, useState } from "react";
 import HeaderAdmin from "../../components/Header/headerAdmin";
 import {
+  createTimeshareCompany,
   getAllTimeshareCompany,
   getTimeshareCompanyById,
 } from "../../service/adminAPIService/adminAPI";
-import CreateTimeshareCompanyModal from "../../components/Modal/creatTimeshareCompanyModal";
+import CreateTimeshareCompanyModal from "../../components/Modal/createTimeshareCompanyModal";
 import DetailTimeshareCompanyModal from "../../components/Modal/detailTimeshareCompanyModal";
 import { toast, Toaster } from "react-hot-toast";
 import Loading from "../../components/LoadingComponent/loading";
 
-const ResortManagement = () => {
+const resortManagement = () => {
   const [allTimeshareCompany, setAllTimeshareCompany] = useState([]);
   const [page, setPage] = useState(0);
   const [size, setSize] = useState(6);
@@ -19,16 +20,25 @@ const ResortManagement = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
   const [selectedCompany, setSelectedCompany] = useState(null);
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(true);
+
   const fetchAllTimeshareCompany = async () => {
     try {
-      let data = await getAllTimeshareCompany(page, size, timeshareCompanyName);
+      const token = localStorage.getItem("token");
+      const headers = {
+        Authorization: `Bearer ${token}`,
+      };
+      let data = await getAllTimeshareCompany(
+        page,
+        size,
+        timeshareCompanyName,
+        { headers }
+      );
       if (data.status === 200) {
         setAllTimeshareCompany(data.data.content);
         setTotalPages(data.data.totalPages);
-        setLoading(false)
+        setLoading(false);
       }
-
     } catch (error) {
       console.log(error);
     }
@@ -61,14 +71,30 @@ const ResortManagement = () => {
     setPage(0);
   };
 
+  const handleCreateNewTimeshareCompany = async (newTimeshareCompany) => {
+    try {
+      if (newTimeshareCompany) {
+        // Replace this with your API call function to create a new timeshare company
+        let response = await createTimeshareCompany(newTimeshareCompany);
+
+        if (response.status === 200) {
+          toast.success("Tạo mới thành công", { duration: 2000 });
+        } else {
+          toast.error("Tạo mới thất bại", { duration: 2000 });
+        }
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Có lỗi xảy ra trong lúc tạo", { duration: 2000 });
+    }
+  };
+
   useEffect(() => {
     fetchAllTimeshareCompany();
   }, [page, timeshareCompanyName]);
 
-  const handleCreateNewTimeshareCompany = async () => { };
-
   if (loading) {
-    return (<Loading />)
+    return <Loading />;
   }
 
   return (
@@ -178,10 +204,11 @@ const ResortManagement = () => {
               <button
                 key={index}
                 onClick={() => setPage(index)}
-                className={`px-4 py-2 rounded-lg ${index === page
-                  ? "bg-blue-500 text-white"
-                  : "bg-gray-300 text-gray-700 hover:bg-gray-400"
-                  }`}
+                className={`px-4 py-2 rounded-lg ${
+                  index === page
+                    ? "bg-blue-500 text-white"
+                    : "bg-gray-300 text-gray-700 hover:bg-gray-400"
+                }`}
               >
                 {index + 1}
               </button>
@@ -207,4 +234,4 @@ const ResortManagement = () => {
   );
 };
 
-export default ResortManagement;
+export default resortManagement;
