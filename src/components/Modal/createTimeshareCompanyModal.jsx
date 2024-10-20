@@ -1,36 +1,73 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import platformLogo from "../../assets/logoTEPblack.png";
 import { FaXmark } from "react-icons/fa6";
+import {
+  createTimeshareCompany,
+  getAllTimeshareCompanyAccount,
+} from "../../service/adminAPIService/adminAPI";
+import toast from "react-hot-toast";
 
-const creatTimeshareCompanyModal = ({ isOpen, onClose, onCreate }) => {
+const createTimeshareCompanyModal = ({ isOpen, onClose, onCreate }) => {
   const [timeshareCompanyName, setTimeshareCompanyName] = useState("");
   const [logo, setLogo] = useState("");
   const [address, setAddress] = useState("");
-  const [description, setDescription] = useState("");
   const [ownerId, setOwnerId] = useState("");
   const [contact, setContact] = useState("");
+  const [description, setDescription] = useState("");
+  const [accounts, setAccounts] = useState([]);
+  const [error, setError] = useState("");
 
-  const handleSubmit = (e) => {
+  const getAllTSC = async () => {
+    try {
+      const response = await getAllTimeshareCompanyAccount();
+      setAccounts(response.data);
+    } catch (error) {
+      console.error("Error fetching accounts:", error.response || error);
+      setError("Failed to load accounts. Please try again.");
+    }
+  };
+
+  useEffect(() => {
+    if (isOpen) {
+      getAllTSC();
+    }
+  }, [isOpen]);
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const newTimshareCompany = {
+    const newTimeshareCompany = {
+      id: 0,
       timeshareCompanyName,
       logo,
       address,
       description,
-      ownerId,
+      ownerId: parseInt(ownerId, 10), // Convert to number
       contact,
+      isActive: true,
     };
-    onCreate(newTimshareCompany);
 
-    setTimeshareCompanyName("");
-    setLogo("");
-    setAddress("");
-    setDescription("");
-    setOwnerId("");
-    setContact("");
+    try {
+      let response = await createTimeshareCompany(newTimeshareCompany);
+      if (response.status === 200) {
+        toast.success("Tạo mới thành công", { duration: 2000 });
+      } else {
+        toast.error("Tạo mới thất bại", { duration: 2000 });
+      }
+      onCreate(response.data);
+      setTimeshareCompanyName("");
+      setLogo("");
+      setAddress("");
+      setDescription("");
+      setOwnerId("");
+      setContact("");
 
-    onClose();
+      // Close modal
+      onClose();
+    } catch (error) {
+      console.error("Error creating company:", error.response || error);
+      setError("Failed to create company. Please try again.");
+    }
   };
 
   if (!isOpen) return null;
@@ -51,12 +88,13 @@ const creatTimeshareCompanyModal = ({ isOpen, onClose, onCreate }) => {
           <img src={platformLogo} alt="Platform Logo" className="h-12 w-auto" />
         </div>
 
-        <h2 className="text-2xl  font-semibold text-gray-700 mb-4">
+        <h2 className="text-2xl font-semibold text-gray-700 mb-4">
           Tạo mới đối tác
         </h2>
 
+        {error && <p className="text-red-500 mb-4">{error}</p>}
         <form onSubmit={handleSubmit}>
-          {/* Get TSCompany Account */}
+          {/* Select Timeshare Company Account */}
           <div className="mb-4">
             <label className="block text-gray-700 font-medium mb-2">
               Tài khoản đối tác
@@ -64,13 +102,15 @@ const creatTimeshareCompanyModal = ({ isOpen, onClose, onCreate }) => {
             <select
               value={ownerId}
               onChange={(e) => setOwnerId(e.target.value)}
-              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 h-16"
-              required
+              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
-              <option value="1">Acc1</option>
-              <option value="2">Acc2</option>
-              <option value="3">Acc3</option>
-              <option value="4">Acc4</option>
+              <option value="">Chọn tài khoản</option>
+              {accounts &&
+                accounts.map((account) => (
+                  <option key={account.id} value={account.id}>
+                    {account.userName} ({account.email})
+                  </option>
+                ))}
             </select>
           </div>
           <div className="mb-4">
@@ -89,7 +129,7 @@ const creatTimeshareCompanyModal = ({ isOpen, onClose, onCreate }) => {
           <div className="mb-4">
             <label className="block text-gray-700 font-medium mb-2">Logo</label>
             <input
-              type="url"
+              type="text"
               value={logo}
               onChange={(e) => setLogo(e.target.value)}
               className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -97,7 +137,7 @@ const creatTimeshareCompanyModal = ({ isOpen, onClose, onCreate }) => {
             />
           </div>
 
-          <div className="mb-4 relative">
+          <div className="mb-4">
             <label className="block text-gray-700 font-medium mb-2">
               Địa chỉ
             </label>
@@ -109,7 +149,7 @@ const creatTimeshareCompanyModal = ({ isOpen, onClose, onCreate }) => {
               required
             />
           </div>
-          <div className="mb-4 relative">
+          <div className="mb-4">
             <label className="block text-gray-700 font-medium mb-2">
               Thông tin liên lạc
             </label>
@@ -121,21 +161,20 @@ const creatTimeshareCompanyModal = ({ isOpen, onClose, onCreate }) => {
               required
             />
           </div>
-          <div className="mb-4 relative">
+
+          <div className="mb-4">
             <label className="block text-gray-700 font-medium mb-2">
               Mô tả
             </label>
-            <textarea
+            <input
               type="text"
-              rows="5"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              className="resize-none w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
-
           {/* Buttons */}
-          <div className="flex justify-end space-x-4">
+          <div className="flex justify-end space-x-4 mt-8">
             <button
               type="button"
               onClick={onClose}
@@ -156,4 +195,4 @@ const creatTimeshareCompanyModal = ({ isOpen, onClose, onCreate }) => {
   );
 };
 
-export default creatTimeshareCompanyModal;
+export default createTimeshareCompanyModal;
