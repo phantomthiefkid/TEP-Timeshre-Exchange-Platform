@@ -5,7 +5,7 @@ import { FaXmark } from "react-icons/fa6";
 
 const createTimeshareStaffModal = ({ isOpen, onClose, onCreate }) => {
   // State to hold form data
-  const [username, setUsername] = useState("");
+  const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   // Handle form submission
@@ -13,14 +13,14 @@ const createTimeshareStaffModal = ({ isOpen, onClose, onCreate }) => {
     e.preventDefault();
 
     // Pass form data to the parent component for further processing
-    const newUser = {
-      username,
+    const newTimeshareStaff = {
+      userName,
       password,
     };
-    onCreate(newUser);
+    onCreate(newTimeshareStaff);
 
     // Clear form fields after submission
-    setUsername("");
+    setUserName("");
     setPassword("");
 
     // Close modal
@@ -59,8 +59,8 @@ const createTimeshareStaffModal = ({ isOpen, onClose, onCreate }) => {
             </label>
             <input
               type="text"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              value={userName}
+              onChange={(e) => setUserName(e.target.value)}
               className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               required
             />

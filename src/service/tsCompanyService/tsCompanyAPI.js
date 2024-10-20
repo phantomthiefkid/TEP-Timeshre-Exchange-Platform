@@ -56,10 +56,28 @@ const createResortUnitType = async (data) => {
   }
 };
 
+const getTimeshareCompanyById = async (tsId = "") => {
+  try {
+    return await axiosConfig.get(`admin/timeshare-company/${tsId}`, {});
+  } catch (error) {
+    console.error("Get Timeshare Company Detail error:", error);
+    return error;
+  }
+};
+
+const getTsStaffById = async (id = "") => {
+  try {
+    return await axiosConfig.get(`/timeshare-company/staff/${id}`, {});
+  } catch (error) {
+    console.error("Get Timeshare Staff Detail error:", error);
+    return error;
+  }
+};
 export {
   getAllResort,
   getAllTimeshareStaff,
   createTimeshareStaff,
   createResortByTSC,
   createResortUnitType,
+  getTsStaffById,
 };
