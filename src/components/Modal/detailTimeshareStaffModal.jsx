@@ -1,39 +1,34 @@
 import React, { useEffect, useState } from "react";
 import { FaAddressCard, FaLocationDot, FaUser, FaXmark } from "react-icons/fa6";
+import { getAllResort } from "../../service/tsCompanyService/tsCompanyAPI";
 
 const detailTimeshareStaffModal = ({ isOpen, onClose, tsStaff }) => {
-  const [isActive, setIsActive] = useState(tsStaff?.isActive || false);
-  const [companies, setCompanies] = useState([]);
-  //   const [selectedCompany, setSelectedCompany] = useState(
-  //     tsStaff?.resortId || ""
-  //   );
+  const [isActive, setIsActive] = useState(false);
+  // const [resortList, setResortList] = useState([]);
+  // const [selectedResort, setSelectedResort] = useState(tsStaff?.resortId || "");
+  const [error, setError] = useState("");
 
   if (!isOpen) return null;
 
-  const handleToggle = () => {
-    setIsActive(!isActive);
-  };
+  // const handleToggle = () => {
+  //   setIsActive(!isActive);
+  // };
 
-  const fetchCompanies = async () => {
-    try {
-      //   const response = await fetch("YOUR_API_URL");
-      const response = null;
-      const data = await response.json();
-      setCompanies(data);
-    } catch (error) {
-      console.error("Error fetching companies:", error);
-    }
-  };
+  // const fetchResort = async () => {
+  //   try {
+  //     const response = await getAllResort();
+  //     setResortList(response.data);
+  //   } catch (error) {
+  //     console.error("Error fetching resort:", error);
+  //     setError("Failed to load resort. Please try again.");
+  //   }
+  // };
 
-  const handleCompanyChange = (e) => {
-    setSelectedCompany(e.target.value);
-  };
-
-  useEffect(() => {
-    if (isOpen) {
-      //   fetchCompanies();
-    }
-  }, [isOpen]);
+  // useEffect(() => {
+  //   if (isOpen) {
+  //     fetchResort();
+  //   }
+  // }, [isOpen]);
 
   return (
     <div className="fixed inset-0 flex items-center justify-center">
@@ -62,35 +57,36 @@ const detailTimeshareStaffModal = ({ isOpen, onClose, tsStaff }) => {
               <label className="block text-gray-700 mb-2">Resort quản lí</label>
               <div className="flex items-center border rounded-lg p-2">
                 <FaAddressCard className="mr-2" />
+                <select className="w-full outline-none bg-white">
+                  <option>01</option>
+                  <option>01</option>
+                  <option>01</option>
+                  <option>01</option>
+                  <option>01</option>
+                </select>
                 {/* <select
-                  value={selectedCompany}
-                  onChange={handleCompanyChange}
+                  value={selectedResort}
+                  onChange={(e) => setSelectedResort(e.target.value)}
                   className="w-full outline-none bg-white"
                 >
                   <option value="">Chọn Resort</option>
-                  {companies.map((company) => (
-                    <option key={company.id} value={company.id}>
-                      {company.name}
+                  {resortList.map((resort) => (
+                    <option key={resort.id} value={resort.id}>
+                      {resort.resortName}
                     </option>
                   ))}
                 </select> */}
-                <select>
-                  <option>o1</option>
-                  <option>o1</option>
-                  <option>o1</option>
-                  <option>o1</option>
-                </select>
               </div>
             </div>
             <div className="mb-4">
               <label className="block text-gray-700 mb-2">Trạng thái</label>
               <div className="flex items-center">
-                <input
+                {/* <input
                   type="checkbox"
                   checked={isActive}
-                  onChange={handleToggle}
+                  // onChange={handleToggle}
                   className="sr-only peer"
-                />
+                /> */}
                 <div className="relative w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-checked:bg-blue-500">
                   <div
                     className={`absolute top-0.5 start-[2px] h-5 w-5 bg-white rounded-full transition-all ${

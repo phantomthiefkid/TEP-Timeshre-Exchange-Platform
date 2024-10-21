@@ -2,14 +2,18 @@ import React, { useState } from "react";
 import logo from "../../assets/logoTEPblack.png";
 import { EyeIcon, EyeOffIcon } from "@heroicons/react/outline";
 import { FaXmark } from "react-icons/fa6";
+import toast from "react-hot-toast";
+import { createTimeshareStaff } from "../../service/tsCompanyService/tsCompanyAPI";
 
 const createTimeshareStaffModal = ({ isOpen, onClose, onCreate }) => {
   // State to hold form data
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState("");
+
   // Handle form submission
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     // Pass form data to the parent component for further processing
@@ -17,14 +21,23 @@ const createTimeshareStaffModal = ({ isOpen, onClose, onCreate }) => {
       userName,
       password,
     };
-    onCreate(newTimeshareStaff);
 
-    // Clear form fields after submission
-    setUserName("");
-    setPassword("");
+    try {
+      let response = await createTimeshareStaff(newTimeshareStaff);
+      if (response.status === 200) {
+        toast.success("Tạo mới thành công", { duration: 2000 });
+      } else {
+        toast.error("Tạo mới thất bại", { duration: 2000 });
+      }
+      onCreate(response.data);
+      setUserName("");
+      setPassword("");
 
-    // Close modal
-    onClose();
+      onClose();
+    } catch (error) {
+      console.error("Error creating staff:", error.response || error);
+      setError("Failed to create staff. Please try again.");
+    }
   };
 
   if (!isOpen) return null;
