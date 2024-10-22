@@ -1,30 +1,64 @@
 import React, { useEffect, useState } from "react";
 import { FaAddressCard, FaXmark } from "react-icons/fa6";
-import { getResortByTimeshareCompany } from "../../service/tsCompanyService/tsCompanyAPI";
+import { getAllResort } from "../../service/tsCompanyService/tsCompanyAPI";
+import { updateTimeshareCompanystaff } from "../../service/tsCompanyService/tsCompanyAPI";
+import toast, { Toaster } from "react-hot-toast";
 
-const detailTimeshareStaffModal = ({ isOpen, onClose, tsStaff }) => {
-  const [resortList, setResortList] = useState([]); // Ensure resortList starts as an empty array
+const detailTimeshareStaffModal = ({ isOpen, onSave, onClose, tsStaff }) => {
+  const [resortList, setResortList] = useState([]);
   const [selectedResort, setSelectedResort] = useState(tsStaff?.resortId || "");
+  const [isActive, setIsActive] = useState(tsStaff?.isActive || false);
   const [error, setError] = useState("");
 
-  // Fetch resorts by timeshare company when modal opens and tsStaff is available
-  useEffect(() => {
-    const fetchResorts = async () => {
-      if (tsStaff?.timeshareCompanyId) {
-        try {
-          const response = await getResortByTimeshareCompany(
-            tsStaff.timeshareCompanyId
-          );
-          setResortList(response.content || []); // Ensure response.content exists, default to []
-        } catch (err) {
-          console.error("Error fetching resorts:", err);
-          setError("Failed to load resorts. Please try again.");
-        }
+  const fetchResort = async () => {
+    try {
+      const data = await getAllResort();
+      if (data.status === 200) {
+        setResortList(data.data.content);
       }
-    };
+    } catch (error) {
+      console.error("Error fetching resort:", error);
+      setError("Failed to load resorts. Please try again.");
+    }
+  };
 
-    if (isOpen && tsStaff) {
-      fetchResorts();
+  const handleAssignStaff = async () => {
+    try {
+      const dataAssign = {
+        resortId: selectedResort || tsStaff.resortId,
+        isActive: typeof isActive !== "undefined" ? isActive : tsStaff.isActive,
+      };
+
+      const response = await updateTimeshareCompanystaff(
+        tsStaff.id,
+        dataAssign
+      );
+
+      if (response.status === 200) {
+        toast.success("Cập nhật nhân viên thành công.", { duration: 2000 });
+        onSave();
+        onClose();
+      } else {
+        toast.error("Đã xảy ra lỗi.", { duration: 2000 });
+      }
+    } catch (error) {
+      console.error("Error updating staff:", error);
+      toast.error("Cập nhật thất bại.");
+    }
+  };
+
+  const handleToggleActive = () => {
+    setIsActive((prev) => !prev);
+  };
+
+  useEffect(() => {
+    if (isOpen) {
+      fetchResort();
+    }
+
+    if (tsStaff) {
+      setSelectedResort(tsStaff.resortId || "");
+      setIsActive(tsStaff.isActive || false);
     }
   }, [isOpen, tsStaff]);
 
@@ -32,6 +66,7 @@ const detailTimeshareStaffModal = ({ isOpen, onClose, tsStaff }) => {
 
   return (
     <div className="fixed inset-0 flex items-center justify-center">
+      <Toaster position="top-right" reverseOrder={false} />
       <div
         className="fixed inset-0 bg-black opacity-50"
         onClick={onClose}
@@ -63,31 +98,33 @@ const detailTimeshareStaffModal = ({ isOpen, onClose, tsStaff }) => {
                   onChange={(e) => setSelectedResort(e.target.value)}
                   className="w-full outline-none bg-white"
                 >
-                  <option value="">Chọn Resort</option>
-                  {resortList.length > 0 ? (
+                  <option value="">Vui lòng chọn Resort</option>
+                  {resortList.length > 0 &&
                     resortList.map((resort) => (
                       <option key={resort.id} value={resort.id}>
                         {resort.resortName}
                       </option>
-                    ))
-                  ) : (
-                    <option disabled>Không có Resort nào</option>
-                  )}
+                    ))}
                 </select>
               </div>
             </div>
             <div className="mb-4">
               <label className="block text-gray-700 mb-2">Trạng thái</label>
               <div className="flex items-center">
-                <div className="relative w-11 h-6 bg-gray-200 rounded-full">
+                <div
+                  onClick={handleToggleActive}
+                  className={`relative w-11 h-6 rounded-full cursor-pointer ${
+                    isActive ? "bg-blue-500" : "bg-gray-300" // Set the inactive color to gray
+                  }`}
+                >
                   <div
-                    className={`absolute top-0.5 start-[2px] h-5 w-5 bg-white rounded-full transition-all ${
-                      tsStaff.isActive ? "translate-x-full" : ""
+                    className={`absolute top-0.5 start-[2px] h-5 w-5 bg-white rounded-full transition-transform duration-300 ease-in-out ${
+                      isActive ? "translate-x-full" : ""
                     }`}
                   ></div>
                 </div>
                 <span className="ml-3 text-sm font-medium text-gray-900">
-                  {tsStaff.isActive ? "Đang hoạt động" : "Đã vô hiệu hóa"}
+                  {isActive ? "Đang hoạt động" : "Đã vô hiệu hóa"}
                 </span>
               </div>
             </div>
@@ -96,8 +133,11 @@ const detailTimeshareStaffModal = ({ isOpen, onClose, tsStaff }) => {
                 <button className="text-gray-500 mr-4" onClick={onClose}>
                   Hủy bỏ
                 </button>
-                <button className="bg-green-400 text-white rounded-lg px-4 py-2">
-                  Lưu thay đổi{" "}
+                <button
+                  className="bg-green-400 text-white rounded-lg px-4 py-2"
+                  onClick={handleAssignStaff}
+                >
+                  Lưu thay đổi
                 </button>
               </div>
             </div>

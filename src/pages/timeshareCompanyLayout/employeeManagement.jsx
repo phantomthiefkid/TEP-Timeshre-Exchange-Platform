@@ -7,7 +7,7 @@ import {
 } from "../../service/tsCompanyService/tsCompanyAPI";
 import { DotsVerticalIcon, PlusIcon } from "@heroicons/react/solid";
 import CountUp from "react-countup";
-import toast from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
 import CreateTimeshareStaffModal from "../../components/Modal/createTimeshareStaffModal";
 import DetailTimeshareStaffModal from "../../components/Modal/detailTimeshareStaffModal";
 
@@ -88,6 +88,7 @@ const employeeManagement = () => {
 
   return (
     <>
+      <Toaster position="top-right" reverseOrder={false} />
       <Header />
       <div className="p-6 flex justify-between items-center">
         <div className="p-4">
@@ -214,6 +215,7 @@ const employeeManagement = () => {
           isOpen={isDetailModalOpen}
           onClose={() => setIsDetailModalOpen(false)}
           tsStaff={selectedTSStaff}
+          onSave={fetchAllTimeshareStaff}
         />
       </div>
     </>

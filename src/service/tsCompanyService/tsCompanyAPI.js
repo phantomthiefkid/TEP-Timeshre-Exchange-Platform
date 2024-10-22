@@ -75,13 +75,11 @@ const getTsStaffById = async (id = "") => {
   }
 };
 
-const getResortByTimeshareCompany = async (timeshareCompanyId) => {
+const updateTimeshareCompanystaff = async (staffId = "", data) => {
   try {
-    const response = await axiosConfig.get(
-      `/timeshare-company/resort/${timeshareCompanyId}`
-    );
-    return response.data;
+    return await axiosConfig.put(`/timeshare-company/staff/${staffId}`, data);
   } catch (error) {
+    console.error("Update Timeshare Staff Detail error:", error);
     return error;
   }
 };
@@ -93,5 +91,5 @@ export {
   createResortByTSC,
   createResortUnitType,
   getTsStaffById,
-  getResortByTimeshareCompany,
+  updateTimeshareCompanystaff,
 };
