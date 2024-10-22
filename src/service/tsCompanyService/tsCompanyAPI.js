@@ -13,6 +13,7 @@ const getAllResort = async (pageNo = 0, pageSize = 3, resortName = "") => {
     return error;
   }
 };
+
 const getAllTimeshareStaff = async (
   pageNo = 0,
   pageSize = 3,
@@ -73,6 +74,18 @@ const getTsStaffById = async (id = "") => {
     return error;
   }
 };
+
+const getResortByTimeshareCompany = async (timeshareCompanyId) => {
+  try {
+    const response = await axiosConfig.get(
+      `/timeshare-company/resort/${timeshareCompanyId}`
+    );
+    return response.data;
+  } catch (error) {
+    return error;
+  }
+};
+
 export {
   getAllResort,
   getAllTimeshareStaff,
@@ -80,4 +93,5 @@ export {
   createResortByTSC,
   createResortUnitType,
   getTsStaffById,
+  getResortByTimeshareCompany,
 };
