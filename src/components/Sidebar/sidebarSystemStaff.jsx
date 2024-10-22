@@ -104,7 +104,7 @@ const SidebarSystemStaff = () => {
       <div className="px-4 mb-4">
         <button
           onClick={handleLogout}
-          className="flex items-center p-2 text-gray-700 hover:bg-gray-200 transition duration-200 ease-in-out"
+          className="flex items-center p-2 text-gray-700 hover:bg-gray-200 transition duration-200 ease-in-out w-full"
         >
           <FaSignOutAlt className="text-lg mr-2" />
           <span>Đăng xuất</span>

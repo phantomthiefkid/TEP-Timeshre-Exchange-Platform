@@ -3,11 +3,13 @@ import Header from "../../components/Header/headerOtherRole";
 import {
   createTimeshareStaff,
   getAllTimeshareStaff,
+  getTsStaffById,
 } from "../../service/tsCompanyService/tsCompanyAPI";
 import { DotsVerticalIcon, PlusIcon } from "@heroicons/react/solid";
 import CountUp from "react-countup";
-import toast from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
 import CreateTimeshareStaffModal from "../../components/Modal/createTimeshareStaffModal";
+import DetailTimeshareStaffModal from "../../components/Modal/detailTimeshareStaffModal";
 
 const employeeManagement = () => {
   const [allTimeshareStaff, setAllTimeshareStaff] = useState([]);
@@ -16,14 +18,21 @@ const employeeManagement = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [StaffName, setStaffName] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [count, setCount] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
+  const [selectedTSStaff, setSelectedTSStaff] = useState(null);
 
   const fetchAllTimeshareStaff = async () => {
     try {
       let data = await getAllTimeshareStaff(page, size, StaffName);
-      setAllTimeshareStaff(data.content);
-      console.log(data.content);
-
-      setTotalPages(data.data.totalPages);
+      let amount = await getAllTimeshareStaff(0, 100, "");
+      if (data.status === 200) {
+        setAllTimeshareStaff(data.data.content);
+        setTotalPages(data.data.totalPages);
+        setLoading(false);
+        setCount(amount.data.content.length);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -50,6 +59,7 @@ const employeeManagement = () => {
     try {
       if (newTimeshareStaff) {
         let data = await createTimeshareStaff(newTimeshareStaff);
+        console.log(data);
         if (data.status === 200) {
           toast.success("Tạo mới thành công", { duration: 2000 });
         } else {
@@ -62,11 +72,23 @@ const employeeManagement = () => {
     }
   };
 
+  const fetchTSStaffDetails = async (id) => {
+    try {
+      const response = await getTsStaffById(id);
+      setSelectedTSStaff(response.data);
+      setIsDetailModalOpen(true);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     fetchAllTimeshareStaff();
   }, [page, StaffName]);
+
   return (
     <>
+      <Toaster position="top-right" reverseOrder={false} />
       <Header />
       <div className="p-6 flex justify-between items-center">
         <div className="p-4">
@@ -79,7 +101,7 @@ const employeeManagement = () => {
         </div>
         <div className="flex space-x-4">
           <span className="bg-red-100 text-red-600 px-2 py-1 rounded-full text-lg font-medium">
-            Số lượng nhân viên: <CountUp start={0} end={40} duration={2} />
+            Số lượng nhân viên: <CountUp start={0} end={count} duration={2} />
           </span>
         </div>
       </div>
@@ -125,7 +147,7 @@ const employeeManagement = () => {
             {allTimeshareStaff &&
               allTimeshareStaff.map((item, index) => (
                 <tr
-                  key={item.id}
+                  key={index}
                   className="hover:bg-gray-100 transition duration-300 ease-in-out transform hover:scale-95"
                 >
                   <td className="p-4">{index + 1}</td>
@@ -144,7 +166,10 @@ const employeeManagement = () => {
                     </span>
                   </td>
                   <td className="p-4 flex gap-4">
-                    <button className="hover:text-blue-500 transition duration-300 ease-in-out">
+                    <button
+                      onClick={() => fetchTSStaffDetails(item.id)}
+                      className="hover:text-blue-500 transition duration-300 ease-in-out"
+                    >
                       <DotsVerticalIcon className="w-6 h-6" />
                     </button>
                   </td>
@@ -186,6 +211,12 @@ const employeeManagement = () => {
             Trang sau
           </button>
         </div>
+        <DetailTimeshareStaffModal
+          isOpen={isDetailModalOpen}
+          onClose={() => setIsDetailModalOpen(false)}
+          tsStaff={selectedTSStaff}
+          onSave={fetchAllTimeshareStaff}
+        />
       </div>
     </>
   );

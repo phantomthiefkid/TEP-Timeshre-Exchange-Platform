@@ -2,29 +2,42 @@ import React, { useState } from "react";
 import logo from "../../assets/logoTEPblack.png";
 import { EyeIcon, EyeOffIcon } from "@heroicons/react/outline";
 import { FaXmark } from "react-icons/fa6";
+import toast from "react-hot-toast";
+import { createTimeshareStaff } from "../../service/tsCompanyService/tsCompanyAPI";
 
 const createTimeshareStaffModal = ({ isOpen, onClose, onCreate }) => {
   // State to hold form data
-  const [username, setUsername] = useState("");
+  const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState("");
+
   // Handle form submission
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     // Pass form data to the parent component for further processing
-    const newUser = {
-      username,
+    const newTimeshareStaff = {
+      userName,
       password,
     };
-    onCreate(newUser);
 
-    // Clear form fields after submission
-    setUsername("");
-    setPassword("");
+    try {
+      let response = await createTimeshareStaff(newTimeshareStaff);
+      if (response.status === 200) {
+        toast.success("Tạo mới thành công", { duration: 2000 });
+      } else {
+        toast.error("Tạo mới thất bại", { duration: 2000 });
+      }
+      onCreate(response.data);
+      setUserName("");
+      setPassword("");
 
-    // Close modal
-    onClose();
+      onClose();
+    } catch (error) {
+      console.error("Error creating staff:", error.response || error);
+      setError("Failed to create staff. Please try again.");
+    }
   };
 
   if (!isOpen) return null;
@@ -59,8 +72,8 @@ const createTimeshareStaffModal = ({ isOpen, onClose, onCreate }) => {
             </label>
             <input
               type="text"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              value={userName}
+              onChange={(e) => setUserName(e.target.value)}
               className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               required
             />

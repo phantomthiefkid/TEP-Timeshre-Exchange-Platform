@@ -24,16 +24,7 @@ const resortManagement = () => {
 
   const fetchAllTimeshareCompany = async () => {
     try {
-      const token = localStorage.getItem("token");
-      const headers = {
-        Authorization: `Bearer ${token}`,
-      };
-      let data = await getAllTimeshareCompany(
-        page,
-        size,
-        timeshareCompanyName,
-        { headers }
-      );
+      let data = await getAllTimeshareCompany(page, size, timeshareCompanyName);
       if (data.status === 200) {
         setAllTimeshareCompany(data.data.content);
         setTotalPages(data.data.totalPages);
