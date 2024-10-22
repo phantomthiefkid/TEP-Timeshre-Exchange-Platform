@@ -11,9 +11,20 @@ import {
   FaUserCheck,
   FaRegFileAlt,
   FaRegFile,
+  FaComment,
+  FaHouseUser,
+  FaKey,
+  FaFileAlt,
 } from "react-icons/fa";
 import { setIsLogin, setRoleName } from "../../redux/UserSlice/SignIn";
 import { useDispatch } from "react-redux";
+import {
+  FaArrowRightArrowLeft,
+  FaCheckToSlot,
+  FaHandHoldingDollar,
+  FaHouseChimneyCrack,
+  FaTableList,
+} from "react-icons/fa6";
 
 const MenuItem = ({ icon: Icon, title, children, path }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -82,21 +93,45 @@ const SidebarTimeshareStaff = () => {
     dispatch(setRoleName(""));
     navigate("/signin");
   };
+
   return (
     <div className="w-64 bg-white h-screen shadow-lg flex flex-col">
       <div className="flex items-center space-x-2 mb-8 px-6 mt-10">
         <img src="../src/assets/logoTEPblack.png" className="w-auto px-4" />
       </div>
       <div className="flex-grow p-5">
-        <MenuItem icon={FaChartBar} title="Danh sách cho thuê" path="#" />
-        <MenuItem icon={FaListAlt} title="Xác minh bài đăng" path="#" />
-        <MenuItem icon={FaMoneyBillAlt} title="Danh sách yêu cầu">
-          <MenuItem icon={FaUserCheck} title="Yêu cầu cho thuê" path="#" />
-          <MenuItem icon={FaCity} title="Yêu cầu trao đổi" path="#" />
-          <MenuItem icon={FaCity} title="Xác minh trao đổi" path="#" />
+        <MenuItem
+          icon={FaFileAlt}
+          title="Danh sách cho thuê"
+          path="/timesharestaff/rentalmanagement"
+        />
+        <MenuItem icon={FaTableList} title="Danh sách yêu cầu">
+          <MenuItem
+            icon={FaHouseUser}
+            title="Yêu cầu cho thuê"
+            path="/timesharestaff/rentalpostingmanagement"
+          />
+          <MenuItem
+            icon={FaArrowRightArrowLeft}
+            title="Yêu cầu trao đổi"
+            path="/timesharestaff/exchangepostingmanagement"
+          />
+          <MenuItem
+            icon={FaCheckToSlot}
+            title="Xác minh trao đổi"
+            path="/timesharestaff/exchangeverifymanagement"
+          />
         </MenuItem>
-        <MenuItem icon={FaRegFileAlt} title="Hỗ trợ định giá" path="#" />
-        <MenuItem icon={FaRegFileAlt} title="Đánh giá khách hàng" path="#" />
+        <MenuItem
+          icon={FaHandHoldingDollar}
+          title="Hỗ trợ định giá"
+          path="/timesharestaff/moneysupport"
+        />
+        <MenuItem
+          icon={FaComment}
+          title="Đánh giá khách hàng"
+          path="/timesharestaff/feedback"
+        />
       </div>
 
       <hr className="my-4 border-gray-300" />

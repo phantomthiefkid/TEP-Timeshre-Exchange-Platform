@@ -1,9 +1,12 @@
-import React from 'react'
-
+import React from "react";
+import { Toaster } from "react-hot-toast";
 const RentalListManagement = () => {
   return (
-    <div>RentalListManagement</div>
-  )
-}
+    <>
+      <Toaster position="top-right" reverseOrder={false} />
+      Test
+    </>
+  );
+};
 
-export default RentalListManagement
+export default RentalListManagement;

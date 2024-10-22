@@ -21,7 +21,10 @@ import ResortManagementTSC from "./pages/timeshareCompanyLayout/resortManagement
 import TimeshareCompanyLayout from "./pages/timeshareCompanyLayout/timeshareCompanyLayout";
 import FeeddbackList from "./pages/timeshareStaffLayout/feedbackList";
 import RentalListManagement from "./pages/timeshareStaffLayout/rentalListManagement";
-import RequestListManagement from "./pages/timeshareStaffLayout/requestListManagement";
+import RentalPostingManagement from "./pages/timeshareStaffLayout/rentalPostingMNG";
+import ExchangePostingManagement from "./pages/timeshareStaffLayout/exchangePostingMNG";
+import ExchangVerifyManagement from "./pages/timeshareStaffLayout/exchangeVerifyMNG";
+import MoneySupport from "./pages/timeshareStaffLayout/moneySupportMNG";
 import TimeshareStaffLayout from "./pages/timeshareStaffLayout/timeshareStaffLayout";
 import AboutUs from "./pages/about/aboutUs";
 import Faqs from "./pages/faqs/faq";
@@ -149,7 +152,19 @@ function App() {
         <Route path="/timesharestaff" element={<TimeshareStaffLayout />}>
           <Route index element={<RentalListManagement />} />
           <Route path="rentalmanagement" element={<RentalListManagement />} />
-          <Route path="requestmanagement" element={<RequestListManagement />} />
+          <Route
+            path="rentalpostingmanagement"
+            element={<RentalPostingManagement />}
+          />
+          <Route
+            path="exchangepostingmanagement"
+            element={<ExchangePostingManagement />}
+          />
+          <Route
+            path="exchangeverifymanagement"
+            element={<ExchangVerifyManagement />}
+          />
+          <Route path="moneysupport" element={<MoneySupport />} />
           <Route path="feedback" element={<FeeddbackList />} />
         </Route>
       </Routes>

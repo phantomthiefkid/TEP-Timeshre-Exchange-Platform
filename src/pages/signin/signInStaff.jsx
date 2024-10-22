@@ -3,12 +3,7 @@ import bgSignIn from "../../assets/bgSignInSignUp.png";
 import logoTEP from "../../assets/logoTEPblack.png";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import {
-  setError,
-  setIsLogin,
-  setRoleName,
-  setUserId,
-} from "../../redux/UserSlice/SignIn";
+import { setError, setIsLogin, setUserId } from "../../redux/UserSlice/SignIn";
 import { jwtDecode } from "jwt-decode";
 import { getAllTimeshareCompany } from "../../service/public/resortService/resortAPI";
 import { staffLogin } from "../../service/accountAPI/accountService";
@@ -51,24 +46,11 @@ const SignInStaff = () => {
 
       if (data && data.data && data.data.accessToken) {
         const decodedToken = jwtDecode(data.data.accessToken);
-        const roleName = decodedToken.RoleName;
         localStorage.setItem("token", data.data.accessToken);
-        localStorage.setItem("roleName", roleName);
         dispatch(setIsLogin(true));
-        dispatch(setRoleName(roleName));
         dispatch(setUserId(decodedToken.userId));
         dispatch(setError(false));
-
-        // Navigate based on role
-        if (roleName === "ADMIN") {
-          navigate("/admin");
-        } else if (roleName === "SYSTEMSTAFF") {
-          navigate("/systemstaff");
-        } else if (roleName === "TIMESHARECOMPANY") {
-          navigate("/timesharecompany");
-        } else {
-          navigate("/");
-        }
+        navigate("/timesharestaff");
       } else {
         dispatch(setError(true));
         console.error("Login failed:", data.error || "Unknown error");
