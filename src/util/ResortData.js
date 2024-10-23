@@ -8,47 +8,26 @@ const resorts = [
     {
         id: 2,
         name: 'InterContinental Danang Sun Peninsula Resort',
+        img: 'https://modalabeachresort.com/wp-content/uploads/2024/06/rooms_tawhay_6.jpg',
         location: 'Đà Nẵng'
     },
     {
         id: 3,
         name: 'The Grand Ho Tram Strip',
+        img: 'https://modalabeachresort.com/wp-content/uploads/2024/06/rooms_hayahay_6.jpg',
         location: 'Bà Rịa - Vũng Tàu'
     },
     {
         id: 4,
         name: 'Six Senses Ninh Van Bay',
+        img: 'https://modalabeachresort.com/wp-content/uploads/2024/06/Lantaw-Sunset-Carousel.png',
         location: 'Ninh Vân Bay, Khánh Hòa'
     },
     {
         id: 5,
         name: 'Fusion Resort Cam Ranh',
+        img: 'https://modalabeachresort.com/wp-content/uploads/2024/06/Lantaw-Ocean-1-e1649727785617.jpg',
         location: 'Cam Ranh, Khánh Hòa'
-    },
-    {
-        id: 6,
-        name: 'Amanoi Resort',
-        location: 'Vĩnh Hy Bay, Ninh Thuận'
-    },
-    {
-        id: 7,
-        name: 'Anantara Mui Ne Resort',
-        location: 'Mũi Né, Bình Thuận'
-    },
-    {
-        id: 8,
-        name: 'Salinda Resort Phu Quoc',
-        location: 'Phú Quốc, Kiên Giang'
-    },
-    {
-        id: 9,
-        name: 'Angsana Lang Co',
-        location: 'Lăng Cô, Thừa Thiên Huế'
-    },
-    {
-        id: 10,
-        name: 'Flamingo Dai Lai Resort',
-        location: 'Vĩnh Phúc'
     }
 ];
 

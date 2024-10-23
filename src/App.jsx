@@ -139,7 +139,7 @@ function App() {
             <Route path="resortmanagementtsc" element={<ResortManagementTSC />} />
             <Route path="employeemanagement" element={<EmployeeManagement />} />
             <Route path="createresort" element={<CreateResort />} />
-            <Route path="updateresort" element={<UpdateResort />} />
+            <Route path="updateresort/:id" element={<UpdateResort />} />
           </Route>
         </Route>
         {/* Timeshare staff routes */}

@@ -49,6 +49,7 @@ const CreateResort = () => {
         setStep(3);
         toast.success("Tạo mới thành công. Vui lòng nhập loại phòng!", { duration: 2000 });
       }
+      
     }
   };
 

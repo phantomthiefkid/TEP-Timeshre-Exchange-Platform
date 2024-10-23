@@ -117,10 +117,10 @@ const CreateUnitType = ({ onUpdateData, onNext, onBack, formData }) => {
           setIsOpenModalUnitType(false); // Đóng modal sau khi cập nhật
         }}
       />
-      <div className="mt-6 flex justify-between">
-        <button type="button" onClick={onBack} className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">
+      <div className="mt-6 flex justify-end">
+        {/* <button type="button" onClick={onBack} className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">
           Quay lại
-        </button>
+        </button> */}
         <button type="button" onClick={handleSubmit} className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">
           Tiếp theo
         </button>

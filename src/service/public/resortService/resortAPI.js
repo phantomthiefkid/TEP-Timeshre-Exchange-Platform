@@ -23,7 +23,16 @@ const getAllResortByName = async (pageNo = 0, pageSize = 20, resortName) => {
     }
 }
 
+const getDetailUnitType =  async (unitTypeId) => {
+    try {
+        return await axios.get(`${baseURL}public/unit-type/${unitTypeId}`)
+    } catch (error) {
+        return error
+    }
+}
+
 export {
     getResortById,
-    getAllResortByName
+    getAllResortByName,
+    getDetailUnitType
 }
