@@ -1,296 +1,131 @@
-import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
-
+import { PlusIcon, XIcon } from '@heroicons/react/solid';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import UnitTypeModal from '../../../components/Modal/unitTypeModal';
+import { setResortId } from '../../../redux/ResortSlice/Resort';
+import { createResortUnitType } from '../../../service/tsCompanyService/tsCompanyAPI';
+import { toast, Toaster } from 'react-hot-toast';
 const CreateUnitType = ({ onUpdateData, onNext, onBack, formData }) => {
-  const { resortId } = useSelector((state) => state.resortId); // Ensure you access the correct state
+  const { resortId } = useSelector((state) => state.resortId);
+  const [selectedUnitType, setSelectedUnitType] = useState(null);
+  const [isOpenModalUnitType, setIsOpenModalUnitType] = useState(false);
+  const [roomTypes, setRoomTypes] = useState([]);
+  const [indexSelected, setIndexSelected] = useState(-1)
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
+  const handleAddUnitType = (newUnitType) => {
+    setRoomTypes([...roomTypes, newUnitType]);
+    setIsOpenModalUnitType(false)
+  }
 
-  // Initialize the unitType state
-  const [unitType, setUnitType] = useState({
-    title: '',
-    area: '',
-    bathrooms: 0,
-    bedrooms: 0,
-    bedsFull: 0,
-    bedsKing: 0,
-    bedsSofa: 0,
-    bedsMurphy: 0,
-    bedsQueen: 0,
-    bedsTwin: 0,
-    buildingsOption: '',
-    price: 0,
-    description: '',
-    kitchen: '',
-    photos: '',
-    resortId: resortId, // Set resortId from Redux state
-    sleeps: 0,
-    view: '',
-    unitTypeAmenitiesDTOS: [{ name: '', type: '' }],
-  });
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    // Check if the input field is a number
-    const isNumberField = ['bathrooms', 'bedrooms', 'bedsFull', 'bedsKing', 'bedsSofa', 'bedsMurphy', 'bedsQueen', 'bedsTwin', 'price', 'sleeps'].includes(name);
-    const newValue = isNumberField ? Number(value) : value; // Convert to number if it's a number field
-    setUnitType((prev) => ({ ...prev, [name]: newValue })); // Update unitType state
-    console.log(unitType); // Log the current state for debugging
+  const handleDeleteRoomType = (indexToDelete) => {
+    setRoomTypes(roomTypes.filter((_, index) => index !== indexToDelete)); // Remove room type by index
+  };
+  const handleEditUnitType = (index) => {
+    setSelectedUnitType({ ...roomTypes[index] }); // Lưu trữ item được chọn và vị trí trong mảng
+    setIndexSelected(index);
+    setIsOpenModalUnitType(true); // Mở modal
   };
 
-  const handleAmenityChange = (index, field, value) => {
-    const updatedAmenities = [...unitType.unitTypeAmenitiesDTOS];
-    updatedAmenities[index][field] = value; // Update specific amenity field
-    setUnitType((prev) => ({ ...prev, unitTypeAmenitiesDTOS: updatedAmenities })); // Update state
-    console.log(unitType); // Log the current state for debugging
-  };
+  const handleSubmit = async () => {
+    try {
+      setLoading(true)
+      for (const roomType of roomTypes) {
 
-  const addAmenity = () => {
-    setUnitType((prev) => ({
-      ...prev,
-      unitTypeAmenitiesDTOS: [...prev.unitTypeAmenitiesDTOS, { name: '', type: '' }],
-    }));
-  };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    onUpdateData(unitType); // Cập nhật dữ liệu
-    console.log(unitType)
-    if (onNext) {
-      onNext(); // Gọi hàm onNext nếu nó tồn tại
+        // Gọi API tạo loại phòng
+        const response = await createResortUnitType(roomType);
+
+        // Kiểm tra nếu POST thất bại
+        if (response.status === 200) {
+          setLoading(false);
+        }
+
+      }
+
+      // Nếu tất cả POST thành công, chuyển sang bước tiếp theo
+
+      dispatch(setResortId(null))
+      toast.success("Tạo mới thành công!", { duration: 1000 })
+      setTimeout(() => {
+        navigate('/timesharecompany/resortmanagementtsc');
+      }, 1000);  // Delay of 1000 milliseconds = 1 second
+
+    } catch (error) {
+      console.error('Error creating unit types:', error);
+      // Bạn có thể thêm thông báo lỗi hoặc thông báo cho người dùng ở đây
     }
   };
-  
+
+  const handleOpenModalAdd = () => {
+
+    setSelectedUnitType(null)
+    setIsOpenModalUnitType(true)
+  }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
-      <h3 className="text-xl font-semibold">Thông tin Loại phòng</h3>
+    <div>
+      <Toaster position="top-right" reverseOrder={false} />
+      <div className='border p-6 rounded-xl'>
+        <h2 className="text-xl font-bold mb-4">Loại phòng</h2>
+        <div className='grid grid-cols-4 gap-4 p-4 min-h-96'>
+          {roomTypes.map((room, index) => (
+            <div
+              onClick={() => handleEditUnitType(index)}
+              key={index}
+              className="relative p-4 border-2 h-40 shadow-sm hover:shadow-md rounded-lg text-center flex justify-center items-center"
+            >
+              <span>{room.title}</span> {/* Display the title of the room */}
 
-      {/* Basic Information */}
-      <div className="grid grid-cols-2 gap-4">
-        <div>
-          <label className="block mb-1">Tiêu đề:</label>
-          <input
-            type="text"
-            name="title"
-            value={unitType.title}
-            onChange={handleChange}
-            placeholder="Nhập tiêu đề"
-            className="w-full p-2 border rounded"
-          />
-        </div>
-        <div>
-          <label className="block mb-1">Diện tích:</label>
-          <input
-            type="text"
-            name="area"
-            value={unitType.area}
-            onChange={handleChange}
-            placeholder="Nhập diện tích"
-            className="w-full p-2 border rounded"
-          />
-        </div>
-        <div>
-          <label className="block mb-1">Số phòng tắm:</label>
-          <input
-            type="number"
-            name="bathrooms"
-            value={unitType.bathrooms}
-            onChange={handleChange}
-            className="w-full p-2 border rounded"
-          />
-        </div>
-        <div>
-          <label className="block mb-1">Số phòng ngủ:</label>
-          <input
-            type="number"
-            name="bedrooms"
-            value={unitType.bedrooms}
-            onChange={handleChange}
-            className="w-full p-2 border rounded"
-          />
+              {/* Delete Button (X icon) */}
+              <button
+                onClick={(e) => {
+                  e.stopPropagation(); // Ngăn chặn việc mở modal khi click nút delete
+                  handleDeleteRoomType(index);
+                }}
+                className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 hover:bg-red-600"
+              >
+                <XIcon className="h-4 w-4" />
+              </button>
+            </div>
+          ))}
+
+
+          {/* Add Room Type Button */}
+          <button
+            className="flex items-center h-40 gap-2 justify-center p-4 border-2 border-dashed text-black rounded-lg"
+            onClick={handleOpenModalAdd} // Open modal on click
+          >
+            <label>Thêm</label>
+            <PlusIcon className="h-6 w-6" />
+          </button>
         </div>
 
-        {/* More Beds */}
-        <div>
-          <label className="block mb-1">Giường Full:</label>
-          <input
-            type="number"
-            name="bedsFull"
-            value={unitType.bedsFull}
-            onChange={handleChange}
-            className="w-full p-2 border rounded"
-          />
-        </div>
-        <div>
-          <label className="block mb-1">Giường King:</label>
-          <input
-            type="number"
-            name="bedsKing"
-            value={unitType.bedsKing}
-            onChange={handleChange}
-            className="w-full p-2 border rounded"
-          />
-        </div>
-        <div>
-          <label className="block mb-1">Giường Sofa:</label>
-          <input
-            type="number"
-            name="bedsSofa"
-            value={unitType.bedsSofa}
-            onChange={handleChange}
-            className="w-full p-2 border rounded"
-          />
-        </div>
-        <div>
-          <label className="block mb-1">Giường Murphy:</label>
-          <input
-            type="number"
-            name="bedsMurphy"
-            value={unitType.bedsMurphy}
-            onChange={handleChange}
-            className="w-full p-2 border rounded"
-          />
-        </div>
-        <div>
-          <label className="block mb-1">Giường Queen:</label>
-          <input
-            type="number"
-            name="bedsQueen"
-            value={unitType.bedsQueen}
-            onChange={handleChange}
-            className="w-full p-2 border rounded"
-          />
-        </div>
-        <div>
-          <label className="block mb-1">Giường Twin:</label>
-          <input
-            type="number"
-            name="bedsTwin"
-            value={unitType.bedsTwin}
-            onChange={handleChange}
-            className="w-full p-2 border rounded"
-          />
-        </div>
       </div>
-
-      {/* Additional Fields */}
-      <div className="grid grid-cols-2 gap-4 mt-4">
-        <div>
-          <label className="block mb-1">Tùy chọn tòa nhà:</label>
-          <input
-            type="text"
-            name="buildingsOption"
-            value={unitType.buildingsOption}
-            onChange={handleChange}
-            className="w-full p-2 border rounded"
-          />
-        </div>
-        <div>
-          <label className="block mb-1">Giá (VND):</label>
-          <input
-            type="number"
-            name="price"
-            value={unitType.price}
-            onChange={handleChange}
-            className="w-full p-2 border rounded"
-          />
-        </div>
-        <div>
-          <label className="block mb-1">Số người ở:</label>
-          <input
-            type="number"
-            name="sleeps"
-            value={unitType.sleeps}
-            onChange={handleChange}
-            className="w-full p-2 border rounded"
-          />
-        </div>
-        <div>
-          <label className="block mb-1">View:</label>
-          <input
-            type="text"
-            name="view"
-            value={unitType.view}
-            onChange={handleChange}
-            className="w-full p-2 border rounded"
-          />
-        </div>
-      </div>
-
-      {/* Description */}
-      <div className="mt-4">
-        <label className="block mb-1">Mô tả:</label>
-        <textarea
-          name="description"
-          value={unitType.description}
-          onChange={handleChange}
-          className="w-full p-2 border rounded"
-          rows="4"
-        />
-      </div>
-      <div className="mt-4">
-        <label className="block mb-1">Nhà bếp:</label>
-        <textarea
-          name="kitchen"
-          value={unitType.kitchen}
-          onChange={handleChange}
-          className="w-full p-2 border rounded"
-          rows="4"
-        />
-      </div>
-
-      {/* Amenities */}
-      <div className="mt-4">
-        <h4 className="text-lg font-medium">Tiện ích loại phòng</h4>
-        {unitType.unitTypeAmenitiesDTOS.map((amenity, index) => (
-          <div key={index} className="grid grid-cols-2 gap-4 mt-2">
-            <input
-              type="text"
-              placeholder="Tên tiện ích"
-              value={amenity.name}
-              onChange={(e) => handleAmenityChange(index, 'name', e.target.value)}
-              className="p-2 border rounded"
-            />
-            <input
-              type="text"
-              placeholder="Loại tiện ích"
-              value={amenity.type}
-              onChange={(e) => handleAmenityChange(index, 'type', e.target.value)}
-              className="p-2 border rounded"
-            />
-          </div>
-        ))}
-        <button
-          type="button"
-          className="mt-2 bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600"
-          onClick={addAmenity}
-        >
-          Thêm Tiện Ích
-        </button>
-      </div>
-
-      {/* Photos */}
-      <div className="mt-4">
-        <label className="block mb-1">Ảnh:</label>
-        <input
-          type="text"
-          name="photos"
-          value={unitType.photos}
-          onChange={handleChange}
-          placeholder="URL ảnh"
-          className="w-full p-2 border rounded"
-        />
-      </div>
-
-      {/* Navigation Buttons */}
-      <div className="mt-6 flex justify-between">
-        <button type="button" onClick={onBack} className="text-blue-500">
+      <UnitTypeModal
+        isOpen={isOpenModalUnitType}
+        onClose={() => setIsOpenModalUnitType(false)} // Close modal
+        onAddRoomType={handleAddUnitType}
+        selectedUnitType={selectedUnitType}
+        onUpdateRoomType={(updatedUnitType) => {
+          // Cập nhật item trong danh sách
+          const updatedRoomTypes = [...roomTypes];
+          updatedRoomTypes[indexSelected] = updatedUnitType;
+          setRoomTypes(updatedRoomTypes);
+          setIsOpenModalUnitType(false); // Đóng modal sau khi cập nhật
+        }}
+      />
+      <div className="mt-6 flex justify-end">
+        {/* <button type="button" onClick={onBack} className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">
           Quay lại
-        </button>
-        <button type="submit" className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">
+        </button> */}
+        <button type="button" onClick={handleSubmit} className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">
           Tiếp theo
         </button>
       </div>
-    </form>
+    </div>
   );
 };
 
