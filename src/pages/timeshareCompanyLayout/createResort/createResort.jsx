@@ -12,8 +12,8 @@ const CreateResort = () => {
   const [step, setStep] = useState(1); // Quản lý bước hiện tại
   const dispatch = useDispatch();
   const [formData, setFormData] = useState({
-    resortName: '',
-    logo: '',
+    resortName: "",
+    logo: "",
     minPrice: 0,
     maxPrice: 0,
     address: '',
@@ -26,7 +26,7 @@ const CreateResort = () => {
   const updateFormData = (newData) => {
     setFormData((prevData) => ({
       ...prevData,
-      ...newData
+      ...newData,
     }));
   };
 
@@ -58,7 +58,7 @@ const CreateResort = () => {
       let response = await createResortByTSC(formData);
       if (response.status === 200) {
         console.log(response.data);
-        dispatch(setResortId(response.data.id));  // Dispatch action to save resortId in Redux
+        dispatch(setResortId(response.data.id)); // Dispatch action to save resortId in Redux
         return true;
       }
     } catch (error) {
