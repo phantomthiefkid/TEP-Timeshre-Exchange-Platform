@@ -6,6 +6,8 @@ import UnitTypeModal from '../../../components/Modal/unitTypeModal';
 import { setResortId } from '../../../redux/ResortSlice/Resort';
 import { createResortUnitType } from '../../../service/tsCompanyService/tsCompanyAPI';
 import { toast, Toaster } from 'react-hot-toast';
+import LoadingWaitingComponent from '../../../components/LoadingComponent/loadingWaitingComponent';
+import Loading from '../../../components/LoadingComponent/loading';
 const CreateUnitType = ({ onUpdateData, onNext, onBack, formData }) => {
   const { resortId } = useSelector((state) => state.resortId);
   const [selectedUnitType, setSelectedUnitType] = useState(null);
@@ -21,15 +23,15 @@ const CreateUnitType = ({ onUpdateData, onNext, onBack, formData }) => {
   }
 
   const handleDeleteRoomType = (indexToDelete) => {
-    setRoomTypes(roomTypes.filter((_, index) => index !== indexToDelete)); // Remove room type by index
+    setRoomTypes(roomTypes.filter((_, index) => index !== indexToDelete));
   };
   const handleEditUnitType = (index) => {
-    setSelectedUnitType({ ...roomTypes[index] }); // Lưu trữ item được chọn và vị trí trong mảng
-    setIndexSelected(index);
-    setIsOpenModalUnitType(true); // Mở modal
+    setSelectedUnitType({ ...roomTypes[index] }); 
+    setIsOpenModalUnitType(true); 
   };
 
   const handleSubmit = async () => {
+    console.log(roomTypes)
     try {
       setLoading(true)
       for (const roomType of roomTypes) {
@@ -42,20 +44,20 @@ const CreateUnitType = ({ onUpdateData, onNext, onBack, formData }) => {
         if (response.status === 200) {
           setLoading(false);
         }
+        console.log("Check: ", response)
 
       }
 
-      // Nếu tất cả POST thành công, chuyển sang bước tiếp theo
-
-      dispatch(setResortId(null))
+      // dispatch(setResortId(null))
       toast.success("Tạo mới thành công!", { duration: 1000 })
       setTimeout(() => {
         navigate('/timesharecompany/resortmanagementtsc');
-      }, 1000);  // Delay of 1000 milliseconds = 1 second
+      }, 1000);
 
     } catch (error) {
-      console.error('Error creating unit types:', error);
-      // Bạn có thể thêm thông báo lỗi hoặc thông báo cho người dùng ở đây
+      console.log('Error creating unit types:', error);
+    } finally{
+      setLoading(false)
     }
   };
 
@@ -77,12 +79,11 @@ const CreateUnitType = ({ onUpdateData, onNext, onBack, formData }) => {
               key={index}
               className="relative p-4 border-2 h-40 shadow-sm hover:shadow-md rounded-lg text-center flex justify-center items-center"
             >
-              <span>{room.title}</span> {/* Display the title of the room */}
+              <span>{room.title}</span> 
 
-              {/* Delete Button (X icon) */}
               <button
                 onClick={(e) => {
-                  e.stopPropagation(); // Ngăn chặn việc mở modal khi click nút delete
+                  e.stopPropagation(); 
                   handleDeleteRoomType(index);
                 }}
                 className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 hover:bg-red-600"
@@ -125,6 +126,7 @@ const CreateUnitType = ({ onUpdateData, onNext, onBack, formData }) => {
           Tiếp theo
         </button>
       </div>
+      {loading && (<Loading/>)}
     </div>
   );
 };

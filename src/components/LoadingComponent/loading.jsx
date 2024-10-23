@@ -10,7 +10,7 @@ const Loading = () => {
             <div className="w-8 h-8 bg-gradient-to-r from-blue-300 to-blue-500 rounded-full shadow-lg"></div>
           </div>
         </div>
-        <p className="text-blue-700 font-semibold text-lg">Loading resort details...</p>
+        <p className="text-blue-700 font-semibold text-lg">Loading...</p>
       </div>
     </div>
 

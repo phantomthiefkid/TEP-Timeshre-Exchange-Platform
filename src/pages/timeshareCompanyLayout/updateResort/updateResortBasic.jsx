@@ -34,7 +34,7 @@ const UpdateResortBasic = () => {
         address,
         timeshareCompanyId,
         description,
-        
+        resortAmenityList
       } = data.data;
 
       const newResort = {
@@ -46,7 +46,7 @@ const UpdateResortBasic = () => {
         address,
         timeshareCompanyId,
         description,
-        resortAmenityList: []
+        resortAmenityList
       };
 
       // Update both current resort data and the original resort data for comparison
