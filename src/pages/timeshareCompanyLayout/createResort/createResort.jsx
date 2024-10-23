@@ -7,10 +7,12 @@ import { useDispatch } from "react-redux";
 import { setResortId } from "../../../redux/ResortSlice/Resort";
 import { useNavigate } from 'react-router-dom';
 import { toast, Toaster } from 'react-hot-toast';
+import Loading from '../../../components/LoadingComponent/loading';
 
 const CreateResort = () => {
   const [step, setStep] = useState(1); // Quản lý bước hiện tại
   const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     resortName: "",
     logo: "",
@@ -18,7 +20,7 @@ const CreateResort = () => {
     maxPrice: 0,
     address: '',
     description: '',
-    resortAmenityList: [], 
+    resortAmenityList: [],
   });
 
   const [unitType, setUnitType] = useState([]);
@@ -30,10 +32,6 @@ const CreateResort = () => {
     }));
   };
 
-  useEffect(() => {
-    console.log(formData)
-  }, formData)
-
   const updateUnitType = (newData) => {
     setUnitType(...newData);
     console.log(unitType)
@@ -44,23 +42,25 @@ const CreateResort = () => {
     if (step === 1) {
       setStep(2);
     } else if (step === 2) {
-      const isResortCreated = await handleCreateResort();
-      if (isResortCreated) {
-        setStep(3);
-        toast.success("Tạo mới thành công. Vui lòng nhập loại phòng!", { duration: 2000 });
-      }
-      
+
+     handleCreateResort();
+
     }
   };
 
-  const handleCreateResort = async () => {
+  const handleCreateResort = () => {
     try {
-      let response = await createResortByTSC(formData);
-      if (response.status === 200) {
-        console.log(response.data);
-        dispatch(setResortId(response.data.id)); // Dispatch action to save resortId in Redux
-        return true;
-      }
+      setLoading(true);
+      createResortByTSC(formData).then(() => {
+        toast.success("Tạo mới thành công. Vui lòng nhập loại phòng!", { duration: 2000 });
+        setStep(3)
+      }).catch(() => {
+        toast.error("Tạo thất bại!", { duration: 2000 });
+      })
+        .finally(() => {
+          setLoading(false); // Tắt loading khi hoàn tất
+        });
+
     } catch (error) {
       console.error("Failed to create resort:", error);
     }
@@ -70,7 +70,11 @@ const CreateResort = () => {
   const handleBack = () => {
     setStep((prevStep) => prevStep - 1);
   };
- 
+
+  if (loading) {
+    return (<Loading/>)
+  }
+
   return (
     <div className="w-full p-10 bg-white">
       <Toaster position="top-right" reverseOrder={false} />
@@ -105,6 +109,7 @@ const CreateResort = () => {
           formData={unitType} // Pass unitType data
         />
       )}
+      
     </div>
   );
 };

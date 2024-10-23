@@ -51,6 +51,7 @@ const createResortByTSC = async (data) => {
 
 const createResortUnitType = async (data) => {
     try {
+      console.log("Data: ", data)
         return await axiosConfig.post(`timeshare-company/resort/unit-type`, data)
     } catch (error) {
         throw error

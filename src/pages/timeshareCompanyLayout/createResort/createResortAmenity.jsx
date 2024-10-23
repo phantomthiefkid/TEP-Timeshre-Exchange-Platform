@@ -1,137 +1,156 @@
-import { PlusCircleIcon, PlusIcon, TrashIcon } from '@heroicons/react/solid';
+import { PlusCircleIcon, TrashIcon, XCircleIcon, XIcon } from '@heroicons/react/outline';
 import React, { useEffect, useState } from 'react';
 
 const CreateResortAmenity = ({ onUpdateData, onNext, onBack, formData }) => {
-  const [amenityName, setAmenityName] = useState('');
-  const [amenityType, setAmenityType] = useState('');
-  const [resortAmenityList, setResortAmenityList] = useState(formData.resortAmenityList || []);
-  const [showInputs, setShowInputs] = useState(false);
+  const [amenities, setAmenities] = useState([]);
 
-  const handleAddAmenity = () => {
-    if (amenityName && amenityType) {
-      const newAmenity = { name: amenityName, type: amenityType };
-      setResortAmenityList((prevList) => {
-        const updatedList = [...prevList, newAmenity];
-        console.log("Updated List: ", updatedList); // This logs the new state correctly
-        return updatedList;
-      });
-      setAmenityName(''); // Reset the input for name
-      setAmenityType(''); // Reset the input for type
-      setShowInputs(false); // Hide the input fields after adding
+  // Separate states for each section
+  const [onSiteFeature, setOnSiteFeature] = useState('');
+  const [nearbyAttraction, setNearbyAttraction] = useState('');
+  const [policy, setPolicy] = useState('');
+
+  // Handle adding amenity based on type
+  const handleAddAmenity = (name, type) => {
+    if (name) {
+      setAmenities([...amenities, { name, type }]);
+
+      // Clear the corresponding input field based on type
+      if (type === '1') setOnSiteFeature('');
+      else if (type === '2') setNearbyAttraction('');
+      else if (type === '3') setPolicy('');
     }
+  };
+
+  // Handle removing an amenity by name
+  const handleRemoveAmenity = (name) => {
+    const updatedAmenities = amenities.filter((amenity) => amenity.name !== name);
+    setAmenities(updatedAmenities);
   };
 
   useEffect(() => {
     onUpdateData({
       ...formData,
-      resortAmenityList,
+      resortAmenityList : amenities
     });
-  }, [resortAmenityList])
+  }, [amenities])
 
-  const handleDeleteAmenity = (indexToRemove) => {
-    setResortAmenityList((prevList) => prevList.filter((_, index) => index !== indexToRemove));
-  };
-
+  // Handle form submit
   const handleSubmit = (e) => {
     e.preventDefault();
+   
+      
+    
     if (onNext) {
       onNext();
     }
   };
+
+  // Filter amenities by type for rendering
+  const renderAmenitiesByType = (type) => {
+    return amenities
+      .filter((amenity) => amenity.type === type)
+      .map((amenity) => (
+        <div key={amenity.name} className="relative flex justify-center items-center rounded-full border mt-2 p-2">
+          <span>{amenity.name}</span>
+
+          <button
+            type="button"
+            onClick={() => handleRemoveAmenity(amenity.name)}
+            className="absolute top-1 right-0 text-red-500 flex items-center"
+          >
+            <XCircleIcon className="h-7 w-7" />
+          </button>
+        </div>
+
+      ));
+  };
+
+
 
   return (
     <div className="p-6">
       <div className="border border-blue-500 rounded-md p-8 space-y-14">
         <h4 className="text-2xl font-bold mb-4">Tiện ích khách sạn</h4>
 
-        {/* Section for Adding Amenities */}
+        {/* Section for Adding On-site Features */}
         <div className="mt-4">
           <h3 className="text-md font-semibold">Các tính năng và tiện nghi tại chỗ</h3>
-          <button
-            className="bg-white font-semibold border text-gray-600 rounded-lg px-4 py-2 mt-2 flex gap-2"
-            onClick={() => setShowInputs(!showInputs)}
-          >
-            Thêm
-            <div className='w-6'><PlusIcon /></div>
-          </button>
-
-          {showInputs && (
-            <div className="mt-4 flex items-center gap-2">
+          <div className="grid grid-cols-6 py-4 gap-4">
+            {renderAmenitiesByType('1')}
+            <div className='flex'>
               <input
                 type="text"
-                value={amenityName}
-                onChange={(e) => setAmenityName(e.target.value)}
-                placeholder="Tên tiện ích"
-                className="border p-2 rounded-lg w-1/3"
-              />
-              <input
-                type="text"
-                value={amenityType}
-                onChange={(e) => setAmenityType(e.target.value)}
-                placeholder="Loại tiện ích"
-                className="border p-2 rounded-lg w-1/3"
+                className="border p-2 rounded-full"
+                value={onSiteFeature}
+                onChange={(e) => setOnSiteFeature(e.target.value)}
+                placeholder="Thêm tính năng tại chỗ"
               />
               <button
                 type="button"
-                onClick={handleAddAmenity}
-                className="bg-green-500 text-white px-3 py-2 rounded hover:bg-green-600 flex-shrink-0"
+                onClick={() => handleAddAmenity(onSiteFeature, '1')}
+                className=" text-white p-2 rounded flex items-center space-x-2"
               >
-                Thêm
+                <PlusCircleIcon color='blue' className="h-8 w-8" />
+                <span>Thêm</span>
               </button>
             </div>
-          )}
+          </div>
+
+
         </div>
 
-        {/* Display Added Amenities in a Grid */}
-        <div className="border rounded-lg p-4 bg-white shadow-sm">
-          <h4 className="text-xl font-semibold mb-4">Danh sách tiện ích đã thêm</h4>
-          {resortAmenityList && resortAmenityList.length > 0 ? (
-            <ul className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-              {resortAmenityList.map((amenity, index) => (
-                <li
-                  key={index}
-                  className="relative border p-4 rounded-lg bg-gray-50"
-                >
-                  {/* Delete Button in the Top-Right Corner */}
-                  <button
-                    onClick={() => handleDeleteAmenity(index)}
-                    className="absolute top-2 right-2 text-gray-500 hover:text-gray-700 font-semibold text-xs"
-                  >
-                    <div className='w-6'>
-                      <PlusCircleIcon />
-                    </div>
-                  </button>
-
-                  {/* Amenity Details */}
-                  <div className='grid grid-cols-2'>
-                    <div className="font-medium text-gray-900">{amenity.name}</div>
-                    <div className="font-medium text-gray-900">{amenity.type}</div>
-                  </div>
-                </li>
-              ))}
-            </ul>
-
-          ) : (
-            <p className="text-gray-500 text-sm">Chưa có tiện ích nào được thêm.</p>
-          )}
-        </div>
-
-        {/* Other Sections */}
         <div className="mt-4">
           <h3 className="text-md font-semibold">Các điểm tham quan lân cận</h3>
-          <button className="bg-white font-semibold border text-gray-600 rounded-lg px-4 py-2 mt-2 flex gap-2">
-            Thêm
-            <div className='w-6'><PlusIcon /></div>
-          </button>
+          <div className="grid grid-cols-6 py-4 gap-4">
+            {renderAmenitiesByType('2')}
+            <div className='flex'>
+              <input
+                type="text"
+                className="border p-2 rounded-full"
+                value={nearbyAttraction}
+                onChange={(e) => setNearbyAttraction(e.target.value)}
+                placeholder="Thêm điểm tham quan lân cận"
+              />
+              <button
+                type="button"
+                onClick={() => handleAddAmenity(nearbyAttraction, '2')}
+                className=" text-white p-2 rounded flex items-center space-x-2"
+              >
+                <PlusCircleIcon color='blue' className="h-8 w-8" />
+                <span>Thêm</span>
+              </button>
+            </div>
+          </div>
+
+
         </div>
 
         <div className="mt-4">
           <h3 className="text-md font-semibold">Các chính sách</h3>
-          <button className="bg-white font-semibold border text-gray-600 rounded-lg px-4 py-2 mt-2 flex gap-2">
-            Thêm
-            <div className='w-6'><PlusIcon /></div>
-          </button>
+          <div className="grid grid-cols-6 py-4 gap-4">
+            {renderAmenitiesByType('3')}
+            <div className='flex'>
+              <input
+                type="text"
+                className="border p-2 rounded-full"
+                value={policy}
+                onChange={(e) => setPolicy(e.target.value)}
+                placeholder="Thêm chính sách"
+              />
+              <button
+                type="button"
+                onClick={() => handleAddAmenity(policy, '3')}
+                className=" text-white p-2 rounded flex items-center space-x-2"
+              >
+                <PlusCircleIcon color='blue' className="h-8 w-8" />
+                <span>Thêm</span>
+              </button>
+            </div>
+          </div>
+
+
         </div>
+
       </div>
 
       <div className="mt-6 flex justify-between">

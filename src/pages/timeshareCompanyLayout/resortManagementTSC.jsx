@@ -112,7 +112,7 @@ const ResortManagementTSC = () => {
                   </td>
                   <td className="p-4">
                     <img
-                      src="https://scontent.fsgn2-7.fna.fbcdn.net/v/t39.30808-6/457790295_1947970998949022_3066255129954259156_n.jpg?_nc_cat=108&ccb=1-7&_nc_sid=6ee11a&_nc_eui2=AeFoY4GYNi_qQDgWWYTVmkUJddJ_WJqplOh10n9YmqmU6A-DFFr1-u1kpgPXw4WLuc3ejG4XhxS9QWj-l3PSn8tF&_nc_ohc=5dOtTlzsDu0Q7kNvgGmqM3K&_nc_ht=scontent.fsgn2-7.fna&_nc_gid=AQXge5qrw4LXdmvXPL5sfJg&oh=00_AYAmYlBZfq86NfBJdoNTVuTAUpyzWPKCwwJGACxjQJKi2w&oe=67118559"
+                      src="https://trao.com.vn/wp-content/uploads/2019/08/logo-vinpearl.jpg"
                       alt="logo"
                       className="w-12 h-12 rounded-full border-2 border-gray-300 shadow-sm"
                     />
