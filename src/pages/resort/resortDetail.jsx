@@ -8,11 +8,14 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import { getResortById } from '../../service/public/resortService/resortAPI';
+import DetailUnitTypeModal from '../../components/Modal/detailUnitTypePublic';
 const ResortDetail = () => {
     const [isOpen, setIsOpen] = useState(false);
+    const [isOpenUnitTypeModal, setIsOpenUnitTypeModal] = useState(false);
     const [selectedImage, setSelectedImage] = useState(0);
     const { id } = useParams();
     const [resort, setResort] = useState({});
+    const [selectedUnitTypeId, setSelectedUnitTypeId] = useState(null);
     // Images array for the Swiper
     const images = [
         'https://media.architecturaldigest.com/photos/57e42de0fe422b3e29b7e78f/16:9/w_2560%2Cc_limit/JW_LosCabos_2015_MainExterior.jpg',
@@ -45,6 +48,12 @@ const ResortDetail = () => {
 
     const openModal = () => setIsOpen(true);
     const closeModal = () => setIsOpen(false);
+
+    const handleOpenUnitTypeModal = (unitTypeId) => {
+        setIsOpenUnitTypeModal(true);
+        setSelectedUnitTypeId(unitTypeId)
+    }
+
     return (
         <>
             <Navigation />
@@ -185,7 +194,7 @@ const ResortDetail = () => {
                                 <div className='py-4 relative space-y-4'>
                                     <span className='text-2xl font-medium'>Thông tin phòng</span>
                                     <h3 className='text-4xl  text-gray-700 font-bold'>{item.title}</h3>
-                                    <a href='#' className='bottom-2 absolute hover:text-gray-600'><p><u>Xem chi tiết phòng</u></p></a>
+                                    <button onClick={() => handleOpenUnitTypeModal(item.id)}><p><u>Xem chi tiết phòng</u></p></button>
                                 </div>
                             </div>
 
@@ -198,7 +207,7 @@ const ResortDetail = () => {
 
                                 <div className="flex justify-left text-left">
                                     <div className='w-full'><span>Phòng ngủ: {item.bedrooms}</span></div>
-                                    <div className='w-full'><span>Số người: 4</span></div>
+                                    <div className='w-full'><span>Số người: {item.sleeps}</span></div>
                                 </div>
 
                                 <div>
@@ -211,6 +220,9 @@ const ResortDetail = () => {
                             </div>
                         </div>))
                     )}
+                    {
+                        isOpenUnitTypeModal && (<DetailUnitTypeModal selectedId={selectedUnitTypeId} onClose={() => setIsOpenUnitTypeModal(false)}/>)
+                    }
 
 
                 </div>

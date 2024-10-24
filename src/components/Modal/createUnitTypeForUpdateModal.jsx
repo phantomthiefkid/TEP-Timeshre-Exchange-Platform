@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from 'react';
+import { toast, Toaster } from 'react-hot-toast';
 import { FaUpload } from 'react-icons/fa';
-import { useSelector } from 'react-redux';
-
-const UnitTypeModal = ({ isOpen, onClose, onAddRoomType, selectedUnitType, onUpdateRoomType }) => {
-    const { resortId } = useSelector((state) => state.resortId);
-    const [formData, setFormData] = useState({
+import { useParams } from 'react-router-dom';
+import { createResortUnitType } from '../../service/tsCompanyService/tsCompanyAPI';
+import Loading from '../LoadingComponent/loading';
+const CreateUnitTypeForUpdateModal = ({ onClose, flag }) => {
+    const [picture, setPicture] = useState([]);
+    const { id } = useParams();
+    const [loading, setLoading] = useState(false);
+    const [unitType, setUnitType] = useState({
         title: '',
         area: '',
         bathrooms: 0,
@@ -16,117 +20,89 @@ const UnitTypeModal = ({ isOpen, onClose, onAddRoomType, selectedUnitType, onUpd
         bedsQueen: 0,
         bedsTwin: 0,
         buildingsOption: '',
-        price: '',
+        price: 0,
         description: '',
         kitchen: '',
         photos: '',
-        resortId: resortId || -1,
+        resortId: Number(id),
         sleeps: 0,
         view: '',
         unitTypeAmenitiesDTOS: []
-    });
-    const [picture, setPicture] = useState([]);
-    const [amenity, setAmenity] = useState({ name: '', type: '' });
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-
-        // Define the fields that should be treated as numbers
-        const numberFields = [
-            'bathrooms', 'bedrooms', 'bedsFull', 'bedsKing',
-            'bedsSofa', 'bedsMurphy', 'bedsQueen', 'bedsTwin',
-            'price', 'sleeps'
-        ];
-
-        // If the field is a number field, parse it to an integer
-        const newValue = numberFields.includes(name) ? Number(value) : value;
-
-        setFormData({ ...formData, [name]: newValue });
-    };
-
-
-    const handleAmenityChange = (e) => {
-        const { name, value } = e.target;
-        setAmenity({ ...amenity, [name]: value });
-
-    };
-    const resetFormData = () => {
-        setFormData({
-            title: '',
-            area: '',
-            bathrooms: 0,
-            bedrooms: 0,
-            bedsFull: 0,
-            bedsKing: 0,
-            bedsSofa: 0,
-            bedsMurphy: 0,
-            bedsQueen: 0,
-            bedsTwin: 0,
-            buildingsOption: '',
-            price: '',
-            description: '',
-            kitchen: '',
-            photos: '',
-            resortId: resortId,
-            sleeps: 0,
-            view: '',
-            unitTypeAmenitiesDTOS: []
-        });
-    };
-
-
-    useEffect(() => {
-        if (selectedUnitType) {
-            setFormData(selectedUnitType); // Đổ dữ liệu vào form nếu đang chỉnh sửa
-        } else {
-            resetFormData(); // Reset form nếu thêm mới
-        }
-    }, [selectedUnitType]);
-
-
-    const handleAddAmenity = () => {
-        if (amenity.name && amenity.type) {
-            setFormData({
-                ...formData,
-                unitTypeAmenitiesDTOS: [...formData.unitTypeAmenitiesDTOS, amenity],
-            });
-            setAmenity({ name: '', type: '' });
-        }
-    };
-
-    const handleRemoveAmenity = (index) => {
-        setFormData({
-            ...formData,
-            unitTypeAmenitiesDTOS: formData.unitTypeAmenitiesDTOS.filter((_, i) => i !== index),
-        });
-    };
-
-    const handleSubmit = () => {
-        if (selectedUnitType) {
-            onUpdateRoomType(formData);         
-        } else {
-            onAddRoomType(formData); 
-            console.log("Add", formData)
-            resetFormData()
-        }
-        onClose();
-    };
-
+    })
+    const [amenity, setAmenity] = useState({ name: "", type: "" });
     const handleUploadFileImage = (e) => {
         const files = Array.from(e.target.files);
         const images = files.map((file) => URL.createObjectURL(file));
         setPicture((prev) => [
             ...prev, images
         ])
-        console.log(picture)
+    }
+    const handleAmenityChange = (e) => {
+        const { name, value } = e.target;
+        setAmenity({ ...amenity, [name]: value });
+        console.log(name, value)
+
+    };
+    const handleOnchange = (e) => {
+        const { name, value } = e.target;
+
+        // Kiểm tra nếu name thuộc các trường cần ép kiểu thành số
+        const numericFields = ['bathrooms', 'bedrooms', 'bedsFull', 'bedsKing', 'bedsSofa', 'bedsMurphy', 'bedsQueen', 'bedsTwin', 'price', 'sleeps'];
+
+        // Nếu là numeric field, ép kiểu thành số, nếu không giữ nguyên
+        setUnitType({
+            ...unitType,
+            [name]: numericFields.includes(name) ? Number(value) : value
+        });
+    };
+
+
+    const handleAddAmenity = () => {
+        if (amenity.name && amenity.type) {
+            setUnitType((prevUnitType) => ({
+                ...prevUnitType,
+                unitTypeAmenitiesDTOS: [...prevUnitType.unitTypeAmenitiesDTOS, { ...amenity }],
+            }));
+
+            // Reset lại tiện ích sau khi thêm
+            setAmenity({ name: '', type: '' });
+        }
+        console.log(unitType);
+    };
+
+
+    const handleRemoveAmenity = (index) => {
+        setUnitType({
+            ...unitType,
+            unitTypeAmenitiesDTOS: unitType.unitTypeAmenitiesDTOS.filter((_, i) => i !== index),
+        });
+    };
+
+    const handleSubmit = () => {
+        setLoading(true)
+        createResortUnitType(unitType).then(() => {
+            toast.success("Cập nhật thành công!", { duration: 2000 });
+            flag()
+            onClose()
+
+        }).catch(() => {
+            toast.error("Cập nhật thất bại!", { duration: 2000 });
+        })
+            .finally(() => {
+                setLoading(false); // Tắt loading khi hoàn tất
+            });
+
+
     }
 
-    if (!isOpen) return null;
+
 
     return (
         <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center">
+            <Toaster position="top-center" reverseOrder={false} />
             <div className="bg-white  rounded-lg shadow-lg w-full max-w-5xl">
 
-                <h3 className="text-3xl font-bold text-center mb-4 mt-6">Thêm loại phòng mới</h3>
+                <h3 className="text-3xl font-bold text-center mb-4 mt-6">Cập nhật loại phòng</h3>
                 <div className="max-h-[800px] overflow-auto">
                     {/* Two-column layout */}
                     <div className="grid grid-cols-2 gap-4 p-8">
@@ -138,8 +114,8 @@ const UnitTypeModal = ({ isOpen, onClose, onAddRoomType, selectedUnitType, onUpd
                                     type="text"
                                     name="title"
                                     className="border p-2 rounded-lg"
-                                    value={formData.title}
-                                    onChange={handleChange}
+
+                                    onChange={handleOnchange}
                                     placeholder="Nhập tên loại phòng"
                                 />
                             </div>
@@ -149,8 +125,8 @@ const UnitTypeModal = ({ isOpen, onClose, onAddRoomType, selectedUnitType, onUpd
                                     rows={5}
                                     name="description"
                                     className="border p-2 rounded-lg"
-                                    value={formData.description}
-                                    onChange={handleChange}
+
+                                    onChange={handleOnchange}
                                     placeholder="Mô tả"
                                 />
                             </div>
@@ -161,8 +137,8 @@ const UnitTypeModal = ({ isOpen, onClose, onAddRoomType, selectedUnitType, onUpd
                                     <select
                                         name="bedrooms"
                                         className="border p-2"
-                                        value={formData.bedrooms}
-                                        onChange={handleChange}
+
+                                        onChange={handleOnchange}
                                     >
                                         {[0, 1, 2, 3, 4, 5, 6].map((option) => (
                                             <option key={option} value={option}>
@@ -176,8 +152,8 @@ const UnitTypeModal = ({ isOpen, onClose, onAddRoomType, selectedUnitType, onUpd
                                     <select
                                         name="sleeps"
                                         className="border p-2"
-                                        value={formData.sleeps}
-                                        onChange={handleChange}
+
+                                        onChange={handleOnchange}
                                     >
                                         {[0, 1, 2, 3, 4, 5, 6].map((option) => (
                                             <option key={option} value={option}>
@@ -236,8 +212,8 @@ const UnitTypeModal = ({ isOpen, onClose, onAddRoomType, selectedUnitType, onUpd
                             <select
                                 name="bedsKing"
                                 className="border p-2"
-                                value={formData.bedsKing}
-                                onChange={handleChange}
+
+                                onChange={handleOnchange}
                             >
                                 {[0, 1, 2, 3, 4, 5, 6].map((option) => (
                                     <option key={option} value={option}>
@@ -252,8 +228,8 @@ const UnitTypeModal = ({ isOpen, onClose, onAddRoomType, selectedUnitType, onUpd
                             <select
                                 name="bedsFull"
                                 className="border p-2"
-                                value={formData.bedsFull}
-                                onChange={handleChange}
+
+                                onChange={handleOnchange}
                             >
                                 {[0, 1, 2, 3, 4, 5, 6].map((option) => (
                                     <option key={option} value={option}>
@@ -268,8 +244,8 @@ const UnitTypeModal = ({ isOpen, onClose, onAddRoomType, selectedUnitType, onUpd
                             <select
                                 name="bedsSofa"
                                 className="border p-2"
-                                value={formData.bedsSofa}
-                                onChange={handleChange}
+
+                                onChange={handleOnchange}
                             >
                                 {[0, 1, 2, 3, 4, 5, 6].map((option) => (
                                     <option key={option} value={option}>
@@ -282,10 +258,9 @@ const UnitTypeModal = ({ isOpen, onClose, onAddRoomType, selectedUnitType, onUpd
                             <label className="mb-1">Số bedsMurphy:</label>
                             <select
                                 name="bedsMurphy"
-                                className="border p-2"
-                                value={formData.bedsMurphy}
-                                onChange={handleChange}
-                            >
+
+                                onChange={handleOnchange}
+                                className="border p-2">
                                 {[0, 1, 2, 3, 4, 5, 6].map((option) => (
                                     <option key={option} value={option}>
                                         {option}
@@ -298,10 +273,9 @@ const UnitTypeModal = ({ isOpen, onClose, onAddRoomType, selectedUnitType, onUpd
                             <label className="mb-1">Số bedsQueen:</label>
                             <select
                                 name="bedsQueen"
-                                className="border p-2"
-                                value={formData.bedsQueen}
-                                onChange={handleChange}
-                            >
+
+                                onChange={handleOnchange}
+                                className="border p-2">
                                 {[0, 1, 2, 3, 4, 5, 6].map((option) => (
                                     <option key={option} value={option}>
                                         {option}
@@ -314,8 +288,8 @@ const UnitTypeModal = ({ isOpen, onClose, onAddRoomType, selectedUnitType, onUpd
                             <select
                                 name="bedsTwin"
                                 className="border p-2"
-                                value={formData.bedsTwin}
-                                onChange={handleChange}
+
+                                onChange={handleOnchange}
                             >
                                 {[0, 1, 2, 3, 4, 5, 6].map((option) => (
                                     <option key={option} value={option}>
@@ -334,8 +308,8 @@ const UnitTypeModal = ({ isOpen, onClose, onAddRoomType, selectedUnitType, onUpd
                             <select
                                 name="bathrooms"
                                 className="border p-2"
-                                value={formData.bathrooms}
-                                onChange={handleChange}
+
+                                onChange={handleOnchange}
                             >
                                 {[0, 1, 2, 3, 4, 5, 6].map((option) => (
                                     <option key={option} value={option}>
@@ -351,15 +325,14 @@ const UnitTypeModal = ({ isOpen, onClose, onAddRoomType, selectedUnitType, onUpd
                                     <label
                                         key={option}
                                         className={`flex items-center p-2 rounded-lg cursor-pointer border-2 
-                    ${formData.kitchen === option ? 'border-blue-500 bg-blue-100' : 'border-gray-300 bg-white'} 
-                    hover:border-blue-400 hover:bg-blue-50`}
+${unitType.kitchen === option ? 'border-blue-500 bg-blue-100' : 'border-gray-300 bg-white'} 
+hover:border-blue-400 hover:bg-blue-50`}
                                     >
                                         <input
                                             type="radio"
                                             name="kitchen"
                                             value={option}
-                                            checked={formData.kitchen === option}
-                                            onChange={handleChange}
+                                            onChange={handleOnchange}
                                             className="hidden" // Hide the default radio button
                                         />
                                         <span className="ml-2">{option}</span>
@@ -373,8 +346,8 @@ const UnitTypeModal = ({ isOpen, onClose, onAddRoomType, selectedUnitType, onUpd
                                 type="number"
                                 name="price"
                                 className="border border-gray-300 p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
-                                value={formData.price}
-                                onChange={handleChange}
+
+                                onChange={handleOnchange}
                                 placeholder="Giá (VND)"
                             />
                         </div>
@@ -390,16 +363,16 @@ const UnitTypeModal = ({ isOpen, onClose, onAddRoomType, selectedUnitType, onUpd
                                 type="text"
                                 name="name"
                                 className="border p-2 flex-1"
-                                value={amenity.name}
                                 onChange={handleAmenityChange}
+                                value={amenity.name}
                                 placeholder="Tên tiện ích"
                             />
                             <input
                                 type="text"
                                 name="type"
                                 className="border p-2 flex-1"
-                                value={amenity.type}
                                 onChange={handleAmenityChange}
+                                value={amenity.type}
                                 placeholder="Loại tiện ích"
                             />
                             <button
@@ -412,7 +385,7 @@ const UnitTypeModal = ({ isOpen, onClose, onAddRoomType, selectedUnitType, onUpd
                         </div>
 
                         <ul>
-                            {formData.unitTypeAmenitiesDTOS.map((amenity, index) => (
+                            {unitType.unitTypeAmenitiesDTOS && unitType.unitTypeAmenitiesDTOS.map((amenity, index) => (
                                 <li key={index} className="flex justify-between mb-2">
                                     <span>{`${amenity.name} (${amenity.type})`}</span>
                                     <button
@@ -427,7 +400,7 @@ const UnitTypeModal = ({ isOpen, onClose, onAddRoomType, selectedUnitType, onUpd
                         </ul>
                     </div>
 
-                    {/* Submit and cancel buttons */}
+
                     <div className="flex justify-end space-x-4 py-4 mb-2 px-8">
                         <button
                             className="bg-red-300 text-white px-12 py-2 rounded-lg"
@@ -439,16 +412,21 @@ const UnitTypeModal = ({ isOpen, onClose, onAddRoomType, selectedUnitType, onUpd
                             type='button'
                             className="bg-green-500 text-white px-12 py-2 rounded-lg"
                             onClick={handleSubmit}
+                            disabled={loading}
                         >
-                            {selectedUnitType ? 'Cập nhật' : 'Thêm mới'}
+                            {loading ? (
+                                "Chờ..."
+                            ) : (
+                                "Cập nhật"
+                            )}
                         </button>
                     </div>
                 </div>
 
             </div>
+
         </div>
+    )
+}
 
-    );
-};
-
-export default UnitTypeModal;
+export default CreateUnitTypeForUpdateModal

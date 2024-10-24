@@ -50,12 +50,39 @@ const createResortByTSC = async (data) => {
 };
 
 const createResortUnitType = async (data) => {
-  try {
-    return await axiosConfig.post(`timeshare-company/resort/unit-type`, data);
-  } catch (error) {
-    throw error;
-  }
-};
+    try {
+      console.log("Data: ", data)
+        return await axiosConfig.post(`timeshare-company/resort/unit-type`, data)
+    } catch (error) {
+        throw error
+    }
+}
+
+const getResortById = async (id) => {
+    try {
+        return await axiosConfig.get(`timeshare-company/resort/${id}`)
+    } catch (error) {
+        throw error
+    }
+}
+
+const updateResortBasic = async (data, resortId) => {
+    try {
+        return await axiosConfig.put(`timeshare-company/resort/${resortId}`, data)
+    } catch (error) {
+        throw error
+    }
+}
+
+const updateResortUnitType = async (data, unitTypeId) => {
+    try {
+        return await axiosConfig.put(`timeshare-company/resort/unit-type/${unitTypeId}`, data)
+    } catch (error) {
+        throw error
+    }
+}
+
+
 
 const getTimeshareCompanyById = async (tsId = "") => {
   try {
@@ -92,4 +119,8 @@ export {
   createResortUnitType,
   getTsStaffById,
   updateTimeshareCompanystaff,
+  updateResortBasic,
+  updateResortUnitType,
+  getTimeshareCompanyById,
+  getResortById
 };

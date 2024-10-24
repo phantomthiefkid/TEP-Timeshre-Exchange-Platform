@@ -10,7 +10,7 @@ const CreateResortBasic = ({ onNext, onUpdateData, formData }) => {
     address: formData.address || '',
     roomImages: [], // Lưu ảnh phòng tải lên
   });
-
+  const [errors, setErrors] = useState({});
   // Hàm xử lý thay đổi dữ liệu trong các input
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -28,7 +28,18 @@ const CreateResortBasic = ({ onNext, onUpdateData, formData }) => {
     });
   };
 
+  const validateFields = () => {
+    const newErrors = {};
 
+    if (!resortData.resortName.trim()) newErrors.resortName = 'Tên resort không được để trống';
+    if (!resortData.minPrice) newErrors.minPrice = 'Yêu cầu nhập giá tối thiểu';
+    if (!resortData.maxPrice) newErrors.maxPrice = 'Yêu cầu nhập giá';
+    if (!resortData.description.trim()) newErrors.description = 'Mô tả không được để trống';
+    if (!resortData.address.trim()) newErrors.address = 'Địa chỉ không được để trống';
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0; // Return true if no errors
+  };
   const handleLogoUpload = (e) => {
     const file = e.target.files[0];
     const reader = new FileReader();
@@ -40,7 +51,11 @@ const CreateResortBasic = ({ onNext, onUpdateData, formData }) => {
     }
   };
 
-
+  const handleNext = () => {
+    if (validateFields()) {
+      onNext();
+    }
+  };
   // Hàm xử lý upload ảnh phòng
   const handleFileUpload = (e) => {
     const files = Array.from(e.target.files);
@@ -75,6 +90,7 @@ const CreateResortBasic = ({ onNext, onUpdateData, formData }) => {
                   onChange={handleChange}
                   placeholder="Nhập tên resort"
                 />
+                 {errors.resortName && <p className="text-red-500 text-sm mt-1">{errors.resortName}</p>}
               </div>
 
               {/* Giá min/max */}
@@ -93,6 +109,7 @@ const CreateResortBasic = ({ onNext, onUpdateData, formData }) => {
                       onChange={handleChange}
                       placeholder="0"
                     />
+                    {errors.minPrice && <p className="text-red-500 text-sm mt-1">{errors.minPrice}</p>}
                     <span className="absolute top-2 right-8 text-sm font-semibold text-gray-600">VND</span>
                   </div>
 
@@ -112,6 +129,7 @@ const CreateResortBasic = ({ onNext, onUpdateData, formData }) => {
                       onChange={handleChange}
                       placeholder="0"
                     />
+                              {errors.maxPrice && <p className="text-red-500 text-sm mt-1">{errors.maxPrice}</p>}
                     <span className="absolute top-2 right-8 text-sm font-semibold text-gray-600">VND</span>
                   </div>
                 </div>
@@ -130,6 +148,7 @@ const CreateResortBasic = ({ onNext, onUpdateData, formData }) => {
                   placeholder="Mô tả về resort"
                   rows="4"
                 ></textarea>
+                {errors.description && <p className="text-red-500 text-sm mt-1">{errors.description}</p>}
               </div>
             </div>
 
@@ -145,6 +164,7 @@ const CreateResortBasic = ({ onNext, onUpdateData, formData }) => {
                   onChange={handleChange}
                   placeholder="Nhập địa chỉ resort"
                 />
+                {errors.address && <p className="text-red-500 text-sm mt-1">{errors.address}</p>}
               </div>
 
               {/* Vị trí trên bản đồ */}
@@ -242,7 +262,7 @@ const CreateResortBasic = ({ onNext, onUpdateData, formData }) => {
         </button>
         <button
           className="bg-blue-500 text-white py-2 px-8 rounded-lg hover:bg-blue-600"
-          onClick={onNext}
+          onClick={handleNext}
         >
           Tiếp tục
         </button>

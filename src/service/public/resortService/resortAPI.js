@@ -23,6 +23,14 @@ const getAllResortByName = async (pageNo = 0, pageSize = 20, resortName) => {
   }
 };
 
+const getDetailUnitType = async (unitTypeId) => {
+  try {
+    return await axios.get(`${baseURL}public/unit-type/${unitTypeId}`);
+  } catch (error) {
+    return error;
+  }
+};
+
 const getAllTimeshareCompany = async (
   pageNo = 0,
   pageSize = 20,
@@ -41,4 +49,9 @@ const getAllTimeshareCompany = async (
   }
 };
 
-export { getResortById, getAllResortByName, getAllTimeshareCompany };
+export {
+  getResortById,
+  getAllResortByName,
+  getAllTimeshareCompany,
+  getDetailUnitType,
+};

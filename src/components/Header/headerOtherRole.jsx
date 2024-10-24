@@ -8,7 +8,7 @@ const Header = () => {
  
 
   return (
-    <header className="bg-white shadow-md border py-4 px-6 flex justify-between items-center">
+    <header className="bg-white shadow-sm border-b-2 py-4 px-6 flex justify-between items-center">
       {/* Welcome Message */}
       <div className='px-4'>
         <h1 className="text-lg text-gray-500 font-semibold">Welcome,</h1>
@@ -30,7 +30,7 @@ const Header = () => {
           </div>
           {/* Avatar */}
           <img
-            src="https://scontent.fsgn24-2.fna.fbcdn.net/v/t39.30808-6/457790295_1947970998949022_3066255129954259156_n.jpg?_nc_cat=108&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=jEeocNqmB_cQ7kNvgFG2GAo&_nc_ht=scontent.fsgn24-2.fna&_nc_gid=AYsYSfR5qtCYt43Z5wL6smV&oh=00_AYCMvj7CdMZnxlF8thje_1jF3ncfSLcpf54nwMrKh87Oow&oe=6701B359"
+            src="https://scontent.fsgn13-2.fna.fbcdn.net/v/t39.30808-6/457790295_1947970998949022_3066255129954259156_n.jpg?_nc_cat=108&ccb=1-7&_nc_sid=6ee11a&_nc_eui2=AeFoY4GYNi_qQDgWWYTVmkUJddJ_WJqplOh10n9YmqmU6A-DFFr1-u1kpgPXw4WLuc3ejG4XhxS9QWj-l3PSn8tF&_nc_ohc=7kCCvto4rtEQ7kNvgFujVfw&_nc_ht=scontent.fsgn13-2.fna&_nc_gid=A5LQozwxCRKtMDXByoq1Rr1&oh=00_AYBz0eNQRECHr2LqNY8Qqz_EgXswQo9YTwlnJw5kf7bgug&oe=671A8799"
             alt="Admin Avatar"
             className="w-16 h-16 rounded-full border-2 border-gray-300"
           />

@@ -89,7 +89,6 @@ const employeeManagement = () => {
   return (
     <>
       <Toaster position="top-right" reverseOrder={false} />
-      <Header />
       <div className="p-6 flex justify-between items-center">
         <div className="p-4">
           <h1 className="text-3xl text-gray-700 font-bold">

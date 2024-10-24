@@ -1,110 +1,66 @@
-import React, { useState } from "react";
-import CreateResortBasic from "./createResortBasic";
-import CreateResortAmenity from "./createResortAmenity";
-import CreateUnitType from "./createUnitType";
-import {
-  createResortByTSC,
-  createResortUnitType,
-} from "../../../service/tsCompanyService/tsCompanyAPI";
+import React, { useEffect, useState } from 'react';
+import CreateResortBasic from './CreateResortBasic';
+import CreateResortAmenity from './CreateResortAmenity';
+import CreateUnitType from './CreateUnitType';
+import { createResortByTSC, createResortUnitType } from '../../../service/tsCompanyService/tsCompanyAPI';
 import { useDispatch } from "react-redux";
 import { setResortId } from "../../../redux/ResortSlice/Resort";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
+import { toast, Toaster } from 'react-hot-toast';
+import Loading from '../../../components/LoadingComponent/loading';
+
 const CreateResort = () => {
   const [step, setStep] = useState(1); // Quản lý bước hiện tại
   const dispatch = useDispatch();
-  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     resortName: "",
     logo: "",
     minPrice: 0,
     maxPrice: 0,
-    address: "",
-    description: "",
-    resortAmenityList: [], // Dữ liệu tiện ích
+    address: '',
+    description: '',
+    resortAmenityList: [],
   });
 
-  const [unitType, setUnitType] = useState({
-    resortId: 0,
-    title: "", // Initial value as a placeholder
-    area: "", // Initial value as a placeholder
-    bathrooms: 0,
-    bedrooms: 0,
-    bedsFull: 0,
-    bedsKing: 0,
-    bedsSofa: 0,
-    bedsMurphy: 0,
-    bedsQueen: 0,
-    bedsTwin: 0,
-    buildingsOption: "", // Initial value as a placeholder
-    price: 0,
-    description: "", // Initial value as a placeholder
-    kitchen: "", // Initial value as a placeholder
-    photos: "", // Initial value as a placeholder
-    sleeps: 0,
-    view: "", // Initial value as a placeholder
-    unitTypeAmenitiesDTOS: [
-      {
-        name: "", // Initial value as a placeholder
-        type: "", // Initial value as a placeholder
-      },
-    ],
-  });
+  const [unitType, setUnitType] = useState([]);
 
-  // Hàm để lưu dữ liệu nhập vào từ các component con
   const updateFormData = (newData) => {
     setFormData((prevData) => ({
       ...prevData,
       ...newData,
     }));
-    console.log(formData, "parent");
   };
 
   const updateUnitType = (newData) => {
-    setUnitType((prevData) => ({
-      ...prevData,
-      ...newData,
-    }));
+    setUnitType(...newData);
+    console.log(unitType)
   };
-  // console.log(unitType, "unitType parent");
+
 
   const handleNext = async () => {
     if (step === 1) {
       setStep(2);
     } else if (step === 2) {
-      const isResortCreated = await handleCreateResort();
-      if (isResortCreated) {
-        setStep(3);
-      }
-    } else if (step === 3) {
-      const status = await handleCreateUnitType();
-      if (status === 200) {
-        navigate("/timesharecompany/resortmanagementtsc");
-      }
-      console.log(unitType);
+
+     handleCreateResort();
+
     }
   };
 
-  const handleCreateUnitType = async () => {
+  const handleCreateResort = () => {
     try {
-      let response = await createResortUnitType(unitType);
-      if (response.status === 200) {
-        console.log(response);
-        dispatch(setResortId(null));
-        return response.status;
-      }
-    } catch (error) {
-      throw error;
-    }
-  };
+      setLoading(true);
+      createResortByTSC(formData).then(() => {
+        toast.success("Tạo mới thành công. Vui lòng nhập loại phòng!", { duration: 2000 });
+        setStep(3)
+      }).catch(() => {
+        toast.error("Tạo thất bại!", { duration: 2000 });
+      })
+        .finally(() => {
+          setLoading(false); // Tắt loading khi hoàn tất
+        });
 
-  const handleCreateResort = async () => {
-    try {
-      let response = await createResortByTSC(formData);
-      if (response.status === 200) {
-        console.log(response.data);
-        dispatch(setResortId(response.data.id)); // Dispatch action to save resortId in Redux
-        return true;
-      }
     } catch (error) {
       console.error("Failed to create resort:", error);
     }
@@ -115,8 +71,13 @@ const CreateResort = () => {
     setStep((prevStep) => prevStep - 1);
   };
 
+  if (loading) {
+    return (<Loading/>)
+  }
+
   return (
     <div className="w-full p-10 bg-white">
+      <Toaster position="top-right" reverseOrder={false} />
       <div className="flex justify-between">
         <h2 className="text-3xl font-bold mb-6">Thêm mới Resort</h2>
         <img
@@ -148,6 +109,7 @@ const CreateResort = () => {
           formData={unitType} // Pass unitType data
         />
       )}
+      
     </div>
   );
 };
