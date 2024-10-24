@@ -102,18 +102,18 @@ const SidebarTimeshareStaff = () => {
       <div className="flex-grow p-5">
         <MenuItem
           icon={FaFileAlt}
-          title="Danh sách cho thuê"
+          title="Danh sách thuê"
           path="/timesharestaff/rentalmanagement"
         />
         <MenuItem icon={FaTableList} title="Danh sách yêu cầu">
           <MenuItem
             icon={FaHouseUser}
-            title="Yêu cầu cho thuê"
+            title="Bài đăng cho thuê"
             path="/timesharestaff/rentalpostingmanagement"
           />
           <MenuItem
             icon={FaArrowRightArrowLeft}
-            title="Yêu cầu trao đổi"
+            title="Bài đăng trao đổi"
             path="/timesharestaff/exchangepostingmanagement"
           />
           <MenuItem

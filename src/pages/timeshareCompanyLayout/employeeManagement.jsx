@@ -10,6 +10,7 @@ import CountUp from "react-countup";
 import toast, { Toaster } from "react-hot-toast";
 import CreateTimeshareStaffModal from "../../components/Modal/createTimeshareStaffModal";
 import DetailTimeshareStaffModal from "../../components/Modal/detailTimeshareStaffModal";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa6";
 
 const employeeManagement = () => {
   const [allTimeshareStaff, setAllTimeshareStaff] = useState([]);
@@ -181,33 +182,66 @@ const employeeManagement = () => {
           <button
             onClick={handlePreviousPage}
             disabled={page === 0}
-            className="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400"
+            className="w-10 h-10 flex items-center justify-center rounded-full bg-white text-gray-500 hover:bg-blue-500 hover:text-white transition-colors duration-300"
           >
-            Trang trước
+            <FaChevronLeft />
           </button>
 
-          <div className="flex space-x-2">
-            {Array.from({ length: totalPages }, (_, index) => (
-              <button
-                key={index}
-                onClick={() => setPage(index)}
-                className={`px-4 py-2 rounded-lg ${
-                  index === page
-                    ? "bg-blue-500 text-white"
-                    : "bg-gray-300 text-gray-700 hover:bg-gray-400"
-                }`}
-              >
-                {index + 1}
-              </button>
-            ))}
+          <div className="flex space-x-2 bg-white px-2 py-1">
+            {page > 2 && (
+              <>
+                <button
+                  onClick={() => setPage(0)}
+                  className="w-10 h-10 flex items-center justify-center rounded-full text-gray-500 hover:text-blue-500"
+                >
+                  1
+                </button>
+                <span className="flex items-center justify-center text-gray-500">
+                  ...
+                </span>
+              </>
+            )}
+
+            {Array.from({ length: totalPages }, (_, index) => {
+              if (index >= page - 2 && index <= page + 2) {
+                return (
+                  <button
+                    key={index}
+                    onClick={() => setPage(index)}
+                    className={`w-10 h-10 flex items-center justify-center rounded-xl ${
+                      index === page
+                        ? "bg-blue-500 text-white shadow-lg font-semibold"
+                        : "text-gray-500 hover:text-blue-500 hover:font-semibold"
+                    }`}
+                  >
+                    {index + 1}
+                  </button>
+                );
+              }
+              return null;
+            })}
+
+            {page < totalPages - 3 && (
+              <>
+                <span className="flex items-center justify-center text-gray-500">
+                  ...
+                </span>
+                <button
+                  onClick={() => setPage(totalPages - 1)}
+                  className="w-10 h-10 flex items-center justify-center rounded-full text-gray-500 hover:text-blue-500"
+                >
+                  {totalPages}
+                </button>
+              </>
+            )}
           </div>
 
           <button
             onClick={handleNextPage}
             disabled={page === totalPages - 1}
-            className="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400"
+            className="w-10 h-10 flex items-center justify-center rounded-full bg-white text-gray-500 hover:bg-blue-500 hover:text-white transition-colors duration-300"
           >
-            Trang sau
+            <FaChevronRight />
           </button>
         </div>
         <DetailTimeshareStaffModal
