@@ -4,10 +4,15 @@ import SidebarSystemStaff from "../../components/Sidebar/sidebarSystemStaff";
 
 const SystemStaffLayout = () => {
   return (
-    <div className="flex">
-      <SidebarSystemStaff />
-      <div className="flex-grow p-6">
-        <Outlet />
+    <div className="flex h-screen">
+      <SidebarSystemStaff className="fixed left-0 top-0 h-full" />
+
+      <div className="flex-grow  bg-white flex flex-col">
+        {/* <Header className="w-full" /> */}
+
+        <div className="flex-grow p-4 overflow-y-auto">
+          <Outlet />
+        </div>
       </div>
     </div>
   );

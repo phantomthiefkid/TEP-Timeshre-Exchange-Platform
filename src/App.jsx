@@ -73,10 +73,7 @@ function App() {
         <Route path="/signup" element={<SignUp />} />
         <Route path="/resortsearchlist" element={<ResortSearchList />} />
         <Route path="/resortdetail/:id" element={<ResortDetail />} />
-        <Route
-          path="/timesharecompanyinformation"
-          element={<TimeshareCompany />}
-        />
+        <Route path="/timesharecompanylist" element={<TimeshareCompany />} />
         <Route
           path="/timesharecompanydetail"
           element={<TimeshareCompanyDetail />}
