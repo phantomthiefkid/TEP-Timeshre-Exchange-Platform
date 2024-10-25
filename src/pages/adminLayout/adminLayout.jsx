@@ -4,13 +4,15 @@ import SidebarAdmin from "../../components/Sidebar/sidebarAdmin";
 
 const AdminLayout = () => {
   return (
-    <div className="flex">
-      {/* Sidebar luôn hiện */}
-      <SidebarAdmin />
+    <div className="flex h-screen">
+      <SidebarAdmin className="fixed left-0 top-0 h-full" />
 
-      {/* Phần Outlet này sẽ chứa các trang quản trị được điều hướng */}
-      <div className="flex-grow ">
-        <Outlet />
+      <div className="flex-grow  bg-white flex flex-col">
+        {/* <Header className="w-full" /> */}
+
+        <div className="flex-grow p-4 overflow-y-auto">
+          <Outlet />
+        </div>
       </div>
     </div>
   );
