@@ -5,7 +5,6 @@ import CreateUnitType from './CreateUnitType';
 import { createResortByTSC, createResortUnitType } from '../../../service/tsCompanyService/tsCompanyAPI';
 import { useDispatch } from "react-redux";
 import { setResortId } from "../../../redux/ResortSlice/Resort";
-import { useNavigate } from 'react-router-dom';
 import { toast, Toaster } from 'react-hot-toast';
 import Loading from '../../../components/LoadingComponent/loading';
 
@@ -43,28 +42,31 @@ const CreateResort = () => {
       setStep(2);
     } else if (step === 2) {
 
-     handleCreateResort();
+      handleCreateResort();
 
     }
   };
 
-  const handleCreateResort = () => {
+  const handleCreateResort = async () => {
     try {
       setLoading(true);
-      createResortByTSC(formData).then(() => {
+      let data = await createResortByTSC(formData)
+      
+      if (data.status === 200) {
         toast.success("Tạo mới thành công. Vui lòng nhập loại phòng!", { duration: 2000 });
         setStep(3)
-      }).catch(() => {
+        const resortId = data.data.id;
+        dispatch(setResortId(resortId)); 
+        setLoading(false);
+        console.log(data.data.id)
+      } else {
         toast.error("Tạo thất bại!", { duration: 2000 });
-      })
-        .finally(() => {
-          setLoading(false); // Tắt loading khi hoàn tất
-        });
+      }
 
     } catch (error) {
       console.error("Failed to create resort:", error);
     }
-    return false; // Return false if resort creation fails
+
   };
 
   const handleBack = () => {
@@ -72,7 +74,7 @@ const CreateResort = () => {
   };
 
   if (loading) {
-    return (<Loading/>)
+    return (<Loading />)
   }
 
   return (
@@ -109,7 +111,7 @@ const CreateResort = () => {
           formData={unitType} // Pass unitType data
         />
       )}
-      
+
     </div>
   );
 };

@@ -26,8 +26,9 @@ const CreateUnitType = ({ onUpdateData, onNext, onBack, formData }) => {
     setRoomTypes(roomTypes.filter((_, index) => index !== indexToDelete));
   };
   const handleEditUnitType = (index) => {
-    setSelectedUnitType({ ...roomTypes[index] }); 
-    setIsOpenModalUnitType(true); 
+    setSelectedUnitType({ ...roomTypes[index] });
+    setIndexSelected(index)
+    setIsOpenModalUnitType(true);
   };
 
   const handleSubmit = async () => {
@@ -44,8 +45,6 @@ const CreateUnitType = ({ onUpdateData, onNext, onBack, formData }) => {
         if (response.status === 200) {
           setLoading(false);
         }
-        console.log("Check: ", response)
-
       }
 
       // dispatch(setResortId(null))
@@ -56,7 +55,7 @@ const CreateUnitType = ({ onUpdateData, onNext, onBack, formData }) => {
 
     } catch (error) {
       console.log('Error creating unit types:', error);
-    } finally{
+    } finally {
       setLoading(false)
     }
   };
@@ -79,11 +78,11 @@ const CreateUnitType = ({ onUpdateData, onNext, onBack, formData }) => {
               key={index}
               className="relative p-4 border-2 h-40 shadow-sm hover:shadow-md rounded-lg text-center flex justify-center items-center"
             >
-              <span>{room.title}</span> 
+              <span>{room.title}</span>
 
               <button
                 onClick={(e) => {
-                  e.stopPropagation(); 
+                  e.stopPropagation();
                   handleDeleteRoomType(index);
                 }}
                 className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 hover:bg-red-600"
@@ -126,7 +125,7 @@ const CreateUnitType = ({ onUpdateData, onNext, onBack, formData }) => {
           Tiếp theo
         </button>
       </div>
-      {loading && (<Loading/>)}
+      {loading && (<Loading />)}
     </div>
   );
 };
