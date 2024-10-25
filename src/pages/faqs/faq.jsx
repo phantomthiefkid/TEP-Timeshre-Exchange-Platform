@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Navigation from "../../components/Navbar/navigation";
 import Footer from "../../components/Footer/footer";
+import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 
 const faq = () => {
   const [faqs, setFaqs] = useState([]);
@@ -35,7 +36,7 @@ const faq = () => {
         className="w-full text-left p-4 flex justify-between items-center"
       >
         <span>{title}</span>
-        <i className={`fas fa-chevron-${isOpen ? "up" : "down"}`}></i>
+        <>{isOpen ? <FaChevronUp /> : <FaChevronDown />}</>
       </button>
       {isOpen && <div className="p-4 bg-gray-50">{description}</div>}
     </div>

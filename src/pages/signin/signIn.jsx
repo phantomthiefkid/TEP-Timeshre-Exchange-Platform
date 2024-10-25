@@ -170,6 +170,16 @@ const SignIn = () => {
                 Đăng nhập
               </button>
             </div>
+
+            <div className="space-y-3 mt-3">
+              <button
+                type="button"
+                onClick={() => navigate("/signin/staff")} // Navigates to systemstaff login page
+                className="w-full py-2 px-4 bg-gray-500 text-white font-semibold rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500"
+              >
+                Đăng nhập nhân viên
+              </button>
+            </div>
           </form>
 
           <div className="flex items-center justify-center mt-4">
@@ -210,12 +220,12 @@ const SignIn = () => {
           {/* Registration Link */}
           <div className="mt-6 text-center text-sm">
             <span>Bạn chưa có tài khoản tại Unwind?</span>
-            <a
-              href="/signup"
+            <button
+              onClick={() => navigate("/signup")} // Navigate to the signup page on button click
               className="ml-1 text-blue-600 hover:text-blue-800 font-medium"
             >
               Đăng ký ngay
-            </a>
+            </button>
           </div>
         </div>
       </div>

@@ -21,8 +21,8 @@ const Navigation = () => {
             <div className="border-b-4 border-blue-400 group-hover:scale-x-100 scale-x-0 transform transition-transform duration-300 origin-left mt-1"></div>
           </li>
           <li className="group">
-            <a href="/resortsearchlist" className="hover:text-gray-200">
-              Timeshare
+            <a href="/timesharecompanylist" className="hover:text-gray-200">
+              Timeshare Company
             </a>
             <div className="border-b-4 border-blue-400 group-hover:scale-x-100 scale-x-0 transform transition-transform duration-300 origin-left mt-1"></div>
           </li>

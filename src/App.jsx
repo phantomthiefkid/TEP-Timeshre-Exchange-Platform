@@ -10,6 +10,7 @@ import LandingPage from "./pages/landingpage/landingpage";
 import ResortDetail from "./pages/resort/resortDetail";
 import ResortSearchList from "./pages/resort/resortSearchList";
 import SignIn from "./pages/signin/signIn";
+import SignInStaff from "./pages/signin/signInStaff";
 import SignUp from "./pages/signup/signUp";
 import Dashboard from "./pages/systemStaffLayout/dashboard";
 import FaqManagement from "./pages/systemStaffLayout/faqManagement";
@@ -20,7 +21,10 @@ import ResortManagementTSC from "./pages/timeshareCompanyLayout/resortManagement
 import TimeshareCompanyLayout from "./pages/timeshareCompanyLayout/timeshareCompanyLayout";
 import FeeddbackList from "./pages/timeshareStaffLayout/feedbackList";
 import RentalListManagement from "./pages/timeshareStaffLayout/rentalListManagement";
-import RequestListManagement from "./pages/timeshareStaffLayout/requestListManagement";
+import RentalPostingManagement from "./pages/timeshareStaffLayout/rentalPostingMNG";
+import ExchangePostingManagement from "./pages/timeshareStaffLayout/exchangePostingMNG";
+import ExchangVerifyManagement from "./pages/timeshareStaffLayout/exchangeVerifyMNG";
+import MoneySupport from "./pages/timeshareStaffLayout/moneySupportMNG";
 import TimeshareStaffLayout from "./pages/timeshareStaffLayout/timeshareStaffLayout";
 import AboutUs from "./pages/about/aboutUs";
 import Faqs from "./pages/faqs/faq";
@@ -31,7 +35,7 @@ import { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import { setIsLogin, setRoleName, setUserId } from "./redux/UserSlice/SignIn";
 import Loading from "./components/LoadingComponent/loading";
-import ScrollToTop from "./components/ScrollToTop/ScrollToTop"
+import ScrollToTop from "./components/ScrollToTop/ScrollToTop";
 import CreateResort from "./pages/timeshareCompanyLayout/createResort/createResort";
 import Test from "./pages/timeshareCompanyLayout/createResort/test";
 import UpdateResort from "./pages/timeshareCompanyLayout/updateResort/updateResort";
@@ -66,13 +70,11 @@ function App() {
         <Route path="/test" element={<Test />} />
         <Route path="/" element={<LandingPage />} />
         <Route path="/signin" element={<SignIn />} />
+        <Route path="/signin/staff" element={<SignInStaff />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/resortsearchlist" element={<ResortSearchList />} />
         <Route path="/resortdetail/:id" element={<ResortDetail />} />
-        <Route
-          path="/timesharecompanyinformation"
-          element={<TimeshareCompany />}
-        />
+        <Route path="/timesharecompanylist" element={<TimeshareCompany />} />
         <Route
           path="/timesharecompanydetail"
           element={<TimeshareCompanyDetail />}
@@ -136,7 +138,10 @@ function App() {
         >
           <Route path="/timesharecompany" element={<TimeshareCompanyLayout />}>
             <Route index element={<ResortManagementTSC />} />
-            <Route path="resortmanagementtsc" element={<ResortManagementTSC />} />
+            <Route
+              path="resortmanagementtsc"
+              element={<ResortManagementTSC />}
+            />
             <Route path="employeemanagement" element={<EmployeeManagement />} />
             <Route path="createresort" element={<CreateResort />} />
             <Route path="updateresort/:id" element={<UpdateResort />} />
@@ -146,7 +151,19 @@ function App() {
         <Route path="/timesharestaff" element={<TimeshareStaffLayout />}>
           <Route index element={<RentalListManagement />} />
           <Route path="rentalmanagement" element={<RentalListManagement />} />
-          <Route path="requestmanagement" element={<RequestListManagement />} />
+          <Route
+            path="rentalpostingmanagement"
+            element={<RentalPostingManagement />}
+          />
+          <Route
+            path="exchangepostingmanagement"
+            element={<ExchangePostingManagement />}
+          />
+          <Route
+            path="exchangeverifymanagement"
+            element={<ExchangVerifyManagement />}
+          />
+          <Route path="moneysupport" element={<MoneySupport />} />
           <Route path="feedback" element={<FeeddbackList />} />
         </Route>
       </Routes>
