@@ -242,7 +242,7 @@ const rentalPostingMNG = () => {
           </div>
         </div>
         {/* Filter Buttons */}
-        <div className="flex items-center space-x-4 mb-5">
+        <div className="flex items-center space-x-1 mb-5">
           <button
             onClick={() => setFilterStatus("")} // Reset filter
             className={`px-4 py-2 rounded-md ${

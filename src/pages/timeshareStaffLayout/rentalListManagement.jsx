@@ -9,9 +9,15 @@ import {
   FaSignOutAlt,
 } from "react-icons/fa";
 import { FaArrowsRotate, FaEllipsisVertical } from "react-icons/fa6";
-
+import DetailCheckinModal from "../../components/Modal/detailCheckinModal";
 const RentalListManagement = () => {
   const [filterStatus, setFilterStatus] = useState("");
+  const [selectedDateTab, setSelectedDateTab] = useState("today");
+  const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
+
+  const handleOpenModal = () => {
+    setIsDetailModalOpen(true);
+  };
 
   const transactions = [
     {
@@ -22,6 +28,7 @@ const RentalListManagement = () => {
       status: "Đã nhận phòng",
       statusColor: "bg-green-100 text-green-500",
       image: "https://placehold.co/32x32",
+      date: new Date(Date.now() - 86400000), // Yesterday
     },
     {
       name: "Adobe CC",
@@ -31,132 +38,74 @@ const RentalListManagement = () => {
       status: "Đã trả phòng",
       statusColor: "bg-red-100 text-red-500",
       image: "https://placehold.co/32x32",
-    },
-    {
-      name: "Adobe CC",
-      contact: "text",
-      room_type: "Type3",
-      number_of_nights: "02 ",
-      status: "Đang chờ",
-      statusColor: "bg-yellow-100 text-yellow-500",
-      image: "https://placehold.co/32x32",
+      date: new Date(), // Today
     },
     {
       name: "Wilson Rhiel Madsen",
       contact: "text",
-      room_type: "Type1 ",
-      number_of_nights: "02 ",
+      room_type: "Type1",
+      number_of_nights: "02",
       status: "Đã nhận phòng",
       statusColor: "bg-green-100 text-green-500",
       image: "https://placehold.co/32x32",
+      date: new Date(), // Today
     },
     {
       name: "Adobe CC",
       contact: "text",
       room_type: "Type3",
-      number_of_nights: "02 ",
+      number_of_nights: "02",
       status: "Đã trả phòng",
       statusColor: "bg-red-100 text-red-500",
       image: "https://placehold.co/32x32",
+      date: new Date(Date.now() - 86400000), // Yesterday
     },
     {
-      name: "Adobe CC",
+      name: "Another Guest",
       contact: "text",
-      room_type: "Type3",
-      number_of_nights: "02 ",
+      room_type: "Type2",
+      number_of_nights: "03",
       status: "Đang chờ",
       statusColor: "bg-yellow-100 text-yellow-500",
       image: "https://placehold.co/32x32",
-    },
-    {
-      name: "Wilson Rhiel Madsen",
-      contact: "text",
-      room_type: "Type1 ",
-      number_of_nights: "02 ",
-      status: "Đã nhận phòng",
-      statusColor: "bg-green-100 text-green-500",
-      image: "https://placehold.co/32x32",
-    },
-    {
-      name: "Adobe CC",
-      contact: "text",
-      room_type: "Type3",
-      number_of_nights: "02 ",
-      status: "Đã trả phòng",
-      statusColor: "bg-red-100 text-red-500",
-      image: "https://placehold.co/32x32",
-    },
-    {
-      name: "Adobe CC",
-      contact: "text",
-      room_type: "Type3",
-      number_of_nights: "02 ",
-      status: "Đang chờ",
-      statusColor: "bg-yellow-100 text-yellow-500",
-      image: "https://placehold.co/32x32",
-    },
-    {
-      name: "Wilson Rhiel Madsen",
-      contact: "text",
-      room_type: "Type1 ",
-      number_of_nights: "02 ",
-      status: "Đã nhận phòng",
-      statusColor: "bg-green-100 text-green-500",
-      image: "https://placehold.co/32x32",
-    },
-    {
-      name: "Adobe CC",
-      contact: "text",
-      room_type: "Type3",
-      number_of_nights: "02 ",
-      status: "Đã trả phòng",
-      statusColor: "bg-red-100 text-red-500",
-      image: "https://placehold.co/32x32",
-    },
-    {
-      name: "Adobe CC",
-      contact: "text",
-      room_type: "Type3",
-      number_of_nights: "02 ",
-      status: "Đang chờ",
-      statusColor: "bg-yellow-100 text-yellow-500",
-      image: "https://placehold.co/32x32",
-    },
-    {
-      name: "Wilson Rhiel Madsen",
-      contact: "text",
-      room_type: "Type1 ",
-      number_of_nights: "02 ",
-      status: "Đã nhận phòng",
-      statusColor: "bg-green-100 text-green-500",
-      image: "https://placehold.co/32x32",
-    },
-    {
-      name: "Adobe CC",
-      contact: "text",
-      room_type: "Type3",
-      number_of_nights: "02 ",
-      status: "Đã trả phòng",
-      statusColor: "bg-red-100 text-red-500",
-      image: "https://placehold.co/32x32",
-    },
-    {
-      name: "Adobe CC",
-      contact: "text",
-      room_type: "Type3",
-      number_of_nights: "02 ",
-      status: "Đang chờ",
-      statusColor: "bg-yellow-100 text-yellow-500",
-      image: "https://placehold.co/32x32",
+      date: new Date(Date.now() + 86400000), // Tomorrow
     },
   ];
 
   // Enhanced filtering logic
-  const filteredTransactions = filterStatus
-    ? transactions.filter((transaction) =>
-        transaction.status.toLowerCase().includes(filterStatus.toLowerCase())
-      )
-    : transactions;
+  const filteredTransactions = transactions.filter((transaction) => {
+    // Filter by status
+    const statusMatches =
+      !filterStatus ||
+      transaction.status.toLowerCase().includes(filterStatus.toLowerCase());
+
+    // Filter by date
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const transactionDate = new Date(transaction.date);
+    transactionDate.setHours(0, 0, 0, 0);
+
+    let dateMatches = false;
+    switch (selectedDateTab) {
+      case "yesterday":
+        dateMatches =
+          transactionDate.getTime() ===
+          new Date(today.getTime() - 86400000).getTime();
+        break;
+      case "today":
+        dateMatches = transactionDate.getTime() === today.getTime();
+        break;
+      case "tomorrow":
+        dateMatches =
+          transactionDate.getTime() ===
+          new Date(today.getTime() + 86400000).getTime();
+        break;
+      default:
+        dateMatches = true;
+    }
+
+    return statusMatches && dateMatches;
+  });
 
   return (
     <>
@@ -171,7 +120,7 @@ const RentalListManagement = () => {
           </div>
         </div>
 
-        {/* Cards Section */}
+        {/* Dashboard */}
         <div className="flex justify-center items-center bg-white mb-3">
           {/* Nhận phòng */}
           <div className="flex flex-col justify-center w-[480px] h-32 bg-white shadow-md rounded-lg p-4 m-4">
@@ -213,7 +162,7 @@ const RentalListManagement = () => {
 
         {/* Filter Buttons & Refresh Button */}
         <div className="flex items-center justify-between mb-5">
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-1">
             {/* All Filter */}
             <button
               onClick={() => setFilterStatus("")} // Reset filter
@@ -268,6 +217,43 @@ const RentalListManagement = () => {
           </button>
         </div>
 
+        {/* Day Fitler */}
+        <div className="flex justify-start space-x-2 mb-2">
+          <button
+            className={`px-4 py-2 text-black bg-white transition-all duration-300 ease-out relative ${
+              selectedDateTab === "yesterday"
+            }`}
+            onClick={() => setSelectedDateTab("yesterday")}
+          >
+            Hôm qua
+            {selectedDateTab === "yesterday" && (
+              <span className="absolute bottom-0 left-0 w-full h-0.5 bg-blue-500 mt-1"></span>
+            )}
+          </button>
+          <button
+            className={`px-4 py-2 text-black bg-white transition-all duration-300 ease-out relative ${
+              selectedDateTab === "today"
+            }`}
+            onClick={() => setSelectedDateTab("today")}
+          >
+            Hôm nay
+            {selectedDateTab === "today" && (
+              <span className="absolute bottom-0 left-0 w-full h-0.5 bg-blue-500 mt-1"></span>
+            )}
+          </button>
+          <button
+            className={`px-4 py-2 text-black bg-white transition-all duration-300 ease-out relative ${
+              selectedDateTab === "tomorrow"
+            }`}
+            onClick={() => setSelectedDateTab("tomorrow")}
+          >
+            Ngày mai
+            {selectedDateTab === "tomorrow" && (
+              <span className="absolute bottom-0 left-0 w-full h-0.5 bg-blue-500 mt-1"></span>
+            )}
+          </button>
+        </div>
+
         {/* Transactions Table */}
         <table className="min-w-full bg-white border border-gray-200 ">
           <thead>
@@ -295,9 +281,8 @@ const RentalListManagement = () => {
                     </p>
                   </div>
                 </td>
-
                 <td className="p-4">{transaction.room_type}</td>
-                <td className="p-4">{transaction.number_of_nights}</td>
+                <td className="p-4 pl-8">{transaction.number_of_nights}</td>
                 <td className="p-4">
                   <span
                     className={`flex items-center px-2 py-1 rounded-full w-40 ${transaction.statusColor}`}
@@ -331,9 +316,8 @@ const RentalListManagement = () => {
                     </div>
                   ) : null}
                 </td>
-
                 <td className="p-4">
-                  <FaEllipsisVertical />
+                  <FaEllipsisVertical onClick={() => handleOpenModal()} />
                 </td>
               </tr>
             ))}
@@ -378,6 +362,11 @@ const RentalListManagement = () => {
             <FaChevronRight />
           </button>
         </div>
+
+        <DetailCheckinModal
+          isOpen={isDetailModalOpen}
+          onClose={() => setIsDetailModalOpen(false)}
+        />
       </div>
     </>
   );

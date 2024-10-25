@@ -63,13 +63,10 @@ const Navigation = () => {
               Tải ứng dụng
             </a>
           </li>
-          <li>
+          <li className="border-2 hover:text-gray-200 border-blue-400 hover:border-gray-200 text-center rounded-xl w-36 h-10 flex justify-center items-center text-blue-400">
             <Link to={`/signin`} className="hover:text-gray-200">
               Đăng nhập
             </Link>
-          </li>
-          <li className="border-2 hover:text-gray-200 border-blue-400 hover:border-gray-200 text-center rounded-xl w-36 h-10 flex justify-center items-center text-blue-400">
-            <a href="/signup">Đăng ký</a>
           </li>
         </ul>
       </div>
