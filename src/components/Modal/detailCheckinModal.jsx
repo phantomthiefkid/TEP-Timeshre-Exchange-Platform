@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Toaster } from "react-hot-toast";
-import { FaAddressCard, FaDotCircle, FaPen } from "react-icons/fa";
-import { FaPenToSquare, FaXmark } from "react-icons/fa6";
+import { FaDotCircle } from "react-icons/fa";
+import { FaXmark } from "react-icons/fa6";
+import UpdateCheckin from "../../pages/timeshareStaffLayout/updateCheckin/updateCheckin";
 
-// const detailCheckinModal = ({ isOpen, onSave, onClose, requestId }) => {
-const detailCheckinModal = ({ isOpen, onClose }) => {
+const DetailCheckinModal = ({ isOpen, onClose }) => {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
@@ -24,6 +24,7 @@ const detailCheckinModal = ({ isOpen, onClose }) => {
         transform: "translateX(100%)",
         transition: "all 0.3s ease",
       };
+
   return (
     <div className="fixed inset-0 flex justify-end p-3 h-full">
       <Toaster position="top-right" reverseOrder={false} />
@@ -45,27 +46,9 @@ const detailCheckinModal = ({ isOpen, onClose }) => {
           <FaXmark size={28} />
         </button>
 
-        <div className="flex items-center p-4 border rounded-lg shadow-sm w-full mb-6">
-          <img
-            src="https://placehold.co/100x100"
-            className="w-24 h-24 rounded-lg object-cover"
-          />
-          <div className="ml-4 flex-grow">
-            <h2 className="text-lg font-medium">Mã đặt phòng</h2>
-            <div className="flex items-center mt-4">
-              <img
-                src="https://placehold.co/40x40"
-                className="w-10 h-10 rounded-full object-cover"
-              />
-              <div className="ml-2">
-                <p className="text-sm font-medium">Nguyễn Văn A</p>
-                <p className="text-sm text-gray-500">0987654321</p>
-              </div>
-            </div>
-          </div>
-          <button className="ml-4 px-4 py-2 bg-orange-100 text-orange-600 rounded-full text-sm font-medium">
-            Đang chờ
-          </button>
+        {/* UpdateCheckin Component placed here */}
+        <div className="mb-0 ">
+          <UpdateCheckin />
         </div>
 
         <div className="mb-5">
@@ -131,4 +114,4 @@ const detailCheckinModal = ({ isOpen, onClose }) => {
   );
 };
 
-export default detailCheckinModal;
+export default DetailCheckinModal;

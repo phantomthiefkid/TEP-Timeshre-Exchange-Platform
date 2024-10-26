@@ -5,7 +5,6 @@ import {
   FaCalendarCheck,
   FaChevronLeft,
   FaChevronRight,
-  FaDotCircle,
   FaSignOutAlt,
 } from "react-icons/fa";
 import { FaArrowsRotate, FaEllipsisVertical } from "react-icons/fa6";
@@ -15,7 +14,7 @@ const RentalListManagement = () => {
   const [selectedDateTab, setSelectedDateTab] = useState("today");
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
 
-  const handleOpenModal = () => {
+  const handleOpenDetailModal = () => {
     setIsDetailModalOpen(true);
   };
 
@@ -218,42 +217,41 @@ const RentalListManagement = () => {
         </div>
 
         {/* Day Fitler */}
-        <div className="flex justify-start space-x-2 mb-2">
+        <div className="flex justify-start space-x-2 mb-1">
           <button
             className={`px-4 py-2 text-black bg-white transition-all duration-300 ease-out relative ${
-              selectedDateTab === "yesterday"
+              selectedDateTab === "yesterday" ? "text-blue-500 bg-blue-500" : ""
             }`}
             onClick={() => setSelectedDateTab("yesterday")}
           >
             Hôm qua
             {selectedDateTab === "yesterday" && (
-              <span className="absolute bottom-0 left-0 w-full h-0.5 bg-blue-500 mt-1"></span>
+              <span className="absolute bottom-0 left-0 w-full h-1 bg-blue-500 mt-1"></span>
             )}
           </button>
           <button
             className={`px-4 py-2 text-black bg-white transition-all duration-300 ease-out relative ${
-              selectedDateTab === "today"
+              selectedDateTab === "today" ? "text-blue-500 bg-blue-500" : ""
             }`}
             onClick={() => setSelectedDateTab("today")}
           >
             Hôm nay
             {selectedDateTab === "today" && (
-              <span className="absolute bottom-0 left-0 w-full h-0.5 bg-blue-500 mt-1"></span>
+              <span className="absolute bottom-0 left-0 w-full h-1 bg-blue-500 mt-1"></span>
             )}
           </button>
           <button
             className={`px-4 py-2 text-black bg-white transition-all duration-300 ease-out relative ${
-              selectedDateTab === "tomorrow"
+              selectedDateTab === "tomorrow" ? "text-blue-500 bg-blue-500" : ""
             }`}
             onClick={() => setSelectedDateTab("tomorrow")}
           >
             Ngày mai
             {selectedDateTab === "tomorrow" && (
-              <span className="absolute bottom-0 left-0 w-full h-0.5 bg-blue-500 mt-1"></span>
+              <span className="absolute bottom-0 left-0 w-full h-1 bg-blue-500 mt-1"></span>
             )}
           </button>
         </div>
-
         {/* Transactions Table */}
         <table className="min-w-full bg-white border border-gray-200 ">
           <thead>
@@ -285,9 +283,8 @@ const RentalListManagement = () => {
                 <td className="p-4 pl-8">{transaction.number_of_nights}</td>
                 <td className="p-4">
                   <span
-                    className={`flex items-center px-2 py-1 rounded-full w-40 ${transaction.statusColor}`}
+                    className={`flex items-center justify-center px-2 py-1 rounded-full w-36 font-semibold ${transaction.statusColor}`}
                   >
-                    <FaDotCircle className="mr-2" />
                     {transaction.status}
                   </span>
                 </td>
@@ -317,7 +314,14 @@ const RentalListManagement = () => {
                   ) : null}
                 </td>
                 <td className="p-4">
-                  <FaEllipsisVertical onClick={() => handleOpenModal()} />
+                  <div
+                    className="cursor-pointer hover:bg-gray-100 rounded-xl w-8 h-8 p-2"
+                    onClick={() => {
+                      handleOpenDetailModal();
+                    }}
+                  >
+                    <FaEllipsisVertical />
+                  </div>
                 </td>
               </tr>
             ))}

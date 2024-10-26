@@ -316,9 +316,8 @@ const exchangePostingMNG = () => {
                 <td className="p-4">{transaction.amount}</td>
                 <td className="p-4">
                   <span
-                    className={`flex items-center px-2 py-1 rounded-full w-32 ${transaction.statusColor}`}
+                    className={`flex items-center justify-center px-2 py-1 rounded-full w-24 font-semibold ${transaction.statusColor}`}
                   >
-                    <FaDotCircle className="mr-2" />
                     {transaction.status}
                   </span>
                 </td>
