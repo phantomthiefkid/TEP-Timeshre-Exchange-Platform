@@ -90,7 +90,7 @@ const SidebarSystemStaff = () => {
       </div>
       <div className="flex-grow p-5">
         <MenuItem icon={FaChartBar} title="Dashboard" path="#" />
-        <MenuItem icon={FaListAlt} title="Danh sách bài đăng" path="#" />
+        <MenuItem icon={FaListAlt} title="Danh sách bài đăng" path="post" />
         <MenuItem icon={FaMoneyBillAlt} title="Thanh toán">
           <MenuItem icon={FaUserCheck} title="Người đăng" path="#" />
           <MenuItem icon={FaCity} title="Công ty Timeshare" path="#" />
