@@ -52,20 +52,21 @@ const MenuItem = ({ icon: Icon, title, children, path }) => {
       <Link
         to={path || "#"}
         onClick={handleClick}
-        className={`flex items-center justify-between p-2 cursor-pointer hover:bg-gray-200 transition duration-200 ease-in-out ${
-          isParentActive ? "bg-gray-300" : ""
+        className={`flex items-center justify-between p-3 cursor-pointer hover:bg-gray-100 transition duration-200 ease-in-out rounded-xl w-[94%] ml-2 ${
+          isParentActive ? "bg-gray-200" : ""
         }`}
       >
         <div className="flex items-center">
           <Icon
             className={`text-lg transition-transform duration-200 ease-in-out ${
               isParentActive ? "text-blue-600" : "text-gray-700"
-            } hover:text-blue-500`}
+            }`}
           />
           <span
             className={`ml-2 transition-colors duration-200 ease-in-out ${
               isParentActive ? "text-blue-600" : "text-gray-700"
-            } hover:text-blue-500`}
+            }`}
+            style={isParentActive ? { color: "#2563eb" } : {}}
           >
             {title}
           </span>
@@ -99,28 +100,30 @@ const SidebarTimeshareStaff = () => {
       <div className="flex items-center space-x-2 mb-8 px-6 mt-10">
         <img src="../src/assets/logoTEPblack.png" className="w-auto px-4" />
       </div>
-      <div className="flex-grow p-5">
+      <div className="flex-grow space-y-2">
         <MenuItem
           icon={FaFileAlt}
           title="Danh sách thuê"
           path="/timesharestaff/rentalmanagement"
         />
         <MenuItem icon={FaTableList} title="Danh sách yêu cầu">
-          <MenuItem
-            icon={FaHouseUser}
-            title="Bài đăng cho thuê"
-            path="/timesharestaff/rentalpostingmanagement"
-          />
-          <MenuItem
-            icon={FaArrowRightArrowLeft}
-            title="Bài đăng trao đổi"
-            path="/timesharestaff/exchangepostingmanagement"
-          />
-          <MenuItem
-            icon={FaCheckToSlot}
-            title="Xác minh trao đổi"
-            path="/timesharestaff/exchangeverifymanagement"
-          />
+          <div className="space-y-2 ml-4">
+            <MenuItem
+              icon={FaHouseUser}
+              title="Bài đăng cho thuê"
+              path="/timesharestaff/rentalpostingmanagement"
+            />
+            <MenuItem
+              icon={FaArrowRightArrowLeft}
+              title="Bài đăng trao đổi"
+              path="/timesharestaff/exchangepostingmanagement"
+            />
+            <MenuItem
+              icon={FaCheckToSlot}
+              title="Xác minh trao đổi"
+              path="/timesharestaff/exchangeverifymanagement"
+            />
+          </div>
         </MenuItem>
         <MenuItem
           icon={FaHandHoldingDollar}

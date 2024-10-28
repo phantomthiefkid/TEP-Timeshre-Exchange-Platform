@@ -12,6 +12,7 @@ import {
   setUserId,
 } from "../../redux/UserSlice/SignIn";
 import { jwtDecode } from "jwt-decode";
+import { FaEnvelope, FaLock } from "react-icons/fa";
 const SignIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -97,14 +98,7 @@ const SignIn = () => {
 
               {/* Envelope Icon */}
               <div className="absolute inset-y-0 left-0 pl-3 top-6 flex items-center pointer-events-none">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5 text-gray-400"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                >
-                  <path d="M20.75 4H3.25C2.01 4 1 5.01 1 6.25v11.5C1 18.99 2.01 20 3.25 20h17.5c1.24 0 2.25-1.01 2.25-2.25V6.25C23 5.01 21.99 4 20.75 4zM20.75 6c.138 0 .25.112.25.25v.511l-8.75 5.478-8.75-5.478V6.25c0-.138.112-.25.25-.25h17.5zM3.25 18c-.138 0-.25-.112-.25-.25v-9.02l8.772 5.493a.75.75 0 00.756 0l8.772-5.493v9.02c0 .138-.112.25-.25.25H3.25z" />
-                </svg>
+                <FaEnvelope />
               </div>
 
               <input
@@ -129,20 +123,7 @@ const SignIn = () => {
 
               {/* Lock Icon */}
               <div className="absolute inset-y-0 left-0 pl-3 top-6 flex items-center pointer-events-none">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5 text-gray-400"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M12 17a2 2 0 110-4 2 2 0 010 4zm6-7V9a6 6 0 00-12 0v1H5a2 2 0 00-2 2v7a2 2 0 002 2h14a2 2 0 002-2v-7a2 2 0 00-2-2h-1zm-2 0H8V9a4 4 0 118 0v1z"
-                  />
-                </svg>
+                <FaLock />
               </div>
 
               {/* Password Input Field */}
@@ -182,15 +163,14 @@ const SignIn = () => {
             </div>
           </form>
 
-          <div className="flex items-center justify-center mt-4">
+          {/* <div className="flex items-center justify-center mt-4">
             <div className="flex-grow border-t border-gray-500"></div>
             <span className="mx-4 text-gray-400">Hoặc đăng nhập bằng</span>
             <div className="flex-grow border-t border-gray-500"></div>
-          </div>
+          </div> */}
 
-          <div className="mt-6">
+          {/* <div className="mt-6">
             <button className="w-full py-2 px-4 bg-white text-gray-700 font-semibold border border-gray-300 rounded-md shadow-sm hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 flex justify-center items-center space-x-2">
-              {/* Google Icon as SVG */}
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="w-6 h-6"
@@ -215,18 +195,7 @@ const SignIn = () => {
               </svg>
               <span>Đăng nhập với Google</span>
             </button>
-          </div>
-
-          {/* Registration Link */}
-          <div className="mt-6 text-center text-sm">
-            <span>Bạn chưa có tài khoản tại Unwind?</span>
-            <button
-              onClick={() => navigate("/signup")} // Navigate to the signup page on button click
-              className="ml-1 text-blue-600 hover:text-blue-800 font-medium"
-            >
-              Đăng ký ngay
-            </button>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>
