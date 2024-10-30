@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Toaster } from "react-hot-toast";
-import { FaChevronLeft, FaChevronRight, FaDotCircle } from "react-icons/fa";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { FaArrowsRotate, FaEllipsisVertical } from "react-icons/fa6";
 import DetailRentalPostingModal from "../../components/Modal/requestPostingModal/detailRentalPostingModal";
 import {
@@ -36,8 +36,6 @@ const rentalPostingMNG = () => {
     try {
       const response = await getRentalPostingById(rentalPostingId);
       setSelectedPost(response.data);
-      console.log(response.data);
-
       setIsDetailModalOpen(true);
     } catch (error) {
       console.log(error);
@@ -56,11 +54,11 @@ const rentalPostingMNG = () => {
     }
   };
 
-  const transactions = [];
-
   const filteredTransactions = filterStatus
-    ? transactions.filter((transaction) => transaction.status === filterStatus)
-    : transactions;
+    ? allRentalPosts.filter(
+        (transaction) => transaction.status === filterStatus
+      )
+    : allRentalPosts;
 
   useEffect(() => {
     fetchAllRentalPosting();
@@ -87,7 +85,7 @@ const rentalPostingMNG = () => {
         {/* Filter Buttons */}
         <div className="flex items-center space-x-1 mb-5">
           <button
-            onClick={() => setFilterStatus("")} // Reset filter
+            onClick={() => setFilterStatus("")}
             className={`px-4 py-2 rounded-md ${
               filterStatus === ""
                 ? "bg-blue-500 text-white"
@@ -97,9 +95,9 @@ const rentalPostingMNG = () => {
             Tất cả
           </button>
           <button
-            onClick={() => setFilterStatus("Đang chờ")}
+            onClick={() => setFilterStatus("PendingApproval")}
             className={`px-4 py-2 rounded-md ${
-              filterStatus === "Đang chờ"
+              filterStatus === "PendingApproval"
                 ? "bg-blue-500 text-white"
                 : "bg-gray-100 text-gray-700 hover:bg-blue-500 hover:text-white"
             }`}
@@ -107,9 +105,9 @@ const rentalPostingMNG = () => {
             Đang chờ
           </button>
           <button
-            onClick={() => setFilterStatus("Đã duyệt")}
+            onClick={() => setFilterStatus("Completed")}
             className={`px-4 py-2 rounded-md ${
-              filterStatus === "Đã duyệt"
+              filterStatus === "Completed"
                 ? "bg-blue-500 text-white"
                 : "bg-gray-100 text-gray-700 hover:bg-blue-500 hover:text-white"
             }`}
@@ -117,14 +115,24 @@ const rentalPostingMNG = () => {
             Đã duyệt
           </button>
           <button
-            onClick={() => setFilterStatus("Từ chối")}
+            onClick={() => setFilterStatus("Closed")}
             className={`px-4 py-2 rounded-md ${
-              filterStatus === "Từ chối"
+              filterStatus === "Closed"
                 ? "bg-blue-500 text-white"
                 : "bg-gray-100 text-gray-700 hover:bg-blue-500 hover:text-white"
             }`}
           >
             Từ chối
+          </button>
+          <button
+            onClick={() => setFilterStatus("Expired")}
+            className={`px-4 py-2 rounded-md ${
+              filterStatus === "Expired"
+                ? "bg-blue-500 text-white"
+                : "bg-gray-100 text-gray-700 hover:bg-blue-500 hover:text-white"
+            }`}
+          >
+            Hết hạn
           </button>
         </div>
 
@@ -140,46 +148,62 @@ const rentalPostingMNG = () => {
             </tr>
           </thead>
           <tbody>
-            {allRentalPosts &&
-              allRentalPosts.map((post, index) => (
-                <tr key={index} className="border-b border-gray-200">
-                  <td className="p-4 flex items-center w-72">
-                    <img
-                      src={post.image}
-                      className="w-12 h-12 rounded-2xl mr-5"
-                    />
-                    <div className="flex flex-col">
-                      <h3 className="font-semibold">
-                        {post.resortName} - {post.roomCode}
-                      </h3>
-                      <p className="text-sm text-blue-400">
-                        {post.rentalPostingId}
-                      </p>
-                    </div>
-                  </td>
-
-                  <td className="p-4">{post.checkinDate}</td>
-                  <td className="p-4">{post.checkoutDate}</td>
-                  <td className="p-4">{post.pricePerNights}</td>
-                  <td className="p-4">
-                    <span
-                      className={`flex items-center justify-center px-2 py-1 rounded-full w-24 font-semibold ${post.statusColor}`}
-                    >
-                      {post.status}
+            {filteredTransactions.map((post, index) => (
+              <tr key={index} className="border-b border-gray-200">
+                <td className="p-4 w-auto flex items-center space-x-4">
+                  <img
+                    src={post.image}
+                    className="w-12 h-12 rounded-2xl object-cover"
+                  />
+                  <div className="flex flex-col justify-center">
+                    <h3 className="font-semibold text-gray-800">
+                      {post.resortName}
+                    </h3>
+                    <span className="text-gray-600">
+                      {post.roomCode} - {post.roomName}
                     </span>
-                  </td>
-                  <td className="p-4">
-                    <div
-                      className="cursor-pointer hover:bg-gray-100 rounded-xl w-8 h-8 p-2"
-                      onClick={() =>
-                        fetchRentalPostingDetails(post.rentalPostingId)
-                      }
-                    >
-                      <FaEllipsisVertical />
-                    </div>
-                  </td>
-                </tr>
-              ))}
+                    <p className="text-sm text-blue-500">
+                      {post.rentalPostingId}
+                    </p>
+                  </div>
+                </td>
+
+                <td className="p-4">{post.checkinDate}</td>
+                <td className="p-4">{post.checkoutDate}</td>
+                <td className="p-4">{post.pricePerNights}</td>
+                <td className="p-4">
+                  <span
+                    className={`flex items-center justify-center px-2 py-1 rounded-full w-24 font-semibold ${
+                      post.status === "PendingApproval"
+                        ? "bg-blue-100 text-blue-500"
+                        : post.status === "Completed"
+                        ? "bg-green-100 text-green-500"
+                        : post.status === "Closed"
+                        ? "bg-yellow-100 text-yellow-500"
+                        : "bg-red-100 text-red-500"
+                    }`}
+                  >
+                    {post.status === "PendingApproval"
+                      ? "Đang chờ"
+                      : post.status === "Completed"
+                      ? "Đã duyệt"
+                      : post.status === "Closed"
+                      ? "Từ chối"
+                      : "Hết hạn"}
+                  </span>
+                </td>
+                <td className="p-4">
+                  <div
+                    className="cursor-pointer hover:bg-gray-100 rounded-xl w-8 h-8 p-2"
+                    onClick={() =>
+                      fetchRentalPostingDetails(post.rentalPostingId)
+                    }
+                  >
+                    <FaEllipsisVertical />
+                  </div>
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
 
