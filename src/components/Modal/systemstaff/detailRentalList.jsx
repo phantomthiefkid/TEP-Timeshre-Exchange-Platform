@@ -2,10 +2,9 @@ import React, { useEffect, useState } from "react";
 import { Toaster } from "react-hot-toast";
 import { FaEdit, FaMap, FaMapMarkerAlt } from "react-icons/fa";
 import { FaXmark } from "react-icons/fa6";
-
-const DetailRentalPostingModal = ({ isOpen, onClose, postingId }) => {
+const DetailRentalList = ({ isOpen, onClose, postingId }) => {
   const [isVisible, setIsVisible] = useState(false);
-
+  console.log(postingId)
   useEffect(() => {
     if (isOpen) {
       setIsVisible(true);
@@ -19,25 +18,11 @@ const DetailRentalPostingModal = ({ isOpen, onClose, postingId }) => {
   const modalStyles = isOpen
     ? {}
     : {
-        opacity: 0,
-        transform: "translateX(100%)",
-        transition: "all 0.3s ease",
-      };
+      opacity: 0,
+      transform: "translateX(100%)",
+      transition: "all 0.3s ease",
+    };
 
-  const getStatusStyles = (status) => {
-    switch (status) {
-      case "PendingApproval":
-        return "bg-blue-100 text-blue-500";
-      case "completed":
-        return "bg-green-100 text-green-500";
-      case "closed":
-        return "bg-yellow-100 text-yellow-500";
-      case "expired":
-        return "bg-red-100 text-red-500";
-      default:
-        return "bg-gray-100 text-gray-500";
-    }
-  };
   return (
     <div className="fixed inset-0 flex justify-end p-3 h-full">
       <Toaster position="top-right" reverseOrder={false} />
@@ -51,65 +36,51 @@ const DetailRentalPostingModal = ({ isOpen, onClose, postingId }) => {
         style={{ zIndex: 1000, ...modalStyles }}
       >
         {/* Header Section */}
-        <div className="p-4 border-b flex justify-between items-center">
-          <h1 className="text-xl font-bold">Thông tin chi tiết</h1>
+        <div className="p-6 border-b flex justify-between items-center bg-gradient-to-r from-blue-500 to-purple-500 text-white">
+          <h1 className="text-xl font-bold tracking-wider">Thông tin chi tiết</h1>
           <div className="flex items-center">
-            <div className="bg-white border-2 border-gray-300 rounded-xl p-2 mr-2 hover:bg-gray-300 cursor-pointer">
-              <button className="text-gray-500 focus:outline-none flex flex-row items-center">
-                <FaEdit size={20} />
-                <span className="ml-2">Chỉnh sửa</span>
+            <div className="bg-white border border-gray-300 rounded-xl p-2 mr-2 hover:bg-gray-100 cursor-pointer shadow-sm">
+              <button className="text-gray-500 focus:outline-none flex items-center">
+                <FaEdit size={20} className="mr-2 text-blue-600" />
+                <span>Chỉnh sửa</span>
               </button>
             </div>
-
             <button
               onClick={onClose}
-              className="text-gray-500 hover:text-zinc-300 focus:outline-none"
+              className="text-white hover:text-gray-300 transition duration-200"
             >
               <FaXmark size={28} />
             </button>
           </div>
         </div>
 
+
         {postingId ? (
           <>
             <div className=" border-b">
-              <div className="flex items-center p-4 m-3 border border-gray-300 rounded-xl ">
+              <div className="flex items-center p-4 m-3 border border-gray-300 rounded-xl shadow-lg hover:shadow-xl transition duration-200">
                 <img
-                  src="https://placehold.co/100x100"
+                  src="https://cdn5.redweek.com/photos/full-preview/3/0/3/303804.jpg?1"
                   alt="Hotel Thumbnail"
-                  className="w-20 h-20 rounded-lg mr-4"
+                  className="w-20 h-20 rounded-lg mr-4 object-cover"
                 />
                 <div className="flex justify-between items-center w-full">
-                  <div className="flex items-center">
-                    <div>
-                      <h2 className="text-xl font-bold mb-2">
-                        {postingId.resortName}
-                      </h2>
-                      <div className="flex flex-row">
-                        <FaMap
-                          className="text-gray-500 mr-2 mt-1"
-                          style={{ color: "blue" }}
-                        />
-                        <p className="text-base text-blue-500">
-                          {postingId.address}
-                        </p>
-                      </div>
+                  <div>
+                    <h2 className="text-xl font-semibold mb-1">{postingId.resortName}</h2>
+                    <div className="flex items-center text-blue-500">
+                      <FaMap className="mr-2" />
+                      <p>{postingId.address}</p>
                     </div>
                   </div>
-                  <div className="flex justify-end">
-                    <span
-                      className={`text-medium px-2 py-1 rounded-full ${getStatusStyles(
-                        postingId.status
-                      )}`}
-                    >
-                      {postingId.status}
-                    </span>
-                  </div>
+                  <span className="px-3 py-1 bg-yellow-100 text-yellow-700 rounded-full">
+                    {postingId.status}
+                  </span>
                 </div>
               </div>
+
             </div>
 
-            <div className="flex-1 overflow-y-auto p-4">
+            <div className="flex-1 overflow-y-auto p-8">
               <h2 className="text-2xl font-semibold mb-3">Chi tiết bài đăng</h2>
               <div className="grid grid-cols-2 gap-4 mb-6">
                 <div className="space-y-2">
@@ -120,7 +91,7 @@ const DetailRentalPostingModal = ({ isOpen, onClose, postingId }) => {
                   <p className="text-medium text-gray-500">Đăng bởi</p>
                   <div className="flex flex-row items-center">
                     <img
-                      src="https://placehold.co/25x25"
+                      src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhPSeKg-xl483vdzvuk5p1Nl89goZRGsrjMA&s"
                       alt="Hotel Thumbnail"
                       className="w-12 h-12 rounded-full mr-4 border border-blue-400"
                     />
@@ -137,7 +108,7 @@ const DetailRentalPostingModal = ({ isOpen, onClose, postingId }) => {
                 </div>
                 <div className="space-y-2">
                   <p className="text-medium text-gray-500">Giá phòng</p>
-                  <p className="font-medium">{postingId.totalPrice}</p>
+                  <p className="font-medium">{postingId.totalPrice} VND</p>
                 </div>
               </div>
 
@@ -146,16 +117,26 @@ const DetailRentalPostingModal = ({ isOpen, onClose, postingId }) => {
                 <p className="text-medium">{postingId.resortDescription}</p>
               </div>
 
-              <div className="mb-4">
-                <h2 className="text-2xl font-semibold mb-4">
-                  Các tiện năng và tiện nghi tại chỗ
-                </h2>
+              <div className="bg-gray-100 p-4 rounded-lg shadow-inner mb-4">
+                <h2 className="text-xl font-semibold mb-3">Các tiện năng và tiện nghi tại chỗ</h2>
+                <div className="grid grid-cols-3 gap-4">
+                  {postingId.resortAmenities
+                    .filter((amenity) => amenity.type === "1")
+                    .map((amenity) => (
+                      <p key={amenity.id} className="text-gray-700 flex items-center">
+                        <FaMapMarkerAlt className="mr-2 text-blue-500" />
+                        {amenity.name}
+                      </p>
+                    ))}
+                </div>
+              </div>
+
+
+              <div className="bg-gray-100 p-4 rounded-lg shadow-inner mb-4">
+                <h2 className="text-2xl font-semibold mb-4">Các điểm tham quan gần đó</h2>
                 <div className="grid grid-cols-3 gap-2">
                   {postingId.resortAmenities
-                    .filter(
-                      (amenity) =>
-                        amenity.type === "Các tính năng và tiện nghi tại chỗ"
-                    )
+                    .filter((amenity) => amenity.type === "2")
                     .map((amenity) => (
                       <p key={amenity.id} className="text-medium">
                         {amenity.name}
@@ -164,32 +145,11 @@ const DetailRentalPostingModal = ({ isOpen, onClose, postingId }) => {
                 </div>
               </div>
 
-              <div className="mb-4">
-                <h2 className="text-2xl font-semibold mb-4">
-                  Các điểm tham quan gần đó
-                </h2>
-                <div className="grid grid-cols-3 gap-2">
-                  {postingId.resortAmenities
-                    .filter(
-                      (amenity) => amenity.type === "Các điểm tham quan gần đó"
-                    )
-                    .map((amenity) => (
-                      <p key={amenity.id} className="text-medium">
-                        {amenity.name}
-                      </p>
-                    ))}
-                </div>
-              </div>
-
-              <div className="mb-4">
+              <div className="bg-gray-100 p-4 rounded-lg shadow-inner mb-4">
                 <h2 className="text-2xl font-semibold mb-4">Chính sách</h2>
                 <div className="grid grid-cols-3 gap-2">
                   {postingId.resortAmenities
-                    .filter(
-                      (amenity) =>
-                        amenity.type !== "Các điểm tham quan gần đó" &&
-                        amenity.type !== "Các tính năng và tiện nghi tại chỗ"
-                    )
+                    .filter((amenity) => amenity.type !== "1" && amenity.type !== "2")
                     .map((amenity) => (
                       <p key={amenity.id} className="text-medium">
                         {amenity.name}
@@ -198,9 +158,9 @@ const DetailRentalPostingModal = ({ isOpen, onClose, postingId }) => {
                 </div>
               </div>
 
+
               <div className="mb-4">
                 <h2 className="text-2xl font-semibold mb-3">Địa chỉ</h2>
-                <p className="text-base mb-3">{postingId.address}</p>
                 <img
                   src="https://placehold.co/600x300"
                   className="max-w-full "
@@ -211,6 +171,7 @@ const DetailRentalPostingModal = ({ isOpen, onClose, postingId }) => {
         ) : (
           <p>Đang tải...</p>
         )}
+
 
         {/* Footer Section with Buttons */}
         <div className="p-4 border-t flex justify-between">
@@ -236,4 +197,4 @@ const DetailRentalPostingModal = ({ isOpen, onClose, postingId }) => {
   );
 };
 
-export default DetailRentalPostingModal;
+export default DetailRentalList;

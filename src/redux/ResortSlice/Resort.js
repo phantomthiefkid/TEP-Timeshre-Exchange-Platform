@@ -10,6 +10,7 @@ const resortSlice =  createSlice({
     reducers: {
         setResortId: (state, action) => {
             state.resortId = action.payload;
+            console.log("Redux: ", action.payload)
         }
     }
 })

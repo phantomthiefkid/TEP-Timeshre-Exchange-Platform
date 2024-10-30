@@ -5,7 +5,6 @@ import CreateUnitType from './CreateUnitType';
 import { createResortByTSC, createResortUnitType } from '../../../service/tsCompanyService/tsCompanyAPI';
 import { useDispatch } from "react-redux";
 import { setResortId } from "../../../redux/ResortSlice/Resort";
-import { useNavigate } from 'react-router-dom';
 import { toast, Toaster } from 'react-hot-toast';
 import Loading from '../../../components/LoadingComponent/loading';
 
@@ -43,28 +42,31 @@ const CreateResort = () => {
       setStep(2);
     } else if (step === 2) {
 
-     handleCreateResort();
+      handleCreateResort();
 
     }
   };
 
-  const handleCreateResort = () => {
+  const handleCreateResort = async () => {
     try {
       setLoading(true);
-      createResortByTSC(formData).then(() => {
+      let data = await createResortByTSC(formData)
+      
+      if (data.status === 200) {
         toast.success("Tạo mới thành công. Vui lòng nhập loại phòng!", { duration: 2000 });
         setStep(3)
-      }).catch(() => {
+        const resortId = data.data.id;
+        dispatch(setResortId(resortId)); 
+        setLoading(false);
+        console.log(data.data.id)
+      } else {
         toast.error("Tạo thất bại!", { duration: 2000 });
-      })
-        .finally(() => {
-          setLoading(false); // Tắt loading khi hoàn tất
-        });
+      }
 
     } catch (error) {
       console.error("Failed to create resort:", error);
     }
-    return false; // Return false if resort creation fails
+
   };
 
   const handleBack = () => {
@@ -72,14 +74,14 @@ const CreateResort = () => {
   };
 
   if (loading) {
-    return (<Loading/>)
+    return (<Loading />)
   }
 
   return (
     <div className="w-full p-10 bg-white">
       <Toaster position="top-right" reverseOrder={false} />
       <div className="flex justify-between">
-        <h2 className="text-3xl font-bold mb-6">Thêm mới Resort</h2>
+        <h2 className="text-3xl font-bold mb-6 text-gray-800">Thêm mới Resort</h2>
         <img
           src="../src/assets/logoTEPblack.png" // Replace with your logo URL
           alt="Company Logo"
@@ -109,7 +111,7 @@ const CreateResort = () => {
           formData={unitType} // Pass unitType data
         />
       )}
-      
+
     </div>
   );
 };
