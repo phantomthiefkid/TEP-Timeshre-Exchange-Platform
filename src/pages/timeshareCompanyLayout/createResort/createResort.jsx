@@ -81,7 +81,7 @@ const CreateResort = () => {
     <div className="w-full p-10 bg-white">
       <Toaster position="top-right" reverseOrder={false} />
       <div className="flex justify-between">
-        <h2 className="text-3xl font-bold mb-6">Thêm mới Resort</h2>
+        <h2 className="text-3xl font-bold mb-6 text-gray-800">Thêm mới Resort</h2>
         <img
           src="../src/assets/logoTEPblack.png" // Replace with your logo URL
           alt="Company Logo"

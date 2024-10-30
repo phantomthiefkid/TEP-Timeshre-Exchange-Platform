@@ -69,36 +69,59 @@ const CreateUnitType = ({ onUpdateData, onNext, onBack, formData }) => {
   return (
     <div>
       <Toaster position="top-right" reverseOrder={false} />
-      <div className='border p-6 rounded-xl'>
-        <h2 className="text-xl font-bold mb-4">Loại phòng</h2>
-        <div className='grid grid-cols-4 gap-4 p-4 min-h-96'>
+      <div className=' p-6 '>
+        <div className="py-4 space-y-2">
+          <h1 className="text-3xl font-bold text-gray-800">Loại phòng</h1>
+          <h3 className="text-xl text-gray-500">
+            Tạo các loại phòng cụ thể và những thông tin chi tiết
+          </h3>
+        </div>
+        <div className='grid grid-cols-3 gap-4 p-4 min-h-96'>
           {roomTypes.map((room, index) => (
             <div
               onClick={() => handleEditUnitType(index)}
               key={index}
-              className="relative p-4 border-2 h-40 shadow-sm hover:shadow-md rounded-lg text-center flex justify-center items-center"
+              className="relative border-2 h-40 shadow-md hover:shadow-lg  hover:bg-gray-100 flex items-center"
             >
-              <span>{room.title}</span>
+              {/* Left Section: Image */}
+              <div className="w-1/3 h-full overflow-hidden">
+                <img
+                  src="https://hagiangamazingtour.vn/upload/images/resort-ha-giang-2-.jpg" // Assuming `imageUrl` is the key for the image
+                  alt={room.title}
+                  className="w-full h-full object-cover"
+                />
+              </div>
 
+              {/* Right Section: Room Details */}
+              <div className="w-2/3 pl-4 flex flex-col justify-center text-left">
+                <h3 className="font-semibold text-lg">{room.title}</h3>
+                <p className="text-sm text-gray-600">Phòng ngủ: {room.bedrooms}</p>
+                <p className="text-sm text-gray-600">Nhà bếp: {room.kitchen}</p>
+                <p className="text-sm text-gray-600">Phòng tắm: {room.bathrooms}</p>
+                <p className="text-sm font-medium text-blue-600">Giá: {room.price} VND</p>
+              </div>
+
+              {/* Delete Button */}
               <button
                 onClick={(e) => {
                   e.stopPropagation();
                   handleDeleteRoomType(index);
                 }}
-                className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 hover:bg-red-600"
+                className="absolute top-1 right-1 bg-gray-500 text-white rounded-full p-1 hover:bg-red-600"
               >
                 <XIcon className="h-4 w-4" />
               </button>
             </div>
+
           ))}
 
 
           {/* Add Room Type Button */}
           <button
-            className="flex items-center h-40 gap-2 justify-center p-4 border-2 border-dashed text-black rounded-lg"
+            className="flex items-center h-40 gap-2 justify-center p-4 border-4 border-dashed text-black rounded-lg hover:bg-slate-200"
             onClick={handleOpenModalAdd} // Open modal on click
           >
-            <label>Thêm</label>
+            <label>Thêm mới</label>
             <PlusIcon className="h-6 w-6" />
           </button>
         </div>
@@ -121,8 +144,8 @@ const CreateUnitType = ({ onUpdateData, onNext, onBack, formData }) => {
         {/* <button type="button" onClick={onBack} className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">
           Quay lại
         </button> */}
-        <button type="button" onClick={handleSubmit} className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">
-          Tiếp theo
+        <button type="button" onClick={handleSubmit} className="bg-green-500 text-white py-2 px-10 rounded-xl hover:bg-green-600">
+          Hoàn tất
         </button>
       </div>
       {loading && (<Loading />)}

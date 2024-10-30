@@ -8,13 +8,16 @@ import {
   FaSearch
 } from "react-icons/fa";
 import { FaArrowsRotate, FaEllipsisVertical } from "react-icons/fa6";
-import { getAllRentalPosting } from "../../service/systemStaffService/systemStaffAPI";
-import  DetailRentalList from "../../components/Modal/systemstaff/detailRentalList";
+import { getAllRentalPosting, getRentalPostingById } from "../../service/systemStaffService/systemStaffAPI";
+import DetailRentalList from "../../components/Modal/systemstaff/detailRentalList";
+import { Link } from "react-router-dom";
+import Loading from "../../components/LoadingComponent/loading"
 const PostManagement = () => {
   const [filterStatus, setFilterStatus] = useState("");
   const [rentalPostings, setRentalPostins] = useState([]);
   const [openDetailModal, setOpenDetailModal] = useState(false);
   const [selectPosting, setSelectPosting] = useState();
+  const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(0);
   const [size, setSize] = useState(10);
   const [totalPages, setTotalPages] = useState(1)
@@ -23,6 +26,7 @@ const PostManagement = () => {
     try {
       let data = await getAllRentalPosting(page, size, resortName);
       if (data.status === 200) {
+        setLoading(false)
         setRentalPostins(data.data.content)
         setTotalPages(data.data.totalPages);
       }
@@ -31,9 +35,16 @@ const PostManagement = () => {
     }
   }
 
-  const handleOpenDetailModal = (postingId) => {
-    setOpenDetailModal(true);
-    setSelectPosting(postingId)
+  const handleOpenDetailModal = async (postingId) => {
+
+    let data = await getRentalPostingById(postingId);
+    if (data.status === 200) {
+      setSelectPosting(data.data)
+      console.log(data.data)
+      setOpenDetailModal(true);
+    }
+
+
 
   }
 
@@ -77,6 +88,9 @@ const PostManagement = () => {
 
 
 
+    if (loading) {
+      return <Loading/>
+    }
 
   return (
     <>
@@ -103,10 +117,12 @@ const PostManagement = () => {
 
 
           <div className="flex items-center space-x-4">
-            <button className="flex items-center bg-green-500 text-white rounded-lg px-4 py-2">
-              <FaPlus className="mr-3" />
-              Thêm mới
-            </button>
+            <Link to={`/systemstaff/createposting`}>
+              <button className="flex items-center bg-green-500 text-white rounded-lg px-4 py-2">
+                <FaPlus className="mr-3" />
+                Thêm mới
+              </button>
+            </Link>
             <button className="flex items-center bg-blue-500 text-white rounded-lg px-4 py-2">
               <FaArrowsRotate className="mr-3" />
               Làm mới
@@ -196,29 +212,44 @@ const PostManagement = () => {
             ))}
           </tbody>
         </table>
-        { openDetailModal && <DetailRentalList onClose={() => setOpenDetailModal(false)} selected={selectPosting}/> }
+        {openDetailModal && <DetailRentalList isOpen={openDetailModal} onClose={() => setOpenDetailModal(false)} postingId={selectPosting} />}
         {/* Pagination */}
-        <div className="flex items-center justify-center space-x-2 mt-5 w-full">
+        {
+          rentalPostings && rentalPostings.length > 0 ? (
+            <div className="flex items-center justify-center space-x-2 mt-5 w-full">
+              <button
+                onClick={handlePreviousPage}
+                disabled={page === 0}
+                className="w-8 h-8 flex items-center justify-center rounded-full bg-white text-gray-500"
+              >
+                <FaChevronLeft />
+              </button>
+              <div className="flex space-x-2 bg-gray-200 rounded-full px-2 py-1">
+                {
+                  Array.from({ length: totalPages }, (_, index) => (
+                    <button
+                      key={index}
+                      onClick={() => setPage(index)}
+                      className={`w-8 h-8 flex items-center justify-center rounded-full ${index === page ? "bg-blue-500 text-white" : "bg-white text-gray-500"}`}
+                    >
+                      {index + 1}
+                    </button>
+                  ))
+                }
+              </div>
+              <button
+                onClick={handleNextPage}
+                disabled={page === totalPages - 1}
+                className="w-8 h-8 flex items-center justify-center rounded-full bg-blue-500 text-white"
+              >
+                <FaChevronRight />
+              </button>
+            </div>
+          ) : (
+            <span className="flex items-center justify-center space-x-2 mt-5 w-full">Không có bài đăng nào!!!</span>
+          )
+        }
 
-          <button onClick={handlePreviousPage} disabled={page === 0} className="w-8 h-8 flex items-center justify-center rounded-full bg-white text-gray-500">
-            <FaChevronLeft />
-          </button>
-          <div className="flex space-x-2 bg-gray-200 rounded-full px-2 py-1">
-            {
-              Array.from({ length: totalPages }, (_, index) => (
-                <button
-                  key={index}
-                  onClick={() => setPage(index)} className={`w-8 h-8 flex items-center justify-center rounded-full ${index === page ? "bg-blue-500 text-white" : "bg-white text-gray-500"}`}>
-                  {index + 1}
-                </button>
-              ))
-            }
-
-          </div>
-          <button onClick={handleNextPage} disabled={page === totalPages - 1} className="w-8 h-8 flex items-center justify-center rounded-full bg-blue-500 text-white">
-            <FaChevronRight />
-          </button>
-        </div>
       </div>
     </>
   );
