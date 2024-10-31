@@ -14,7 +14,7 @@ const getAllRentalPosting = async (
       },
     });
   } catch (error) {
-    return error;
+    throw error;
   }
 };
 
@@ -26,4 +26,31 @@ const getRentalPostingById = async (postingId) => {
   }
 };
 
-export { getAllRentalPosting, getRentalPostingById };
+const rejectRentalPostingById = async (data, postingId) => {
+  try {
+    return await axiosConfig.post(
+      `timeshare-staff/rental/posting/reject/${postingId}`,
+      { data }
+    );
+  } catch (error) {
+    throw error;
+  }
+};
+
+const approveRentalPostingById = async (postingId, data) => {
+  try {
+    return await axiosConfig.post(
+      `timeshare-staff/rental/posting/approval/${postingId}`,
+      data
+    );
+  } catch (error) {
+    throw error;
+  }
+};
+
+export {
+  getAllRentalPosting,
+  getRentalPostingById,
+  rejectRentalPostingById,
+  approveRentalPostingById,
+};
