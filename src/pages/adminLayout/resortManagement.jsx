@@ -10,6 +10,7 @@ import CreateTimeshareCompanyModal from "../../components/Modal/createTimeshareC
 import DetailTimeshareCompanyModal from "../../components/Modal/detailTimeshareCompanyModal";
 import { toast, Toaster } from "react-hot-toast";
 import Loading from "../../components/LoadingComponent/loading";
+import SpinnerWaiting from "../../components/LoadingComponent/spinnerWaiting";
 
 const resortManagement = () => {
   const [allTimeshareCompany, setAllTimeshareCompany] = useState([]);
@@ -85,13 +86,13 @@ const resortManagement = () => {
   }, [page, timeshareCompanyName]);
 
   if (loading) {
-    return <Loading />;
+    return <SpinnerWaiting/>;
   }
 
   return (
     <div>
       <Toaster position="top-right" reverseOrder={false} />
-      <HeaderAdmin />
+      
       <div className="p-6 flex justify-between items-center">
         <div className="p-4">
           <h1 className="text-3xl text-gray-700 font-bold">Quản lí đối tác</h1>
@@ -112,7 +113,7 @@ const resortManagement = () => {
 
           <button
             onClick={() => setIsModalOpen(true)}
-            className="px-6 flex items-center gap-4 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-500"
+            className="bg-gradient-to-r from-blue-300 to-blue-400 border border-blue-300 text-gray-560 py-2 px-4 pr-10 rounded-xl shadow-md flex items-center justify-between cursor-pointer transition duration-300 ease-in-out transform hover:from-blue-400 hover:to-blue-300 hover:border-blue-500 focus:outline-none gap-4"
           >
             <PlusIcon className="w-7 h-7" />
             Thêm đối tác mới

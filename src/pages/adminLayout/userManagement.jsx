@@ -7,11 +7,13 @@ import CreateUserModal from '../../components/Modal/createUserModal';
 import { toast, Toaster } from 'react-hot-toast';
 import DetailEditUserModal from '../../components/Modal/detailEditUserModal';
 import Loading from '../../components/LoadingComponent/loading';
+import { Audio, ThreeCircles } from 'react-loader-spinner'
+import SpinnerWaiting from '../../components/LoadingComponent/spinnerWaiting';
 const UserManagement = () => {
   const [allUser, setAllUser] = useState([]);
-  const [page, setPage] = useState(0); 
-  const [size, setSize] = useState(6); 
-  const [totalPages, setTotalPages] = useState(1); 
+  const [page, setPage] = useState(0);
+  const [size, setSize] = useState(6);
+  const [totalPages, setTotalPages] = useState(1);
   const [roleId, setRoleId] = useState("");
   const [userName, setUserName] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -24,7 +26,7 @@ const UserManagement = () => {
       let data = await getAllUser(page, size, roleId, userName);
       if (data.status === 200) {
         setAllUser(data.data.content);
-        setTotalPages(data.data.totalPages); 
+        setTotalPages(data.data.totalPages);
         setLoading(false)
       }
     } catch (error) {
@@ -46,12 +48,12 @@ const UserManagement = () => {
 
   const handleRoleFilter = (e) => {
     setRoleId(e.target.value);
-    setPage(0); 
+    setPage(0);
   };
 
   const handleSearch = (e) => {
     setUserName(e.target.value);
-    setPage(0); 
+    setPage(0);
   };
 
   useEffect(() => {
@@ -63,7 +65,7 @@ const UserManagement = () => {
       if (newUser) {
         let data = await createUser(newUser);
         if (data.status === 200) {
-          toast.success("Tạo mới thành công", { duration: 2000 }); 
+          toast.success("Tạo mới thành công", { duration: 2000 });
         } else {
           toast.error("Tạo mới thất bại", { duration: 2000 });
         }
@@ -79,13 +81,16 @@ const UserManagement = () => {
     setSelectedUser(user)
   }
   if (loading) {
-    return <Loading/>
+    return (
+      <SpinnerWaiting/>
+    );
   }
+
 
   return (
     <div>
       <Toaster position="top-right" reverseOrder={false} />
-      <HeaderAdmin />
+  
       <div className="p-6 flex justify-between items-center">
         <div className="p-4">
           <h1 className="text-3xl text-gray-700 font-bold">
@@ -123,21 +128,21 @@ const UserManagement = () => {
 
           {/* Filter */}
           <select
-            className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="bg-gradient-to-r from-blue-50 to-blue-100 border border-blue-300 text-gray-700 py-2 px-4 pr-10 rounded-xl shadow-md flex items-center justify-between cursor-pointer transition duration-300 ease-in-out transform  hover:border-blue-500 focus:outline-none"
             value={roleId}
             onChange={handleRoleFilter}
           >
             <option value="">Tất cả</option>
-            <option value="4">Admin</option>
-            <option value="2">Timeshare Company</option>
-            <option value="3">System Staff</option>
-            <option value="1">Customer</option>
+            <option class="block px-4 py-2 text-gray-700 hover:bg-blue-100 hover:text-blue-700 cursor-pointer rounded-lg transition" value="4">Admin</option>
+            <option class="block px-4 py-2 text-gray-700 hover:bg-blue-100 hover:text-blue-700 cursor-pointer rounded-lg transition" value="2">Timeshare Company</option>
+            <option class="block px-4 py-2 text-gray-700 hover:bg-blue-100 hover:text-blue-700 cursor-pointer rounded-lg transition" value="3">System Staff</option>
+            <option class="block px-4 py-2 text-gray-700 hover:bg-blue-100 hover:text-blue-700 cursor-pointer rounded-lg transition" value="1">Customer</option>
           </select>
 
           {/* Add New User */}
           <button
             onClick={() => setIsModalOpen(true)}
-            className="px-6 flex items-center gap-4 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-500"
+            className="bg-gradient-to-r gap-2 from-blue-300 to-blue-400 border border-blue-300 text-gray-560 py-2 px-4 pr-10 rounded-xl shadow-md flex items-center justify-between cursor-pointer transition duration-300 ease-in-out transform hover:from-blue-400 hover:to-blue-300 hover:border-blue-500 focus:outline-none"
           >
             <PlusIcon className="w-7 h-7" />
             Thêm người dùng mới

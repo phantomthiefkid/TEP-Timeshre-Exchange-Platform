@@ -162,7 +162,7 @@ const CreateResortBasic = ({ onNext, onUpdateData, formData }) => {
                     <LocationMarkerIcon className='w-6 text-red-500' />
                   </span>
                   <input
-                    className="border-b bg-slate-50 p-4 pl-10 focus:outline-none focus:border-b-2 focus:border-blue-500 transition-all w-full"
+                    className="border-b-4 bg-slate-50 p-4 pl-10 focus:outline-none focus:border-b-2 focus:border-blue-500 transition-all w-full"
                     type="text"
                     name="address"
                     value={resortData.address}

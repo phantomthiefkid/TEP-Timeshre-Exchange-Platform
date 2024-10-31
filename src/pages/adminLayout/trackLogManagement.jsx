@@ -3,7 +3,7 @@ import HeaderAdmin from '../../components/Header/headerAdmin'
 
 const TrackLogManagement = () => {
   return (
-    <div><HeaderAdmin/></div>
+    <div></div>
   )
 }
 
