@@ -6,8 +6,8 @@ import UnitTypeModal from '../../../components/Modal/unitTypeModal';
 import { setResortId } from '../../../redux/ResortSlice/Resort';
 import { createResortUnitType } from '../../../service/tsCompanyService/tsCompanyAPI';
 import { toast, Toaster } from 'react-hot-toast';
-import LoadingWaitingComponent from '../../../components/LoadingComponent/loadingWaitingComponent';
-import Loading from '../../../components/LoadingComponent/loading';
+
+import SpinnerWaiting from '../../../components/LoadingComponent/spinnerWaiting';
 const CreateUnitType = ({ onUpdateData, onNext, onBack, formData }) => {
   const { resortId } = useSelector((state) => state.resortId);
   const [selectedUnitType, setSelectedUnitType] = useState(null);
@@ -148,7 +148,7 @@ const CreateUnitType = ({ onUpdateData, onNext, onBack, formData }) => {
           Hoàn tất
         </button>
       </div>
-      {loading && (<Loading />)}
+      {loading && (<SpinnerWaiting />)}
     </div>
   );
 };

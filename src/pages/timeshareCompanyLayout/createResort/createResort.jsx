@@ -6,7 +6,6 @@ import { createResortByTSC, createResortUnitType } from '../../../service/tsComp
 import { useDispatch } from "react-redux";
 import { setResortId } from "../../../redux/ResortSlice/Resort";
 import { toast, Toaster } from 'react-hot-toast';
-import Loading from '../../../components/LoadingComponent/loading';
 import SpinnerWaiting from '../../../components/LoadingComponent/spinnerWaiting';
 
 const CreateResort = () => {
