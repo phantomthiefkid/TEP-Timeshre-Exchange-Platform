@@ -39,6 +39,7 @@ import ScrollToTop from "./components/ScrollToTop/ScrollToTop";
 import CreateResort from "./pages/timeshareCompanyLayout/createResort/createResort";
 import Test from "./pages/timeshareCompanyLayout/createResort/test";
 import UpdateResort from "./pages/timeshareCompanyLayout/updateResort/updateResort";
+import CreatePosting from "./pages/systemStaffLayout/createPosting";
 function App() {
   const dispatch = useDispatch();
   const { isLogin, role } = useSelector((state) => state.isLogin);
@@ -123,6 +124,7 @@ function App() {
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="post" element={<PostManagement />} />
             <Route path="faqs" element={<FaqManagement />} />
+            <Route path="createposting" element={<CreatePosting/>}/>
           </Route>
         </Route>
 

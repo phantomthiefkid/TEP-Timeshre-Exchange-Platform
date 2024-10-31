@@ -56,12 +56,12 @@ const UpdateResortAmenity = () => {
     return amenities
       .filter((amenity) => amenity.type === type)
       .map((amenity) => (
-        <div key={amenity.name} className="relative flex justify-center items-center rounded-full border mt-2 p-2">
+        <div key={amenity.name} className="relative flex justify-center items-center rounded-2xl border mt-2 p-3">
           <span>{amenity.name}</span>
           <button
             type="button"
             onClick={() => handleRemoveAmenity(amenity.name)}
-            className="absolute top-1 right-0 text-red-500 flex items-center"
+            className="absolute top-1 right-0 text-gray-400 flex items-center"
           >
             <XCircleIcon className="h-7 w-7" />
           </button>
@@ -102,14 +102,14 @@ const UpdateResortAmenity = () => {
       <div className='grid grid-rows-3 gap-6'>
 
         {/* On-Site Features and Amenities */}
-        <div className='border-b pb-4'>
+        <div className='border-b pb-4 p-4 py-6'>
           <h2 className='text-xl font-semibold mb-3 text-gray-800'>Các tính năng và tiện nghi tại chỗ</h2>
           <div className='grid grid-cols-6 gap-4 px-6'>
             {renderAmenitiesByType('1')}
             <div className='flex'>
               <input
                 type="text"
-                className="border p-2 rounded-full"
+                className="border rounded-2xl"
                 value={onSiteFeature}
                 onChange={(e) => setOnSiteFeature(e.target.value)}
                 placeholder="Thêm tính năng tại chỗ"
@@ -119,21 +119,21 @@ const UpdateResortAmenity = () => {
                 onClick={() => handleAddAmenity(onSiteFeature, '1')}
                 className=" text-white p-2 rounded flex items-center space-x-2"
               >
-                <PlusCircleIcon color='blue' className="h-8 w-8" />
+                <PlusCircleIcon color='#2D99AE' className="h-8 w-8" />
               </button>
             </div>
           </div>
         </div>
 
         {/* Nearby Attractions */}
-        <div className='border-b pb-4'>
+        <div className='border-b pb-4 p-4 py-6'>
           <h2 className='text-xl font-semibold mb-3 text-gray-800'>Các điểm tham quan lân cận</h2>
-          <div className='grid grid-cols-6 gap-4 px-6'>
+          <div className='grid grid-cols-6 gap-4 px-6 '>
             {renderAmenitiesByType('2')}
             <div className='flex'>
               <input
                 type="text"
-                className="border p-2 rounded-full"
+                className="border rounded-2xl"
                 value={nearbyAttraction}
                 onChange={(e) => setNearbyAttraction(e.target.value)}
                 placeholder="Thêm điểm tham quan lân cận"
@@ -143,21 +143,21 @@ const UpdateResortAmenity = () => {
                 onClick={() => handleAddAmenity(nearbyAttraction, '2')}
                 className=" text-white p-2 rounded flex items-center space-x-2"
               >
-                <PlusCircleIcon color='blue' className="h-8 w-8" />
+                <PlusCircleIcon color='#2D99AE' className="h-8 w-8" />
               </button>
             </div>
           </div>
         </div>
 
         {/* Policies */}
-        <div>
+        <div className='border-b pb-4 p-4 py-6'>
           <h2 className='text-xl font-semibold mb-3 text-gray-800'>Các chính sách</h2>
           <div className='grid grid-cols-6 gap-4 px-6'>
             {renderAmenitiesByType('3')}
             <div className='flex'>
               <input
                 type="text"
-                className="border p-2 rounded-full"
+                className="border rounded-2xl"
                 value={policy}
                 onChange={(e) => setPolicy(e.target.value)}
                 placeholder="Thêm chính sách"
@@ -167,7 +167,7 @@ const UpdateResortAmenity = () => {
                 onClick={() => handleAddAmenity(policy, '3')}
                 className=" text-white p-2 rounded flex items-center space-x-2"
               >
-                <PlusCircleIcon color='blue' className="h-8 w-8" />
+                <PlusCircleIcon color='#2D99AE' className="h-8 w-8" />
               </button>
             </div>
           </div>
@@ -179,7 +179,7 @@ const UpdateResortAmenity = () => {
         <button
           type="button"
           onClick={handleSubmit}
-          className="bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-14 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-14 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400 hover:scale-105"
         >
           Cập nhật
         </button>

@@ -1,3 +1,4 @@
+import { LocationMarkerIcon } from '@heroicons/react/solid';
 import React, { useState } from 'react';
 import { FaUpload } from 'react-icons/fa';
 
@@ -78,31 +79,31 @@ const CreateResortBasic = ({ onNext, onUpdateData, formData }) => {
 
           {/* Column 1 */}
           <div className="space-y-4">
-            <div className="border p-6 rounded-lg shadow-sm bg-gray-50 space-y-4">
-              <h1 className="text-2xl font-semibold mb-4">Thông tin cơ bản</h1>
-              <div>
-                <label className="block mb-2 font-medium">Tên Resort:</label>
+            <div className="border p-10 shadow-sm bg-white space-y-4">
+              <h1 className="text-2xl font-bold text-gray-600 tracking-wide font-serif mb-2">Thông tin cơ bản</h1>
+              <div className='grid grid-cols-1 space-y-2'>
+                <label className="font-semibold text-gray-700 mb-2 text-lg tracking-wide">Tên Resort*</label>
                 <input
-                  className="border border-gray-300 rounded-md p-2 w-full focus:ring-2 focus:ring-blue-400 focus:outline-none"
+                 className="border-b bg-slate-50 p-4 focus:outline-none focus:border-b-2 focus:border-blue-500 transition-all"
                   type="text"
                   name="resortName"
                   value={resortData.resortName}
                   onChange={handleChange}
                   placeholder="Nhập tên resort"
                 />
-                 {errors.resortName && <p className="text-red-500 text-sm mt-1">{errors.resortName}</p>}
+                {errors.resortName && <p className="text-red-500 text-sm mt-1">{errors.resortName}</p>}
               </div>
 
               {/* Giá min/max */}
               <div className="space-y-4">
-                <label className="block mb-2 font-medium">Khoảng giá (VND):</label>
+                <label className="font-semibold text-gray-700 mb-2 text-lg tracking-wide">Khoảng giá (VND)*</label>
                 <div className="grid grid-cols-5 items-center gap-4">
 
                   {/* Từ giá tối thiểu */}
                   <div className="relative col-span-2">
-                    <label className="absolute top-3 left-2 text-sm font-semibold text-gray-600">Từ:</label>
+                  <span className="absolute left-3 top-2 text-gray-500">VND:</span>
                     <input
-                      className="border border-gray-300 rounded-md p-2 w-full pl-10 focus:ring-2 focus:ring-blue-400 focus:outline-none"
+                       className="pl-14 bg-gray-50 pr-4 py-2 border border-gray-300 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200 shadow-sm"
                       type="number"
                       name="minPrice"
                       value={resortData.minPrice}
@@ -110,7 +111,7 @@ const CreateResortBasic = ({ onNext, onUpdateData, formData }) => {
                       placeholder="0"
                     />
                     {errors.minPrice && <p className="text-red-500 text-sm mt-1">{errors.minPrice}</p>}
-                    <span className="absolute top-2 right-8 text-sm font-semibold text-gray-600">VND</span>
+                   
                   </div>
 
                   {/* Chữ "Đến" ở giữa */}
@@ -120,17 +121,17 @@ const CreateResortBasic = ({ onNext, onUpdateData, formData }) => {
 
                   {/* Đến giá tối đa */}
                   <div className="relative col-span-2">
-                    <label className="absolute top-3 left-2 text-sm font-semibold text-gray-600">Đến:</label>
+                  <span className="absolute left-3 top-2 text-gray-500">VND:</span>
                     <input
-                      className="border border-gray-300 rounded-md p-2 w-full pl-10 focus:ring-2 focus:ring-blue-400 focus:outline-none"
+                       className="pl-14 bg-gray-50 pr-4 py-2 border border-gray-300 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200 shadow-sm"
                       type="number"
                       name="maxPrice"
                       value={resortData.maxPrice}
                       onChange={handleChange}
                       placeholder="0"
                     />
-                              {errors.maxPrice && <p className="text-red-500 text-sm mt-1">{errors.maxPrice}</p>}
-                    <span className="absolute top-2 right-8 text-sm font-semibold text-gray-600">VND</span>
+                    {errors.maxPrice && <p className="text-red-500 text-sm mt-1">{errors.maxPrice}</p>}
+                    
                   </div>
                 </div>
               </div>
@@ -138,10 +139,10 @@ const CreateResortBasic = ({ onNext, onUpdateData, formData }) => {
 
 
               {/* Mô tả */}
-              <div>
-                <label className="block mb-2 font-medium">Mô tả:</label>
+              <div className='grid grid-cols-1 space-y-2'>
+                <label className='font-semibold text-gray-700 mb-2 text-lg tracking-wide'>Mô tả</label>
                 <textarea
-                  className="border border-gray-300 rounded-md p-2 w-full focus:ring-2 focus:ring-blue-400 focus:outline-none"
+                   className="border-b bg-slate-50 border-gray-600 p-4 focus:outline-none focus:border-b-2 focus:border-blue-500 transition-all"
                   name="description"
                   value={resortData.description}
                   onChange={handleChange}
@@ -153,18 +154,24 @@ const CreateResortBasic = ({ onNext, onUpdateData, formData }) => {
             </div>
 
             {/* Địa chỉ */}
-            <div className='border rounded-lg shadow-md p-6 bg-gray-50'>
+            <div className='border p-6'>
               <div>
-                <label className="block mb-2 font-medium">Địa chỉ:</label>
-                <input
-                  className="border border-gray-300 rounded-md p-2 w-full focus:ring-2 focus:ring-blue-400 focus:outline-none"
-                  type="text"
-                  name="address"
-                  value={resortData.address}
-                  onChange={handleChange}
-                  placeholder="Nhập địa chỉ resort"
-                />
-                {errors.address && <p className="text-red-500 text-sm mt-1">{errors.address}</p>}
+                <label className='font-semibold text-gray-700 mb-2 text-lg tracking-wide'>Địa chỉ*</label>
+                <div className="relative">
+                  <span className="absolute left-3 top-4 text-gray-400">
+                    <LocationMarkerIcon className='w-6 text-red-500' />
+                  </span>
+                  <input
+                    className="border-b bg-slate-50 p-4 pl-10 focus:outline-none focus:border-b-2 focus:border-blue-500 transition-all w-full"
+                    type="text"
+                    name="address"
+                    value={resortData.address}
+                    onChange={handleChange}
+                    placeholder="Nhập địa chỉ resort"
+                  />
+                  {errors.address && <p className="text-red-500 text-sm mt-1">{errors.address}</p>}
+                </div>
+
               </div>
 
               {/* Vị trí trên bản đồ */}
@@ -211,13 +218,11 @@ const CreateResortBasic = ({ onNext, onUpdateData, formData }) => {
               <div className="flex items-center space-x-4 w-full">
                 <label
                   htmlFor="upload-room-images"
-                  className="bg-white border-2 justify-center w-full h-44 text-gray-700 py-2 px-4 rounded-xl shadow-lg cursor-pointer flex items-center space-x-2 hover:bg-gray-200"
+                  className="w-full h-36 border-dashed border-4 border-gray-300 rounded-lg flex flex-col justify-center items-center cursor-pointer transition hover:border-blue-400 hover:bg-gray-100"
                 >
-
-                  {/* Text */}
-                  <div className='text center'><FaUpload size={34} color='gray' />
-
-                  </div>
+                  <FaUpload size={40} className="text-gray-400 mb-2" />
+                  <span className="text-gray-500 font-semibold">Tải lên ảnh loại phòng</span>
+                  <span className="text-sm text-gray-400">(Kéo thả hoặc nhấn để chọn ảnh)</span>
                 </label>
 
                 {/* Hidden input to trigger file upload */}

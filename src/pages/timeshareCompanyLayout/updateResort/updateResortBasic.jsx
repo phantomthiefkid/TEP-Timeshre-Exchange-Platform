@@ -1,6 +1,7 @@
+import { LocationMarkerIcon } from '@heroicons/react/solid';
 import React, { useEffect, useState } from 'react'
 import { toast, Toaster } from 'react-hot-toast';
-import { FaCamera } from 'react-icons/fa'
+import { FaCamera, FaUpload } from 'react-icons/fa'
 import { useParams } from 'react-router-dom'
 import Loading from '../../../components/LoadingComponent/loading';
 import { getResortById, updateResortBasic } from '../../../service/tsCompanyService/tsCompanyAPI';
@@ -88,162 +89,159 @@ const UpdateResortBasic = () => {
     return JSON.stringify(resort) !== JSON.stringify(originalResort);
   };
 
-  if(loading) {
-    return <Loading/>
+  if (loading) {
+    return <Loading />
   }
   console.log(resort)
 
   return (
-      <div className='border rounded'>
-        <Toaster position="top-center" reverseOrder={false} />
-        <div className="grid grid-cols-2 gap-6 px-8 py-4 bg-white">
+    <div className='border rounded'>
+      <Toaster position="top-center" reverseOrder={false} />
+      <div className="grid grid-cols-2 gap-6 px-8 py-4 bg-white">
 
-          {/* Column 1 */}
-          <div className="space-y-4">
-            <div className="border p-10 rounded-lg shadow-sm bg-white space-y-4">
-              <h1 className="text-2xl font-semibold mb-4">Thông tin cơ bản</h1>
-              <div>
-                <label className="block mb-2 font-medium">Tên Resort*</label>
-                <input
-                  className="border border-gray-300 rounded-md p-2 w-full focus:ring-2 focus:ring-blue-400 focus:outline-none"
-                  type="text"
-                  name="resortName"
-                  value={resort.resortName}
-                  onChange={handleChange}
-                  placeholder="Nhập tên resort"
-                />
+        {/* Column 1 */}
+        <div className="space-y-4">
+          <div className="border p-10 shadow-sm bg-white space-y-4">
+            <h1 className="text-2xl font-bold text-gray-600 tracking-wide font-serif mb-2">Thông tin cơ bản</h1>
+            <div className='grid grid-cols-1 space-y-2'>
+              <label className="font-semibold text-gray-700 mb-2 text-lg tracking-wide">Tên Resort*</label>
+              <input
+                className="border-b bg-slate-50 p-4 focus:outline-none focus:border-b-2 focus:border-blue-500 transition-all"
+                type="text"
+                name="resortName"
+                value={resort.resortName}
+                onChange={handleChange}
+                placeholder="Nhập tên resort"
+              />
 
-              </div>
-
-              {/* Giá min/max */}
-              <div className="space-y-4">
-                <label className="block mb-2 font-medium">Khoảng giá (VND)*</label>
-                <div className="grid grid-cols-5 items-center gap-4">
-
-                  {/* Từ giá tối thiểu */}
-                  <div className="relative col-span-2">
-                    <label className="absolute top-3 left-2 text-sm font-semibold text-gray-600">Từ:</label>
-                    <input
-                      className="border border-gray-300 rounded-md p-2 w-full pl-10 focus:ring-2 focus:ring-blue-400 focus:outline-none"
-                      type="number"
-                      name="minPrice"
-                      value={resort.minPrice}
-                      onChange={handleChange}
-                      placeholder="0"
-                    />
-
-                    <span className="absolute top-2 right-8 text-sm font-semibold text-gray-600">VND</span>
-                  </div>
-
-                  {/* Chữ "Đến" ở giữa */}
-                  <div className="text-center col-span-1 text-sm font-semibold text-gray-600">
-                    Đến
-                  </div>
-
-                  {/* Đến giá tối đa */}
-                  <div className="relative col-span-2">
-                    <label className="absolute top-3 left-2 text-sm font-semibold text-gray-600">Đến:</label>
-                    <input
-                      className="border border-gray-300 rounded-md p-2 w-full pl-10 focus:ring-2 focus:ring-blue-400 focus:outline-none"
-                      type="number"
-                      name="maxPrice"
-                      value={resort.maxPrice}
-                      onChange={handleChange}
-                      placeholder="0"
-                    />
-
-                    <span className="absolute top-2 right-8 text-sm font-semibold text-gray-600">VND</span>
-                  </div>
-                </div>
-              </div>
-
-
-
-              {/* Mô tả */}
-              <div>
-                <label className="block mb-2 font-medium">Mô tả:</label>
-                <textarea
-                  className="border border-gray-300 rounded-md p-2 w-full focus:ring-2 focus:ring-blue-400 focus:outline-none"
-                  name="description"
-                  value={resort.description}
-                  placeholder="Mô tả về resort"
-                  rows="6"
-                  onChange={handleChange}
-                ></textarea>
-
-              </div>
             </div>
 
-            {/* Địa chỉ */}
-            <div className='border rounded-lg shadow-md p-6 bg-gray-50'>
-              <div>
-                <label className="block mb-2 font-medium">Địa chỉ*</label>
-                <input
-                  className="border border-gray-300 rounded-md p-2 w-full focus:ring-2 focus:ring-blue-400 focus:outline-none"
-                  type="text"
-                  name="address"
-                  value={resort.address}
-                  placeholder="Nhập địa chỉ resort"
-                />
+            {/* Giá min/max */}
+            <div className="space-y-4">
+              <label className="font-semibold text-gray-700 mb-2 text-lg tracking-wide">Khoảng giá (VND)*</label>
+              <div className="grid grid-cols-5 items-center gap-4">
 
-              </div>
+                {/* Từ giá tối thiểu */}
+                <div className="relative col-span-2">
+                  <span className="absolute left-3 top-2 text-gray-500">VND:</span>
+                  <input
+                    className="pl-14 bg-gray-50 pr-4 py-2 border border-gray-300 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200 shadow-sm"
+                    type="number"
+                    name="minPrice"
+                    value={resort.minPrice}
+                    onChange={handleChange}
+                    placeholder="0"
+                  />
+                </div>
 
-              {/* Vị trí trên bản đồ */}
-              <div className='py-4'>
-                <img
-                  src="https://thanhnien.mediacdn.vn/Uploaded/trungnq/2022_10_29/1-2829.jpg" // Ảnh bản đồ tạm thời (hardcoded)
-                  alt="Map"
-                  className="w-full h-60 object-cover border rounded-lg"
-                />
+                {/* Chữ "Đến" ở giữa */}
+                <div className="text-center col-span-1 text-sm font-semibold text-gray-600">
+                  Đến
+                </div>
+
+                {/* Đến giá tối đa */}
+                <div className="relative col-span-2">
+                  <span className="absolute left-3 top-2 text-gray-500">VND:</span>
+                  <input
+                    className="pl-14 bg-gray-50 pr-4 py-2 border border-gray-300 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200 shadow-sm"
+                    type="number"
+                    name="maxPrice"
+                    value={resort.maxPrice}
+                    onChange={handleChange}
+                    placeholder="0"
+                  />
+                </div>
               </div>
+            </div>
+            {/* Mô tả */}
+            <div className='grid grid-cols-1 space-y-2'>
+              <label className='font-semibold text-gray-700 mb-2 text-lg tracking-wide'>Mô tả</label>
+              <textarea
+                className="border-b bg-slate-50 border-gray-600 p-4 focus:outline-none focus:border-b-2 focus:border-blue-500 transition-all"
+                name="description"
+                value={resort.description}
+                placeholder="Mô tả về resort"
+                rows="6"
+                onChange={handleChange}
+              ></textarea>
+
             </div>
           </div>
 
-          {/* Column 2 */}
-          <div className="space-y-4">
-            {/* Upload logo */}
-            <div>
-              <label className="block mb-2 font-medium">Logo:</label>
-              <input
-                type="file"
-                accept="image/*"
-                className="border border-gray-300 rounded-md p-2 w-full focus:ring-2 focus:ring-blue-400 focus:outline-none"
-
-              />
+          {/* Địa chỉ */}
+          <div className='border p-6'>
+            <div className='grid grid-cols-1 space-y-2'>
+              <label className='font-semibold text-gray-700 mb-2 text-lg tracking-wide'>Địa chỉ*</label>
+              <div className="relative">
+                <span className="absolute left-3 top-4 text-gray-400">
+                  <LocationMarkerIcon className='w-6 text-red-500' />
+                </span>
+                <input
+                  className="border-b bg-slate-50 p-4 pl-10 focus:outline-none focus:border-b-2 focus:border-blue-500 transition-all w-full"
+                  type="text"
+                  name="address"
+                  value={resort.address}
+                  onChange={handleChange}
+                  placeholder="Nhập địa chỉ resort"
+                />
+              </div>
             </div>
 
 
-            {/* Upload room images */}
-            {/* Upload room images with icon button */}
-            <div className="space-y-4">
-              <label className="block mb-2 font-medium">Ảnh phòng:</label>
+            {/* Vị trí trên bản đồ */}
+            <div className='py-4'>
+              <img
+                src="https://thanhnien.mediacdn.vn/Uploaded/trungnq/2022_10_29/1-2829.jpg" // Ảnh bản đồ tạm thời (hardcoded)
+                alt="Map"
+                className="w-full h-60 object-cover border rounded-lg"
+              />
+            </div>
+          </div>
+        </div>
 
-              {/* Upload button with icon */}
-              <div className="flex items-center space-x-4 w-full">
-                <label
-                  htmlFor="upload-room-images"
-                  className="bg-white border-2 justify-center w-full h-44 text-gray-700 py-2 px-4 rounded-xl shadow-lg cursor-pointer flex items-center space-x-2 hover:bg-gray-100"
-                >
+        {/* Column 2 */}
+        <div className="space-y-4">
+          {/* Upload logo */}
+          <div>
+            <label className="block mb-2 font-medium">Logo:</label>
+            <input
+              type="file"
+              accept="image/*"
+              className="border border-gray-300 rounded-md p-2 w-full focus:ring-2 focus:ring-blue-400 focus:outline-none"
 
-                  {/* Text */}
-                  <div className='text center'><FaCamera size={34} color='gray' />
+            />
+          </div>
 
-                  </div>
-                </label>
 
-                {/* Hidden input to trigger file upload */}
-                <input
-                  id="upload-room-images"
-                  type="file"
-                  accept="image/*"
-                  multiple
-                  className="hidden"
-                // onChange={handleFileUpload}
-                />
-              </div>
+          {/* Upload room images */}
+          {/* Upload room images with icon button */}
+          <div className="space-y-4">
+            <label className="block mb-2 font-medium">Ảnh phòng:</label>
 
-              Display uploaded images
-              {/* {resortData.roomImages.length > 0 && (
+            {/* Upload button with icon */}
+            <div className="flex items-center space-x-4 w-full">
+              <label
+                htmlFor="upload-room-images"
+                className="w-full h-36 border-dashed border-4 border-gray-300 rounded-lg flex flex-col justify-center items-center cursor-pointer transition hover:border-blue-400 hover:bg-gray-100"
+              >
+                <FaUpload size={40} className="text-gray-400 mb-2" />
+                <span className="text-gray-500 font-semibold">Tải lên ảnh loại phòng</span>
+                <span className="text-sm text-gray-400">(Kéo thả hoặc nhấn để chọn ảnh)</span>
+              </label>
+
+              {/* Hidden input to trigger file upload */}
+              <input
+                id="upload-room-images"
+                type="file"
+                accept="image/*"
+                multiple
+                className="hidden"
+              // onChange={handleFileUpload}
+              />
+            </div>
+
+            Display uploaded images
+            {/* {resortData.roomImages.length > 0 && (
               <div className="grid grid-cols-4 gap-4 mt-4">
                 {resortData.roomImages.map((image, index) => (
                   <div key={index} className="relative">
@@ -256,24 +254,24 @@ const UpdateResortBasic = () => {
                 ))}
               </div>
             )} */}
-            </div>
-
           </div>
+
         </div>
-        {hasChanged() && (
-          <div className='flex justify-end p-6'>
-            <button
-              type="button"
-              className="bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-14 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
-              onClick={handleUpdate}
-            >
-              Cập nhật
-            </button>
-          </div>
-        )}
-
       </div>
-    )
+      {hasChanged() && (
+        <div className='flex justify-end p-6'>
+          <button
+            type="button"
+            className="bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-14 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
+            onClick={handleUpdate}
+          >
+            Cập nhật
+          </button>
+        </div>
+      )}
+
+    </div>
+  )
 }
 
 export default UpdateResortBasic
