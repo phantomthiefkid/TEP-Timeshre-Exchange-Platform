@@ -1,5 +1,6 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
+import HeaderAdmin from "../../components/Header/headerAdmin";
 import SidebarAdmin from "../../components/Sidebar/sidebarAdmin";
 
 const AdminLayout = () => {
@@ -8,7 +9,7 @@ const AdminLayout = () => {
       <SidebarAdmin className="fixed left-0 top-0 h-full" />
 
       <div className="flex-grow  bg-white flex flex-col">
-        {/* <Header className="w-full" /> */}
+        <HeaderAdmin className="w-full" />
 
         <div className="flex-grow p-4 overflow-y-auto">
           <Outlet />

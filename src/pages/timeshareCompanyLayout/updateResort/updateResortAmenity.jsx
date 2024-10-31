@@ -4,6 +4,7 @@ import { getResortById, updateResortBasic } from '../../../service/tsCompanyServ
 import { PlusCircleIcon, XCircleIcon } from '@heroicons/react/solid'; // Make sure you import the icons
 import { toast, Toaster } from 'react-hot-toast';
 import Loading from '../../../components/LoadingComponent/loading';
+import SpinnerWaiting from '../../../components/LoadingComponent/spinnerWaiting';
 
 const UpdateResortAmenity = () => {
   const { id } = useParams();
@@ -94,7 +95,7 @@ const UpdateResortAmenity = () => {
   };
 
   if (loading) {
-    return (<Loading />)
+    return (<SpinnerWaiting/>)
   }
   return (
     <div className='border rounded shadow-md bg-white p-6'>

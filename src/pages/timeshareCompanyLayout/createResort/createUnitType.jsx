@@ -81,24 +81,24 @@ const CreateUnitType = ({ onUpdateData, onNext, onBack, formData }) => {
             <div
               onClick={() => handleEditUnitType(index)}
               key={index}
-              className="relative border-2 h-40 shadow-md hover:shadow-lg  hover:bg-gray-100 flex items-center"
+              className="relative border-2 h-44 shadow-md hover:shadow-lg rounded-xl hover:bg-gray-100 flex items-center"
             >
               {/* Left Section: Image */}
               <div className="w-1/3 h-full overflow-hidden">
                 <img
                   src="https://hagiangamazingtour.vn/upload/images/resort-ha-giang-2-.jpg" // Assuming `imageUrl` is the key for the image
                   alt={room.title}
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover rounded-l-xl"
                 />
               </div>
 
               {/* Right Section: Room Details */}
               <div className="w-2/3 pl-4 flex flex-col justify-center text-left">
-                <h3 className="font-semibold text-lg">{room.title}</h3>
-                <p className="text-sm text-gray-600">Phòng ngủ: {room.bedrooms}</p>
-                <p className="text-sm text-gray-600">Nhà bếp: {room.kitchen}</p>
-                <p className="text-sm text-gray-600">Phòng tắm: {room.bathrooms}</p>
-                <p className="text-sm font-medium text-blue-600">Giá: {room.price} VND</p>
+                <h3 className="font-semibold text-xl">Phòng: {room.title}</h3>
+                <p className="text-lg text-gray-600">Phòng ngủ: {room.bedrooms}</p>
+                <p className="text-lg text-gray-600">Nhà bếp: {room.kitchen}</p>
+                <p className="text-lg text-gray-600">Phòng tắm: {room.bathrooms}</p>
+                <p className="text-lg font-medium text-blue-600 absolute bottom-2 right-2">Giá: {room.price} VND</p>
               </div>
 
               {/* Delete Button */}
@@ -118,7 +118,7 @@ const CreateUnitType = ({ onUpdateData, onNext, onBack, formData }) => {
 
           {/* Add Room Type Button */}
           <button
-            className="flex items-center h-40 gap-2 justify-center p-4 border-4 border-dashed text-black rounded-lg hover:bg-slate-200"
+            className="flex items-center h-44 gap-2 justify-center p-4 border-4 border-dashed text-black rounded-xl hover:bg-slate-200 hover:border-sky-500"
             onClick={handleOpenModalAdd} // Open modal on click
           >
             <label>Thêm mới</label>

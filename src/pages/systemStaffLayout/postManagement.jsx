@@ -12,6 +12,7 @@ import { getAllRentalPosting, getRentalPostingById } from "../../service/systemS
 import DetailRentalList from "../../components/Modal/systemstaff/detailRentalList";
 import { Link } from "react-router-dom";
 import Loading from "../../components/LoadingComponent/loading"
+import SpinnerWaiting from "../../components/LoadingComponent/spinnerWaiting"
 const PostManagement = () => {
   const [filterStatus, setFilterStatus] = useState("");
   const [rentalPostings, setRentalPostings] = useState([]);
@@ -89,7 +90,7 @@ const PostManagement = () => {
 
 
   if (loading) {
-    return <Loading />
+    return (<SpinnerWaiting/>)
   }
 
 
