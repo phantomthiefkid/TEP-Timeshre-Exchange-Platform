@@ -6,6 +6,7 @@ import {
   getAllResortByName,
   getAllTimeshareCompany,
 } from "../../service/public/resortService/resortAPI";
+import { FaSearch } from "react-icons/fa";
 
 const TimeshareCompany = () => {
   const navigate = useNavigate();
@@ -72,46 +73,41 @@ const TimeshareCompany = () => {
   return (
     <>
       <Navigation />
-      <div className="bg-ninhvan bg-cover max-w-full h-auto relative">
+      <div className="max-w-full h-auto relative">
         <img src="../src/assets/tsCom-banner.png" className="w-full h-auto" />
-        <div className="grid grid-rows-2 font-sans w-[1720px] h-[300px] text-black px-20 absolute top-10 left-10">
-          <h1 className="text-4xl text-white font-bold text-left ">
+        <div className="grid grid-rows-2 font-sans w-full max-w-[1720px] h-[210px] text-black px-5 lg:px-20 absolute top-10 left-10 space-y-4">
+          <h1 className="text-4xl text-white font-bold text-left mt-14">
             Công ty Timeshare
           </h1>
-          <div className="bg-white p-5 rounded-md">
-            <div className="border rounded-lg overflow-hidden flex shadow-md">
-              <div>
-                <input
-                  type="text"
-                  className="px-4 py-2 w-w-search h-h-search flex justify-center"
-                  placeholder="Search..."
-                  value={keyword}
-                  onChange={handleSearch}
-                />
-              </div>
-              <button className="flex items-center bg-blue-500 justify-center px-4 border-l w-14">
-                <Link to={"/resortsearchlist"}>
-                  <svg
-                    className="h-4 w-4 text-grey-dark"
-                    fill="white"
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                  >
-                    <path d="M16.32 14.9l5.39 5.4a1 1 0 0 1-1.42 1.4l-5.38-5.38a8 8 0 1 1 1.41-1.41zM10 16a6 6 0 1 0 0-12 6 6 0 0 0 0 12z" />
-                  </svg>
+          <div className="bg-white p-5 rounded-lg shadow-lg">
+            <div className="flex items-center border rounded-lg overflow-hidden shadow-sm">
+              <input
+                type="text"
+                className="px-4 py-2 w-64 md:w-80 lg:w-full h-10 focus:outline-none"
+                placeholder="Search..."
+                value={keyword}
+                onChange={handleSearch}
+              />
+              <button className="flex items-center bg-blue-500 justify-center px-4 py-4 border-l max-h-full">
+                <Link to="/resortsearchlist" style={{ color: "White" }}>
+                  <FaSearch />
                 </Link>
               </button>
             </div>
           </div>
+
           {resort && resort.length > 0 && (
-            <div className="absolute top-14 right-35 w-1/2 bg-gray-100 border shadow-xl rounded-lg z-10">
-              <ul>
+            <div className="absolute top-44 left-24 w-[1480px] bg-gray-100 border border-gray-300 shadow-xl rounded-lg z-10 mt-2">
+              <ul className="max-h-60 overflow-y-auto">
                 {resort.map((item) => (
                   <li
                     key={item.id}
-                    className="px-4 py-2 border-b hover:bg-gray-300"
+                    className="px-4 py-2 border-b border-gray-200 hover:bg-gray-300"
                   >
-                    <Link to={`/resortdetail/${item.id}`}>
+                    <Link
+                      to={`/resortdetail/${item.id}`}
+                      className="text-black hover:text-blue-800"
+                    >
                       {item.resortName} - {item.address}
                     </Link>
                   </li>
