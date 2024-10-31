@@ -11,6 +11,9 @@ import {
   FaUserCheck,
   FaRegFileAlt,
   FaRegFile,
+  FaList,
+  FaListUl,
+  FaListOl,
 } from "react-icons/fa";
 import { useDispatch } from "react-redux";
 import { setIsLogin, setRoleName } from "../../redux/UserSlice/SignIn";
@@ -90,7 +93,11 @@ const SidebarSystemStaff = () => {
       </div>
       <div className="flex-grow p-5">
         <MenuItem icon={FaChartBar} title="Dashboard" path="#" />
-        <MenuItem icon={FaListAlt} title="Danh sách bài đăng" path="post" />
+       
+        <MenuItem icon={FaListAlt} title="Bài đăng">
+        <MenuItem icon={FaList} title="Danh sách bài đăng" path="post"/>
+        <MenuItem icon={FaListOl} title="Danh sách định giá" path="valuationlist"/>
+        </MenuItem>
         <MenuItem icon={FaMoneyBillAlt} title="Thanh toán">
           <MenuItem icon={FaUserCheck} title="Người đăng" path="#" />
           <MenuItem icon={FaCity} title="Công ty Timeshare" path="#" />

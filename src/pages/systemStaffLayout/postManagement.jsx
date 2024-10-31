@@ -14,7 +14,7 @@ import { Link } from "react-router-dom";
 import Loading from "../../components/LoadingComponent/loading"
 const PostManagement = () => {
   const [filterStatus, setFilterStatus] = useState("");
-  const [rentalPostings, setRentalPostins] = useState([]);
+  const [rentalPostings, setRentalPostings] = useState([]);
   const [openDetailModal, setOpenDetailModal] = useState(false);
   const [selectPosting, setSelectPosting] = useState();
   const [loading, setLoading] = useState(true);
@@ -27,7 +27,7 @@ const PostManagement = () => {
       let data = await getAllRentalPosting(page, size, resortName);
       if (data.status === 200) {
         setLoading(false)
-        setRentalPostins(data.data.content)
+        setRentalPostings(data.data.content)
         setTotalPages(data.data.totalPages);
       }
     } catch (error) {
@@ -88,9 +88,10 @@ const PostManagement = () => {
 
 
 
-    if (loading) {
-      return <Loading/>
-    }
+  if (loading) {
+    return <Loading />
+  }
+
 
   return (
     <>
@@ -117,13 +118,38 @@ const PostManagement = () => {
 
 
           <div className="flex items-center space-x-4">
+            <div class="flex items-center max-w-sm gap-2">
+              <div class="flex-shrink-0">
+                <label for="filter" class="text-xl font-semibold text-gray-800 whitespace-nowrap">Lọc theo:</label>
+              </div>
+              <div class="relative w-full">
+             
+                <input type="checkbox" id="dropdownToggle" class="peer hidden"/>
+
+                
+                  <label for="dropdownToggle" class=" bg-gradient-to-r from-blue-50 to-blue-100 border border-blue-300 text-gray-700 py-2 px-4 pr-10 rounded-xl shadow-md flex items-center justify-between cursor-pointer transition duration-300 ease-in-out transform  hover:border-blue-500 focus:outline-none">
+                    <span id="selectedOption">Chọn bộ lọc</span>
+                    <svg class="fill-current h-5 w-5 text-blue-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" /></svg>
+                  </label>
+
+                
+                  <div class="absolute hidden peer-checked:block w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-10">
+                    <label for="dropdownToggle" class="block px-4 py-2 text-gray-700 hover:bg-blue-100 hover:text-blue-700 cursor-pointer rounded-lg transition">Lựa chọn 1</label>
+                    <label for="dropdownToggle" class="block px-4 py-2 text-gray-700 hover:bg-blue-100 hover:text-blue-700 cursor-pointer rounded-lg transition">Lựa chọn 2</label>
+                    <label for="dropdownToggle" class="block px-4 py-2 text-gray-700 hover:bg-blue-100 hover:text-blue-700 cursor-pointer rounded-lg transition">Lựa chọn 3</label>
+                  </div>
+              </div>
+
+
+            </div>
+
             <Link to={`/systemstaff/createposting`}>
-              <button className="flex items-center bg-green-500 text-white rounded-lg px-4 py-2">
+              <button className="bg-gradient-to-r from-green-300 to-green-400 border border-blue-300 text-gray-560 py-2 px-4 pr-10 rounded-xl shadow-md flex items-center justify-between cursor-pointer transition duration-300 ease-in-out transform hover:from-green-400 hover:to-green-300 hover:border-blue-500 focus:outline-none">
                 <FaPlus className="mr-3" />
                 Thêm mới
               </button>
             </Link>
-            <button className="flex items-center bg-blue-500 text-white rounded-lg px-4 py-2">
+            <button className="bg-gradient-to-r from-blue-300 to-blue-400 border border-blue-300 text-gray-560 py-2 px-4 pr-10 rounded-xl shadow-md flex items-center justify-between cursor-pointer transition duration-300 ease-in-out transform hover:from-blue-400 hover:to-blue-300 hover:border-blue-500 focus:outline-none">
               <FaArrowsRotate className="mr-3" />
               Làm mới
             </button>

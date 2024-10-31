@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Toaster } from "react-hot-toast";
 import { FaEdit, FaMap, FaMapMarkerAlt } from "react-icons/fa";
-import { FaXmark } from "react-icons/fa6";
+import { FaPencil, FaXmark } from "react-icons/fa6";
+import { acceptNewPriceValuation } from "../../../service/systemStaffService/systemStaffAPI";
 const DetailRentalList = ({ isOpen, onClose, postingId }) => {
   const [isVisible, setIsVisible] = useState(false);
-  console.log(postingId)
+  const [newPriceValuation, setNewPriceValuation] = useState("");
+  const [editFlag, setEditFlag] = useState(false);
   useEffect(() => {
     if (isOpen) {
       setIsVisible(true);
@@ -22,6 +24,14 @@ const DetailRentalList = ({ isOpen, onClose, postingId }) => {
       transform: "translateX(100%)",
       transition: "all 0.3s ease",
     };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    let data = await acceptNewPriceValuation(postingId.rentalPostingId, parseFloat(newPriceValuation))
+    if (data) {
+      console.log(data)
+    }
+  }
 
   return (
     <div className="fixed inset-0 flex justify-end p-3 h-full">
@@ -57,73 +67,84 @@ const DetailRentalList = ({ isOpen, onClose, postingId }) => {
 
         {postingId ? (
           <>
-            <div className=" border-b">
-              <div className="flex items-center p-4 m-3 border border-gray-300 rounded-xl shadow-lg hover:shadow-xl transition duration-200">
+            <div className="border-b">
+              <div className="flex items-center p-4 m-3 border border-red-400 shadow-sm transition duration-200 relative">
                 <img
                   src="https://cdn5.redweek.com/photos/full-preview/3/0/3/303804.jpg?1"
                   alt="Hotel Thumbnail"
                   className="w-20 h-20 rounded-lg mr-4 object-cover"
                 />
-                <div className="flex justify-between items-center w-full">
-                  <div>
-                    <h2 className="text-xl font-semibold mb-1">{postingId.resortName}</h2>
+                <div className="flex justify-between items-center w-full gap-4">
+                  <div className="w-2/3">
+                    <h2 className="text-xl text-gray-700 font-semibold mb-1">{postingId.resortName}</h2>
                     <div className="flex items-center text-blue-500">
                       <FaMap className="mr-2" />
                       <p>{postingId.address}</p>
                     </div>
                   </div>
-                  <span className="px-3 py-1 bg-yellow-100 text-yellow-700 rounded-full">
-                    {postingId.status}
-                  </span>
-                </div>
-              </div>
-
-            </div>
-
-            <div className="flex-1 overflow-y-auto p-8">
-              <h2 className="text-2xl font-semibold mb-3">Chi tiết bài đăng</h2>
-              <div className="grid grid-cols-2 gap-4 mb-6">
-                <div className="space-y-2">
-                  <p className="text-medium text-gray-500">Mã đăng bài</p>
-                  <p className="font-medium">{postingId.rentalPostingId}</p>
-                </div>
-                <div className="space-y-2">
-                  <p className="text-medium text-gray-500">Đăng bởi</p>
-                  <div className="flex flex-row items-center">
-                    <img
-                      src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhPSeKg-xl483vdzvuk5p1Nl89goZRGsrjMA&s"
-                      alt="Hotel Thumbnail"
-                      className="w-12 h-12 rounded-full mr-4 border border-blue-400"
-                    />
-                    <p className="font-medium">{postingId.ownerName}</p>
+                  <div>
+                    <span className="bg-red-100 px-6 py-1 font-semibold text-red-500 rounded-full whitespace-nowrap absolute top-2 right-2">
+                      Yêu cầu hỗ trợ
+                    </span>
                   </div>
                 </div>
-                <div className="space-y-2">
-                  <p className="text-medium text-gray-500">Ngày nhận phòng</p>
-                  <p className="font-medium">{postingId.checkinDate}</p>
-                </div>
-                <div className="space-y-2">
-                  <p className="text-medium text-gray-500">Ngày trả phòng</p>
-                  <p className="font-medium">{postingId.checkoutDate}</p>
-                </div>
-                <div className="space-y-2">
-                  <p className="text-medium text-gray-500">Giá phòng</p>
-                  <p className="font-medium">{postingId.totalPrice} VND</p>
-                </div>
+
+                {/* Nhãn Đang chờ ở góc dưới bên phải với dấu chấm tròn */}
+                <span className="absolute bottom-2 right-2 flex items-center bg-orange-50 px-3 py-1 font-semibold text-orange-300 rounded-full whitespace-nowrap">
+                  <span className="inline-block w-2 h-2 mr-1 bg-orange-300 rounded-full"></span>
+                  Đang chờ
+                </span>
+              </div>
+            </div>
+
+
+
+            <div className="flex-1 overflow-y-auto p-8">
+              <h2 className="text-xl font-semibold mb-3 text-gray-700">Thông tin</h2>
+              <div className="grid grid-cols-4 gap-4 mb-6 p-2">
+
+                <p className="text-medium text-gray-500 mr-4">Mã đăng bài: </p>
+                <p className="font-medium">{postingId.rentalPostingId}</p>
+
+                <p className="text-medium text-gray-500 mr-4">Đăng bởi: </p>
+
+
+                <p className="font-medium">{postingId.ownerName}</p>
+
+
+                <p className="text-medium text-gray-500 mr-4">Ngày nhận phòng: </p>
+                <p className="font-medium">{postingId.checkinDate}</p>
+
+                <p className="text-medium text-gray-500 mr-4">Ngày trả phòng: </p>
+                <p className="font-medium">{postingId.checkoutDate}</p>
+
+                <p className="text-medium text-gray-500 mr-4">Giá phòng: </p>
+                <p className="font-medium flex gap-4 items-center flex-col">{postingId.totalPrice} VND </p>
+                <p>{editFlag ? (<input
+                  className="border-2 border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200 shadow-sm"
+                  onChange={(e) => setNewPriceValuation(e.target.value)}
+                  type="text"
+                  name="newPriceValuation"
+                  value={newPriceValuation}
+                  placeholder="Nhập giá"
+                />
+                ) : (<FaEdit onClick={() => setEditFlag(true)} size={24} color="gray" />)}</p>
               </div>
 
+
+
               <div className="mb-4">
-                <h2 className="text-2xl font-semibold mb-3">Mô tả</h2>
+                <h2 className="text-xl text-gray-700 font-semibold mb-3">Mô tả</h2>
                 <p className="text-medium">{postingId.resortDescription}</p>
               </div>
 
-              <div className="bg-gray-100 p-4 rounded-lg shadow-inner mb-4">
-                <h2 className="text-xl font-semibold mb-3">Các tiện năng và tiện nghi tại chỗ</h2>
+              <div className="bg-gray-100 p-4 rounded-lg shadow-inner mb-4 text-gray-700">
+                <h2 className="text-lg font-semibold mb-3">Các tiện năng và tiện nghi tại chỗ</h2>
                 <div className="grid grid-cols-3 gap-4">
                   {postingId.resortAmenities
                     .filter((amenity) => amenity.type === "1")
                     .map((amenity) => (
-                      <p key={amenity.id} className="text-gray-700 flex items-center">
+                      <p key={amenity.id} className="text-medium flex gap-4  items-center before:content-[''] before:inline-block before:w-2 before:h-2 before:mr-2 before:bg-blue-500 before:rounded-full">
                         <FaMapMarkerAlt className="mr-2 text-blue-500" />
                         {amenity.name}
                       </p>
@@ -132,35 +153,39 @@ const DetailRentalList = ({ isOpen, onClose, postingId }) => {
               </div>
 
 
-              <div className="bg-gray-100 p-4 rounded-lg shadow-inner mb-4">
-                <h2 className="text-2xl font-semibold mb-4">Các điểm tham quan gần đó</h2>
+              <div className="bg-gray-100 p-4 rounded-lg shadow-inner mb-4 text-gray-700">
+                <h2 className="text-lg font-semibold mb-4">Các điểm tham quan gần đó</h2>
                 <div className="grid grid-cols-3 gap-2">
                   {postingId.resortAmenities
                     .filter((amenity) => amenity.type === "2")
                     .map((amenity) => (
-                      <p key={amenity.id} className="text-medium">
+                      <p key={amenity.id} className="text-medium flex gap-4  items-center before:content-[''] before:inline-block before:w-2 before:h-2 before:mr-2 before:bg-blue-500 before:rounded-full">
                         {amenity.name}
                       </p>
                     ))}
                 </div>
               </div>
 
-              <div className="bg-gray-100 p-4 rounded-lg shadow-inner mb-4">
-                <h2 className="text-2xl font-semibold mb-4">Chính sách</h2>
+              <div className="bg-gray-100 p-4 rounded-lg shadow-inner mb-4 text-gray-700">
+                <h2 className="text-lg font-semibold mb-4">Chính sách</h2>
                 <div className="grid grid-cols-3 gap-2">
                   {postingId.resortAmenities
                     .filter((amenity) => amenity.type !== "1" && amenity.type !== "2")
                     .map((amenity) => (
-                      <p key={amenity.id} className="text-medium">
+                      <p
+                        key={amenity.id}
+                        className="text-medium gap-4 flex items-center before:content-[''] before:inline-block before:w-2 before:h-2 before:mr-2 before:bg-blue-500 before:rounded-full"
+                      >
                         {amenity.name}
                       </p>
                     ))}
                 </div>
+
               </div>
 
 
               <div className="mb-4">
-                <h2 className="text-2xl font-semibold mb-3">Địa chỉ</h2>
+                <h2 className="text-xl text-gray-700 font-semibold mb-3">Địa chỉ</h2>
                 <img
                   src="https://placehold.co/600x300"
                   className="max-w-full "
@@ -184,10 +209,8 @@ const DetailRentalList = ({ isOpen, onClose, postingId }) => {
             </button>
           </div>
           <div className="border-t flex justify-end">
-            <button className="border border-red-500 text-red-500 px-4 py-2 rounded-xl mr-2 hover:bg-red-500 hover:text-white transition duration-150">
-              Từ chối
-            </button>
-            <button className="bg-green-500 text-white px-4 py-2 rounded-xl hover:bg-green-600 transition duration-150">
+
+            <button onClick={handleSubmit} className="bg-green-500 text-white px-8 py-2 rounded-xl hover:bg-green-600 transition duration-150">
               Xác nhận
             </button>
           </div>
