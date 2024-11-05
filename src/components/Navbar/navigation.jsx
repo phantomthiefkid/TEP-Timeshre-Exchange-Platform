@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import logo from "../../assets/logoTEP.png";
+import { FaDownload } from "react-icons/fa";
 
 const Navigation = () => {
   return (
@@ -42,26 +43,10 @@ const Navigation = () => {
 
         <ul className="flex items-center justify-end space-x-10 text-white w-2/5 text-lg font-extralight">
           <li>
-            <a href="#" className="hover:text-gray-200 flex">
-              {" "}
-              <svg
-                className="h-6 w-6"
-                data-slot="icon"
-                fill="none"
-                stroke-width="1.5"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-                aria-hidden="true"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3"
-                ></path>
-              </svg>
+            <Link to={"/"} className="hover:text-gray-200 flex">
+              <FaDownload className="h-5 w-5 mr-3 mt-1" />
               Tải ứng dụng
-            </a>
+            </Link>
           </li>
           <li className="border-2 hover:text-gray-200 border-blue-400 hover:border-gray-200 text-center rounded-xl w-36 h-10 flex justify-center items-center text-blue-400">
             <Link to={`/signin`} className="hover:text-gray-200">

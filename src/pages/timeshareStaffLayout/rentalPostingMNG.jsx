@@ -8,8 +8,8 @@ import {
   getRentalPostingById,
 } from "../../service/tsStaffService/tsStaffAPI";
 
-const rentalPostingMNG = () => {
-  const [filterPackageId, setFilterPackageId] = useState("");
+const RentalPostingMNG = () => {
+  const [filterPackageId, setFilterPackageId] = useState(null); // Change to null
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
   const [allRentalPosts, setAllRentalPosts] = useState([]);
   const [page, setPage] = useState(0);
@@ -21,7 +21,12 @@ const rentalPostingMNG = () => {
 
   const fetchAllRentalPosting = async () => {
     try {
-      let data = await getAllRentalPosting(page, size, roomInfoCode);
+      let data = await getAllRentalPosting(
+        page,
+        size,
+        roomInfoCode,
+        filterPackageId
+      );
       if (data.status === 200) {
         setAllRentalPosts(data.data.content);
         setTotalPages(data.data.totalPages);
@@ -36,6 +41,7 @@ const rentalPostingMNG = () => {
     try {
       const response = await getRentalPostingById(rentalPostingId);
       setSelectedPost(response.data);
+      console.log(response.data);
       setIsDetailModalOpen(true);
     } catch (error) {
       console.log(error);
@@ -54,16 +60,9 @@ const rentalPostingMNG = () => {
     }
   };
 
-  const filteredPosting = allRentalPosts.filter((posting) => {
-    const packageMatch = filterPackageId
-      ? posting.rentalPackageId == filterPackageId
-      : true;
-    return packageMatch;
-  });
-
   useEffect(() => {
     fetchAllRentalPosting();
-  }, [page, roomInfoCode]);
+  }, [page, roomInfoCode, filterPackageId]);
 
   return (
     <>
@@ -85,48 +84,32 @@ const rentalPostingMNG = () => {
             Làm mới
           </button>
         </div>
+
         {/* Filter Buttons */}
         <div className="flex items-center space-x-1 mb-5">
           <button
-            onClick={() => setFilterPackageId("")}
+            onClick={() => setFilterPackageId(null)} // Set to null to fetch all
             className={`px-4 py-2 rounded-md ${
-              filterPackageId === ""
+              filterPackageId === null
                 ? "bg-blue-500 text-white"
                 : "bg-gray-100 text-gray-700 hover:bg-blue-500 hover:text-white"
             }`}
           >
             Tất cả gói đăng
           </button>
-          <button
-            onClick={() => setFilterPackageId("2")}
-            className={`px-4 py-2 rounded-md ${
-              filterPackageId === "2"
-                ? "bg-blue-500 text-white"
-                : "bg-gray-100 text-gray-700 hover:bg-blue-500 hover:text-white"
-            }`}
-          >
-            Gói đăng bài 2
-          </button>
-          <button
-            onClick={() => setFilterPackageId("3")}
-            className={`px-4 py-2 rounded-md ${
-              filterPackageId === "3"
-                ? "bg-blue-500 text-white"
-                : "bg-gray-100 text-gray-700 hover:bg-blue-500 hover:text-white"
-            }`}
-          >
-            Gói đăng bài 3
-          </button>
-          <button
-            onClick={() => setFilterPackageId("4")}
-            className={`px-4 py-2 rounded-md ${
-              filterPackageId === "4"
-                ? "bg-blue-500 text-white"
-                : "bg-gray-100 text-gray-700 hover:bg-blue-500 hover:text-white"
-            }`}
-          >
-            Gói đăng bài 4
-          </button>
+          {[2, 3, 4].map((id) => (
+            <button
+              key={id}
+              onClick={() => setFilterPackageId(id)} // Set as a number
+              className={`px-4 py-2 rounded-md ${
+                filterPackageId === id
+                  ? "bg-blue-500 text-white"
+                  : "bg-gray-100 text-gray-700 hover:bg-blue-500 hover:text-white"
+              }`}
+            >
+              Gói đăng bài {id}
+            </button>
+          ))}
         </div>
 
         <table className="min-w-full bg-white border border-gray-200 ">
@@ -141,7 +124,7 @@ const rentalPostingMNG = () => {
             </tr>
           </thead>
           <tbody>
-            {filteredPosting.map((post, index) => (
+            {allRentalPosts.map((post, index) => (
               <tr key={index} className="border-b border-gray-200">
                 <td className="p-4 w-auto flex items-center space-x-4">
                   <img
@@ -235,39 +218,21 @@ const rentalPostingMNG = () => {
                 </span>
               </>
             )}
-
-            {Array.from({ length: totalPages }, (_, index) => {
-              if (index >= page - 2 && index <= page + 2) {
-                return (
-                  <button
-                    key={index}
-                    onClick={() => setPage(index)}
-                    className={`w-10 h-10 flex items-center justify-center rounded-xl ${
-                      index === page
-                        ? "bg-blue-500 text-white shadow-lg font-semibold"
-                        : "text-gray-500 hover:text-blue-500 hover:font-semibold"
-                    }`}
-                  >
-                    {index + 1}
-                  </button>
-                );
-              }
-              return null;
-            })}
-
-            {page < totalPages - 3 && (
-              <>
-                <span className="flex items-center justify-center text-gray-500">
-                  ...
-                </span>
+            {[...Array(totalPages).keys()]
+              .slice(Math.max(0, page - 2), Math.min(page + 3, totalPages))
+              .map((pageNumber) => (
                 <button
-                  onClick={() => setPage(totalPages - 1)}
-                  className="w-10 h-10 flex items-center justify-center rounded-full text-gray-500 hover:text-blue-500"
+                  key={pageNumber}
+                  onClick={() => setPage(pageNumber)}
+                  className={`w-10 h-10 flex items-center justify-center rounded-full ${
+                    pageNumber === page
+                      ? "bg-blue-500 text-white"
+                      : "text-gray-500 hover:text-blue-500"
+                  }`}
                 >
-                  {totalPages}
+                  {pageNumber + 1}
                 </button>
-              </>
-            )}
+              ))}
           </div>
 
           <button
@@ -278,16 +243,19 @@ const rentalPostingMNG = () => {
             <FaChevronRight />
           </button>
         </div>
+      </div>
 
+      {/* Detail Modal */}
+      {isDetailModalOpen && (
         <DetailRentalPostingModal
           isOpen={isDetailModalOpen}
           onClose={() => setIsDetailModalOpen(false)}
-          postingId={selectedPost}
-          onSave={fetchAllRentalPosting}
+          rentalPostingData={selectedPost}
+          refetch={fetchAllRentalPosting}
         />
-      </div>
+      )}
     </>
   );
 };
 
-export default rentalPostingMNG;
+export default RentalPostingMNG;

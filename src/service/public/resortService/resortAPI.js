@@ -2,7 +2,6 @@ import axios from "axios";
 import { baseURL } from "../../../config/config";
 const getResortById = async (id) => {
   try {
-    console.log(id);
     return await axios.get(`${baseURL}public/resort/${id}`);
   } catch (error) {
     return error;
@@ -49,9 +48,19 @@ const getAllTimeshareCompany = async (
   }
 };
 
+const getTimeshareCompanyDetail = async (tsId) => {
+  try {
+    return await axios.get(`${baseURL}public/timeshare-company/${tsId} 
+`);
+  } catch (error) {
+    return error;
+  }
+};
+
 export {
   getResortById,
   getAllResortByName,
   getAllTimeshareCompany,
+  getTimeshareCompanyDetail,
   getDetailUnitType,
 };

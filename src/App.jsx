@@ -24,7 +24,6 @@ import RentalListManagement from "./pages/timeshareStaffLayout/rentalListManagem
 import RentalPostingManagement from "./pages/timeshareStaffLayout/rentalPostingMNG";
 import ExchangePostingManagement from "./pages/timeshareStaffLayout/exchangePostingMNG";
 import ExchangVerifyManagement from "./pages/timeshareStaffLayout/exchangeVerifyMNG";
-import MoneySupport from "./pages/timeshareStaffLayout/moneySupportMNG";
 import TimeshareStaffLayout from "./pages/timeshareStaffLayout/timeshareStaffLayout";
 import AboutUs from "./pages/about/aboutUs";
 import Faqs from "./pages/faqs/faq";
@@ -77,7 +76,7 @@ function App() {
         <Route path="/resortdetail/:id" element={<ResortDetail />} />
         <Route path="/timesharecompanylist" element={<TimeshareCompany />} />
         <Route
-          path="/timesharecompanydetail"
+          path="/timesharecompanydetail/:tsId"
           element={<TimeshareCompanyDetail />}
         />
         <Route path="/aboutus" element={<AboutUs />} />
@@ -124,7 +123,7 @@ function App() {
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="post" element={<PostManagement />} />
             <Route path="faqs" element={<FaqManagement />} />
-            <Route path="createposting" element={<CreatePosting/>}/>
+            <Route path="createposting" element={<CreatePosting />} />
           </Route>
         </Route>
 
@@ -165,7 +164,6 @@ function App() {
             path="exchangeverifymanagement"
             element={<ExchangVerifyManagement />}
           />
-          <Route path="moneysupport" element={<MoneySupport />} />
           <Route path="feedback" element={<FeeddbackList />} />
         </Route>
       </Routes>

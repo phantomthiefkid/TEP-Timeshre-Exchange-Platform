@@ -126,11 +126,6 @@ const SidebarTimeshareStaff = () => {
           </div>
         </MenuItem>
         <MenuItem
-          icon={FaHandHoldingDollar}
-          title="Hỗ trợ định giá"
-          path="/timesharestaff/moneysupport"
-        />
-        <MenuItem
           icon={FaComment}
           title="Đánh giá khách hàng"
           path="/timesharestaff/feedback"

@@ -1,31 +1,35 @@
-import { DocumentIcon, DotsVerticalIcon, PlusIcon } from '@heroicons/react/outline';
-import React, { useEffect, useState } from 'react';
-import CountUp from 'react-countup'
-import HeaderAdmin from '../../components/Header/headerAdmin';
-import { createUser, getAllUser } from '../../service/adminAPIService/adminAPI';
-import CreateUserModal from '../../components/Modal/createUserModal';
-import { toast, Toaster } from 'react-hot-toast';
-import DetailEditUserModal from '../../components/Modal/detailEditUserModal';
-import Loading from '../../components/LoadingComponent/loading';
+import {
+  DocumentIcon,
+  DotsVerticalIcon,
+  PlusIcon,
+} from "@heroicons/react/outline";
+import React, { useEffect, useState } from "react";
+import CountUp from "react-countup";
+import HeaderAdmin from "../../components/Header/headerAdmin";
+import { createUser, getAllUser } from "../../service/adminAPIService/adminAPI";
+import CreateUserModal from "../../components/Modal/createUserModal";
+import { toast, Toaster } from "react-hot-toast";
+import DetailEditUserModal from "../../components/Modal/detailEditUserModal";
+import Loading from "../../components/LoadingComponent/loading";
 const UserManagement = () => {
   const [allUser, setAllUser] = useState([]);
-  const [page, setPage] = useState(0); 
-  const [size, setSize] = useState(6); 
-  const [totalPages, setTotalPages] = useState(1); 
+  const [page, setPage] = useState(0);
+  const [size, setSize] = useState(6);
+  const [totalPages, setTotalPages] = useState(1);
   const [roleId, setRoleId] = useState("");
   const [userName, setUserName] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const [flag, setFlag] = useState(false);
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(true);
   const fetchAllUser = async () => {
     try {
       let data = await getAllUser(page, size, roleId, userName);
       if (data.status === 200) {
         setAllUser(data.data.content);
-        setTotalPages(data.data.totalPages); 
-        setLoading(false)
+        setTotalPages(data.data.totalPages);
+        setLoading(false);
       }
     } catch (error) {
       console.log(error);
@@ -46,12 +50,12 @@ const UserManagement = () => {
 
   const handleRoleFilter = (e) => {
     setRoleId(e.target.value);
-    setPage(0); 
+    setPage(0);
   };
 
   const handleSearch = (e) => {
     setUserName(e.target.value);
-    setPage(0); 
+    setPage(0);
   };
 
   useEffect(() => {
@@ -63,7 +67,7 @@ const UserManagement = () => {
       if (newUser) {
         let data = await createUser(newUser);
         if (data.status === 200) {
-          toast.success("Tạo mới thành công", { duration: 2000 }); 
+          toast.success("Tạo mới thành công", { duration: 2000 });
         } else {
           toast.error("Tạo mới thất bại", { duration: 2000 });
         }
@@ -75,11 +79,11 @@ const UserManagement = () => {
   };
 
   const handleOpenUpdateModal = (user) => {
-    setIsUpdateModalOpen(true)
-    setSelectedUser(user)
-  }
+    setIsUpdateModalOpen(true);
+    setSelectedUser(user);
+  };
   if (loading) {
-    return <Loading/>
+    return <Loading />;
   }
 
   return (
@@ -164,48 +168,61 @@ const UserManagement = () => {
             </tr>
           </thead>
           <tbody className="bg-white">
-            {allUser && allUser.map((item, index) => (
-              <tr key={index}>
-                <td className="p-4">{index + 1}</td>
-                <td className="p-4 flex items-center">
-                  <img
-                    src="https://scontent.fsgn2-7.fna.fbcdn.net/v/t39.30808-6/457790295_1947970998949022_3066255129954259156_n.jpg?_nc_cat=108&ccb=1-7&_nc_sid=6ee11a&_nc_eui2=AeFoY4GYNi_qQDgWWYTVmkUJddJ_WJqplOh10n9YmqmU6A-DFFr1-u1kpgPXw4WLuc3ejG4XhxS9QWj-l3PSn8tF&_nc_ohc=5dOtTlzsDu0Q7kNvgGmqM3K&_nc_ht=scontent.fsgn2-7.fna&_nc_gid=AQXge5qrw4LXdmvXPL5sfJg&oh=00_AYAmYlBZfq86NfBJdoNTVuTAUpyzWPKCwwJGACxjQJKi2w&oe=67118559"
-                    alt={`${item.name}'s avatar`}
-                    className="w-10 h-10 rounded-full mr-2" // Adjust size as needed
-                  />
-                  <div>
-                    <p className="font-semibold text-gray-700 text-lg">{item.userName ? item.userName : "Người dùng"}</p> {/* Display Name */}
-                    <p className="text-gray-500 text-md">{item.email}</p> {/* Display Email */}
-                  </div>
-                </td>
-                <td className="p-4">{item.email}</td>
-                <td className="p-4">{item.roleName}</td>
-                <td className="p-4 text-center">
-                  {/* <input
+            {allUser &&
+              allUser.map((item, index) => (
+                <tr key={index}>
+                  <td className="p-4">{index + 1}</td>
+                  <td className="p-4 flex items-center">
+                    <img
+                      src="https://scontent.fsgn2-7.fna.fbcdn.net/v/t39.30808-6/457790295_1947970998949022_3066255129954259156_n.jpg?_nc_cat=108&ccb=1-7&_nc_sid=6ee11a&_nc_eui2=AeFoY4GYNi_qQDgWWYTVmkUJddJ_WJqplOh10n9YmqmU6A-DFFr1-u1kpgPXw4WLuc3ejG4XhxS9QWj-l3PSn8tF&_nc_ohc=5dOtTlzsDu0Q7kNvgGmqM3K&_nc_ht=scontent.fsgn2-7.fna&_nc_gid=AQXge5qrw4LXdmvXPL5sfJg&oh=00_AYAmYlBZfq86NfBJdoNTVuTAUpyzWPKCwwJGACxjQJKi2w&oe=67118559"
+                      alt={`${item.name}'s avatar`}
+                      className="w-10 h-10 rounded-full mr-2" // Adjust size as needed
+                    />
+                    <div>
+                      <p className="font-semibold text-gray-700 text-lg">
+                        {item.userName ? item.userName : "Người dùng"}
+                      </p>{" "}
+                      {/* Display Name */}
+                      <p className="text-gray-500 text-md">{item.email}</p>{" "}
+                      {/* Display Email */}
+                    </div>
+                  </td>
+                  <td className="p-4">{item.email}</td>
+                  <td className="p-4">{item.roleName}</td>
+                  <td className="p-4 text-center">
+                    {/* <input
                     type="checkbox"
                     checked={item.state}
                     className={`w-6 h-6 ${item.state ? 'bg-green-500' : 'bg-gray-300'}`}
                   /> */}
-                  <label class="flex items-center">
-                    <input type="checkbox" checked={item.isActive} class="sr-only peer" disabled />
-                    <div class="relative w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
-                    <span class="ms-3 text-sm font-medium text-gray-400 dark:text-gray-500">{item.isActive ? "Đang hoạt động" : "Đã vô hiệu hóa"}</span>
-                  </label>
-                </td>
-                <td className="p-4 flex gap-4">
-
-                  <button onClick={() => handleOpenUpdateModal(item)}><DocumentIcon color='gray' className='w-6 h-6' /></button>
-                  <button><DotsVerticalIcon className='w-6 h-6' /></button>
-
-                </td>
-
-              </tr>
-            ))}
-
+                    <label className="flex items-center">
+                      <input
+                        type="checkbox"
+                        checked={item.isActive}
+                        className="sr-only peer"
+                        disabled
+                      />
+                      <div className="relative w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                      <span className="ms-3 text-sm font-medium text-gray-400 dark:text-gray-500">
+                        {item.isActive ? "Đang hoạt động" : "Đã vô hiệu hóa"}
+                      </span>
+                    </label>
+                  </td>
+                  <td className="p-4 flex gap-4">
+                    <button onClick={() => handleOpenUpdateModal(item)}>
+                      <DocumentIcon color="gray" className="w-6 h-6" />
+                    </button>
+                    <button>
+                      <DotsVerticalIcon className="w-6 h-6" />
+                    </button>
+                  </td>
+                </tr>
+              ))}
           </tbody>
         </table>
 
-        <DetailEditUserModal isOpen={isUpdateModalOpen}
+        <DetailEditUserModal
+          isOpen={isUpdateModalOpen}
           onClose={() => setIsUpdateModalOpen(false)}
           userData={selectedUser}
           setFlag={() => setFlag(!flag)}
@@ -225,10 +242,11 @@ const UserManagement = () => {
               <button
                 key={index}
                 onClick={() => setPage(index)}
-                className={`px-4 py-2 rounded-lg ${index === page
-                  ? "bg-blue-500 text-white"
-                  : "bg-gray-300 text-gray-700 hover:bg-gray-400"
-                  }`}
+                className={`px-4 py-2 rounded-lg ${
+                  index === page
+                    ? "bg-blue-500 text-white"
+                    : "bg-gray-300 text-gray-700 hover:bg-gray-400"
+                }`}
               >
                 {index + 1}
               </button>

@@ -10,7 +10,7 @@ const rejectRentalPostingModal = ({ isOpen, onClose, onReject }) => {
       onReject(reason);
       onClose();
     } else {
-      toast.error("Please enter a reason for rejection.");
+      toast.error("Vui lòng nhập lí do từ chối.");
     }
   };
 

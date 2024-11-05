@@ -3,7 +3,8 @@ import axiosConfig from "../../util/axiosCustomize/axiosConfig";
 const getAllRentalPosting = async (
   pageNo = 0,
   pageSize = 3,
-  roomInfoCode = ""
+  roomInfoCode = "",
+  packageId = null
 ) => {
   try {
     return await axiosConfig.get(`timeshare-staff/rental/postings`, {
@@ -11,6 +12,7 @@ const getAllRentalPosting = async (
         pageNo,
         pageSize,
         roomInfoCode,
+        packageId,
       },
     });
   } catch (error) {
