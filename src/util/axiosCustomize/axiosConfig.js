@@ -2,7 +2,7 @@ import axios from "axios";
 
 // Tạo một instance axios với baseURL
 const instance = axios.create({
-    baseURL: "http://35.247.160.131/api/",
+    baseURL: "https://fams-management.tech/api/",
 });
 
 // Sử dụng interceptor để thêm token vào header cho mỗi request
