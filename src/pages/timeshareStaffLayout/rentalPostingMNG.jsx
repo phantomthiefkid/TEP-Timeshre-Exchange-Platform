@@ -218,21 +218,39 @@ const RentalPostingMNG = () => {
                 </span>
               </>
             )}
-            {[...Array(totalPages).keys()]
-              .slice(Math.max(0, page - 2), Math.min(page + 3, totalPages))
-              .map((pageNumber) => (
+
+            {Array.from({ length: totalPages }, (_, index) => {
+              if (index >= page - 2 && index <= page + 2) {
+                return (
+                  <button
+                    key={index}
+                    onClick={() => setPage(index)}
+                    className={`w-10 h-10 flex items-center justify-center rounded-xl ${
+                      index === page
+                        ? "bg-blue-500 text-white shadow-lg font-semibold"
+                        : "text-gray-500 hover:text-blue-500 hover:font-semibold"
+                    }`}
+                  >
+                    {index + 1}
+                  </button>
+                );
+              }
+              return null;
+            })}
+
+            {page < totalPages - 3 && (
+              <>
+                <span className="flex items-center justify-center text-gray-500">
+                  ...
+                </span>
                 <button
-                  key={pageNumber}
-                  onClick={() => setPage(pageNumber)}
-                  className={`w-10 h-10 flex items-center justify-center rounded-full ${
-                    pageNumber === page
-                      ? "bg-blue-500 text-white"
-                      : "text-gray-500 hover:text-blue-500"
-                  }`}
+                  onClick={() => setPage(totalPages - 1)}
+                  className="w-10 h-10 flex items-center justify-center rounded-full text-gray-500 hover:text-blue-500"
                 >
-                  {pageNumber + 1}
+                  {totalPages}
                 </button>
-              ))}
+              </>
+            )}
           </div>
 
           <button
@@ -246,14 +264,12 @@ const RentalPostingMNG = () => {
       </div>
 
       {/* Detail Modal */}
-      {isDetailModalOpen && (
-        <DetailRentalPostingModal
-          isOpen={isDetailModalOpen}
-          onClose={() => setIsDetailModalOpen(false)}
-          rentalPostingData={selectedPost}
-          refetch={fetchAllRentalPosting}
-        />
-      )}
+      <DetailRentalPostingModal
+        isOpen={isDetailModalOpen}
+        onClose={() => setIsDetailModalOpen(false)}
+        postingId={selectedPost}
+        onSave={fetchAllRentalPosting}
+      />
     </>
   );
 };

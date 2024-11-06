@@ -88,8 +88,8 @@ const DetailRentalPostingModal = ({ isOpen, onClose, postingId, onSave }) => {
   };
 
   const handleClose = () => {
-    setIsEditing(false); // Reset editing state
-    onClose(); // Close the modal
+    setIsEditing(false);
+    onClose();
   };
 
   useEffect(() => {
