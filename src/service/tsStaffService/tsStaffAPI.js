@@ -3,7 +3,8 @@ import axiosConfig from "../../util/axiosCustomize/axiosConfig";
 const getAllRentalPosting = async (
   pageNo = 0,
   pageSize = 3,
-  roomInfoCode = ""
+  roomInfoCode = "",
+  packageId = null
 ) => {
   try {
     return await axiosConfig.get(`timeshare-staff/rental/postings`, {
@@ -11,6 +12,7 @@ const getAllRentalPosting = async (
         pageNo,
         pageSize,
         roomInfoCode,
+        packageId,
       },
     });
   } catch (error) {
@@ -48,41 +50,132 @@ const approveRentalPostingById = async (postingId, data) => {
   }
 };
 
+const getAllBooking = async (
+  pageNo = 0,
+  pageSize = 3,
+  isComing = false,
+  willGo = false
+) => {
+  try {
+    return await axiosConfig.get(`timeshare-staff/booking`, {
+      params: {
+        pageNo,
+        pageSize,
+        isComing,
+        willGo,
+      },
+    });
+  } catch (error) {
+    throw error;
+  }
+};
+
+const getAllExchangePosting = async (
+  pageNo = 0,
+  pageSize = 3,
+  roomInfoCode = ""
+) => {
+  try {
+    return await axiosConfig.get(`timeshare-staff/exchange/postings`, {
+      params: {
+        pageNo,
+        pageSize,
+        roomInfoCode,
+      },
+    });
+  } catch (error) {
+    throw error;
+  }
+};
+
+const getExchangePostingById = async (postingId) => {
+  try {
+    return await axiosConfig.get(
+      `timeshare-staff/exchange/posting/${postingId}`
+    );
+  } catch (error) {
+    throw error;
+  }
+};
+
+const rejectExchangePostingById = async (data, postingId) => {
+  try {
+    return await axiosConfig.post(
+      `timeshare-staff/exchange/posting/reject/${postingId}`,
+      { data }
+    );
+  } catch (error) {
+    throw error;
+  }
+};
+
+const approveExchangePostingById = async (postingId, data) => {
+  try {
+    return await axiosConfig.post(
+      `timeshare-staff/exchange/posting/approval/${postingId}`,
+      data
+    );
+  } catch (error) {
+    throw error;
+  }
+};
+
+const getRentalBookingById = async (bookingId) => {
+  try {
+    return await axiosConfig.get(`timeshare-staff/booking/rental/${bookingId}`);
+  } catch (error) {
+    throw error;
+  }
+};
+
+const getExchangeBookingById = async (bookingId) => {
+  try {
+    return await axiosConfig.get(
+      `timeshare-staff/booking/exchange/${bookingId}`
+    );
+  } catch (error) {
+    throw error;
+  }
+};
+
 const getFeedbackResort = async (pageNo, pageSize) => {
   try {
     return await axiosConfig.get(`timeshare-staff/feedback/resort`, {
       params: {
         pageNo,
-        pageSize
+        pageSize,
       },
     });
   } catch (error) {
     return error;
   }
-}
+};
 
 const getAllFeedbacksResortForRating = async () => {
   try {
     return await axiosConfig.get(`timeshare-staff/feedback/resort`, {
       params: {
-        pageNo : 0,
-        pageSize : 200
+        pageNo: 0,
+        pageSize: 200,
       },
     });
   } catch (error) {
     return error;
   }
-}
+};
 
 const sendReportFeedbackResort = async (feedbackId, data) => {
   try {
-    console.log(feedbackId, data)
-    return await axiosConfig.put(`timeshare-staff/feedback/report/${feedbackId}`, {note: data})
+    console.log(feedbackId, data);
+    return await axiosConfig.put(
+      `timeshare-staff/feedback/report/${feedbackId}`,
+      { note: data }
+    );
   } catch (error) {
-    console.log(error)
-    throw error
+    console.log(error);
+    throw error;
   }
-}
+};
 
 export {
   getAllRentalPosting,
@@ -91,5 +184,12 @@ export {
   approveRentalPostingById,
   getFeedbackResort,
   getAllFeedbacksResortForRating,
-  sendReportFeedbackResort
+  sendReportFeedbackResort,
+  getAllBooking,
+  getAllExchangePosting,
+  getExchangePostingById,
+  rejectExchangePostingById,
+  approveExchangePostingById,
+  getRentalBookingById,
+  getExchangeBookingById,
 };

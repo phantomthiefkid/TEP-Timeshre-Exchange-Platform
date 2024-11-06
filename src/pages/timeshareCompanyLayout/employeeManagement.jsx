@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Header from "../../components/Header/headerOtherRole";
 import {
   createTimeshareStaff,
+  getAllResort,
   getAllTimeshareStaff,
   getTsStaffById,
 } from "../../service/tsCompanyService/tsCompanyAPI";
@@ -24,6 +25,7 @@ const employeeManagement = () => {
   const [loading, setLoading] = useState(true);
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
   const [selectedTSStaff, setSelectedTSStaff] = useState(null);
+  const [allResorts, setAllResorts] = useState([]);
 
   const fetchAllTimeshareStaff = async () => {
     try {
@@ -84,8 +86,25 @@ const employeeManagement = () => {
     }
   };
 
+  const fetchAllResorts = async () => {
+    try {
+      const data = await getAllResort();
+      if (data.status === 200) {
+        console.log("Fetched Resorts:", data.data.content); // Log resort data
+        setAllResorts(data.data.content);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  const getResortName = (resortId) => {
+    const resort = allResorts.find((resort) => resort.id === resortId);
+    return resort ? resort.resortName : "-";
+  };
+
   useEffect(() => {
     fetchAllTimeshareStaff();
+    fetchAllResorts();
   }, [page, StaffName]);
 
   if (loading) {
@@ -142,6 +161,7 @@ const employeeManagement = () => {
             <tr className="text-left text-sm font-semibold uppercase tracking-wider text-gray-500 rounded-lg">
               <th className="p-4 rounded-l-lg">STT</th>
               <th className="p-4">Tên nhân viên</th>
+              <th className="p-4">Resort quản lí</th>
               <th className="p-4">Trạng thái</th>
               <th className="p-4 rounded-r-lg"></th>
             </tr>
@@ -156,6 +176,9 @@ const employeeManagement = () => {
                   <td className="p-4">{index + 1}</td>
                   <td className="p-4 flex items-center font-medium text-gray-700">
                     {item.userName}
+                  </td>
+                  <td className="p-4 font-medium text-gray-700">
+                    {getResortName(item.resortId)}
                   </td>
                   <td className="p-4">
                     <span

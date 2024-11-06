@@ -7,21 +7,27 @@ import {
   getAllRentalPosting,
   getRentalPostingById,
 } from "../../service/tsStaffService/tsStaffAPI";
+import SpinnerWaiting from "../../components/LoadingComponent/spinnerWaiting";
 
-const rentalPostingMNG = () => {
-  const [filterPackageId, setFilterPackageId] = useState("");
+const RentalPostingMNG = () => {
+  const [filterPackageId, setFilterPackageId] = useState(null);
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
   const [allRentalPosts, setAllRentalPosts] = useState([]);
   const [page, setPage] = useState(0);
   const [size, setSize] = useState(6);
   const [totalPages, setTotalPages] = useState(1);
   const [roomInfoCode, setRoomInfoCode] = useState("");
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [selectedPost, setSelectedPost] = useState(null);
 
   const fetchAllRentalPosting = async () => {
     try {
-      let data = await getAllRentalPosting(page, size, roomInfoCode);
+      let data = await getAllRentalPosting(
+        page,
+        size,
+        roomInfoCode,
+        filterPackageId
+      );
       if (data.status === 200) {
         setAllRentalPosts(data.data.content);
         setTotalPages(data.data.totalPages);
@@ -54,16 +60,9 @@ const rentalPostingMNG = () => {
     }
   };
 
-  const filteredPosting = allRentalPosts.filter((posting) => {
-    const packageMatch = filterPackageId
-      ? posting.rentalPackageId == filterPackageId
-      : true;
-    return packageMatch;
-  });
-
   useEffect(() => {
     fetchAllRentalPosting();
-  }, [page, roomInfoCode]);
+  }, [page, roomInfoCode, filterPackageId]);
 
   return (
     <>
@@ -85,48 +84,35 @@ const rentalPostingMNG = () => {
             Làm mới
           </button>
         </div>
+
         {/* Filter Buttons */}
         <div className="flex items-center space-x-1 mb-5">
           <button
-            onClick={() => setFilterPackageId("")}
+            onClick={() => setFilterPackageId(null)} // Set to null to fetch all
             className={`px-4 py-2 rounded-md ${
-              filterPackageId === ""
+              filterPackageId === null
                 ? "bg-blue-500 text-white"
                 : "bg-gray-100 text-gray-700 hover:bg-blue-500 hover:text-white"
             }`}
           >
             Tất cả gói đăng
           </button>
-          <button
-            onClick={() => setFilterPackageId("2")}
-            className={`px-4 py-2 rounded-md ${
-              filterPackageId === "2"
-                ? "bg-blue-500 text-white"
-                : "bg-gray-100 text-gray-700 hover:bg-blue-500 hover:text-white"
-            }`}
-          >
-            Gói đăng bài 2
-          </button>
-          <button
-            onClick={() => setFilterPackageId("3")}
-            className={`px-4 py-2 rounded-md ${
-              filterPackageId === "3"
-                ? "bg-blue-500 text-white"
-                : "bg-gray-100 text-gray-700 hover:bg-blue-500 hover:text-white"
-            }`}
-          >
-            Gói đăng bài 3
-          </button>
-          <button
-            onClick={() => setFilterPackageId("4")}
-            className={`px-4 py-2 rounded-md ${
-              filterPackageId === "4"
-                ? "bg-blue-500 text-white"
-                : "bg-gray-100 text-gray-700 hover:bg-blue-500 hover:text-white"
-            }`}
-          >
-            Gói đăng bài 4
-          </button>
+          {[2, 3, 4].map((id) => (
+            <button
+              key={id}
+              onClick={() => {
+                setFilterPackageId(id);
+                setPage(0);
+              }}
+              className={`px-4 py-2 rounded-md ${
+                filterPackageId === id
+                  ? "bg-blue-500 text-white"
+                  : "bg-gray-100 text-gray-700 hover:bg-blue-500 hover:text-white"
+              }`}
+            >
+              Gói đăng bài {id}
+            </button>
+          ))}
         </div>
 
         <table className="min-w-full bg-white border border-gray-200 ">
@@ -140,75 +126,79 @@ const rentalPostingMNG = () => {
               <th className="p-4 text-left"></th>
             </tr>
           </thead>
-          <tbody>
-            {filteredPosting.map((post, index) => (
-              <tr key={index} className="border-b border-gray-200">
-                <td className="p-4 w-auto flex items-center space-x-4">
-                  <img
-                    src={post.image}
-                    className="w-12 h-12 rounded-2xl object-cover"
-                  />
-                  <div className="flex flex-col justify-center">
-                    <h3 className="font-semibold text-gray-800">
-                      {post.resortName}
-                    </h3>
-                    <span className="text-gray-600">{post.roomCode}</span>
-                    <p className="text-sm text-blue-500">
-                      {post.rentalPostingId}
-                    </p>
-                  </div>
-                </td>
+          {loading ? (
+            <SpinnerWaiting />
+          ) : (
+            <tbody>
+              {allRentalPosts.map((post, index) => (
+                <tr key={index} className="border-b border-gray-200">
+                  <td className="p-4 w-auto flex items-center space-x-4">
+                    <img
+                      src={post.image}
+                      className="w-12 h-12 rounded-2xl object-cover"
+                    />
+                    <div className="flex flex-col justify-center">
+                      <h3 className="font-semibold text-gray-800">
+                        {post.resortName}
+                      </h3>
+                      <span className="text-gray-600">{post.roomCode}</span>
+                      <p className="text-sm text-blue-500">
+                        {post.rentalPostingId}
+                      </p>
+                    </div>
+                  </td>
 
-                <td className="p-4">{post.checkinDate}</td>
-                <td className="p-4">{post.checkoutDate}</td>
-                <td className="p-4">
-                  {post.rentalPackageId === 3 ? (
-                    <div className="text-red-500 bg-red-100 font-semibold w-3/4 flex items-center justify-center px-2 py-1 rounded-full">
-                      <span>Hỗ trợ định giá</span>
+                  <td className="p-4">{post.checkinDate}</td>
+                  <td className="p-4">{post.checkoutDate}</td>
+                  <td className="p-4">
+                    {post.rentalPackageId === 3 ? (
+                      <div className="text-red-500 bg-red-100 font-semibold w-3/4 flex items-center justify-center px-2 py-1 rounded-full">
+                        <span>Hỗ trợ định giá</span>
+                      </div>
+                    ) : post.rentalPackageId === 4 ? (
+                      <div className="text-yellow-500 bg-yellow-100 font-semibold w-[150px] flex items-center justify-center px-2 py-1 rounded-full">
+                        <span>Chờ định giá</span>
+                      </div>
+                    ) : (
+                      <div>
+                        <p className="font-medium">
+                          {new Intl.NumberFormat("vi-VN", {
+                            style: "currency",
+                            currency: "VND",
+                          }).format(post.totalPrice)}
+                        </p>
+                        <p className="font-medium">
+                          (
+                          {new Intl.NumberFormat("vi-VN", {
+                            style: "currency",
+                            currency: "VND",
+                          }).format(post.pricePerNights)}
+                          / đêm)
+                        </p>
+                      </div>
+                    )}
+                  </td>
+                  <td className="p-4">
+                    {post.status === "PendingApproval" && (
+                      <span className="flex items-center justify-center px-2 py-1 rounded-full w-24 font-semibold bg-blue-100 text-blue-500">
+                        Đang chờ
+                      </span>
+                    )}
+                  </td>
+                  <td className="p-4">
+                    <div
+                      className="cursor-pointer hover:bg-gray-100 rounded-xl w-8 h-8 p-2"
+                      onClick={() =>
+                        fetchRentalPostingDetails(post.rentalPostingId)
+                      }
+                    >
+                      <FaEllipsisVertical />
                     </div>
-                  ) : post.rentalPackageId === 4 ? (
-                    <div className="text-yellow-500 bg-yellow-100 font-semibold w-[150px] flex items-center justify-center px-2 py-1 rounded-full">
-                      <span>Chờ định giá</span>
-                    </div>
-                  ) : (
-                    <div>
-                      <p className="font-medium">
-                        {new Intl.NumberFormat("vi-VN", {
-                          style: "currency",
-                          currency: "VND",
-                        }).format(post.totalPrice)}
-                      </p>
-                      <p className="font-medium">
-                        (
-                        {new Intl.NumberFormat("vi-VN", {
-                          style: "currency",
-                          currency: "VND",
-                        }).format(post.pricePerNights)}
-                        / đêm)
-                      </p>
-                    </div>
-                  )}
-                </td>
-                <td className="p-4">
-                  {post.status === "PendingApproval" && (
-                    <span className="flex items-center justify-center px-2 py-1 rounded-full w-24 font-semibold bg-blue-100 text-blue-500">
-                      Đang chờ
-                    </span>
-                  )}
-                </td>
-                <td className="p-4">
-                  <div
-                    className="cursor-pointer hover:bg-gray-100 rounded-xl w-8 h-8 p-2"
-                    onClick={() =>
-                      fetchRentalPostingDetails(post.rentalPostingId)
-                    }
-                  >
-                    <FaEllipsisVertical />
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          )}
         </table>
 
         {/* Pagination */}
@@ -278,16 +268,17 @@ const rentalPostingMNG = () => {
             <FaChevronRight />
           </button>
         </div>
-
-        <DetailRentalPostingModal
-          isOpen={isDetailModalOpen}
-          onClose={() => setIsDetailModalOpen(false)}
-          postingId={selectedPost}
-          onSave={fetchAllRentalPosting}
-        />
       </div>
+
+      {/* Detail Modal */}
+      <DetailRentalPostingModal
+        isOpen={isDetailModalOpen}
+        onClose={() => setIsDetailModalOpen(false)}
+        postingId={selectedPost}
+        onSave={fetchAllRentalPosting}
+      />
     </>
   );
 };
 
-export default rentalPostingMNG;
+export default RentalPostingMNG;
