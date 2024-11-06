@@ -65,7 +65,7 @@ function App() {
     setIsLoading(false);
   }, [dispatch]);
   if (isLoading) {
-    return <Loading />; // Hiển thị trạng thái chờ khi kiểm tra đăng nhập
+    return <Loading />; 
   }
   return (
     <BrowserRouter>

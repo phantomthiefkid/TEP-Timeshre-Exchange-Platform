@@ -113,7 +113,6 @@ const employeeManagement = () => {
 
       <div className="flex justify-end items-center px-6">
         <div className="flex space-x-4">
-          {/* Search User */}
           <input
             type="text"
             placeholder="Tìm kiếm nhân viên..."
@@ -121,7 +120,6 @@ const employeeManagement = () => {
             onChange={handleSearch}
           />
 
-          {/* Add New User */}
           <button
             onClick={() => setIsModalOpen(true)}
             className="bg-gradient-to-r from-blue-300 to-blue-400 border border-blue-300 text-gray-560 py-2 px-4 pr-10 rounded-xl shadow-md flex items-center justify-between cursor-pointer transition duration-300 ease-in-out transform hover:from-blue-400 hover:to-blue-300 hover:border-blue-500 focus:outline-none gap-4"
