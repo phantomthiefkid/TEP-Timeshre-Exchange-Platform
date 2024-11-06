@@ -1,5 +1,6 @@
 import { PlusCircleIcon, TrashIcon, XCircleIcon, XIcon } from '@heroicons/react/outline';
 import React, { useEffect, useState } from 'react';
+import { FaArrowLeft, FaArrowRight } from 'react-icons/fa6';
 
 const CreateResortAmenity = ({ onUpdateData, onNext, onBack, formData }) => {
   const [amenities, setAmenities] = useState([]);
@@ -30,16 +31,16 @@ const CreateResortAmenity = ({ onUpdateData, onNext, onBack, formData }) => {
   useEffect(() => {
     onUpdateData({
       ...formData,
-      resortAmenityList : amenities
+      resortAmenityList: amenities
     });
   }, [amenities])
 
   // Handle form submit
   const handleSubmit = (e) => {
     e.preventDefault();
-   
-      
-    
+
+
+
     if (onNext) {
       onNext();
     }
@@ -69,7 +70,7 @@ const CreateResortAmenity = ({ onUpdateData, onNext, onBack, formData }) => {
 
   return (
     <div className="p-6">
-      <div className="border border-blue-500 rounded-md p-8 space-y-14">
+      <div className="border border-sky-400 rounded-md p-8 space-y-14">
         <h4 className="text-2xl font-bold mb-4">Tiện ích khách sạn</h4>
 
         {/* Section for Adding On-site Features */}
@@ -80,7 +81,7 @@ const CreateResortAmenity = ({ onUpdateData, onNext, onBack, formData }) => {
             <div className='flex'>
               <input
                 type="text"
-                className="border p-2 rounded-full"
+               className="border p-2 rounded-full focus:outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-300 transition duration-200"
                 value={onSiteFeature}
                 onChange={(e) => setOnSiteFeature(e.target.value)}
                 placeholder="Thêm tính năng tại chỗ"
@@ -90,7 +91,7 @@ const CreateResortAmenity = ({ onUpdateData, onNext, onBack, formData }) => {
                 onClick={() => handleAddAmenity(onSiteFeature, '1')}
                 className=" text-white p-2 rounded flex items-center space-x-2"
               >
-                <PlusCircleIcon color='blue' className="h-8 w-8" />
+                <PlusCircleIcon color='#6A9CFD' className="h-8 w-8" />
                 <span>Thêm</span>
               </button>
             </div>
@@ -106,7 +107,7 @@ const CreateResortAmenity = ({ onUpdateData, onNext, onBack, formData }) => {
             <div className='flex'>
               <input
                 type="text"
-                className="border p-2 rounded-full"
+               className="border p-2 rounded-full focus:outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-300 transition duration-200"
                 value={nearbyAttraction}
                 onChange={(e) => setNearbyAttraction(e.target.value)}
                 placeholder="Thêm điểm tham quan lân cận"
@@ -116,7 +117,7 @@ const CreateResortAmenity = ({ onUpdateData, onNext, onBack, formData }) => {
                 onClick={() => handleAddAmenity(nearbyAttraction, '2')}
                 className=" text-white p-2 rounded flex items-center space-x-2"
               >
-                <PlusCircleIcon color='blue' className="h-8 w-8" />
+                <PlusCircleIcon color='#6A9CFD' className="h-8 w-8" />
                 <span>Thêm</span>
               </button>
             </div>
@@ -132,7 +133,7 @@ const CreateResortAmenity = ({ onUpdateData, onNext, onBack, formData }) => {
             <div className='flex'>
               <input
                 type="text"
-                className="border p-2 rounded-full"
+                className="border p-2 rounded-full focus:outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-300 transition duration-200"
                 value={policy}
                 onChange={(e) => setPolicy(e.target.value)}
                 placeholder="Thêm chính sách"
@@ -140,9 +141,9 @@ const CreateResortAmenity = ({ onUpdateData, onNext, onBack, formData }) => {
               <button
                 type="button"
                 onClick={() => handleAddAmenity(policy, '3')}
-                className=" text-white p-2 rounded flex items-center space-x-2"
+                className="text-white p-2 rounded flex items-center space-x-2"
               >
-                <PlusCircleIcon color='blue' className="h-8 w-8" />
+                <PlusCircleIcon color='#6A9CFD' className="h-8 w-8" />
                 <span>Thêm</span>
               </button>
             </div>
@@ -157,16 +158,16 @@ const CreateResortAmenity = ({ onUpdateData, onNext, onBack, formData }) => {
         <button
           type="button"
           onClick={onBack}
-          className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
+          className="bg-indigo-400 hover:bg-indigo-700 text-indigo-100 rounded-full flex items-center"
         >
-          Quay lại
+          <span class="bg-indigo-500 hover:bg-indigo-700 w-12 h-12 flex items-center justify-center rounded-full mr-4"><FaArrowLeft /></span><span class="mr-6">trở lại</span>
         </button>
         <button
           type="button"
           onClick={handleSubmit}
-          className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
+          className="bg-indigo-400 hover:bg-indigo-700 text-indigo-100 pl-6 rounded-full flex items-center"
         >
-          Tiếp theo
+          <span class="mr-6">Bước tiếp theo</span><span class="bg-indigo-500 hover:bg-indigo-700 w-12 h-12 flex items-center justify-center rounded-full"><FaArrowRight /></span>
         </button>
       </div>
     </div>

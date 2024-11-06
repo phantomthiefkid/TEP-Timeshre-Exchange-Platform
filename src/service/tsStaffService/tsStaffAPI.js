@@ -48,9 +48,48 @@ const approveRentalPostingById = async (postingId, data) => {
   }
 };
 
+const getFeedbackResort = async (pageNo, pageSize) => {
+  try {
+    return await axiosConfig.get(`timeshare-staff/feedback/resort`, {
+      params: {
+        pageNo,
+        pageSize
+      },
+    });
+  } catch (error) {
+    return error;
+  }
+}
+
+const getAllFeedbacksResortForRating = async () => {
+  try {
+    return await axiosConfig.get(`timeshare-staff/feedback/resort`, {
+      params: {
+        pageNo : 0,
+        pageSize : 200
+      },
+    });
+  } catch (error) {
+    return error;
+  }
+}
+
+const sendReportFeedbackResort = async (feedbackId, data) => {
+  try {
+    console.log(feedbackId, data)
+    return await axiosConfig.put(`timeshare-staff/feedback/report/${feedbackId}`, {note: data})
+  } catch (error) {
+    console.log(error)
+    throw error
+  }
+}
+
 export {
   getAllRentalPosting,
   getRentalPostingById,
   rejectRentalPostingById,
   approveRentalPostingById,
+  getFeedbackResort,
+  getAllFeedbacksResortForRating,
+  sendReportFeedbackResort
 };

@@ -58,7 +58,7 @@ const UpdateResortUnitType = ({ unitType, flag }) => {
         }
 
 
-        <div onClick={() => setOpenUnitTyCreatepeModal(true)} className="flex justify-center text-xl h-32 items-center gap-4 rounded-xl border shadow-md hover:shadow-lg">
+        <div onClick={() => setOpenUnitTyCreatepeModal(true)} className="flex justify-center text-xl h-36 items-center gap-4 rounded-xl border shadow-md hover:shadow-lg">
           Thêm <FaPlusCircle size={20} />
         </div>
 

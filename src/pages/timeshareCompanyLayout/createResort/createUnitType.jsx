@@ -118,12 +118,13 @@ const CreateUnitType = ({ onUpdateData, onNext, onBack, formData }) => {
 
           {/* Add Room Type Button */}
           <button
-            className="flex items-center h-44 gap-2 justify-center p-4 border-4 border-dashed text-black rounded-xl hover:bg-slate-200 hover:border-sky-500"
+            className="flex flex-col items-center h-44 w-full gap-2 justify-center p-6 border-4 border-dashed border-gray-300 text-gray-700 rounded-xl hover:bg-slate-100 hover:border-sky-500 hover:text-sky-600 transition-all duration-200 ease-in-out shadow-sm hover:shadow-md"
             onClick={handleOpenModalAdd} // Open modal on click
           >
-            <label>Thêm mới</label>
-            <PlusIcon className="h-6 w-6" />
+            <label className="text-lg font-semibold tracking-wide">Thêm mới</label>
+            <PlusIcon className="h-8 w-8" />
           </button>
+
         </div>
 
       </div>
@@ -144,7 +145,7 @@ const CreateUnitType = ({ onUpdateData, onNext, onBack, formData }) => {
         {/* <button type="button" onClick={onBack} className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">
           Quay lại
         </button> */}
-        <button type="button" onClick={handleSubmit} className="bg-green-500 text-white py-2 px-10 rounded-xl hover:bg-green-600">
+        <button type="button" onClick={handleSubmit} className="bg-gradient-to-r z-0 gap-2 from-green-300 to-green-500 border text-gray-560 py-2 px-8 pr-10 rounded-xl shadow-md flex items-center justify-between cursor-pointer transition duration-300 ease-in-out transform hover:from-green-500 hover:to-green-300 hover:scale-105 hover:text-white focus:outline-none">
           Hoàn tất
         </button>
       </div>

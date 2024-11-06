@@ -57,12 +57,12 @@ const UpdateResortAmenity = () => {
     return amenities
       .filter((amenity) => amenity.type === type)
       .map((amenity) => (
-        <div key={amenity.name} className="relative flex justify-center items-center rounded-2xl border mt-2 p-3">
+        <div key={amenity.name} className="relative  bg-slate-100 hover:bg-slate-200 flex justify-center items-center rounded-2xl border mt-2 p-3">
           <span>{amenity.name}</span>
           <button
             type="button"
             onClick={() => handleRemoveAmenity(amenity.name)}
-            className="absolute top-1 right-0 text-gray-400 flex items-center"
+            className="absolute top-1 right-0 text-red-400 hover:text-red-500 flex items-center"
           >
             <XCircleIcon className="h-7 w-7" />
           </button>
@@ -110,7 +110,7 @@ const UpdateResortAmenity = () => {
             <div className='flex'>
               <input
                 type="text"
-                className="border rounded-2xl"
+                className="border rounded-2xl focus:outline-none focus:border-sky-500"
                 value={onSiteFeature}
                 onChange={(e) => setOnSiteFeature(e.target.value)}
                 placeholder="Thêm tính năng tại chỗ"
@@ -134,7 +134,7 @@ const UpdateResortAmenity = () => {
             <div className='flex'>
               <input
                 type="text"
-                className="border rounded-2xl"
+                className="border rounded-2xl focus:outline-none focus:border-sky-500"
                 value={nearbyAttraction}
                 onChange={(e) => setNearbyAttraction(e.target.value)}
                 placeholder="Thêm điểm tham quan lân cận"
@@ -158,7 +158,7 @@ const UpdateResortAmenity = () => {
             <div className='flex'>
               <input
                 type="text"
-                className="border rounded-2xl"
+                className="border rounded-2xl focus:outline-none focus:border-sky-500"
                 value={policy}
                 onChange={(e) => setPolicy(e.target.value)}
                 placeholder="Thêm chính sách"
@@ -180,7 +180,7 @@ const UpdateResortAmenity = () => {
         <button
           type="button"
           onClick={handleSubmit}
-          className="bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-14 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400 hover:scale-105"
+          className="bg-gradient-to-r z-0 gap-2 from-green-300 to-green-500 border text-gray-560 py-2 px-8 pr-10 rounded-xl shadow-md flex items-center justify-between cursor-pointer transition duration-300 ease-in-out transform hover:from-green-500 hover:to-green-300 hover:scale-105 hover:text-white focus:outline-none"
         >
           Cập nhật
         </button>

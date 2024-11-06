@@ -202,22 +202,13 @@ const UpdateResortBasic = () => {
 
         {/* Column 2 */}
         <div className="space-y-4">
-          {/* Upload logo */}
-          <div>
-            <label className="block mb-2 font-medium">Logo:</label>
-            <input
-              type="file"
-              accept="image/*"
-              className="border border-gray-300 rounded-md p-2 w-full focus:ring-2 focus:ring-blue-400 focus:outline-none"
-
-            />
-          </div>
+          
 
 
           {/* Upload room images */}
           {/* Upload room images with icon button */}
           <div className="space-y-4">
-            <label className="block mb-2 font-medium">Ảnh phòng:</label>
+            <label className="block mb-2 font-medium">Logo resort:</label>
 
             {/* Upload button with icon */}
             <div className="flex items-center space-x-4 w-full">
