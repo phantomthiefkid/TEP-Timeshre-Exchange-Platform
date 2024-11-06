@@ -14,6 +14,7 @@ import {
   FaList,
   FaListUl,
   FaListOl,
+  FaComment,
 } from "react-icons/fa";
 import { useDispatch } from "react-redux";
 import { setIsLogin, setRoleName } from "../../redux/UserSlice/SignIn";
@@ -98,6 +99,7 @@ const SidebarSystemStaff = () => {
         <MenuItem icon={FaList} title="Danh sách bài đăng" path="post"/>
         <MenuItem icon={FaListOl} title="Danh sách định giá" path="valuationlist"/>
         </MenuItem>
+        <MenuItem icon={FaComment} title="Quản lí phản hồi" path="feedbackmng"/>
         <MenuItem icon={FaMoneyBillAlt} title="Thanh toán">
           <MenuItem icon={FaUserCheck} title="Người đăng" path="#" />
           <MenuItem icon={FaCity} title="Công ty Timeshare" path="#" />

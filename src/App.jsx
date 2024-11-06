@@ -41,6 +41,8 @@ import Test from "./pages/timeshareCompanyLayout/createResort/test";
 import UpdateResort from "./pages/timeshareCompanyLayout/updateResort/updateResort";
 import CreatePosting from "./pages/systemStaffLayout/createPosting";
 import ValuationList from "./pages/systemStaffLayout/valuationList";
+import Feedback from "./pages/systemStaffLayout/feedback";
+import FeedbackResortDetail from "./pages/systemStaffLayout/feedbackResortDetail";
 function App() {
   const dispatch = useDispatch();
   const { isLogin, role } = useSelector((state) => state.isLogin);
@@ -127,6 +129,8 @@ function App() {
             <Route path="faqs" element={<FaqManagement />} />
             <Route path="createposting" element={<CreatePosting/>}/>
             <Route path="valuationList" element={<ValuationList/>}/>
+            <Route path="feedbackmng" element={<Feedback/>}/>
+            <Route path={`feedbackdetail/:id`} element={<FeedbackResortDetail/>}/> 
           </Route>
         </Route>
 

@@ -67,7 +67,7 @@ const UpdateResortUnitTypeModal = ({ onClose, selectedUnitType, flag }) => {
 
     setLoading(true)
     updateResortUnitType(updatedResort, selectedUnitType.id).then(() => {
-      onClose()
+      // onClose()
       flag()
       toast.success("Cập nhật thành công!", { duration: 2000 });
     }).catch(() => {
@@ -84,7 +84,7 @@ const UpdateResortUnitTypeModal = ({ onClose, selectedUnitType, flag }) => {
   return (
     <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center">
       <Toaster position="top-center" reverseOrder={false} />
-      {!loading && (<div className="bg-white  rounded-xl shadow-lg w-full max-w-5xl">
+      <div className="bg-white  rounded-xl shadow-lg w-full max-w-5xl">
 
         <div className='bg-gradient-to-r from-blue-900 to-custom-blue-hover-sidebar text-center text-white py-6 rounded-t-xl shadow-lg'>
           <h3 className="text-3xl font-bold tracking-wide font-serif mb-2">Cập nhật loại phòng</h3>
@@ -175,13 +175,39 @@ const UpdateResortUnitTypeModal = ({ onClose, selectedUnitType, flag }) => {
                   </div>
 
                 </div>
+                <div className="flex flex-col">
+                  <label className="font-semibold text-md mb-2">Khu vực:</label>
+                  <input
+                    type="text"
+                    name="area"
+                    className="w-full bg-gray-100 text-gray-700 py-2 px-4 rounded-lg shadow-sm border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all"
+                    value={unitType.area}
+                    onChange={handleOnchange}
+                    placeholder="Nhập khu vực"
+                  />
+
+                </div>
+
+                {/* Số người ở Field - Second Instance */}
+                <div className="flex flex-col">
+                  <label className="font-semibold text-md mb-2">Buildings Option:</label>
+                  <input
+                    type="text"
+                    name="buildingsOption"
+                    className="w-full bg-gray-100 text-gray-700 py-2 px-4 rounded-lg shadow-sm border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all"
+                    value={unitType.buildingsOption}
+                    onChange={handleOnchange}
+
+                  />
+
+                </div>
               </div>
 
 
             </div>
 
             {/* Right column */}
-            <div className="space-y-4">
+            <div className="space-y-2">
               <label className="font-semibold text-gray-700 mb-2 text-lg tracking-wide ">Ảnh phòng:</label>
               <div className="flex items-center space-x-4 w-full">
                 <label
@@ -202,19 +228,33 @@ const UpdateResortUnitTypeModal = ({ onClose, selectedUnitType, flag }) => {
                 />
               </div>
 
-              {picture.length > 0 && (
-                <div className="grid grid-cols-6 gap-4 mt-4">
-                  {picture.map((image, index) => (
-                    <div key={index} className="relative">
-                      <img
-                        src={image}
-                        alt={`Room ${index + 1}`}
-                        className="w-full h-24 object-cover border rounded-lg"
-                      />
-                    </div>
-                  ))}
-                </div>
-              )}
+              <div className='min-h-44 py-2'>
+                {picture.length > 0 && (
+                  <div className="flex justify-center items-center mt-6">
+                    {picture.map((image, index) => (
+                      <div key={index} className="relative">
+                        <img
+                          src={image}
+                          alt={`Room ${index + 1}`}
+                          className="w-full h-24 object-cover border rounded-lg"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+              <div className="flex flex-col">
+                <label className="font-semibold text-md mb-2">View:</label>
+                <input
+                  type="text"
+                  name="view"
+                  className="w-full bg-gray-100 text-gray-700 py-2 px-4 rounded-lg shadow-sm border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all"
+                  value={unitType.view}
+                  onChange={handleOnchange}
+                  placeholder="View"
+                />
+
+              </div>
             </div>
           </div>
 
@@ -312,8 +352,6 @@ const UpdateResortUnitTypeModal = ({ onClose, selectedUnitType, flag }) => {
                 ))}
               </select>
             </div>
-
-
           </div>
 
           <div className='grid grid-cols-2 gap-4 mt-4 p-6'>
@@ -400,7 +438,7 @@ const UpdateResortUnitTypeModal = ({ onClose, selectedUnitType, flag }) => {
                 className="bg-gray-50px-4 py-2 rounded-lg hover:text-blue-700"
                 onClick={handleAddAmenity}
               >
-               <FaPlusCircle size={22} color="#3366CC"/>
+                <FaPlusCircle size={22} color="#3366CC" />
               </button>
             </div>
 
@@ -423,25 +461,46 @@ const UpdateResortUnitTypeModal = ({ onClose, selectedUnitType, flag }) => {
 
           <div className="flex justify-end space-x-4 py-4 mb-2 px-8">
             <button
-              className={`bg-white text-red-500 border-red-500 px-12 py-2 rounded-lg border border-transparent transition duration-300 
-              hover:text-white hover:bg-red-500  focus:outline-none`}
+              className="bg-gradient-to-r gap-2 border border-red-400 text-red-500 py-2 px-8 pr-10 rounded-xl shadow-md flex items-center justify-between cursor-pointer transition duration-300 ease-in-out transform hover:from-red-500 hover:to-red-300 hover:text-white hover:scale-105 focus:outline-none"
               onClick={onClose}
             >
               Hủy bỏ
             </button>
             <button
-              type='button'
-              className={`bg-green-500 text-white px-12 py-2 rounded-lg border-2 border-transparent transition duration-300 
-              hover:bg-transparent hover:text-green-500 hover:border-green-500 focus:outline-none`}
+              type="button"
+              className="bg-gradient-to-r gap-2 from-green-400 to-green-600 border text-gray-560 py-2 px-8 pr-10 rounded-xl shadow-md flex items-center justify-between cursor-pointer transition duration-300 ease-in-out transform hover:from-green-500 hover:to-green-300 hover:scale-105 text-white focus:outline-none"
               onClick={handleUpdate}
+              disabled={loading} // Optionally disable the button while loading
             >
-              Cập nhật
+              {loading ? (
+                <>
+                  {/* Spinner */}
+                  <svg
+                    className="animate-spin h-5 w-5 mr-3"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <circle className="opacity-25" cx="12" cy="12" r="10" strokeWidth="4"></circle>
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8v8H4z"
+                    ></path>
+                  </svg>
+                  Đợi trong giây lát...
+                </>
+              ) : (
+                "Cập nhật"
+              )}
             </button>
+
           </div>
         </div>
 
-      </div>)}
-      {loading && (<LoadingWaitingComponent />)}
+      </div>
+      {/* {loading && (<LoadingWaitingComponent />)} */}
     </div>
   )
 }

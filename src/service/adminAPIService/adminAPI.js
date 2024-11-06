@@ -22,6 +22,26 @@ const getAllUser = async (
   }
 };
 
+const getAllUserForCount = async (
+ 
+ 
+) => {
+  try {
+    // Passing query params for pagination, filter, and search
+    return await axiosConfig.get(`admin/users`, {
+      params: {
+        pageNo : 0,
+        pageSize : 200,
+        roleId : "", // Filter by role
+        userName : "", // Search by username
+      },
+    });
+  } catch (error) {
+    console.error("Get all user error:", error);
+    return error;
+  }
+};
+
 const createUser = async (data) => {
   try {
     return await axiosConfig.post(`admin/users`, data);
@@ -100,4 +120,5 @@ export {
   getAllTimeshareCompanyAccount,
   createTimeshareCompany,
   updateTimeshareCompany,
+  getAllUserForCount
 };

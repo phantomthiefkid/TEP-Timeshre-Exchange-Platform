@@ -7,22 +7,23 @@ import {
     FaPlus,
     FaSearch
 } from "react-icons/fa";
-import { FaArrowsRotate, FaEllipsisVertical } from "react-icons/fa6";
+import { FaArrowsRotate } from "react-icons/fa6";
 import { getAllRentalPosting, getRentalPostingById } from "../../service/systemStaffService/systemStaffAPI";
 import DetailRentalList from "../../components/Modal/systemstaff/detailRentalList";
 import { Link } from "react-router-dom";
-import Loading from "../../components/LoadingComponent/loading"
 import SpinnerWaiting from "../../components/LoadingComponent/spinnerWaiting";
+import { DocumentIcon } from "@heroicons/react/solid";
 const ValuationList = () => {
     const [filterStatus, setFilterStatus] = useState("");
     const [rentalPostings, setRentalPostings] = useState([]);
     const [openDetailModal, setOpenDetailModal] = useState(false);
     const [selectPosting, setSelectPosting] = useState();
     const [loading, setLoading] = useState(true);
+    const [flag, setFlag] = useState(false);
     const [page, setPage] = useState(0);
-    const [size, setSize] = useState(10);
+    const [size, setSize] = useState(8);
     const [totalPages, setTotalPages] = useState(1)
-    const [resortName, setResortName] = useState('');
+    const [resortName, setResortName] = useState("");
     const fetchAllRentalPostings = async () => {
         try {
             let data = await getAllRentalPosting(page, size, resortName);
@@ -30,6 +31,7 @@ const ValuationList = () => {
                 setLoading(false)
                 setRentalPostings(data.data.content)
                 setTotalPages(data.data.totalPages);
+                console.log(data.data)
             }
         } catch (error) {
             throw error
@@ -67,24 +69,38 @@ const ValuationList = () => {
     }, [page, resortName])
 
 
-    const transactions = [
-        {
-            name: "Wilson Rhiel Madsen",
-            checkin_date: "08 Sep 2024 ",
-            checkout_date: "02 Sep 2024 ",
-            amount: "$66.00",
-            status: "Từ chối",
-            statusColor: "bg-red-100 text-red-500",
-            image: "https://placehold.co/32x32",
-            postId: "Profile picture of Wilson Rhiel Madsen",
+    const getStatusStyles = (status) => {
+        switch (status) {
+          case "PendingApproval":
+            return { label: "Đang chờ", style: "bg-blue-100 text-blue-500", styleDot: "bg-blue-500" };
+          case "Processing":
+            return { label: "Đã duyệt", style: "bg-green-100 text-green-500", styleDot: "bg-green-500" };
+          case "AwaitingConfirmation":
+            return {
+              label: "Chờ định giá",
+              style: "bg-orange-100 text-orange-500",
+              styleDot: "bg-orange-500"
+            };
+          case "PendingPricing":
+            return {
+              label: "Chờ xác nhận giá",
+              style: "bg-orange-100 text-orange-500",
+              styleDot: "bg-orange-500"
+            };
+          case "Closed":
+            return {
+              label: "Từ chối", style: "bg-yellow-100 text-yellow-500",
+              styleDot: "bg-yellow-500"
+            };
+          case "Expired":
+            return {
+              label: "Hết hạn", style: "bg-red-100 text-red-500",
+              styleDot: "bg-red-500"
+            };
+          default:
+            return { label: "Không xác định", style: "bg-gray-100 text-gray-500", styleDot: "bg-gray-500" };
         }
-    ];
-
-    const filteredTransactions = filterStatus
-        ? transactions.filter((transaction) => transaction.status === filterStatus)
-        : transactions;
-
-
+      }
 
     if (loading) {
         return (<SpinnerWaiting/>)
@@ -95,7 +111,7 @@ const ValuationList = () => {
             <Toaster position="top-right" reverseOrder={false} />
             <div className="container mx-auto p-4 bg-white rounded-xl shadow-xl">
                 <div className="py-4 p-6 space-y-2">
-                    <h1 className="text-4xl font-bold">Danh sách định giá</h1>
+                    <h1 className="text-4xl font-bold text-gray-700">Danh sách định giá</h1>
                     <h3 className="text-xl text-gray-500">
                         Quản lí danh sách định giá ở đây.
                     </h3>
@@ -175,14 +191,15 @@ const ValuationList = () => {
                             <th className="p-4 text-left ml-3">Tên resort</th>
                             <th className="p-4 text-left">Ngày nhận phòng</th>
                             <th className="p-4 text-left">Ngày trả phòng</th>
-                            <th className="p-4 text-left">Giá tiền</th>
+                            <th className="p-4 text-left">Giá mỗi đêm</th>
+                            <th className="p-4 text-left">Tổng tiền</th>
                             <th className="p-4 text-left">Trạng thái</th>
                             <th className="p-4 text-left"></th>
                         </tr>
                     </thead>
                     <tbody>
                         {rentalPostings && rentalPostings.map((posting, index) => (
-                            <tr key={index} className="border-b border-gray-200">
+                            <tr key={index} className="border-b border-gray-200 hover:bg-slate-100">
                                 <td className="p-4 flex items-center w-72">
                                     <img
                                         src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/412883158.jpg?k=a220ece8f04054da35466bd13ee87342354cc18122b73eb0fbdcfef850115325&o=&hp=1"
@@ -196,23 +213,24 @@ const ValuationList = () => {
 
                                 <td className="p-4">{posting.checkinDate}</td>
                                 <td className="p-4">{posting.checkoutDate}</td>
-                                <td className="p-4">{posting.pricePerNights}</td>
+                                <td className="p-4">{posting.pricePerNights} VND</td>
+                                <td className="p-4">{posting.totalPrice} VND</td>
                                 <td className="p-4">
                                     <span
-                                        className={`flex items-center py-1 px-2 rounded-full w-36 bg-red-100 text-red-500`}
+                                        className={`flex items-center hover:scale-105 transition-all duration-200 py-1 px-2 rounded-full w-36 ${getStatusStyles(posting.status).style}`}
                                     >
                                         <FaDotCircle className="mr-2" />
-                                        {posting.status}
+                                        {getStatusStyles(posting.status).label}
                                     </span>
                                 </td>
                                 <td className="p-4">
-                                    <button onClick={() => handleOpenDetailModal(posting.rentalPostingId)}><FaEllipsisVertical /></button>
+                                    <button onClick={() => handleOpenDetailModal(posting.rentalPostingId)}><DocumentIcon className="w-6 hover:scale-110" color="gray"/></button>
                                 </td>
                             </tr>
                         ))}
                     </tbody>
                 </table>
-                {openDetailModal && <DetailRentalList isOpen={openDetailModal} onClose={() => setOpenDetailModal(false)} postingId={selectPosting} />}
+                {openDetailModal && <DetailRentalList isOpen={openDetailModal} onClose={() => setOpenDetailModal(false)} postingId={selectPosting} flag={() => setFlag(!flag)}/>}
                 {/* Pagination */}
                 {
                     rentalPostings && rentalPostings.length > 0 ? (

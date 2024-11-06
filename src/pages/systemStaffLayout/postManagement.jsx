@@ -44,9 +44,6 @@ const PostManagement = () => {
       console.log(data.data)
       setOpenDetailModal(true);
     }
-
-
-
   }
 
   const handleSearch = (e) => {
