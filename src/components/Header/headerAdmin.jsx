@@ -51,7 +51,7 @@ const HeaderAdmin = () => {
           </div>
           {/* Avatar */}
           <img
-            src="https://scontent.fsgn24-2.fna.fbcdn.net/v/t39.30808-6/457790295_1947970998949022_3066255129954259156_n.jpg?_nc_cat=108&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=jEeocNqmB_cQ7kNvgFG2GAo&_nc_ht=scontent.fsgn24-2.fna&_nc_gid=AYsYSfR5qtCYt43Z5wL6smV&oh=00_AYCMvj7CdMZnxlF8thje_1jF3ncfSLcpf54nwMrKh87Oow&oe=6701B359"
+            src="https://scontent.fsgn2-9.fna.fbcdn.net/v/t39.30808-6/453487820_1922600311486091_4189476110642682886_n.jpg?_nc_cat=103&ccb=1-7&_nc_sid=a5f93a&_nc_ohc=D_-yzjvsClsQ7kNvgG2ZjZ-&_nc_zt=23&_nc_ht=scontent.fsgn2-9.fna&_nc_gid=AjICefPScxV7vJ2ebSNG6Xd&oh=00_AYDVjktdpn49fSv8hQHfLlGKhdz-q377YX6taJ0uuL4LQg&oe=6728FBEC"
             alt="Admin Avatar"
             className="w-16 h-16 rounded-full border-2 border-gray-300"
           />

@@ -41,7 +41,7 @@ const Recommand = () => {
       location: "Sapa, Việt Nam",
       price: "2300000",
       image:
-        "https://cf.bstatic.com/xdata/images/hotel/max1280x900/36682884.jpg?k=aecf39ae38dd9cfffbb69b50c6507a68ffcb7c55181e234c18c96c64d0e2bdbb&o=&hp=1",
+        "https://cf2.bstatic.com/xdata/images/hotel/max1024x768/400525888.jpg?k=91e866a5a2c93538f2a4c635c8d5f2772ae269a5249aad32135879c1ff8f3347&o=&hp=1",
     },
     {
       name: "Sunflower",
@@ -84,11 +84,15 @@ const Recommand = () => {
           {resorts.map((resort, index) => (
             <SwiperSlide key={index} className="relative py-6 px-5">
               <div className="bg-white h-h-recommend-card border border-solid border-gray-300 min-h-[400px] w-w-recommend-img shadow-lg hover:shadow-xl rounded-lg transition-shadow duration-300 ease-in-out overflow-visible">
-                <img
-                  src={resort.image}
-                  alt={resort.name}
-                  className="w-w-recommend-img rounded-lg h-h-recommend-img object-cover"
-                />
+                <div className="relative w-w-recommend-img h-h-recommend-img rounded-lg overflow-hidden">
+                  <img
+                    src={resort.image}
+                    alt={resort.name}
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-black opacity-0 hover:opacity-30 transition-opacity duration-300 rounded-lg"></div>
+                </div>
+
                 <div className="p-4">
                   <h3 className="text-xl font-semibold">{resort.name}</h3>
                   <p className="text-gray-500 py-3">{resort.location}</p>

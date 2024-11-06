@@ -6,10 +6,10 @@ const Utility = () => {
             <div className='border-b-2 pb-14'>
                 <h2 className='text-5xl w-1/2 font-medium text-custom-blue-text'>Tận hưởng trọn vẹn kì nghỉ với nhiều tiện ích đa dạng.</h2>
             </div>
-            <div className='border-b-2 mt-4 py-6 flex flex-col lg:flex-row'>
+            <div className='border-b-2 mt-4 py-6 flex flex-col lg:flex-row hover:scale-105 duration-500'>
                 <div className='lg:w-1/3 w-full'>
                     <img
-                        className='w-w-utility-image h-h-utility-image lg:w-full lg:h-auto object-cover'
+                        className='w-w-utility-image h-h-utility-image lg:w-full lg:h-auto object-cover hover:opacity-70 duration-500 transition-opacity'
                         src='https://noithatmanhhe.vn/media/24624/19-he-tu-bep-chu-l-dep.jpg?width=700&height=482.53333333333336&rmode=boxpad'
                         alt='outdoor pool'
                     />
@@ -24,10 +24,10 @@ const Utility = () => {
                     </p>
                 </div>
             </div>
-            <div className='border-b-2 mt-4 py-6 flex flex-col lg:flex-row'>
-                <div className='lg:w-1/3 w-full'>
+            <div className='border-b-2 mt-4 py-6 flex flex-col lg:flex-row hover:scale-105 duration-500'>
+                <div className='lg:w-1/3 w-full '>
                     <img
-                        className='w-w-utility-image h-h-utility-image lg:w-full lg:h-auto object-cover'
+                        className='w-w-utility-image h-h-utility-image lg:w-full lg:h-auto object-cover hover:opacity-70 duration-500 transition-opacity'
                         src='https://hanteco.vn/hinhanh/tintuc/ngay-ngat-voi-nhung-ngoi-nha-so-huu-be-boi-ngoai-troi-cuc-dep-2.jpg'
                         alt='outdoor pool'
                     />
@@ -43,10 +43,10 @@ const Utility = () => {
                 </div>
             </div>
 
-            <div className='border-b-2 mt-4 py-6 flex flex-col lg:flex-row'>
+            <div className='border-b-2 mt-4 py-6 flex flex-col lg:flex-row hover:scale-105 duration-500'>
                 <div className='lg:w-1/3 w-full'>
                     <img
-                        className='w-w-utility-image h-h-utility-image lg:w-full lg:h-auto object-cover'
+                        className='w-w-utility-image h-h-utility-image lg:w-full lg:h-auto object-cover hover:opacity-70 duration-500 transition-opacity'
                         src='https://static.vinwonders.com/production/nha-hang-nha-trang-topbanner.jpg'
                         alt='outdoor pool'
                     />

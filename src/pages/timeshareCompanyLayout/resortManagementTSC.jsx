@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import Header from "../../components/Header/headerOtherRole";
 import CountUp from "react-countup";
 import {
   DocumentIcon,
@@ -9,6 +8,7 @@ import {
 import { getAllResort } from "../../service/tsCompanyService/tsCompanyAPI";
 import Loading from "../../components/LoadingComponent/loading";
 import { Link } from "react-router-dom";
+import SpinnerWaiting from "../../components/LoadingComponent/spinnerWaiting";
 
 const ResortManagementTSC = () => {
   const [allResort, setAllResort] = useState([]);
@@ -57,7 +57,7 @@ const ResortManagementTSC = () => {
   }, [page, resortName]);
 
   if (loading) {
-    return <Loading />;
+    return <SpinnerWaiting />;
   }
 
   return (
@@ -88,7 +88,7 @@ const ResortManagementTSC = () => {
 
           {/* Add New User */}
           <Link to={`/timesharecompany/createresort`}>
-            <button className="px-6 flex items-center gap-4 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-500">
+            <button className="bg-gradient-to-r from-blue-300 to-blue-400 border border-blue-300 text-gray-560 py-2 px-4 pr-10 rounded-xl shadow-md flex items-center justify-between cursor-pointer transition duration-300 ease-in-out transform hover:from-blue-400 hover:to-blue-300 hover:border-blue-500 focus:outline-none gap-4">
               <PlusIcon className="w-7 h-7" />
               Tạo mới resort
             </button>

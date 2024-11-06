@@ -6,7 +6,7 @@ import { createResortByTSC, createResortUnitType } from '../../../service/tsComp
 import { useDispatch } from "react-redux";
 import { setResortId } from "../../../redux/ResortSlice/Resort";
 import { toast, Toaster } from 'react-hot-toast';
-import Loading from '../../../components/LoadingComponent/loading';
+import SpinnerWaiting from '../../../components/LoadingComponent/spinnerWaiting';
 
 const CreateResort = () => {
   const [step, setStep] = useState(1); // Quản lý bước hiện tại
@@ -53,7 +53,7 @@ const CreateResort = () => {
       let data = await createResortByTSC(formData)
       
       if (data.status === 200) {
-        toast.success("Tạo mới thành công. Vui lòng nhập loại phòng!", { duration: 2000 });
+        toast.success("Tạo mới thành công. Vui lòng nhập loại phòng!", { duration: 4000 });
         setStep(3)
         const resortId = data.data.id;
         dispatch(setResortId(resortId)); 
@@ -74,7 +74,7 @@ const CreateResort = () => {
   };
 
   if (loading) {
-    return (<Loading />)
+    return (<SpinnerWaiting/>)
   }
 
   return (

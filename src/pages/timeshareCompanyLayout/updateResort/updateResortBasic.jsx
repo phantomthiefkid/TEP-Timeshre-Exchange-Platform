@@ -4,6 +4,7 @@ import { toast, Toaster } from 'react-hot-toast';
 import { FaCamera, FaUpload } from 'react-icons/fa'
 import { useParams } from 'react-router-dom'
 import Loading from '../../../components/LoadingComponent/loading';
+import SpinnerWaiting from '../../../components/LoadingComponent/spinnerWaiting';
 import { getResortById, updateResortBasic } from '../../../service/tsCompanyService/tsCompanyAPI';
 
 const UpdateResortBasic = () => {
@@ -90,9 +91,9 @@ const UpdateResortBasic = () => {
   };
 
   if (loading) {
-    return <Loading />
+    return (<SpinnerWaiting/>)
   }
-  console.log(resort)
+ 
 
   return (
     <div className='border rounded'>

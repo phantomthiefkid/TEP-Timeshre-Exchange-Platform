@@ -12,6 +12,7 @@ import toast, { Toaster } from "react-hot-toast";
 import CreateTimeshareStaffModal from "../../components/Modal/createTimeshareStaffModal";
 import DetailTimeshareStaffModal from "../../components/Modal/detailTimeshareStaffModal";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa6";
+import SpinnerWaiting from "../../components/LoadingComponent/spinnerWaiting";
 
 const employeeManagement = () => {
   const [allTimeshareStaff, setAllTimeshareStaff] = useState([]);
@@ -106,6 +107,10 @@ const employeeManagement = () => {
     fetchAllResorts();
   }, [page, StaffName]);
 
+  if (loading) {
+    return (<SpinnerWaiting/>)
+  }
+
   return (
     <>
       <Toaster position="top-right" reverseOrder={false} />
@@ -138,7 +143,7 @@ const employeeManagement = () => {
           {/* Add New User */}
           <button
             onClick={() => setIsModalOpen(true)}
-            className="px-6 flex items-center gap-4 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-500"
+            className="bg-gradient-to-r from-blue-300 to-blue-400 border border-blue-300 text-gray-560 py-2 px-4 pr-10 rounded-xl shadow-md flex items-center justify-between cursor-pointer transition duration-300 ease-in-out transform hover:from-blue-400 hover:to-blue-300 hover:border-blue-500 focus:outline-none gap-4"
           >
             <PlusIcon className="w-7 h-7" />
             Thêm mới nhân viên
