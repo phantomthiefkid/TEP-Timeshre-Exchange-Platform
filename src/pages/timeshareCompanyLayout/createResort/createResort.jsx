@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import CreateResortBasic from './CreateResortBasic';
-import CreateResortAmenity from './CreateResortAmenity';
-import CreateUnitType from './CreateUnitType';
+import CreateResortBasic from './createResortBasic.jsx';
+import CreateResortAmenity from './createResortAmenity.jsx';
+import CreateUnitType from './createUnitType.jsx';
 import { createResortByTSC, createResortUnitType } from '../../../service/tsCompanyService/tsCompanyAPI';
 import { useDispatch } from "react-redux";
 import { setResortId } from "../../../redux/ResortSlice/Resort";

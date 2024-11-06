@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import UpdateResortBasic from './UpdateResortBasic';
-import UpdateResortAmenity from './UpdateResortAmenity';
-import UpdateResortUnitType from './UpdateResortUnitType';
+import UpdateResortBasic from './updateResortBasic.jsx'
+import UpdateResortAmenity from './updateResortAmenity.jsx';
+import UpdateResortUnitType from './updateResortUnitType.jsx';
 import { useParams } from 'react-router-dom';
 import { getResortById } from '../../../service/tsCompanyService/tsCompanyAPI';
 
