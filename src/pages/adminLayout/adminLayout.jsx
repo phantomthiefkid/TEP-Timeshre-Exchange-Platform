@@ -5,7 +5,7 @@ import SidebarAdmin from "../../components/Sidebar/sidebarAdmin";
 
 const AdminLayout = () => {
   return (
-    <div className="flex h-screen">
+    <div className="flex h-screen  overflow-hidden">
       <SidebarAdmin className="fixed left-0 top-0 h-full" />
 
       <div className="flex-grow  bg-white flex flex-col">

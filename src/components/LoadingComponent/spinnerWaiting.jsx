@@ -1,5 +1,5 @@
 import React from 'react'
-import { ThreeCircles } from 'react-loader-spinner'
+import { DNA } from 'react-loader-spinner'
 
 const SpinnerWaiting = () => {
     return (
@@ -8,14 +8,14 @@ const SpinnerWaiting = () => {
                 display: 'flex',
                 justifyContent: 'center',
                 alignItems: 'center',
-                height: '100vh',
+                height: '90vh',
             }}
         >
-            <ThreeCircles
-                height="80"
-                width="80"
+             <DNA
+                height="100"
+                width="100"
                 radius="9"
-                color="#4EB09B"
+                color="#649CFD"
                 ariaLabel="loading"
             />
         </div>

@@ -9,7 +9,7 @@ const CreateResortBasic = ({ onNext, onUpdateData, formData }) => {
     maxPrice: formData.maxPrice || 0,
     description: formData.description || '',
     address: formData.address || '',
-    roomImages: [], // Lưu ảnh phòng tải lên
+    logo: "", // Lưu ảnh phòng tải lên
   });
   const [errors, setErrors] = useState({});
   // Hàm xử lý thay đổi dữ liệu trong các input
@@ -59,13 +59,17 @@ const CreateResortBasic = ({ onNext, onUpdateData, formData }) => {
   };
   // Hàm xử lý upload ảnh phòng
   const handleFileUpload = (e) => {
-    const files = Array.from(e.target.files);
-    const images = files.map((file) => URL.createObjectURL(file)); // Tạo URL tạm cho ảnh
-    setResortData((prevData) => ({
-      ...prevData,
-      roomImages: [...prevData.roomImages, ...images],
-    }));
+    const file = e.target.files[0];
+    if (file) {
+      const imageUrl = URL.createObjectURL(file); // Tạo URL tạm cho ảnh
+      setResortData((prevData) => ({
+        ...prevData,
+        logo: imageUrl, // Lưu URL thành chuỗi thay vì mảng
+      }));
+    }
   };
+
+
 
   return (
     <div className="space-y-2 px-4">
@@ -75,16 +79,19 @@ const CreateResortBasic = ({ onNext, onUpdateData, formData }) => {
       <div className="relative">
 
 
-        <div className="grid grid-cols-2 gap-6 px-8 py-4 bg-white">
+        <div className="grid grid-cols-2 gap-6 px-4 py-4 p-4 bg-white shadow-lg">
 
           {/* Column 1 */}
-          <div className="space-y-4">
-            <div className="border p-10 shadow-sm bg-white space-y-4">
-              <h1 className="text-2xl font-bold text-gray-600 tracking-wide font-serif mb-2">Thông tin cơ bản</h1>
-              <div className='grid grid-cols-1 space-y-2'>
-                <label className="font-semibold text-gray-700 mb-2 text-lg tracking-wide">Tên Resort*</label>
+          <div className="space-y-8  my-6">
+            {/* Resort Information Section */}
+            <div className="p-6 rounded-lg bg-white space-y-6">
+              <h1 className="text-2xl font-bold text-gray-700 tracking-wide font-serif mb-4">Thông tin cơ bản</h1>
+
+              {/* Resort Name */}
+              <div className="space-y-2">
+                <label className="font-semibold text-gray-700 text-lg tracking-wide">Tên Resort*</label>
                 <input
-                 className="border-b bg-slate-50 p-4 focus:outline-none focus:border-b-2 focus:border-blue-500 transition-all"
+                  className="border border-gray-300 bg-gray-50 p-3 rounded-lg w-full focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-300 transition-all"
                   type="text"
                   name="resortName"
                   value={resortData.resortName}
@@ -94,16 +101,16 @@ const CreateResortBasic = ({ onNext, onUpdateData, formData }) => {
                 {errors.resortName && <p className="text-red-500 text-sm mt-1">{errors.resortName}</p>}
               </div>
 
-              {/* Giá min/max */}
+              {/* Price Range */}
               <div className="space-y-4">
-                <label className="font-semibold text-gray-700 mb-2 text-lg tracking-wide">Khoảng giá (VND)*</label>
-                <div className="grid grid-cols-5 items-center gap-4">
+                <label className="font-semibold text-gray-700 text-lg tracking-wide">Khoảng giá (VND)*</label>
+                <div className="grid grid-cols-5 gap-4 items-center">
 
-                  {/* Từ giá tối thiểu */}
+                  {/* Min Price */}
                   <div className="relative col-span-2">
-                  <span className="absolute left-3 top-2 text-gray-500">VND:</span>
+                    <span className="absolute left-3 top-5 transform -translate-y-1/2 text-gray-500">VND:</span>
                     <input
-                       className="pl-14 bg-gray-50 pr-4 py-2 border border-gray-300 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200 shadow-sm"
+                      className="pl-16 pr-4 py-2 border border-gray-300 rounded-lg w-full bg-white focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-300 shadow transition-all"
                       type="number"
                       name="minPrice"
                       value={resortData.minPrice}
@@ -111,19 +118,18 @@ const CreateResortBasic = ({ onNext, onUpdateData, formData }) => {
                       placeholder="0"
                     />
                     {errors.minPrice && <p className="text-red-500 text-sm mt-1">{errors.minPrice}</p>}
-                   
                   </div>
 
-                  {/* Chữ "Đến" ở giữa */}
+                  {/* "Đến" Text */}
                   <div className="text-center col-span-1 text-sm font-semibold text-gray-600">
                     Đến
                   </div>
 
-                  {/* Đến giá tối đa */}
+                  {/* Max Price */}
                   <div className="relative col-span-2">
-                  <span className="absolute left-3 top-2 text-gray-500">VND:</span>
+                    <span className="absolute left-3 top-5 transform -translate-y-1/2 text-gray-500">VND:</span>
                     <input
-                       className="pl-14 bg-gray-50 pr-4 py-2 border border-gray-300 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200 shadow-sm"
+                      className="pl-16 pr-4 py-2 border border-gray-300 rounded-lg w-full bg-white focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-300 shadow transition-all"
                       type="number"
                       name="maxPrice"
                       value={resortData.maxPrice}
@@ -131,18 +137,15 @@ const CreateResortBasic = ({ onNext, onUpdateData, formData }) => {
                       placeholder="0"
                     />
                     {errors.maxPrice && <p className="text-red-500 text-sm mt-1">{errors.maxPrice}</p>}
-                    
                   </div>
                 </div>
               </div>
 
-
-
-              {/* Mô tả */}
-              <div className='grid grid-cols-1 space-y-2'>
-                <label className='font-semibold text-gray-700 mb-2 text-lg tracking-wide'>Mô tả</label>
+              {/* Description */}
+              <div className="space-y-2">
+                <label className="font-semibold text-gray-700 text-lg tracking-wide">Mô tả</label>
                 <textarea
-                   className="border-b bg-slate-50 border-gray-600 p-4 focus:outline-none focus:border-b-2 focus:border-blue-500 transition-all"
+                  className="border border-gray-300 bg-gray-50 p-4 rounded-lg w-full focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-300 transition-all"
                   name="description"
                   value={resortData.description}
                   onChange={handleChange}
@@ -153,16 +156,16 @@ const CreateResortBasic = ({ onNext, onUpdateData, formData }) => {
               </div>
             </div>
 
-            {/* Địa chỉ */}
-            <div className='border p-6'>
-              <div>
-                <label className='font-semibold text-gray-700 mb-2 text-lg tracking-wide'>Địa chỉ*</label>
+            {/* Address Section */}
+            <div className="p-4 shadow-lg rounded-lg bg-white space-y-6">
+              <div className="space-y-2">
+                <label className="font-semibold text-gray-700 text-lg tracking-wide">Địa chỉ*</label>
                 <div className="relative">
-                  <span className="absolute left-3 top-4 text-gray-400">
-                    <LocationMarkerIcon className='w-6 text-red-500' />
+                  <span className="absolute left-3 top-6 transform -translate-y-1/2 text-red-500">
+                    <LocationMarkerIcon className="w-5 h-5" />
                   </span>
                   <input
-                    className="border-b-4 bg-slate-50 p-4 pl-10 focus:outline-none focus:border-b-2 focus:border-blue-500 transition-all w-full"
+                    className="pl-10 pr-4 py-3 border border-gray-300 rounded-lg w-full bg-gray-50 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-300 transition-all"
                     type="text"
                     name="address"
                     value={resortData.address}
@@ -171,48 +174,28 @@ const CreateResortBasic = ({ onNext, onUpdateData, formData }) => {
                   />
                   {errors.address && <p className="text-red-500 text-sm mt-1">{errors.address}</p>}
                 </div>
-
               </div>
 
-              {/* Vị trí trên bản đồ */}
-              <div className='py-4'>
+              {/* Map Display */}
+              <div className="mt-4">
                 <img
-                  src="https://thanhnien.mediacdn.vn/Uploaded/trungnq/2022_10_29/1-2829.jpg" // Ảnh bản đồ tạm thời (hardcoded)
+                  src="https://thanhnien.mediacdn.vn/Uploaded/trungnq/2022_10_29/1-2829.jpg" // Temporary map image
                   alt="Map"
-                  className="w-full h-60 object-cover border rounded-lg"
+                  className="w-full h-60 object-cover border rounded-lg shadow-lg"
                 />
               </div>
             </div>
           </div>
 
+
           {/* Column 2 */}
           <div className="space-y-4">
-            {/* Upload logo */}
-            <div>
-              <label className="block mb-2 font-medium">Logo:</label>
-              <input
-                type="file"
-                accept="image/*"
-                className="border border-gray-300 rounded-md p-2 w-full focus:ring-2 focus:ring-blue-400 focus:outline-none"
-                onChange={handleLogoUpload}
-              />
-            </div>
 
-            {/* Display uploaded logo */}
-            {resortData.logo && (
-              <div className="mt-4">
-                <img
-                  src={resortData.logo}
-                  alt="Resort Logo"
-                  className="w-32 h-32 object-cover border rounded-lg"
-                />
-              </div>
-            )}
 
             {/* Upload room images */}
             {/* Upload room images with icon button */}
             <div className="space-y-4">
-              <label className="block mb-2 font-medium">Ảnh phòng:</label>
+              <label className="block mb-2 font-medium">Logo resort</label>
 
               {/* Upload button with icon */}
               <div className="flex items-center space-x-4 w-full">
@@ -237,19 +220,23 @@ const CreateResortBasic = ({ onNext, onUpdateData, formData }) => {
               </div>
 
               {/* Display uploaded images */}
-              {resortData.roomImages.length > 0 && (
-                <div className="grid grid-cols-4 gap-4 mt-4">
-                  {resortData.roomImages.map((image, index) => (
-                    <div key={index} className="relative">
-                      <img
-                        src={image}
-                        alt={`Room ${index + 1}`}
-                        className="w-full h-32 object-cover border rounded-lg"
-                      />
+              {resortData.logo && (
+                <div className="flex justify-center items-center mt-4">
+                  <div className="relative flex justify-center items-center">
+                    <div className="p-2 bg-gradient-to-tr from-gray-200 to-gray-400 rounded-full"> {/* Outer Frame */}
+                      <div className="p-1 bg-gradient-to-tr from-blue-300 to-purple-400 rounded-full"> {/* Inner Gradient Frame */}
+                        <img
+                          src={resortData.logo}
+                          alt="Resort Logo"
+                          className="w-32 h-32 object-cover border-4 border-white rounded-full shadow-lg transition-transform duration-300 ease-in-out transform hover:scale-105"
+                        />
+                      </div>
                     </div>
-                  ))}
+                  </div>
                 </div>
               )}
+
+
             </div>
 
           </div>

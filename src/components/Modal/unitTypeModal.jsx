@@ -124,8 +124,8 @@ const UnitTypeModal = ({ isOpen, onClose, onAddRoomType, selectedUnitType, onUpd
     if (!isOpen) return null;
     // console.log(formData)
     return (
-        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center">
-            <div className="bg-white  rounded-lg shadow-lg w-full max-w-5xl">
+        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center z-50">
+            <div className="bg-white  rounded-xl shadow-lg w-full max-w-5xl">
 
                 <div className='bg-gradient-to-r from-blue-900 to-custom-blue-hover-sidebar text-center text-white py-6 rounded-t-xl shadow-lg'>
                     <h3 className="text-3xl font-bold tracking-wide font-serif mb-2">Thêm loại phòng</h3>
@@ -215,6 +215,36 @@ const UnitTypeModal = ({ isOpen, onClose, onAddRoomType, selectedUnitType, onUpd
                                         </div>
                                     </div>
                                 </div>
+
+                                {/* Số người ở Field */}
+                                <div className="flex flex-col">
+                                    <label className="font-semibold text-md mb-2">Khu vực:</label>
+                                    <input
+                                        type="text"
+                                        name="area"
+                                        className="w-full bg-gray-100 text-gray-700 py-2 px-4 rounded-lg shadow-sm border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all"
+                                        value={formData.area}
+                                        onChange={handleChange}
+                                        placeholder="Nhập khu vực"
+                                    />
+
+                                </div>
+
+                                {/* Số người ở Field - Second Instance */}
+                                <div className="flex flex-col">
+                                    <label className="font-semibold text-md mb-2">Buildings Option:</label>
+                                    <input
+                                        type="text"
+                                        name="buildingsOption"
+                                        className="w-full bg-gray-100 text-gray-700 py-2 px-4 rounded-lg shadow-sm border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all"
+                                        value={formData.buildingsOption}
+                                        onChange={handleChange}
+
+                                    />
+
+                                </div>
+
+
                             </div>
 
 
@@ -242,19 +272,35 @@ const UnitTypeModal = ({ isOpen, onClose, onAddRoomType, selectedUnitType, onUpd
                                 />
                             </div>
 
-                            {picture.length > 0 && (
-                                <div className="grid grid-cols-6 gap-4 mt-4">
-                                    {picture.map((image, index) => (
-                                        <div key={index} className="relative">
-                                            <img
-                                                src={image}
-                                                alt={`Room ${index + 1}`}
-                                                className="w-full h-24 object-cover border rounded-lg"
-                                            />
-                                        </div>
-                                    ))}
-                                </div>
-                            )}
+                            <div className='min-h-24'>
+                                {picture.length > 0 && (
+                                    <div className="grid grid-cols-3 gap-4 mt-4">
+                                        {picture.map((image, index) => (
+                                            <div key={index} className="relative">
+                                                <img
+                                                    src={image}
+                                                    alt={`Room ${index + 1}`}
+                                                    className="w-full h-24 object-cover border rounded-lg"
+                                                />
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
+                            <div className="flex flex-col">
+                                <label className="font-semibold text-md mb-2">View:</label>
+                                <input
+                                    type="text"
+                                    name="view"
+                                    className="w-full bg-gray-100 text-gray-700 py-2 px-4 rounded-lg shadow-sm border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all"
+                                    value={formData.view}
+                                    onChange={handleChange}
+                                    placeholder="View"
+                                />
+
+                            </div>
+
+
                         </div>
                     </div>
 
@@ -484,17 +530,17 @@ const UnitTypeModal = ({ isOpen, onClose, onAddRoomType, selectedUnitType, onUpd
                         <div className='flex flex-col mb-4'>
                             <label className="font-semibold text-gray-700 mb-2 text-md tracking-tight">Giá:</label>
                             <div className="relative">
-                            <span className="absolute left-3 top-2 text-gray-500">VND</span>
-                            <input
-                                type="number"
-                                name="price"
-                                className="pl-14 bg-gray-100 pr-4 py-2 border border-gray-300 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200 shadow-sm"
-                                value={formData.price}
-                                onChange={handleChange}
-                                placeholder="Nhập giá"
-                            />
+                                <span className="absolute left-3 top-2 text-gray-500">VND</span>
+                                <input
+                                    type="number"
+                                    name="price"
+                                    className="pl-14 bg-gray-100 pr-4 py-2 border border-gray-300 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200 shadow-sm"
+                                    value={formData.price}
+                                    onChange={handleChange}
+                                    placeholder="Nhập giá"
+                                />
                             </div>
-                            
+
                         </div>
 
 
@@ -548,16 +594,14 @@ const UnitTypeModal = ({ isOpen, onClose, onAddRoomType, selectedUnitType, onUpd
                     {/* Submit and cancel buttons */}
                     <div className="flex justify-end space-x-4 py-4 mb-2 px-8">
                         <button
-                            className={`bg-white text-red-500 border-red-500 px-12 py-2 rounded-lg border border-transparent transition duration-300 
-                            hover:text-white hover:bg-red-500  focus:outline-none`}
+                            className="bg-gradient-to-r gap-2 border border-red-400 text-red-500 py-2 px-8 pr-10 rounded-xl shadow-md flex items-center justify-between cursor-pointer transition duration-300 ease-in-out transform hover:from-red-500 hover:to-red-300 hover:text-white hover:scale-105 focus:outline-none"
                             onClick={onClose}
                         >
                             Hủy bỏ
                         </button>
                         <button
                             type='button'
-                            className={`bg-green-500 text-white px-12 py-2 rounded-lg border-2 border-transparent transition duration-300 
-                            hover:bg-transparent hover:text-green-500 hover:border-green-500 focus:outline-none`}
+                            className="bg-gradient-to-r gap-2 from-green-300 to-green-500 border text-gray-560 py-2 px-8 pr-10 rounded-xl shadow-md flex items-center justify-between cursor-pointer transition duration-300 ease-in-out transform hover:from-green-500 hover:to-green-300 hover:scale-105 hover:text-white focus:outline-none"
                             onClick={handleSubmit}
                         >
                             {selectedUnitType ? 'Cập nhật' : 'Tạo mới'}

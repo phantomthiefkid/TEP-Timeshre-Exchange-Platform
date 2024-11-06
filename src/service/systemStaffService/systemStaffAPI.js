@@ -33,7 +33,30 @@ const acceptNewPriceValuation = async (postingId, newPriceValuation) => {
         })
 
     } catch (error) {
-        console.log(error)
+        return error
+    }
+}
+
+const getAllFeedbackResortListST = async (isReport, pageNo, pageSize, resortId) => {
+    try {
+        return await axiosConfig.get(`system-staff/feedback/resort/${resortId}`,{
+            params: {
+                isReport: isReport,
+                pageNo: pageNo,
+                pageSize: pageSize
+            }
+        })
+
+    } catch (error) {
+        return error
+    }
+}
+
+const deactiveFeedback = async (feedbackId) => {
+    try {
+        return await axiosConfig.put(`system-staff/feedback/deActive/${feedbackId}`);
+
+    } catch (error) {
         return error
     }
 }
@@ -41,5 +64,7 @@ const acceptNewPriceValuation = async (postingId, newPriceValuation) => {
 export {
     getAllRentalPosting,
     getRentalPostingById,
-    acceptNewPriceValuation
+    acceptNewPriceValuation,
+    getAllFeedbackResortListST,
+    deactiveFeedback
 }

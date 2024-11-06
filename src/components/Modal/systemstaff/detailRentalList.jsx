@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { Toaster } from "react-hot-toast";
+import { toast, Toaster } from "react-hot-toast";
 import { FaEdit, FaMap, FaMapMarkerAlt } from "react-icons/fa";
 import { FaPencil, FaXmark } from "react-icons/fa6";
 import { acceptNewPriceValuation } from "../../../service/systemStaffService/systemStaffAPI";
-import SpinnerWaiting from "../../LoadingComponent/spinnerWaiting";
-const DetailRentalList = ({ isOpen, onClose, postingId }) => {
+const DetailRentalList = ({ isOpen, onClose, postingId, flag }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [newPriceValuation, setNewPriceValuation] = useState("");
   const [editFlag, setEditFlag] = useState(false);
@@ -26,14 +25,62 @@ const DetailRentalList = ({ isOpen, onClose, postingId }) => {
         transition: "all 0.3s ease",
       };
 
+  const getStatusStyles = (status) => {
+    switch (status) {
+      case "PendingApproval":
+        return {
+          label: "Đang chờ",
+          style: "bg-blue-100 text-blue-500",
+          styleDot: "bg-blue-500",
+        };
+      case "Processing":
+        return {
+          label: "Đã duyệt",
+          style: "bg-green-100 text-green-500",
+          styleDot: "bg-green-500",
+        };
+      case "AwaitingConfirmation":
+        return {
+          label: "Chờ định giá",
+          style: "bg-orange-100 text-orange-500",
+          styleDot: "bg-orange-500",
+        };
+      case "PendingPricing":
+        return {
+          label: "Chờ xác nhận giá",
+          style: "bg-orange-100 text-orange-500",
+          styleDot: "bg-orange-500",
+        };
+      case "Closed":
+        return {
+          label: "Từ chối",
+          style: "bg-yellow-100 text-yellow-500",
+          styleDot: "bg-yellow-500",
+        };
+      case "Expired":
+        return {
+          label: "Hết hạn",
+          style: "bg-red-100 text-red-500",
+          styleDot: "bg-red-500",
+        };
+      default:
+        return {
+          label: "Không xác định",
+          style: "bg-gray-100 text-gray-500",
+          styleDot: "bg-gray-500",
+        };
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     let data = await acceptNewPriceValuation(
       postingId.rentalPostingId,
       parseFloat(newPriceValuation)
     );
-    if (data) {
-      console.log(data);
+    if (data.status === 200) {
+      flag();
+      toast.success("Định giá thành công!", { duration: 3000 });
     }
   };
 
@@ -55,12 +102,6 @@ const DetailRentalList = ({ isOpen, onClose, postingId }) => {
             Thông tin chi tiết
           </h1>
           <div className="flex items-center">
-            <div className="bg-white border border-gray-300 rounded-xl p-2 mr-2 hover:bg-gray-100 cursor-pointer shadow-sm">
-              <button className="text-gray-500 focus:outline-none flex items-center">
-                <FaEdit size={20} className="mr-2 text-blue-600" />
-                <span>Chỉnh sửa</span>
-              </button>
-            </div>
             <button
               onClick={onClose}
               className="text-white hover:text-gray-300 transition duration-200"
@@ -97,9 +138,17 @@ const DetailRentalList = ({ isOpen, onClose, postingId }) => {
                 </div>
 
                 {/* Nhãn Đang chờ ở góc dưới bên phải với dấu chấm tròn */}
-                <span className="absolute bottom-2 right-2 flex items-center bg-orange-50 px-3 py-1 font-semibold text-orange-300 rounded-full whitespace-nowrap">
-                  <span className="inline-block w-2 h-2 mr-1 bg-orange-300 rounded-full"></span>
-                  Đang chờ
+                <span
+                  className={`absolute bottom-2 right-2 flex items-center px-3 py-1 font-semibold ${
+                    getStatusStyles(postingId.status).style
+                  } rounded-full whitespace-nowrap`}
+                >
+                  <span
+                    className={`inline-block w-2 h-2 mr-1 ${
+                      getStatusStyles(postingId.status).styleDot
+                    } rounded-full`}
+                  ></span>
+                  {getStatusStyles(postingId.status).label}
                 </span>
               </div>
             </div>
@@ -110,7 +159,9 @@ const DetailRentalList = ({ isOpen, onClose, postingId }) => {
               </h2>
               <div className="grid grid-cols-4 gap-4 mb-6 p-2">
                 <p className="text-medium text-gray-500 mr-4">Mã đăng bài: </p>
-                <p className="font-medium">{postingId.rentalPostingId}</p>
+                <p className="font-medium text-left">
+                  {postingId.rentalPostingId}
+                </p>
 
                 <p className="text-medium text-gray-500 mr-4">Đăng bởi: </p>
 
@@ -119,45 +170,127 @@ const DetailRentalList = ({ isOpen, onClose, postingId }) => {
                 <p className="text-medium text-gray-500 mr-4">
                   Ngày nhận phòng:{" "}
                 </p>
-                <p className="font-medium">{postingId.checkinDate}</p>
+                <p className="font-medium text-left">{postingId.checkinDate}</p>
 
                 <p className="text-medium text-gray-500 mr-4">
                   Ngày trả phòng:{" "}
                 </p>
-                <p className="font-medium">{postingId.checkoutDate}</p>
+                <p className="font-medium ">{postingId.checkoutDate}</p>
 
                 <p className="text-medium text-gray-500 mr-4">Giá phòng: </p>
-                <p className="font-medium flex gap-4 items-center flex-col">
+                <p className="font-medium text-left">
                   {postingId.totalPrice} VND{" "}
                 </p>
-                <p>
-                  {editFlag ? (
-                    <input
-                      className="border-2 border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200 shadow-sm"
-                      onChange={(e) => setNewPriceValuation(e.target.value)}
-                      type="text"
-                      name="newPriceValuation"
-                      value={newPriceValuation}
-                      placeholder="Nhập giá"
-                    />
-                  ) : (
-                    <FaEdit
-                      onClick={() => setEditFlag(true)}
-                      size={24}
-                      color="gray"
-                    />
-                  )}
-                </p>
+                {postingId.status === "PendingPricing" && (
+                  <p>
+                    {editFlag ? (
+                      <input
+                        className="border-2 border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200 shadow-sm"
+                        onChange={(e) => setNewPriceValuation(e.target.value)}
+                        type="text"
+                        name="newPriceValuation"
+                        value={newPriceValuation}
+                        placeholder="Nhập giá"
+                      />
+                    ) : (
+                      <FaEdit
+                        onClick={() => setEditFlag(true)}
+                        size={24}
+                        color="gray"
+                      />
+                    )}
+                  </p>
+                )}
               </div>
 
               <div className="mb-4">
                 <h2 className="text-xl text-gray-700 font-semibold mb-3">
                   Mô tả
                 </h2>
-                <p className="text-medium">{postingId.resortDescription}</p>
+                <p className="text-medium text-gray-600">
+                  {postingId.resortDescription}
+                </p>
               </div>
 
-              <div className="bg-gray-100 p-4 rounded-lg shadow-inner mb-4 text-gray-700">
+              <div className="flex flex-col items-center overflow-y-auto p-6 bg-gray-50 rounded-lg shadow-lg">
+                <h2 className="text-2xl font-semibold mb-4 text-gray-700 text-center">
+                  Thông tin phòng
+                </h2>
+                <div className="w-full mb-6">
+                  <img
+                    src="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/2a/9b/0d/b8/nh-t-ng-quan-resort.jpg?w=1200&h=-1&s=1"
+                    alt="Room Thumbnail"
+                    className="w-full h-64 object-cover rounded-lg shadow-md"
+                  />
+                </div>
+
+                {/* Thông tin chi tiết phòng */}
+                <div className="w-full p-4 bg-white rounded-lg shadow-md text-gray-700">
+                  {/* Tiêu đề */}
+                  <h3 className="text-xl font-semibold text-gray-700 mb-4">
+                    Thông tin chi tiết phòng
+                  </h3>
+
+                  {/* Grid thông tin chi tiết */}
+                  <div className="grid grid-cols-2 gap-y-4 gap-x-8 p-4">
+                    <div className="flex items-center">
+                      <p className="font-semibold text-gray-500">Loại phòng:</p>
+                      <p className="ml-2 font-medium">
+                        {postingId.unitType.title}
+                      </p>
+                    </div>
+
+                    <div className="flex items-center">
+                      <p className="font-semibold text-gray-500">Diện tích:</p>
+                      <p className="ml-2 font-medium">
+                        {postingId.unitType.area}
+                      </p>
+                    </div>
+
+                    <div className="flex items-center">
+                      <p className="font-semibold text-gray-500">
+                        Số phòng tắm:
+                      </p>
+                      <p className="ml-2 font-medium">
+                        {postingId.unitType.bathrooms}
+                      </p>
+                    </div>
+
+                    <div className="flex items-center">
+                      <p className="font-semibold text-gray-500">Số giường:</p>
+                      <p className="ml-2 font-medium">
+                        {postingId.unitType.bedsQueen} Queen,{" "}
+                        {postingId.unitType.bedsTwin} Twin
+                      </p>
+                    </div>
+
+                    <div className="flex items-center">
+                      <p className="font-semibold text-gray-500">Bếp:</p>
+                      <p className="ml-2 font-medium">
+                        {postingId.unitType.kitchen}
+                      </p>
+                    </div>
+
+                    <div className="flex items-center">
+                      <p className="font-semibold text-gray-500">
+                        Số khách tối đa:
+                      </p>
+                      <p className="ml-2 font-medium">
+                        {postingId.unitType.sleeps}
+                      </p>
+                    </div>
+                    {/* Mô tả chi tiết */}
+                    <div className="flex items-center col-span-2">
+                      <p className="font-semibold text-gray-500">Mô tả:</p>
+                      <p className="ml-2 font-medium">
+                        {postingId.unitType.description}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-gray-100 p-4 rounded-lg shadow-inner mb-4 text-gray-700 mt-6">
                 <h2 className="text-lg font-semibold mb-3">
                   Các tiện năng và tiện nghi tại chỗ
                 </h2>
@@ -237,14 +370,16 @@ const DetailRentalList = ({ isOpen, onClose, postingId }) => {
               Đóng
             </button>
           </div>
-          <div className="border-t flex justify-end">
-            <button
-              onClick={handleSubmit}
-              className="bg-green-500 text-white px-8 py-2 rounded-xl hover:bg-green-600 transition duration-150"
-            >
-              Xác nhận
-            </button>
-          </div>
+          {editFlag && postingId.status === "PendingPricing" && (
+            <div className="border-t flex justify-end">
+              <button
+                onClick={handleSubmit}
+                className="bg-green-500 text-white px-8 py-2 rounded-xl hover:bg-green-600 transition duration-150"
+              >
+                Xác nhận
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>

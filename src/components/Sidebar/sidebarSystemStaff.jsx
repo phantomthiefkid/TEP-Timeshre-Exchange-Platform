@@ -13,6 +13,7 @@ import {
   FaRegFile,
   FaList,
   FaListOl,
+  FaComment,
 } from "react-icons/fa";
 import { useDispatch } from "react-redux";
 import { setIsLogin, setRoleName } from "../../redux/UserSlice/SignIn";
@@ -108,6 +109,7 @@ const SidebarSystemStaff = () => {
             />
           </div>
         </MenuItem>
+        <MenuItem icon={FaComment} title="Quản lí phản hồi" path="feedbackmng"/>
         <MenuItem icon={FaMoneyBillAlt} title="Thanh toán">
           <div className="space-y-2 ml-4">
             <MenuItem icon={FaUserCheck} title="Người đăng" path="#" />

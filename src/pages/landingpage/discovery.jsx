@@ -38,7 +38,7 @@ const Discovery = ({ onExploreClick }) => {
                     // navigation={true} 
                     // pagination={{ clickable: true }} 
                     autoplay={{
-                        delay: 4000, 
+                        delay: 3000, 
                         disableOnInteraction: false, 
                     }}
                     loop={true} // Lặp lại slider
