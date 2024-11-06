@@ -13,6 +13,7 @@ import {
 import Loading from "../../components/LoadingComponent/loading";
 import { Audio, ThreeCircles } from "react-loader-spinner";
 import SpinnerWaiting from "../../components/LoadingComponent/spinnerWaiting";
+
 const UserManagement = () => {
   const [allUser, setAllUser] = useState([]);
   const [page, setPage] = useState(0);
