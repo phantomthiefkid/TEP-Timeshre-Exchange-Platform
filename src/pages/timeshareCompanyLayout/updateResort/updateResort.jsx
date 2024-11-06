@@ -7,7 +7,7 @@ import { getResortById } from '../../../service/tsCompanyService/tsCompanyAPI';
 
 const UpdateResort = () => {
     const { id } = useParams();
-    const [activeTab, setActiveTab] = useState('basic'); // Default tab
+    const [activeTab, setActiveTab] = useState('basic');
     const [resort, setResort] = useState({})
     const [unitType, setUnitType] = useState([])
     const [flag, setFlag] = useState(false);
