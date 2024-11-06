@@ -163,8 +163,6 @@ const ResortManagementTSC = () => {
                   </td>
                 </tr>
               ))
-            ) : !allResort ? (
-              <Loading />
             ) : (
               <tr>
                 <td colSpan="5" className="p-4 text-center text-gray-500">

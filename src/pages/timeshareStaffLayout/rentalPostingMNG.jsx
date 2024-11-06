@@ -7,16 +7,17 @@ import {
   getAllRentalPosting,
   getRentalPostingById,
 } from "../../service/tsStaffService/tsStaffAPI";
+import SpinnerWaiting from "../../components/LoadingComponent/spinnerWaiting";
 
 const RentalPostingMNG = () => {
-  const [filterPackageId, setFilterPackageId] = useState(null); // Change to null
+  const [filterPackageId, setFilterPackageId] = useState(null);
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
   const [allRentalPosts, setAllRentalPosts] = useState([]);
   const [page, setPage] = useState(0);
   const [size, setSize] = useState(6);
   const [totalPages, setTotalPages] = useState(1);
   const [roomInfoCode, setRoomInfoCode] = useState("");
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [selectedPost, setSelectedPost] = useState(null);
 
   const fetchAllRentalPosting = async () => {
@@ -41,7 +42,6 @@ const RentalPostingMNG = () => {
     try {
       const response = await getRentalPostingById(rentalPostingId);
       setSelectedPost(response.data);
-      console.log(response.data);
       setIsDetailModalOpen(true);
     } catch (error) {
       console.log(error);
@@ -100,7 +100,10 @@ const RentalPostingMNG = () => {
           {[2, 3, 4].map((id) => (
             <button
               key={id}
-              onClick={() => setFilterPackageId(id)} // Set as a number
+              onClick={() => {
+                setFilterPackageId(id);
+                setPage(0);
+              }}
               className={`px-4 py-2 rounded-md ${
                 filterPackageId === id
                   ? "bg-blue-500 text-white"
@@ -123,75 +126,79 @@ const RentalPostingMNG = () => {
               <th className="p-4 text-left"></th>
             </tr>
           </thead>
-          <tbody>
-            {allRentalPosts.map((post, index) => (
-              <tr key={index} className="border-b border-gray-200">
-                <td className="p-4 w-auto flex items-center space-x-4">
-                  <img
-                    src={post.image}
-                    className="w-12 h-12 rounded-2xl object-cover"
-                  />
-                  <div className="flex flex-col justify-center">
-                    <h3 className="font-semibold text-gray-800">
-                      {post.resortName}
-                    </h3>
-                    <span className="text-gray-600">{post.roomCode}</span>
-                    <p className="text-sm text-blue-500">
-                      {post.rentalPostingId}
-                    </p>
-                  </div>
-                </td>
+          {loading ? (
+            <SpinnerWaiting />
+          ) : (
+            <tbody>
+              {allRentalPosts.map((post, index) => (
+                <tr key={index} className="border-b border-gray-200">
+                  <td className="p-4 w-auto flex items-center space-x-4">
+                    <img
+                      src={post.image}
+                      className="w-12 h-12 rounded-2xl object-cover"
+                    />
+                    <div className="flex flex-col justify-center">
+                      <h3 className="font-semibold text-gray-800">
+                        {post.resortName}
+                      </h3>
+                      <span className="text-gray-600">{post.roomCode}</span>
+                      <p className="text-sm text-blue-500">
+                        {post.rentalPostingId}
+                      </p>
+                    </div>
+                  </td>
 
-                <td className="p-4">{post.checkinDate}</td>
-                <td className="p-4">{post.checkoutDate}</td>
-                <td className="p-4">
-                  {post.rentalPackageId === 3 ? (
-                    <div className="text-red-500 bg-red-100 font-semibold w-3/4 flex items-center justify-center px-2 py-1 rounded-full">
-                      <span>Hỗ trợ định giá</span>
+                  <td className="p-4">{post.checkinDate}</td>
+                  <td className="p-4">{post.checkoutDate}</td>
+                  <td className="p-4">
+                    {post.rentalPackageId === 3 ? (
+                      <div className="text-red-500 bg-red-100 font-semibold w-3/4 flex items-center justify-center px-2 py-1 rounded-full">
+                        <span>Hỗ trợ định giá</span>
+                      </div>
+                    ) : post.rentalPackageId === 4 ? (
+                      <div className="text-yellow-500 bg-yellow-100 font-semibold w-[150px] flex items-center justify-center px-2 py-1 rounded-full">
+                        <span>Chờ định giá</span>
+                      </div>
+                    ) : (
+                      <div>
+                        <p className="font-medium">
+                          {new Intl.NumberFormat("vi-VN", {
+                            style: "currency",
+                            currency: "VND",
+                          }).format(post.totalPrice)}
+                        </p>
+                        <p className="font-medium">
+                          (
+                          {new Intl.NumberFormat("vi-VN", {
+                            style: "currency",
+                            currency: "VND",
+                          }).format(post.pricePerNights)}
+                          / đêm)
+                        </p>
+                      </div>
+                    )}
+                  </td>
+                  <td className="p-4">
+                    {post.status === "PendingApproval" && (
+                      <span className="flex items-center justify-center px-2 py-1 rounded-full w-24 font-semibold bg-blue-100 text-blue-500">
+                        Đang chờ
+                      </span>
+                    )}
+                  </td>
+                  <td className="p-4">
+                    <div
+                      className="cursor-pointer hover:bg-gray-100 rounded-xl w-8 h-8 p-2"
+                      onClick={() =>
+                        fetchRentalPostingDetails(post.rentalPostingId)
+                      }
+                    >
+                      <FaEllipsisVertical />
                     </div>
-                  ) : post.rentalPackageId === 4 ? (
-                    <div className="text-yellow-500 bg-yellow-100 font-semibold w-[150px] flex items-center justify-center px-2 py-1 rounded-full">
-                      <span>Chờ định giá</span>
-                    </div>
-                  ) : (
-                    <div>
-                      <p className="font-medium">
-                        {new Intl.NumberFormat("vi-VN", {
-                          style: "currency",
-                          currency: "VND",
-                        }).format(post.totalPrice)}
-                      </p>
-                      <p className="font-medium">
-                        (
-                        {new Intl.NumberFormat("vi-VN", {
-                          style: "currency",
-                          currency: "VND",
-                        }).format(post.pricePerNights)}
-                        / đêm)
-                      </p>
-                    </div>
-                  )}
-                </td>
-                <td className="p-4">
-                  {post.status === "PendingApproval" && (
-                    <span className="flex items-center justify-center px-2 py-1 rounded-full w-24 font-semibold bg-blue-100 text-blue-500">
-                      Đang chờ
-                    </span>
-                  )}
-                </td>
-                <td className="p-4">
-                  <div
-                    className="cursor-pointer hover:bg-gray-100 rounded-xl w-8 h-8 p-2"
-                    onClick={() =>
-                      fetchRentalPostingDetails(post.rentalPostingId)
-                    }
-                  >
-                    <FaEllipsisVertical />
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          )}
         </table>
 
         {/* Pagination */}

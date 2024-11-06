@@ -2,18 +2,10 @@ import React, { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   FaSignOutAlt,
-  FaCity,
   FaChevronUp,
   FaChevronDown,
-  FaMoneyBillAlt,
-  FaChartBar,
-  FaListAlt,
-  FaUserCheck,
-  FaRegFileAlt,
-  FaRegFile,
   FaComment,
   FaHouseUser,
-  FaKey,
   FaFileAlt,
 } from "react-icons/fa";
 import { setIsLogin, setRoleName } from "../../redux/UserSlice/SignIn";
@@ -21,8 +13,6 @@ import { useDispatch } from "react-redux";
 import {
   FaArrowRightArrowLeft,
   FaCheckToSlot,
-  FaHandHoldingDollar,
-  FaHouseChimneyCrack,
   FaTableList,
 } from "react-icons/fa6";
 

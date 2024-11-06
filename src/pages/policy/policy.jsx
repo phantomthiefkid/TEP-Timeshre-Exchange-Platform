@@ -2,10 +2,11 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Navigation from "../../components/Navbar/navigation";
 import Footer from "../../components/Footer/footer";
+import SpinnerWaiting from "../../components/LoadingComponent/spinnerWaiting";
 
 const policy = () => {
   const [policyData, setPolicyData] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
   const getPolicy = async () => {
@@ -20,6 +21,10 @@ const policy = () => {
       setLoading(false);
     }
   };
+
+  if (loading) {
+    return <SpinnerWaiting />;
+  }
 
   useEffect(() => {
     getPolicy();

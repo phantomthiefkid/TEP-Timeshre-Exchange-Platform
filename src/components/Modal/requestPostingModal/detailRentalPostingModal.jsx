@@ -1,20 +1,13 @@
 import React, { useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
-import {
-  FaCheck,
-  FaClock,
-  FaEdit,
-  FaExclamation,
-  FaExclamationTriangle,
-  FaMap,
-  FaMapMarkerAlt,
-} from "react-icons/fa";
+import { FaClock, FaEdit, FaExclamationTriangle, FaMap } from "react-icons/fa";
 import { FaXmark } from "react-icons/fa6";
 import RejectRentalPostingModal from "../../Modal/requestPostingModal/rejectRentalPostingModal";
 import {
   approveRentalPostingById,
   rejectRentalPostingById,
 } from "../../../service/tsStaffService/tsStaffAPI";
+import SpinnerWaiting from "../../LoadingComponent/spinnerWaiting";
 
 const DetailRentalPostingModal = ({ isOpen, onClose, postingId, onSave }) => {
   const [isVisible, setIsVisible] = useState(false);
@@ -24,6 +17,8 @@ const DetailRentalPostingModal = ({ isOpen, onClose, postingId, onSave }) => {
   const [staffRefinementPrice, setStaffRefinementPrice] = useState("");
   const [priceValuation, setPriceValuation] = useState("");
   const [isEditing, setIsEditing] = useState(false);
+  const [staffRefinementError, setStaffRefinementError] = useState("");
+  const [priceValuationError, setPriceValuationError] = useState("");
 
   const modalStyles = isOpen
     ? {}
@@ -37,42 +32,64 @@ const DetailRentalPostingModal = ({ isOpen, onClose, postingId, onSave }) => {
     switch (status) {
       case "PendingApproval":
         return { label: "Đang chờ", style: "bg-blue-100 text-blue-500" };
-      case "Processing":
-        return { label: "Đã duyệt", style: "bg-green-100 text-green-500" };
-      case "AwaitingConfirmation":
-        return {
-          label: "Chờ định giá",
-          style: "bg-orange-100 text-orange-500",
-        };
-      case "PendingPricing":
-        return {
-          label: "Chờ xác nhận giá",
-          style: "bg-orange-100 text-orange-500",
-        };
-      case "Closed":
-        return { label: "Từ chối", style: "bg-yellow-100 text-yellow-500" };
-      case "Expired":
-        return { label: "Hết hạn", style: "bg-red-100 text-red-500" };
       default:
         return { label: "Không xác định", style: "bg-gray-100 text-gray-500" };
     }
   };
 
+  // Validation
+  const validatePriceInput = (value) => {
+    const numericValue = value.replace(/[^0-9]/g, "");
+
+    const formattedValue = numericValue.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+    return formattedValue;
+  };
+
   const handleAccept = async (e) => {
+    e.preventDefault();
+    let isValid = true;
+
+    // Validate staffRefinementPrice
+    if (isStaffRefinement) {
+      if (!staffRefinementPrice) {
+        setStaffRefinementError("Vui lòng nhập giá hỗ trợ.");
+        isValid = false;
+      } else if (isNaN(staffRefinementPrice) || staffRefinementPrice <= 0) {
+        setStaffRefinementError("Vui lòng nhập số hợp lệ (VNĐ) lớn hơn 0.");
+        isValid = false;
+      } else {
+        setStaffRefinementError("");
+      }
+    }
+
+    // Validate priceValuation
+    if (isPriceValuation) {
+      if (!priceValuation) {
+        setPriceValuationError("Vui lòng nhập định giá.");
+        isValid = false;
+      } else if (isNaN(priceValuation) || priceValuation <= 0) {
+        setPriceValuationError("Vui lòng nhập số hợp lệ (VNĐ) lớn hơn 0.");
+        isValid = false;
+      } else {
+        setPriceValuationError("");
+      }
+    }
+
+    if (!isValid) return;
+
     try {
       await approveRentalPostingById(postingId.rentalPostingId, {
-        staffRefinementPrice: staffRefinementPrice,
+        staffRefinementPrice: validatePriceInput(staffRefinementPrice),
         note: "",
-        priceValuation: priceValuation,
+        priceValuation: validatePriceInput(priceValuation),
         unitTypeId: 0,
       });
-      e.preventDefault();
       onSave();
       toast.success("Chấp nhận bài đăng", { duration: 2000 });
       handleClose();
     } catch (error) {
       toast.error("Đã có lỗi xảy ra", { duration: 2000 });
-      return error;
     }
   };
 
@@ -89,6 +106,10 @@ const DetailRentalPostingModal = ({ isOpen, onClose, postingId, onSave }) => {
 
   const handleClose = () => {
     setIsEditing(false);
+    setStaffRefinementPrice("");
+    setPriceValuation("");
+    setStaffRefinementError("");
+    setPriceValuationError("");
     onClose();
   };
 
@@ -142,41 +163,104 @@ const DetailRentalPostingModal = ({ isOpen, onClose, postingId, onSave }) => {
         {postingId ? (
           <>
             <div className="border-b">
-              <div className="flex items-center p-4 m-3 border border-gray-300 rounded-xl">
-                <img
-                  src="https://placehold.co/100x100"
-                  alt="Hotel Thumbnail"
-                  className="w-20 h-20 rounded-lg mr-4"
-                />
-                <div className="flex justify-between items-center w-full">
-                  <div className="flex items-center">
-                    <div>
-                      <h2 className="text-xl font-bold mb-2">
-                        {postingId.resortName}
-                      </h2>
-                      <div className="flex flex-row">
-                        <FaMap
-                          className="text-gray-500 mr-2 mt-1"
-                          style={{ color: "blue" }}
-                        />
-                        <p className="text-base text-blue-500 w-3/4">
-                          {postingId.address}
-                        </p>
+              {postingId.rentalPackageId === 3 ? (
+                <div className="flex items-center p-4 m-3 border-2 border-red-500 rounded-xl">
+                  <img
+                    src="https://placehold.co/100x100"
+                    alt="Hotel Thumbnail"
+                    className="w-20 h-20 rounded-lg mr-4"
+                  />
+                  <div className="flex justify-between items-center w-full">
+                    <div className="flex items-center">
+                      <div>
+                        <h2 className="text-xl font-bold mb-2">
+                          {postingId.resortName}
+                        </h2>
+                        <div className="flex flex-row">
+                          <FaMap
+                            className="text-gray-500 mr-2 mt-1"
+                            style={{ color: "blue" }}
+                          />
+                          <p className="text-base text-blue-500 w-3/4">
+                            {postingId.address}
+                          </p>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <div className="flex justify-end w-1/3">
-                    {/* Updated parent div */}
-                    <span
-                      className={`text-medium px-2 py-1 w-3/4 text-center rounded-full ${
-                        getStatusStyles(postingId.status).style
-                      }`}
-                    >
-                      {getStatusStyles(postingId.status).label}
-                    </span>
+                    <div className="flex justify-end w-1/3">
+                      <span className="text-medium px-2 py-1 w-auto text-center rounded-full bg-red-100 text-red-500">
+                        Hỗ trợ định giá
+                      </span>
+                    </div>
                   </div>
                 </div>
-              </div>
+              ) : postingId.rentalPackageId === 4 ? (
+                <div className="flex items-center p-4 m-3 border-2 border-yellow-500 rounded-xl">
+                  <img
+                    src="https://placehold.co/100x100"
+                    alt="Hotel Thumbnail"
+                    className="w-20 h-20 rounded-lg mr-4"
+                  />
+                  <div className="flex justify-between items-center w-full">
+                    <div className="flex items-center">
+                      <div>
+                        <h2 className="text-xl font-bold mb-2">
+                          {postingId.resortName}
+                        </h2>
+                        <div className="flex flex-row">
+                          <FaMap
+                            className="text-gray-500 mr-2 mt-1"
+                            style={{ color: "blue" }}
+                          />
+                          <p className="text-base text-blue-500 w-3/4">
+                            {postingId.address}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex justify-end w-1/3">
+                      <span className="text-medium px-2 py-1 w-auto text-center rounded-full bg-yellow-100 text-yellow-500">
+                        Chờ định giá
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div className="flex items-center p-4 m-3 border border-gray-300 rounded-xl">
+                  <img
+                    src="https://placehold.co/100x100"
+                    alt="Hotel Thumbnail"
+                    className="w-20 h-20 rounded-lg mr-4"
+                  />
+                  <div className="flex justify-between items-center w-full">
+                    <div className="flex items-center">
+                      <div>
+                        <h2 className="text-xl font-bold mb-2">
+                          {postingId.resortName}
+                        </h2>
+                        <div className="flex flex-row">
+                          <FaMap
+                            className="text-gray-500 mr-2 mt-1"
+                            style={{ color: "blue" }}
+                          />
+                          <p className="text-base text-blue-500 w-3/4">
+                            {postingId.address}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex justify-end w-1/3">
+                      <span
+                        className={`text-medium px-2 py-1 w-3/4 text-center rounded-full ${
+                          getStatusStyles(postingId.status).style
+                        }`}
+                      >
+                        {getStatusStyles(postingId.status).label}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
 
             <div className="flex-1 overflow-y-auto p-4">
@@ -210,15 +294,31 @@ const DetailRentalPostingModal = ({ isOpen, onClose, postingId, onSave }) => {
                   {isStaffRefinement ? (
                     <div className="flex flex-row items-center">
                       {isEditing ? (
-                        <input
-                          type="text"
-                          value={staffRefinementPrice}
-                          onChange={(e) =>
-                            setStaffRefinementPrice(e.target.value)
-                          }
-                          placeholder="Nhập giá hỗ trợ"
-                          className="border rounded px-2 py-1"
-                        />
+                        <div className="flex flex-col relative">
+                          <div className="flex flex-row">
+                            <input
+                              type="text"
+                              value={staffRefinementPrice}
+                              onChange={(e) =>
+                                setStaffRefinementPrice(
+                                  validatePriceInput(e.target.value)
+                                )
+                              }
+                              placeholder="Nhập giá hỗ trợ"
+                              className={`border rounded px-2 py-1 w-44 ${
+                                staffRefinementError ? "border-red-500" : ""
+                              }`}
+                            />
+                            <p className="ml-0.5 border bg-[#1793FF] p-1 rounded-md text-white">
+                              VNĐ
+                            </p>
+                          </div>
+                          {staffRefinementError && (
+                            <p className="text-red-500 text-sm mt-1">
+                              {staffRefinementError}
+                            </p>
+                          )}
+                        </div>
                       ) : (
                         <>
                           <div className="text-red-500">
@@ -241,13 +341,31 @@ const DetailRentalPostingModal = ({ isOpen, onClose, postingId, onSave }) => {
                   ) : isPriceValuation ? (
                     <div className="flex flex-row items-center">
                       {isEditing ? (
-                        <input
-                          type="text"
-                          value={priceValuation}
-                          onChange={(e) => setPriceValuation(e.target.value)}
-                          placeholder="Nhập giá định giá"
-                          className="border rounded px-2 py-1"
-                        />
+                        <div className="flex flex-col">
+                          <div className="flex flex-row">
+                            <input
+                              type="text"
+                              value={priceValuation}
+                              onChange={(e) =>
+                                setPriceValuation(
+                                  validatePriceInput(e.target.value)
+                                )
+                              }
+                              placeholder="Nhập giá định giá"
+                              className={`border rounded px-2 py-1 w-44 ${
+                                priceValuationError ? "border-red-500" : ""
+                              }`}
+                            />
+                            <p className="ml-0.5 border bg-[#1793FF] p-1 rounded-md text-white">
+                              VNĐ
+                            </p>
+                          </div>
+                          {priceValuationError && (
+                            <p className="text-red-500 text-sm mt-1">
+                              {priceValuationError}
+                            </p>
+                          )}
+                        </div>
                       ) : (
                         <>
                           <div className="text-orange-500">
@@ -425,7 +543,7 @@ const DetailRentalPostingModal = ({ isOpen, onClose, postingId, onSave }) => {
             </div>
           </>
         ) : (
-          <p>Đang tải...</p>
+          <SpinnerWaiting />
         )}
 
         {/* Footer Section with Buttons */}

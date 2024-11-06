@@ -3,11 +3,12 @@ import axios from "axios";
 import Navigation from "../../components/Navbar/navigation";
 import Footer from "../../components/Footer/footer";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
+import SpinnerWaiting from "../../components/LoadingComponent/spinnerWaiting";
 
 const faq = () => {
   const [faqs, setFaqs] = useState([]);
   const [openIndex, setOpenIndex] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
   const getFaqs = async () => {
@@ -24,6 +25,10 @@ const faq = () => {
       setLoading(false);
     }
   };
+
+  if (loading) {
+    return <SpinnerWaiting />;
+  }
 
   useEffect(() => {
     getFaqs();
