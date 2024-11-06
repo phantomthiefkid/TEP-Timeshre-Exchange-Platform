@@ -115,7 +115,6 @@ const ResortManagementTSC = () => {
                 <th className="p-4 text-left ml-3">STT</th>
                 <th className="p-4 text-left">Resort</th>
                 <th className="p-4 text-left">Logo</th>
-                <th className="p-4 text-left">Đội ngũ nhân viên</th>
                 <th className="p-4 text-left">Trạng thái</th>
                 <th className="p-4 text-left"></th>
               </tr>
@@ -138,29 +137,6 @@ const ResortManagementTSC = () => {
                         className="w-12 h-12 rounded-full border-2 border-gray-300 shadow-sm"
                       />
                     </td>
-                    <td className="p-4">
-                      <div className="relative h-10 w-28">
-                        <img
-                          src="https://scontent.fsgn2-8.fna.fbcdn.net/v/t1.6435-9/40103455_523185601427576_6303178065262411776_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=a5f93a&_nc_eui2=AeG5v3PzwlU5090OG4stGvTYqkIPcw5brmKqQg9zDluuYlRWqDzaKYOWwz48Nmux5NwZr9uMFLmMFB7ye9y_l66e&_nc_ohc=OPFz3xfoKPkQ7kNvgGOpznp&_nc_ht=scontent.fsgn2-8.fna&_nc_gid=AO83GDKfFnrVZfD7sX38EPp&oh=00_AYBFEhwIrj9ox1wB-AmT-EDe7uI7W0Yt3s3jUPosEf7f2w&oe=673CBB2C"
-                          alt="User 1"
-                          className="absolute top-0 left-0 h-10 w-10 rounded-full border-2 border-white"
-                          style={{ zIndex: 3 }}
-                        />
-                        <img
-                          src="https://scontent.fsgn2-8.fna.fbcdn.net/v/t1.6435-9/109468981_956312488114883_383028317370844759_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=a5f93a&_nc_eui2=AeHUNoLQHOsQQ3Rk_aOtVbh0c8o9nJvdgGBzyj2cm92AYFwEdHAGyoLCfCeK-GtcKqZSBcA1u27PhRJmxuK2ZrbP&_nc_ohc=NkDudaMc9eQQ7kNvgHK99qG&_nc_ht=scontent.fsgn2-8.fna&_nc_gid=A2_RhISKLfO8Ql2jXlZEuez&oh=00_AYAgOVfTD2DOr7TvGzRg5cUcJMzAd3PUffKZA08eFeS9PQ&oe=673CA642"
-                          alt="User 2"
-                          className="absolute top-0 left-6 h-10 w-10 rounded-full border-2 border-white"
-                          style={{ zIndex: 2 }}
-                        />
-                        <img
-                          src="https://scontent.fsgn2-4.fna.fbcdn.net/v/t1.6435-9/191788257_1180260155720114_865615732732609737_n.jpg?stp=dst-jpg_s552x414&_nc_cat=101&ccb=1-7&_nc_sid=a5f93a&_nc_eui2=AeFq57MzL89ynvvT1o1tVg0soMsZhh4WhFygyxmGHhaEXINf25GqJqTWK-kxLQEVlJGy9Z0YXY5lcdMCiF3yZryY&_nc_ohc=oBrDjuWKZLMQ7kNvgGwCdUY&_nc_ht=scontent.fsgn2-4.fna&_nc_gid=ALyAmXwrUf4WyWty3-0tl3G&oh=00_AYCUUxeOszAAIwtG5srcJpX68MCdHvLM_Zcfh30cyr4izw&oe=673CA79B"
-                          alt="User 3"
-                          className="absolute top-0 left-12 h-10 w-10 rounded-full border-2 border-white"
-                          style={{ zIndex: 1 }}
-                        />
-                      </div>
-                    </td>
-
                     <td className="p-4">
                       <span
                         className={`px-2 py-1 rounded-full text-sm font-medium ${
