@@ -42,7 +42,7 @@ const SidebarAdmin = () => {
   };
 
   return (
-    <div className="min-h-screen flex border-r-2 border-gray-200">
+    <div className="flex border-r-2 border-gray-200">
     
       <motion.div
         initial={{ width: isOpen ? "6rem" : "18rem" }}

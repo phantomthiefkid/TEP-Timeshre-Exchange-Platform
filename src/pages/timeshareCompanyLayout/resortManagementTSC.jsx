@@ -103,7 +103,7 @@ const ResortManagementTSC = () => {
         <div className="p-6">
           <table className="min-w-full bg-white border border-gray-200 ">
             <thead className="bg-gray-100 rounded-lg">
-              <tr className="w-full bg-gray-100 border-b border-gray-200">
+              <tr className="w-full bg-gray-300 border-b border-gray-200">
                 <th className="p-4 text-left ml-3">STT</th>
                 <th className="p-4 text-left">Resort</th>
                 <th className="p-4 text-left">Logo</th>
@@ -154,14 +154,18 @@ const ResortManagementTSC = () => {
 
                     <td className="p-4">
                       <span
-                        className={`px-2 py-1 rounded-full text-sm font-medium ${item.isActive
-                          ? 'bg-green-200 text-green-800'
-                          : 'bg-red-100 text-red-800'
+                        className={`inline-flex items-center space-x-1.5 px-2 py-0.5 rounded-full text-sm font-medium ${item.isActive ? 'bg-green-200 text-green-800' : 'bg-red-100 text-red-800'
                           }`}
                       >
-                        {item.isActive ? 'Đang hoạt động' : 'Ngừng hoạt động'}
+                        <span
+                          className={`inline-block w-2 h-2 rounded-full ${item.isActive ? 'bg-green-500' : 'bg-red-500'
+                            }`}
+                        ></span>
+                        <span>{item.isActive ? 'Đang hoạt động' : 'Ngừng hoạt động'}</span>
                       </span>
+
                     </td>
+
                     <td className="p-4 flex gap-4">
                       <button className="hover:text-blue-500 transition duration-300 ease-in-out">
                         <Link to={`/timesharecompany/updateresort/${item.id}`}> <DocumentIcon color="gray" className="w-6 h-6" /></Link>

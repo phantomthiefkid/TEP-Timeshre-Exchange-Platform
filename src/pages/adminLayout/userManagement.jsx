@@ -11,7 +11,7 @@ const UserManagement = () => {
   const [allUser, setAllUser] = useState([]);
 
   const [page, setPage] = useState(0);
-  const [size, setSize] = useState(10);
+  const [size, setSize] = useState(6);
   const [totalPages, setTotalPages] = useState(1);
   const [roleId, setRoleId] = useState("");
   const [userName, setUserName] = useState("");
@@ -198,7 +198,7 @@ const UserManagement = () => {
 
         <table className="min-w-full bg-white border border-gray-200">
           <thead>
-            <tr className="w-full bg-gray-100 border-b border-gray-200">
+            <tr className="w-full bg-gray-300 border-b border-gray-200">
               <th className="p-4 text-left ml-3">STT</th>
               <th className="text-left p-4">Họ và tên</th>
               <th className="text-left p-4">Địa chỉ email</th>
@@ -209,7 +209,7 @@ const UserManagement = () => {
           </thead>
           <tbody className="bg-white">
             {allUser && allUser.map((item, index) => (
-              <tr key={index} className="border-b border-gray-200">
+              <tr key={index} className="border-b border-gray-200 hover:bg-gray-200">
                 <td className="p-4">{index + 1}</td>
                 <td className="p-4 flex items-center">
                   <img
