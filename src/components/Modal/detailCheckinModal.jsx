@@ -146,8 +146,18 @@ const DetailCheckinModal = ({ isOpen, onClose, bookingId, onSave }) => {
                     disabled
                   >
                     <option value="Booked">Đang chờ</option>
-                    <option value="CheckIn">Đã nhận phòng</option>
-                    <option value="CheckOut">Đã trả phòng</option>
+                    <option
+                      value="CheckIn"
+                      disabled={new Date(dateCheckin) < new Date()}
+                    >
+                      Đã nhận phòng
+                    </option>
+                    <option
+                      value="CheckOut"
+                      disabled={new Date(dateCheckin) > new Date()}
+                    >
+                      Đã trả phòng
+                    </option>
                   </select>
                 ) : (
                   <select
@@ -155,9 +165,18 @@ const DetailCheckinModal = ({ isOpen, onClose, bookingId, onSave }) => {
                     value={status}
                     onChange={(e) => handleOnChangeStatus(e, source)}
                   >
-                    <option value="Booked">Đang chờ</option>
-                    <option value="CheckIn">Đã nhận phòng</option>
-                    <option value="CheckOut">Đã trả phòng</option>
+                    <option
+                      value="Booked"
+                      disabled={status === "CheckIn" || status === "CheckOut"}
+                    >
+                      Đang chờ
+                    </option>
+                    <option value="CheckIn" disabled={status === "CheckOut"}>
+                      Đã nhận phòng
+                    </option>
+                    <option value="CheckOut" disabled={status === "Booked"}>
+                      Đã trả phòng
+                    </option>
                   </select>
                 )}
               </div>
