@@ -1,13 +1,25 @@
 import React, { useEffect, useState } from "react";
-import { Toaster } from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
 import { FaDotCircle } from "react-icons/fa";
 import { FaXmark } from "react-icons/fa6";
 import SpinnerWaiting from "../LoadingComponent/spinnerWaiting";
+import {
+  onChangeExchangeBookingById,
+  onChangeRentalBookingById,
+} from "../../service/tsStaffService/tsStaffAPI";
 
 const DetailCheckinModal = ({ isOpen, onClose, bookingId, onSave }) => {
   if (!isOpen) return null;
 
   const { source } = bookingId;
+
+  const date = new Date();
+  const checkInDate = parseDate(bookingId.checkinDate);
+  const isComingDate = checkInDate > date;
+
+  const [status, setStatus] = useState(bookingId.status);
+  const [isCheckInFlag, setIsCheckInFlag] = useState(false);
+  const [isCheckOutFlag, setIsCheckOutFlag] = useState(false);
 
   const getStatusStyles = (status) => {
     switch (status) {
@@ -32,6 +44,49 @@ const DetailCheckinModal = ({ isOpen, onClose, bookingId, onSave }) => {
         transform: "translateX(100%)",
         transition: "all 0.3s ease",
       };
+
+  const handleOnChangeStatus = async (e, source) => {
+    const newStatus = e.target.value;
+    setStatus(newStatus);
+
+    let checkInFlag = false;
+    let checkOutFlag = false;
+
+    if (newStatus === "CheckIn") {
+      checkInFlag = true;
+    } else if (newStatus === "CheckOut") {
+      checkOutFlag = true;
+    }
+
+    setIsCheckInFlag(checkInFlag);
+    setIsCheckOutFlag(checkOutFlag);
+
+    try {
+      let response;
+      const data = {
+        checkIn: checkInFlag,
+        checkOut: checkOutFlag,
+      };
+
+      if (source === "rental") {
+        response = await onChangeRentalBookingById(bookingId.id, data);
+      } else if (source === "exchange") {
+        response = await onChangeExchangeBookingById(bookingId.id, data);
+      }
+
+      if (response && response.data) {
+        setStatus(response.data.status);
+        toast.success("Trạng thái đã được cập nhật!");
+        onSave();
+        onClose();
+      } else {
+        toast.error("Không thể cập nhật trạng thái.");
+      }
+    } catch (error) {
+      toast.error("Cập nhật trạng thái thất bại!");
+      console.error("Error:", error);
+    }
+  };
 
   return (
     <div className="fixed inset-0 flex justify-end p-3 h-full">
@@ -64,7 +119,10 @@ const DetailCheckinModal = ({ isOpen, onClose, bookingId, onSave }) => {
                   alt="Room Thumbnail"
                 />
                 <div className="ml-4 flex-grow">
-                  <h2 className="text-lg font-medium">{bookingId.id}</h2>
+                  <div className="space-y-1">
+                    <h2 className="text-base font-medium">Mã đặt phòng</h2>
+                    <p className="text-lg font-medium">{bookingId.id}</p>
+                  </div>
                   <div className="flex items-center mt-4">
                     <img
                       src={bookingId.renterLegalAvatar}
@@ -81,15 +139,27 @@ const DetailCheckinModal = ({ isOpen, onClose, bookingId, onSave }) => {
                     </div>
                   </div>
                 </div>
-
-                <select
-                  className="rounded-xl border border-gray-300 bg-gray-50 text-gray-700 p-3 min-w-[150px] hover:bg-gray-100 focus:border-blue-500 focus:outline-none transition ease-in-out duration-200"
-                  value={bookingId.status}
-                >
-                  <option value="Booked">Đang chờ</option>
-                  <option value="CheckIn">Đã nhận phòng</option>
-                  <option value="CheckOut">Đã trả phòng</option>
-                </select>
+                {bookingId.status === "Booked" && isComingDate ? (
+                  <select
+                    className="rounded-xl border border-gray-300 bg-gray-50 text-gray-700 p-3 min-w-[150px] hover:bg-gray-100 focus:border-blue-500 focus:outline-none transition ease-in-out duration-200"
+                    value={bookingId.status}
+                    disabled
+                  >
+                    <option value="Booked">Đang chờ</option>
+                    <option value="CheckIn">Đã nhận phòng</option>
+                    <option value="CheckOut">Đã trả phòng</option>
+                  </select>
+                ) : (
+                  <select
+                    className="rounded-xl border border-gray-300 bg-gray-50 text-gray-700 p-3 min-w-[150px] hover:bg-gray-100 focus:border-blue-500 focus:outline-none transition ease-in-out duration-200"
+                    value={status}
+                    onChange={(e) => handleOnChangeStatus(e, source)}
+                  >
+                    <option value="Booked">Đang chờ</option>
+                    <option value="CheckIn">Đã nhận phòng</option>
+                    <option value="CheckOut">Đã trả phòng</option>
+                  </select>
+                )}
               </div>
             </div>
 
@@ -172,19 +242,27 @@ const DetailCheckinModal = ({ isOpen, onClose, bookingId, onSave }) => {
                   </div>
                 </div>
 
-                <select
-                  className="rounded-xl border border-gray-300 bg-gray-50 text-gray-700 p-3 min-w-[150px] hover:bg-gray-100 focus:border-blue-500 focus:outline-none transition ease-in-out duration-200"
-                  value={bookingId.status} // Set value to the current status
-                  onChange={(e) => {
-                    // Handle the change if you need to update the status
-                    const newStatus = e.target.value;
-                    console.log(newStatus); // You can update the status here if necessary
-                  }}
-                >
-                  <option value="waiting">Đang chờ</option>
-                  <option value="checked-in">Đã nhận phòng</option>
-                  <option value="checked-out">Đã trả phòng</option>
-                </select>
+                {bookingId.status === "Booked" && isComingDate ? (
+                  <select
+                    className="rounded-xl border border-gray-300 bg-gray-50 text-gray-700 p-3 min-w-[150px] hover:bg-gray-100 focus:border-blue-500 focus:outline-none transition ease-in-out duration-200"
+                    value={bookingId.status}
+                    disabled
+                  >
+                    <option value="Booked">Đang chờ</option>
+                    <option value="CheckIn">Đã nhận phòng</option>
+                    <option value="CheckOut">Đã trả phòng</option>
+                  </select>
+                ) : (
+                  <select
+                    className="rounded-xl border border-gray-300 bg-gray-50 text-gray-700 p-3 min-w-[150px] hover:bg-gray-100 focus:border-blue-500 focus:outline-none transition ease-in-out duration-200"
+                    value={status}
+                    onChange={(e) => handleOnChangeStatus(e, source)}
+                  >
+                    <option value="Booked">Đang chờ</option>
+                    <option value="CheckIn">Đã nhận phòng</option>
+                    <option value="CheckOut">Đã trả phòng</option>
+                  </select>
+                )}
               </div>
             </div>
 
@@ -254,6 +332,11 @@ const DetailCheckinModal = ({ isOpen, onClose, bookingId, onSave }) => {
       </div>
     </div>
   );
+};
+
+const parseDate = (dateString) => {
+  const [day, month, year] = dateString.split("-");
+  return new Date(year, month - 1, day);
 };
 
 export default DetailCheckinModal;

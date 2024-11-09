@@ -177,6 +177,28 @@ const sendReportFeedbackResort = async (feedbackId, data) => {
   }
 };
 
+const onChangeRentalBookingById = async (bookingId, data) => {
+  try {
+    return await axiosConfig.post(
+      `timeshare-staff/booking/rental/${bookingId}`,
+      data
+    );
+  } catch (error) {
+    throw error;
+  }
+};
+
+const onChangeExchangeBookingById = async (bookingId, data) => {
+  try {
+    return await axiosConfig.post(
+      `timeshare-staff/booking/exchange/${bookingId}`,
+      data
+    );
+  } catch (error) {
+    throw error;
+  }
+};
+
 export {
   getAllRentalPosting,
   getRentalPostingById,
@@ -192,4 +214,6 @@ export {
   approveExchangePostingById,
   getRentalBookingById,
   getExchangeBookingById,
+  onChangeRentalBookingById,
+  onChangeExchangeBookingById,
 };
