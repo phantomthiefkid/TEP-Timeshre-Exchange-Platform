@@ -2,7 +2,7 @@ const resorts = [
     {
         id: 1,
         name: 'Vinpearl Resort Nha Trang',
-        img: 'https://media.cntraveler.com/photos/53da60a46dec627b149e66f4/master/pass/hilton-moorea-lagoon-resort-spa-moorea-french-poly--110160-1.jpg',
+        img: 'https://media.cntraveler.com/photos/619679354f0a81d5659ee0e4/3:2/w_2499,h_1666,c_limit/Islas%20Secas,%20Panama_IslasSecasIS_Casita%20Sombre%206JACK4755-Edit.jpg',
         location: 'Nha Trang, Khánh Hòa',
     },
     {

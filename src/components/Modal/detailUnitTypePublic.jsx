@@ -2,32 +2,31 @@ import { XIcon } from '@heroicons/react/solid';
 import React, { useEffect, useState } from 'react';
 import { getDetailUnitType } from '../../service/public/resortService/resortAPI';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import 'swiper/css'; // Import CSS của Swiper
+import 'swiper/css'; 
 import resorts from '../../util/ResortData';
 
 const DetailUnitTypeModal = ({ selectedId, onClose }) => {
     const [unitType, setUnitType] = useState({});
-    const [selectedImage, setSelectedImage] = useState(''); // Ảnh đang hiển thị
+    const [selectedImage, setSelectedImage] = useState(''); 
     const [arrImg, setArrImg] = useState([]);
-
     const getUnitTypeDetailById = async () => {
         let data = await getDetailUnitType(selectedId);
         if (data.status === 200) {
             setUnitType(data.data);
-            // Set ảnh chính là ảnh đầu tiên trong danh sách (nếu có)
-            if (data.data.photos && data.data.photos.length > 0) {
-                setSelectedImage(data.data.photos[0]);
-            }
+            // if (data.data.photos && data.data.photos.length > 0) {
+            //     setSelectedImage(data.data.photos[0]);
+            // }
         }
     };
 
     useEffect(() => {
         getUnitTypeDetailById();
         setArrImg(resorts);
-        if (resorts.length > 0) {
+       
             setSelectedImage(resorts[0].img);
-        }
+        
     }, [selectedId]);
+
 
     return (
         <div className="fixed inset-0 flex items-center justify-center z-50">
