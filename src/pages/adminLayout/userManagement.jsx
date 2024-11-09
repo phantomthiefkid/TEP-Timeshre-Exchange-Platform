@@ -1,12 +1,20 @@
-import { DocumentIcon, DotsVerticalIcon, PlusIcon } from '@heroicons/react/outline';
-import React, { useEffect, useState } from 'react';
-import CountUp from 'react-countup'
-import { createUser, getAllUser, getAllUserForCount } from '../../service/adminAPIService/adminAPI';
-import CreateUserModal from '../../components/Modal/createUserModal';
-import { toast, Toaster } from 'react-hot-toast';
-import DetailEditUserModal from '../../components/Modal/detailEditUserModal';
-import SpinnerWaiting from '../../components/LoadingComponent/spinnerWaiting';
-import { FaChevronLeft, FaChevronRight } from 'react-icons/fa6';
+import {
+  DocumentIcon,
+  DotsVerticalIcon,
+  PlusIcon,
+} from "@heroicons/react/outline";
+import React, { useEffect, useState } from "react";
+import CountUp from "react-countup";
+import {
+  createUser,
+  getAllUser,
+  getAllUserForCount,
+} from "../../service/adminAPIService/adminAPI";
+import CreateUserModal from "../../components/Modal/createUserModal";
+import { toast, Toaster } from "react-hot-toast";
+import DetailEditUserModal from "../../components/Modal/detailEditUserModal";
+import SpinnerWaiting from "../../components/LoadingComponent/spinnerWaiting";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa6";
 const UserManagement = () => {
   const [allUser, setAllUser] = useState([]);
 
@@ -19,22 +27,22 @@ const UserManagement = () => {
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const [flag, setFlag] = useState(false);
-  const [loading, setLoading] = useState(true)
-  const [countAdmin, setCountAdmin] = useState(0)
-  const [countSystemStaff, setCountSystemStaff] = useState(0)
-  const [countTSC, setCountTSC] = useState(0)
-  const [countCustomer, setCountCustomer] = useState(0)
-  const [countAll, setCountAll] = useState(0)
+  const [loading, setLoading] = useState(true);
+  const [countAdmin, setCountAdmin] = useState(0);
+  const [countSystemStaff, setCountSystemStaff] = useState(0);
+  const [countTSC, setCountTSC] = useState(0);
+  const [countCustomer, setCountCustomer] = useState(0);
+  const [countAll, setCountAll] = useState(0);
   const fetchAllUser = async () => {
     try {
       let data = await getAllUser(page, size, roleId, userName);
       if (data.status === 200) {
         setAllUser(data.data.content);
         setTotalPages(data.data.totalPages);
-        setLoading(false)
+        setLoading(false);
       }
     } catch (error) {
-      throw error
+      throw error;
     }
   };
 
@@ -42,29 +50,37 @@ const UserManagement = () => {
     try {
       let data = await getAllUserForCount();
       if (data.status === 200) {
-        let admin = data.data.content && data.data.content.filter((item) => {
-          return item.roleId === 4
-        })
-        let systemstaff = data.data.content && data.data.content.filter((item) => {
-          return item.roleId === 3
-        })
-        let tsc = data.data.content && data.data.content.filter((item) => {
-          return item.roleId === 2
-        })
-        let customer = data.data.content && data.data.content.filter((item) => {
-          return item.roleId === 1
-        })
+        let admin =
+          data.data.content &&
+          data.data.content.filter((item) => {
+            return item.roleId === 4;
+          });
+        let systemstaff =
+          data.data.content &&
+          data.data.content.filter((item) => {
+            return item.roleId === 3;
+          });
+        let tsc =
+          data.data.content &&
+          data.data.content.filter((item) => {
+            return item.roleId === 2;
+          });
+        let customer =
+          data.data.content &&
+          data.data.content.filter((item) => {
+            return item.roleId === 1;
+          });
 
-        setCountAdmin(admin.length)
-        setCountCustomer(customer.length)
-        setCountSystemStaff(systemstaff.length)
-        setCountTSC(tsc.length)
-        setCountAll(data.data.content.length)
+        setCountAdmin(admin.length);
+        setCountCustomer(customer.length);
+        setCountSystemStaff(systemstaff.length);
+        setCountTSC(tsc.length);
+        setCountAll(data.data.content.length);
       }
     } catch (error) {
-      throw error
+      throw error;
     }
-  }
+  };
 
   const handleNextPage = () => {
     if (page < totalPages - 1) {
@@ -94,7 +110,7 @@ const UserManagement = () => {
 
   useEffect(() => {
     fetchAllUserForCount();
-  }, [])
+  }, []);
 
   const handleCreateUser = async (newUser) => {
     try {
@@ -113,15 +129,12 @@ const UserManagement = () => {
   };
 
   const handleOpenUpdateModal = (user) => {
-    setIsUpdateModalOpen(true)
-    setSelectedUser(user)
-  }
+    setIsUpdateModalOpen(true);
+    setSelectedUser(user);
+  };
   if (loading) {
-    return (
-      <SpinnerWaiting />
-    );
+    return <SpinnerWaiting />;
   }
-
 
   return (
     <>
@@ -145,10 +158,12 @@ const UserManagement = () => {
               Customer: <CountUp start={0} end={countCustomer} duration={2} />
             </span>
             <span className="bg-green-100 text-green-600 px-2 py-1 rounded-full text-sm font-medium">
-              System Staff: <CountUp start={0} end={countSystemStaff} duration={2} />
+              System Staff:{" "}
+              <CountUp start={0} end={countSystemStaff} duration={2} />
             </span>
             <span className="bg-yellow-100 text-yellow-600 px-2 py-1 rounded-full text-sm font-medium">
-              Timeshare Company: <CountUp start={0} end={countTSC} duration={2} />
+              Timeshare Company:{" "}
+              <CountUp start={0} end={countTSC} duration={2} />
             </span>
             <span className="bg-blue-100 text-blue-600 px-2 py-1 rounded-full text-sm font-medium">
               Admin: <CountUp start={0} end={countAdmin} duration={2} />
@@ -173,10 +188,30 @@ const UserManagement = () => {
               onChange={handleRoleFilter}
             >
               <option value="">Tất cả</option>
-              <option class="block px-4 py-2 text-gray-700 hover:bg-blue-100 hover:text-blue-700 cursor-pointer rounded-lg transition" value="4">Admin</option>
-              <option class="block px-4 py-2 text-gray-700 hover:bg-blue-100 hover:text-blue-700 cursor-pointer rounded-lg transition" value="2">Timeshare Company</option>
-              <option class="block px-4 py-2 text-gray-700 hover:bg-blue-100 hover:text-blue-700 cursor-pointer rounded-lg transition" value="3">System Staff</option>
-              <option class="block px-4 py-2 text-gray-700 hover:bg-blue-100 hover:text-blue-700 cursor-pointer rounded-lg transition" value="1">Customer</option>
+              <option
+                class="block px-4 py-2 text-gray-700 hover:bg-blue-100 hover:text-blue-700 cursor-pointer rounded-lg transition"
+                value="4"
+              >
+                Admin
+              </option>
+              <option
+                class="block px-4 py-2 text-gray-700 hover:bg-blue-100 hover:text-blue-700 cursor-pointer rounded-lg transition"
+                value="2"
+              >
+                Timeshare Company
+              </option>
+              <option
+                class="block px-4 py-2 text-gray-700 hover:bg-blue-100 hover:text-blue-700 cursor-pointer rounded-lg transition"
+                value="3"
+              >
+                System Staff
+              </option>
+              <option
+                class="block px-4 py-2 text-gray-700 hover:bg-blue-100 hover:text-blue-700 cursor-pointer rounded-lg transition"
+                value="1"
+              >
+                Customer
+              </option>
             </select>
 
             {/* Add New User */}
@@ -194,7 +229,6 @@ const UserManagement = () => {
             />
           </div>
         </div>
-
 
         <table className="min-w-full bg-white border border-gray-200">
           <thead>
@@ -230,67 +264,76 @@ const UserManagement = () => {
                     checked={item.state}
                     className={`w-6 h-6 ${item.state ? 'bg-green-500' : 'bg-gray-300'}`}
                   /> */}
-                  <label class="flex items-center">
-                    <input type="checkbox" checked={item.isActive} class="sr-only peer" disabled />
-                    <div class="relative w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
-                    <span class="ms-3 text-sm font-medium text-gray-400 dark:text-gray-500">{item.isActive ? "Đang hoạt động" : "Đã vô hiệu hóa"}</span>
-                  </label>
-                </td>
-                <td className="p-4 flex gap-4">
-
-                  <button onClick={() => handleOpenUpdateModal(item)}><DocumentIcon color='gray' className='w-6 h-6' /></button>
-                  <button><DotsVerticalIcon className='w-6 h-6' /></button>
-
-                </td>
-
-              </tr>
-            ))}
-
+                    <label className="flex items-center">
+                      <input
+                        type="checkbox"
+                        checked={item.isActive}
+                        className="sr-only peer"
+                        disabled
+                      />
+                      <div className="relative w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                      <span className="ms-3 text-sm font-medium text-gray-400 dark:text-gray-500">
+                        {item.isActive ? "Đang hoạt động" : "Đã vô hiệu hóa"}
+                      </span>
+                    </label>
+                  </td>
+                  <td className="p-4 flex gap-4">
+                    <button onClick={() => handleOpenUpdateModal(item)}>
+                      <DocumentIcon color="gray" className="w-6 h-6" />
+                    </button>
+                    <button>
+                      <DotsVerticalIcon className="w-6 h-6" />
+                    </button>
+                  </td>
+                </tr>
+              ))}
           </tbody>
         </table>
 
-        <DetailEditUserModal isOpen={isUpdateModalOpen}
+        <DetailEditUserModal
+          isOpen={isUpdateModalOpen}
           onClose={() => setIsUpdateModalOpen(false)}
           userData={selectedUser}
           setFlag={() => setFlag(!flag)}
         />
 
-        {
-          allUser && allUser.length > 0 ? (
-            <div className="flex items-center justify-center space-x-2 mt-5 w-full">
-              <button
-                onClick={handlePreviousPage}
-                disabled={page === 0}
-                className="w-8 h-8 flex items-center justify-center rounded-full bg-white text-gray-500"
-              >
-                <FaChevronLeft />
-              </button>
-              <div className="flex space-x-2 bg-gray-200 rounded-full px-2 py-1">
-                {
-                  Array.from({ length: totalPages }, (_, index) => (
-                    <button
-                      key={index}
-                      onClick={() => setPage(index)}
-                      className={`w-8 h-8 flex items-center justify-center rounded-full ${index === page ? "bg-blue-500 text-white" : "bg-white text-gray-500"}`}
-                    >
-                      {index + 1}
-                    </button>
-                  ))
-                }
-              </div>
-              <button
-                onClick={handleNextPage}
-                disabled={page === totalPages - 1}
-                className="w-8 h-8 flex items-center justify-center rounded-full bg-blue-500 text-white"
-              >
-                <FaChevronRight />
-              </button>
+        {allUser && allUser.length > 0 ? (
+          <div className="flex items-center justify-center space-x-2 mt-5 w-full">
+            <button
+              onClick={handlePreviousPage}
+              disabled={page === 0}
+              className="w-8 h-8 flex items-center justify-center rounded-full bg-white text-gray-500"
+            >
+              <FaChevronLeft />
+            </button>
+            <div className="flex space-x-2 bg-gray-200 rounded-full px-2 py-1">
+              {Array.from({ length: totalPages }, (_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setPage(index)}
+                  className={`w-8 h-8 flex items-center justify-center rounded-full ${
+                    index === page
+                      ? "bg-blue-500 text-white"
+                      : "bg-white text-gray-500"
+                  }`}
+                >
+                  {index + 1}
+                </button>
+              ))}
             </div>
-          ) : (
-            <span className="flex items-center justify-center space-x-2 mt-5 w-full">Không có bài đăng nào!!!</span>
-          )
-        }
-
+            <button
+              onClick={handleNextPage}
+              disabled={page === totalPages - 1}
+              className="w-8 h-8 flex items-center justify-center rounded-full bg-blue-500 text-white"
+            >
+              <FaChevronRight />
+            </button>
+          </div>
+        ) : (
+          <span className="flex items-center justify-center space-x-2 mt-5 w-full">
+            Không có bài đăng nào!!!
+          </span>
+        )}
       </div>
     </>
   );

@@ -1,6 +1,7 @@
 import { LocationMarkerIcon } from '@heroicons/react/solid';
 import React, { useState } from 'react';
 import { FaUpload } from 'react-icons/fa';
+import { FaArrowLeft, FaArrowRight } from 'react-icons/fa6';
 
 const CreateResortBasic = ({ onNext, onUpdateData, formData }) => {
   const [resortData, setResortData] = useState({
@@ -245,18 +246,19 @@ const CreateResortBasic = ({ onNext, onUpdateData, formData }) => {
 
 
       {/* Nút tiếp theo */}
-      <div className="mt-6 flex justify-center gap-6">
+      <div className="mt-6 flex justify-between py-6">
         <button
-          className="bg-gray-300 text-gray-500 py-2 px-8 rounded-lg"
+          type="button"
           disabled
+          className="bg-indigo-400 hover:bg-indigo-700 text-indigo-100 rounded-full flex items-center"
         >
-          Quay lại
+          <span class="bg-indigo-500 hover:bg-indigo-700 w-12 h-12 flex items-center justify-center rounded-full mr-4"><FaArrowLeft /></span><span class="mr-6">trở lại</span>
         </button>
         <button
-          className="bg-blue-500 text-white py-2 px-8 rounded-lg hover:bg-blue-600"
+          className="bg-indigo-400 hover:bg-indigo-700 text-indigo-100 pl-6 rounded-full flex items-center"
           onClick={handleNext}
         >
-          Tiếp tục
+          <span class="mr-6">Bước tiếp theo</span><span class="bg-indigo-500 hover:bg-indigo-700 w-12 h-12 flex items-center justify-center rounded-full"><FaArrowRight /></span>
         </button>
       </div>
     </div>

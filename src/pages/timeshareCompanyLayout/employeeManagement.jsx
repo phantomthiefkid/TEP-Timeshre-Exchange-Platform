@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Header from "../../components/Header/headerOtherRole";
 import {
   createTimeshareStaff,
+  getAllResort,
   getAllTimeshareStaff,
   getTsStaffById,
 } from "../../service/tsCompanyService/tsCompanyAPI";
@@ -24,6 +25,7 @@ const employeeManagement = () => {
   const [loading, setLoading] = useState(true);
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
   const [selectedTSStaff, setSelectedTSStaff] = useState(null);
+  const [allResorts, setAllResorts] = useState([]);
 
   const fetchAllTimeshareStaff = async () => {
     try {
@@ -84,8 +86,25 @@ const employeeManagement = () => {
     }
   };
 
+  const fetchAllResorts = async () => {
+    try {
+      const data = await getAllResort();
+      if (data.status === 200) {
+        console.log("Fetched Resorts:", data.data.content); // Log resort data
+        setAllResorts(data.data.content);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  const getResortName = (resortId) => {
+    const resort = allResorts.find((resort) => resort.id === resortId);
+    return resort ? resort.resortName : "-";
+  };
+
   useEffect(() => {
     fetchAllTimeshareStaff();
+    fetchAllResorts();
   }, [page, StaffName]);
 
   if (loading) {

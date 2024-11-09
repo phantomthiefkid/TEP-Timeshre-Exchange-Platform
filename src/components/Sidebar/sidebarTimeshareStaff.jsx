@@ -2,18 +2,10 @@ import React, { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   FaSignOutAlt,
-  FaCity,
   FaChevronUp,
   FaChevronDown,
-  FaMoneyBillAlt,
-  FaChartBar,
-  FaListAlt,
-  FaUserCheck,
-  FaRegFileAlt,
-  FaRegFile,
   FaComment,
   FaHouseUser,
-  FaKey,
   FaFileAlt,
 } from "react-icons/fa";
 import { setIsLogin, setRoleName } from "../../redux/UserSlice/SignIn";
@@ -21,8 +13,6 @@ import { useDispatch } from "react-redux";
 import {
   FaArrowRightArrowLeft,
   FaCheckToSlot,
-  FaHandHoldingDollar,
-  FaHouseChimneyCrack,
   FaTableList,
 } from "react-icons/fa6";
 
@@ -125,11 +115,6 @@ const SidebarTimeshareStaff = () => {
             />
           </div>
         </MenuItem>
-        <MenuItem
-          icon={FaHandHoldingDollar}
-          title="Hỗ trợ định giá"
-          path="/timesharestaff/moneysupport"
-        />
         <MenuItem
           icon={FaComment}
           title="Đánh giá khách hàng"

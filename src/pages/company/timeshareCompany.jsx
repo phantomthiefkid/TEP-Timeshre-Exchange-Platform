@@ -10,10 +10,9 @@ import { FaSearch } from "react-icons/fa";
 
 const TimeshareCompany = () => {
   const navigate = useNavigate();
-
   const [keyword, setKeyword] = useState("");
   const [resort, setResort] = useState([]);
-  const [debounceTimeout, setDebounceTimeout] = useState(null); // Dùng để lưu timeout của debounce
+  const [debounceTimeout, setDebounceTimeout] = useState(null);
   const [tsCompany, setTsCompany] = useState("");
 
   const handleSearch = (e) => {
@@ -65,7 +64,11 @@ const TimeshareCompany = () => {
     }
   };
 
-  const handleTSCDetails = () => {};
+  const handleTSCDetails = (tsId) => {
+    navigate(`/timesharecompanydetail/${tsId}`);
+    console.log(tsId);
+  };
+
   useEffect(() => {
     fetchTimeshareCompany();
   }, []);
@@ -118,13 +121,14 @@ const TimeshareCompany = () => {
         </div>
       </div>
 
+      {/* TimeshareCompany */}
       <div className="mt-10 px-4 md:px-4">
         <div className="space-y-10">
           <div className="grid grid-cols-4 gap-8 max-w-full mb-10 items-center">
             {tsCompany &&
               tsCompany.slice(0, 8).map((item, index) => (
-                <div className="flex justify-center " key={index}>
-                  <Link>
+                <div className="flex justify-center" key={index}>
+                  <Link to={`/timesharecompanydetail/${item.id}`}>
                     <img
                       src={item.logo}
                       alt={item.timeshareCompanyName}
@@ -136,10 +140,9 @@ const TimeshareCompany = () => {
           </div>
         </div>
       </div>
-
+      {/* Timeshare Company List */}
       <div className="max-max-w-full flex justify-center">
         <div className="mt-10 md:px-4 w-9/12">
-          {/* Another heading for the list of company names */}
           <div className="flex justify-start">
             <h2 className="text-3xl font-bold mb-6 text-custom-blue-text">
               Danh sách Công ty Timeshare
@@ -154,7 +157,7 @@ const TimeshareCompany = () => {
                   key={index}
                   className="p-4 rounded-md flex justify-start text-blue-600 text-lg text-center"
                 >
-                  <button onClick={handleTSCDetails}>
+                  <button onClick={() => handleTSCDetails(company.id)}>
                     <p className="underline">{company.timeshareCompanyName}</p>
                   </button>
                 </div>

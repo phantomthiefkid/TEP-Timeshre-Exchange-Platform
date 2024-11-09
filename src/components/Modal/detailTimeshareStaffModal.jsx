@@ -3,6 +3,7 @@ import { FaAddressCard, FaXmark } from "react-icons/fa6";
 import { getAllResort } from "../../service/tsCompanyService/tsCompanyAPI";
 import { updateTimeshareCompanystaff } from "../../service/tsCompanyService/tsCompanyAPI";
 import toast, { Toaster } from "react-hot-toast";
+import SpinnerWaiting from "../LoadingComponent/spinnerWaiting";
 
 const detailTimeshareStaffModal = ({ isOpen, onSave, onClose, tsStaff }) => {
   const [resortList, setResortList] = useState([]);
@@ -143,7 +144,7 @@ const detailTimeshareStaffModal = ({ isOpen, onSave, onClose, tsStaff }) => {
             </div>
           </div>
         ) : (
-          <p>Đang tải...</p>
+          <SpinnerWaiting />
         )}
       </div>
     </div>

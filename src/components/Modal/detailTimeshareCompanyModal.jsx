@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { FaAddressCard, FaLocationDot, FaUser, FaXmark } from "react-icons/fa6";
+import SpinnerWaiting from "../LoadingComponent/spinnerWaiting";
 
 const DetailTimeshareCompanyModal = ({ isOpen, onClose, company }) => {
   const [isActive, setIsActive] = useState(company?.isActive || false); // Track the toggle status
@@ -115,7 +116,7 @@ const DetailTimeshareCompanyModal = ({ isOpen, onClose, company }) => {
             </div>
           </div>
         ) : (
-          <p>Đang tải...</p>
+          <SpinnerWaiting />
         )}
       </div>
     </div>
