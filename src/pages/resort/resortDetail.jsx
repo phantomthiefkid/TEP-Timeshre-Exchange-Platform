@@ -9,14 +9,24 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import { getResortById } from '../../service/public/resortService/resortAPI';
 import DetailUnitTypeModal from '../../components/Modal/detailUnitTypePublic';
+import SpinnerWaiting from '../../components/LoadingComponent/spinnerWaiting';
+import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
 const ResortDetail = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [isOpenUnitTypeModal, setIsOpenUnitTypeModal] = useState(false);
     const [selectedImage, setSelectedImage] = useState(0);
     const { id } = useParams();
     const [resort, setResort] = useState({});
+    const [loading, setLoading] = useState(true);
     const [selectedUnitTypeId, setSelectedUnitTypeId] = useState(null);
-    // Images array for the Swiper
+    const [visibleFeedbackCount, setVisibleFeedbackCount] = useState(2);
+    const handleShowMore = () => {
+        setVisibleFeedbackCount((prevCount) => prevCount + 4);
+    };
+    const handleHidden = () => {
+        setVisibleFeedbackCount(2);
+    };
+
     const images = [
         'https://media.architecturaldigest.com/photos/57e42de0fe422b3e29b7e78f/16:9/w_2560%2Cc_limit/JW_LosCabos_2015_MainExterior.jpg',
         'https://vntimetravel.com/media/wysiwyg/Intercontinantal-Phu-Quoc-r.jpg',
@@ -32,7 +42,7 @@ const ResortDetail = () => {
             let data = await getResortById(id);
             if (data && data.status === 200) {
                 setResort(data.data)
-                console.log(data.data)
+                setLoading(false);
             }
         } catch (error) {
             throw error
@@ -43,7 +53,6 @@ const ResortDetail = () => {
         if (id) {
             fetchResortById();
         }
-
     }, [id])
 
     const openModal = () => setIsOpen(true);
@@ -54,19 +63,23 @@ const ResortDetail = () => {
         setSelectedUnitTypeId(unitTypeId)
     }
 
+    if (loading) {
+        return <SpinnerWaiting />
+    }
+
     return (
         <>
             <Navigation />
             <div className='lg:px-32 md:px-24 py-10'>
                 {/* Back to Search Link */}
 
-                
+
 
 
                 {/* Resort Title and Favorite Button */}
                 <div className='flex justify-between py-4'>
                     <h1 className='text-2xl md:text-3xl font-medium'>{resort ? resort.resortName : ""}</h1>
-                   
+
                 </div>
 
                 {/* Location and Rating */}
@@ -163,234 +176,198 @@ const ResortDetail = () => {
                     </div>
                 )}
 
-                <div className='py-8 px-6 rounded-lg '>
-                    <h3 className='text-4xl font-bold text-gray-800 mb-6'>Giới thiệu</h3>
-                    {/* <p className=' leading-relaxed mb-4'>
-                        Tọa lạc ở Hội An, cách Hội Quán Chi Hội Triều Châu Trung Quốc 12 km, New World Hoiana Hotel cung cấp chỗ nghỉ có xe đạp miễn phí, chỗ đậu xe riêng miễn phí, hồ bơi ngoài trời và trung tâm thể dục. Ngoài câu lạc bộ trẻ em, chỗ nghỉ này còn có nhà hàng, sòng bạc và sân hiên để phục vụ du khách. Chỗ nghỉ cung cấp lễ tân 24/24, dịch vụ đưa đón sân bay, dịch vụ phòng và Wi-Fi miễn phí.
-                    </p>
-                    <p className=' leading-relaxed mb-4'>
-                        Khách sạn sẽ cung cấp cho khách các phòng có điều hòa, tủ quần áo, két an toàn, TV màn hình phẳng và phòng tắm riêng với vòi sen. Các phòng đều có minibar.
-                    </p>
-                    <p className=' leading-relaxed'>
-                        Chỗ nghỉ có phục vụ bữa sáng hằng ngày, gồm các lựa chọn thực đơn buffet, kiểu lục địa và kiểu Anh/ Ai-len.
-                    </p>
-                    <p className=' leading-relaxed mb-4'>
-                        New World Hoiana Hotel có sân chơi trẻ em.
-                    </p>
-                    <p className=' leading-relaxed'>
-                        Chỗ nghỉ cách Bảo tàng lịch sử Hội An 13 km và Chùa Cầu 13 km. Sân bay gần nhất là Sân bay Quốc tế Đà Nẵng, cách New World Hoiana Hotel 40 km.
-                    </p> */}
-                    <p className=' leading-relaxed mb-4'>
-                        {resort ? resort.description : ""}
+                <div className="py-10 mt-6 px-12 space-y-8 bg-gray-50 rounded-lg shadow-md">
+                    <h3 className="text-4xl font-semibold text-indigo-600 mb-4 border-b-4 border-indigo-500 pb-2 inline-block">
+                        Giới thiệu
+                    </h3>
+                    <p className="text-lg text-gray-700 leading-relaxed px-4 mt-6">
+                        {resort ? resort.description : "Chưa có thông tin giới thiệu."}
                     </p>
                 </div>
-                <div className='py-2 px-6 rounded-lg space-y-4'>
-                    <h3 className='text-3xl font-bold text-gray-800 mb-6'>Loại phòng</h3>
-                    {resort && resort.unitTypeDtoList && resort.unitTypeDtoList.map((item, index) => 
-                        ((<div className="grid grid-cols-2 gap-4 border px-4">
 
-                            <div className="p-2 grid grid-cols-2 gap-6">
-                                <img src='https://storage.timviec365.vn/timviec365/pictures/images/phong-doi-la-gi.jpg' className='w-full' alt='phòng đôi' />
-                                <div className='py-4 relative space-y-4'>
-                                    <span className='text-2xl font-medium'>Thông tin phòng</span>
-                                    <h3 className='text-4xl  text-gray-700 font-bold'>{item.title}</h3>
-                                    <button onClick={() => handleOpenUnitTypeModal(item.id)}><p><u>Xem chi tiết phòng</u></p></button>
+                <div className="py-10 px-12 space-y-8 bg-gray-50 rounded-lg shadow-md mt-8">
+                    <h3 className="text-3xl font-semibold text-indigo-600 mb-8">Loại phòng</h3>
+
+                    {resort && resort.unitTypeDtoList && resort.unitTypeDtoList.map((item, index) => (
+                        <div
+                            key={index}
+                            className="grid grid-cols-2 gap-6 border rounded-lg bg-white hover:bg-gray-100 px-16 py-8 shadow-sm transition-transform transform hover:scale-105"
+                        >
+                            {/* Phần Thông Tin Phòng */}
+                            <div className="p-2 grid grid-cols-2 gap-4 items-start px-10">
+                                <img
+                                    src='https://storage.timviec365.vn/timviec365/pictures/images/phong-doi-la-gi.jpg'
+                                    className="w-full h-auto rounded-lg shadow-md"
+                                    alt='phòng đôi'
+                                />
+                                <div className="py-4 space-y-4">
+                                    <span className="text-xl text-gray-600 font-medium">Thông tin phòng</span>
+                                    <h3 className="text-3xl font-bold text-indigo-700">{item.title}</h3>
+                                    <button
+                                        onClick={() => handleOpenUnitTypeModal(item.id)}
+                                        className="text-indigo-500 underline font-semibold hover:text-indigo-700"
+                                    >
+                                        Xem chi tiết phòng
+                                    </button>
                                 </div>
                             </div>
 
-
-                            <div className="p-4 py-6 space-y-6 font-medium text-xl">
-
-                                <div className="text-xl font-medium">
+                            {/* Phần Đặc Điểm Phòng */}
+                            <div className="p-4 space-y-4 text-lg text-gray-700">
+                                <div className="text-xl font-semibold text-gray-600">
                                     Đặc điểm phòng
                                 </div>
 
-                                <div className="flex justify-left text-left">
-                                    <div className='w-full'><span>Phòng ngủ: {item.bedrooms}</span></div>
-                                    <div className='w-full'><span>Số người: {item.sleeps}</span></div>
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <span>Phòng ngủ: {item.bedrooms}</span>
+                                    </div>
+                                    <div>
+                                        <span>Số người: {item.sleeps}</span>
+                                    </div>
                                 </div>
 
-                                <div>
-                                    Phòng tắm: {item.bathrooms}
-                                </div>
-
-                                <div>
-                                    Nhà bếp: {item.kitchen}
-                                </div>
+                                <div>Phòng tắm: {item.bathrooms}</div>
+                                <div>Nhà bếp: {item.kitchen}</div>
                             </div>
-                        </div>))
+                        </div>
+                    ))}
+
+                    {isOpenUnitTypeModal && (
+                        <DetailUnitTypeModal
+                            selectedId={selectedUnitTypeId}
+                            onClose={() => setIsOpenUnitTypeModal(false)}
+                        />
                     )}
-                    {
-                        isOpenUnitTypeModal && (<DetailUnitTypeModal selectedId={selectedUnitTypeId} onClose={() => setIsOpenUnitTypeModal(false)}/>)
-                    }
+                </div>
 
 
-                </div>
-                <div className='py-10 w-2/3'>
-                    <h3 className='text-3xl font-bold text-gray-800 mb-6'>Các tính năng và tiện nghi tại chỗ</h3>
-                    <ul className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-1'>
-                        <li className='p-4 rounded-md shadow-sm'>Tiện ích 1</li>
-                        <li className='p-4 rounded-md shadow-sm'>Tiện ích 2</li>
-                        <li className='p-4 rounded-md shadow-sm'>Tiện ích 3</li>
-                        <li className='p-4 rounded-md shadow-sm'>Tiện ích 4</li>
-                        <li className='p-4 rounded-md shadow-sm'>Tiện ích 5</li>
-                        <li className='p-4 rounded-md shadow-sm'>Tiện ích 6</li>
-                        {/* Add more items here */}
-                    </ul>
-                </div>
-                <div className='py-10 w-2/3'>
-                    <h3 className='text-3xl font-bold text-gray-800 mb-6'>Các tính năng và tiện nghi tại chỗ</h3>
-                    <ul className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-1'>
-                        <li className='p-4 rounded-md shadow-sm'>Tiện ích 1</li>
-                        <li className='p-4 rounded-md shadow-sm'>Tiện ích 2</li>
-                        <li className='p-4 rounded-md shadow-sm'>Tiện ích 3</li>
-                        <li className='p-4 rounded-md shadow-sm'>Tiện ích 4</li>
-                        <li className='p-4 rounded-md shadow-sm'>Tiện ích 5</li>
-                        <li className='p-4 rounded-md shadow-sm'>Tiện ích 6</li>
-                        {/* Add more items here */}
-                    </ul>
-                </div>
-                <div className='py-10 w-2/3'>
-                    <h3 className='text-3xl font-bold text-gray-800 mb-6'>Chính sách</h3>
-                    <ul className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-1'>
-                        <li className='p-4 rounded-md shadow-sm'>Tiện ích 1</li>
-                        <li className='p-4 rounded-md shadow-sm'>Tiện ích 2</li>
-                        <li className='p-4 rounded-md shadow-sm'>Tiện ích 3</li>
-                    </ul>
-                </div>
-                <div>
-                    <h3 className='text-3xl font-bold text-gray-800 mb-6'>Đánh giá</h3>
-                    <span className='text-2xl flex items-center gap-2 font-semibold'><StarIcon className='w-12' color='yellow' /> <span className='text-3xl'>4,6</span>/5 <span className='text-gray-400 text-xl mt-1 font-light'>16 đánh giá</span></span>
-                    <div className='grid grid-cols-1 md:grid-cols-2 gap-6 py-8'>
-                        <div className='border-b-4 w-full p-4 flex justify-between'>
-                            <div className='flex flex-col justify-start gap-4 w-2/3'>
-                                <div className='flex items-center gap-4'>
-                                    <div className=''>
-                                        <img src="https://scontent.fsgn2-7.fna.fbcdn.net/v/t39.30808-6/457790295_1947970998949022_3066255129954259156_n.jpg?_nc_cat=108&ccb=1-7&_nc_sid=6ee11a&_nc_eui2=AeFoY4GYNi_qQDgWWYTVmkUJddJ_WJqplOh10n9YmqmU6A-DFFr1-u1kpgPXw4WLuc3ejG4XhxS9QWj-l3PSn8tF&_nc_ohc=F6oiiDryLdsQ7kNvgEHPYkK&_nc_ht=scontent.fsgn2-7.fna&_nc_gid=ADV7XBC3ClWBEMeXTZeUvo9&oh=00_AYDH0uBD5Zb54idOcvKsuiEnLn08MtKV5iQNTg9ppTQzNA&oe=66EC9B59"
-                                            alt="Avatar" className='w-20 h-20 border-gray-600 border rounded-full' />
-                                    </div>
-                                    <div className=''>
-                                        <div className='mb-2'>
-                                            <p className='text-md'>Ngày: 15/09/2024</p>
-                                        </div>
-                                        <div>
-                                            <p className='text-md'>Khách hàng: Nguyễn Văn A</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className='py-4 p-4'>
-                                    <p className='text-md'>Tôi rất hài lòng với dịch vụ ở đây</p>
-                                </div>
-                            </div>
-                            <div className='w-1/3 text-left'>
-                                <span className='font-medium text-lg'>Đánh giá</span>
-                                <div className='flex justify-start items-center gap-2'>
-                                    <StarIcon className='w-8' color='yellow' />
-                                    <StarIcon className='w-8' color='yellow' />
-                                    <StarIcon className='w-8' color='yellow' />
-                                    <StarIcon className='w-8' color='yellow' />
-                                    <StarIcon className='w-8' color='yellow' />
-                                </div>
-                            </div>
-                        </div>
-                        <div className='border-b-4 w-full p-4 flex justify-between'>
-                            <div className='flex flex-col justify-start gap-4 w-2/3'>
-                                <div className='flex items-center gap-4'>
-                                    <div className=''>
-                                        <img src="https://scontent.fsgn2-7.fna.fbcdn.net/v/t39.30808-6/457790295_1947970998949022_3066255129954259156_n.jpg?_nc_cat=108&ccb=1-7&_nc_sid=6ee11a&_nc_eui2=AeFoY4GYNi_qQDgWWYTVmkUJddJ_WJqplOh10n9YmqmU6A-DFFr1-u1kpgPXw4WLuc3ejG4XhxS9QWj-l3PSn8tF&_nc_ohc=F6oiiDryLdsQ7kNvgEHPYkK&_nc_ht=scontent.fsgn2-7.fna&_nc_gid=ADV7XBC3ClWBEMeXTZeUvo9&oh=00_AYDH0uBD5Zb54idOcvKsuiEnLn08MtKV5iQNTg9ppTQzNA&oe=66EC9B59"
-                                            alt="Avatar" className='w-20 h-20 border-gray-600 border rounded-full' />
-                                    </div>
-                                    <div className=''>
-                                        <div className='mb-2'>
-                                            <p className='text-md'>Ngày: 15/09/2024</p>
-                                        </div>
-                                        <div>
-                                            <p className='text-md'>Khách hàng: Nguyễn Văn A</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className='py-4 p-4'>
-                                    <p className='text-md'>Tôi rất hài lòng với dịch vụ ở đây</p>
-                                </div>
-                            </div>
-                            <div className='w-1/3 text-left'>
-                                <span className='font-medium text-lg'>Đánh giá</span>
-                                <div className='flex justify-start items-center gap-2'>
-                                    <StarIcon className='w-8' color='yellow' />
-                                    <StarIcon className='w-8' color='yellow' />
-                                    <StarIcon className='w-8' color='yellow' />
-                                    <StarIcon className='w-8' color='yellow' />
-                                    <StarIcon className='w-8' color='yellow' />
-                                </div>
-                            </div>
-                        </div>
-                        <div className='border-b-4 w-full p-4 flex justify-between'>
-                            <div className='flex flex-col justify-start gap-4 w-2/3'>
-                                <div className='flex items-center gap-4'>
-                                    <div className=''>
-                                        <img src="https://scontent.fsgn2-7.fna.fbcdn.net/v/t39.30808-6/457790295_1947970998949022_3066255129954259156_n.jpg?_nc_cat=108&ccb=1-7&_nc_sid=6ee11a&_nc_eui2=AeFoY4GYNi_qQDgWWYTVmkUJddJ_WJqplOh10n9YmqmU6A-DFFr1-u1kpgPXw4WLuc3ejG4XhxS9QWj-l3PSn8tF&_nc_ohc=F6oiiDryLdsQ7kNvgEHPYkK&_nc_ht=scontent.fsgn2-7.fna&_nc_gid=ADV7XBC3ClWBEMeXTZeUvo9&oh=00_AYDH0uBD5Zb54idOcvKsuiEnLn08MtKV5iQNTg9ppTQzNA&oe=66EC9B59"
-                                            alt="Avatar" className='w-20 h-20 border-gray-600 border rounded-full' />
-                                    </div>
-                                    <div className=''>
-                                        <div className='mb-2'>
-                                            <p className='text-md'>Ngày: 15/09/2024</p>
-                                        </div>
-                                        <div>
-                                            <p className='text-md'>Khách hàng: Nguyễn Văn A</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className='py-4 p-4'>
-                                    <p className='text-md'>Tôi rất hài lòng với dịch vụ ở đây</p>
-                                </div>
-                            </div>
-                            <div className='w-1/3 text-left'>
-                                <span className='font-medium text-lg'>Đánh giá</span>
-                                <div className='flex justify-start items-center gap-2'>
-                                    <StarIcon className='w-8' color='yellow' />
-                                    <StarIcon className='w-8' color='yellow' />
-                                    <StarIcon className='w-8' color='yellow' />
-                                    <StarIcon className='w-8' color='yellow' />
-                                    <StarIcon className='w-8' color='yellow' />
-                                </div>
-                            </div>
-                        </div>
-                        <div className='border-b-4 w-full p-4 flex justify-between'>
-                            <div className='flex flex-col justify-start gap-4 w-2/3'>
-                                <div className='flex items-center gap-4'>
-                                    <div className=''>
-                                        <img src="https://scontent.fsgn2-7.fna.fbcdn.net/v/t39.30808-6/457790295_1947970998949022_3066255129954259156_n.jpg?_nc_cat=108&ccb=1-7&_nc_sid=6ee11a&_nc_eui2=AeFoY4GYNi_qQDgWWYTVmkUJddJ_WJqplOh10n9YmqmU6A-DFFr1-u1kpgPXw4WLuc3ejG4XhxS9QWj-l3PSn8tF&_nc_ohc=F6oiiDryLdsQ7kNvgEHPYkK&_nc_ht=scontent.fsgn2-7.fna&_nc_gid=ADV7XBC3ClWBEMeXTZeUvo9&oh=00_AYDH0uBD5Zb54idOcvKsuiEnLn08MtKV5iQNTg9ppTQzNA&oe=66EC9B59"
-                                            alt="Avatar" className='w-20 h-20 border-gray-600 border rounded-full' />
-                                    </div>
-                                    <div className=''>
-                                        <div className='mb-2'>
-                                            <p className='text-md'>Ngày: 15/09/2024</p>
-                                        </div>
-                                        <div>
-                                            <p className='text-md'>Khách hàng: Nguyễn Văn A</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className='py-4 p-4'>
-                                    <p className='text-md'>Tôi rất hài lòng với dịch vụ ở đây</p>
-                                </div>
-                            </div>
-                            <div className='w-1/3 text-left'>
-                                <span className='font-medium text-lg'>Đánh giá</span>
-                                <div className='flex justify-start items-center gap-2'>
-                                    <StarIcon className='w-8' color='yellow' />
-                                    <StarIcon className='w-8' color='yellow' />
-                                    <StarIcon className='w-8' color='yellow' />
-                                    <StarIcon className='w-8' color='yellow' />
-                                    <StarIcon className='w-8' color='yellow' />
-                                </div>
-                            </div>
-                        </div>
-
+                <div className="space-y-12 w-full mx-auto">
+                    {/* Các tính năng và tiện nghi tại chỗ */}
+                    <div className="py-10 px-8 bg-gray-50 rounded-lg shadow-md">
+                        <h3 className="text-3xl font-semibold text-indigo-600 mb-6 border-b-2 pb-2 border-indigo-400 inline-block">
+                            Các tính năng và tiện nghi tại chỗ
+                        </h3>
+                        <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-6">
+                            {["Tiện ích 1", "Tiện ích 2", "Tiện ích 3", "Tiện ích 4", "Tiện ích 5", "Tiện ích 6"].map((item, index) => (
+                                <li key={index} className="flex items-center p-4 bg-white rounded-md shadow-sm hover:bg-indigo-50 transition-colors">
+                                    <svg className="w-6 h-6 text-indigo-500 mr-3" fill="currentColor" viewBox="0 0 24 24">
+                                        {/* Icon placeholder */}
+                                        <path d="M12 2L15.09 8H21l-4.91 4L16 18l-4-3.09L8 18l.91-6L4 8h5.91L12 2z" />
+                                    </svg>
+                                    <span className="text-gray-700 font-medium">{item}</span>
+                                </li>
+                            ))}
+                        </ul>
                     </div>
 
+                    {/* Tính năng và tiện nghi gần kề */}
+                    <div className="py-10 px-8 bg-gray-50 rounded-lg shadow-md">
+                        <h3 className="text-3xl font-semibold text-indigo-600 mb-6 border-b-2 pb-2 border-indigo-400 inline-block">
+                            Các tính năng và tiện nghi gần kề
+                        </h3>
+                        <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-6">
+                            {["Tiện ích 1", "Tiện ích 2", "Tiện ích 3", "Tiện ích 4", "Tiện ích 5", "Tiện ích 6"].map((item, index) => (
+                                <li key={index} className="flex items-center p-4 bg-white rounded-md shadow-sm hover:bg-indigo-50 transition-colors">
+                                    <svg className="w-6 h-6 text-indigo-500 mr-3" fill="currentColor" viewBox="0 0 24 24">
+                                        {/* Icon placeholder */}
+                                        <path d="M12 2L15.09 8H21l-4.91 4L16 18l-4-3.09L8 18l.91-6L4 8h5.91L12 2z" />
+                                    </svg>
+                                    <span className="text-gray-700 font-medium">{item}</span>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
 
+                    {/* Chính sách */}
+                    <div className="py-10 px-8 bg-gray-50 rounded-lg shadow-md">
+                        <h3 className="text-3xl font-semibold text-indigo-600 mb-6 border-b-2 pb-2 border-indigo-400 inline-block">
+                            Chính sách
+                        </h3>
+                        <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-6">
+                            {["Chính sách 1", "Chính sách 2", "Chính sách 3"].map((item, index) => (
+                                <li key={index} className="flex items-center p-4 bg-white rounded-md shadow-sm hover:bg-indigo-50 transition-colors">
+                                    <svg className="w-6 h-6 text-indigo-500 mr-3" fill="currentColor" viewBox="0 0 24 24">
+                                        {/* Icon placeholder */}
+                                        <path d="M12 2L15.09 8H21l-4.91 4L16 18l-4-3.09L8 18l.91-6L4 8h5.91L12 2z" />
+                                    </svg>
+                                    <span className="text-gray-700 font-medium">{item}</span>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
                 </div>
+
+                <div className='py-16 text-indigo-600'>
+                    <h3 className="text-3xl font-bold mb-6">Đánh giá</h3>
+                    <span className="text-2xl flex items-center gap-2 font-semibold">
+                        <StarIcon className="w-12" color="yellow" />
+                        <span className="text-3xl">4,6</span>/5
+                        <span className="text-gray-400 text-xl mt-1 font-light">16 đánh giá</span>
+                    </span>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 py-8">
+                        {resort && resort.feedbackList && resort.feedbackList.slice(0, visibleFeedbackCount).map((item, index) => (
+                            <div key={index} className="border-b-4 w-full p-6 flex justify-between bg-gray-50 rounded-lg shadow-md">
+                                <div className="flex flex-col justify-start gap-6 w-2/3">
+                                    <div className="flex items-center gap-4">
+                                        <div>
+                                            <img
+                                                src="https://scontent.fsgn2-6.fna.fbcdn.net/v/t39.30808-6/315873108_1547775398968586_291388187145697786_n.jpg?_nc_cat=111&ccb=1-7&_nc_sid=a5f93a&_nc_ohc=2V78iXS9vMQQ7kNvgF9WUhL&_nc_zt=23&_nc_ht=scontent.fsgn2-6.fna&_nc_gid=ApeT9Xgi8oLUPfNsLgTDe7Z&oh=00_AYBElDZMRDh4ekuLpuaWk42oOL-oY8MbC-l_MyIJkiANqQ&oe=67350D93"
+                                                alt="Avatar"
+                                                className="w-20 h-20 border-4 border-green-400 rounded-full"
+                                            />
+                                        </div>
+                                        <div>
+                                            <div className="mb-2 text-md text-gray-600">
+                                                <p>Ngày: {item.createdDate}</p>
+                                            </div>
+                                            <div>
+                                                <p className="text-md text-gray-600">Người đánh giá: {item.user && item.user.fullName}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="py-4 p-4">
+                                        <p className="text-lg font-semibold">Nội dung đánh giá: <span className="text-md font-normal">{item.comment}</span></p>
+                                    </div>
+                                </div>
+                                <div className="w-1/3 text-left">
+                                    <span className="font-medium text-lg text-gray-800">Đánh giá</span>
+                                    <div className="flex justify-start items-center gap-2">
+                                        {Array.from({ length: item.ratingPoint }, (_, index) => (
+                                            <StarIcon key={index} className="w-8 text-yellow-500" />
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+
+                        {resort && resort.feedbackList && visibleFeedbackCount < resort.feedbackList.length && (
+                            <div className="text-center mt-6 col-span-2">
+                                <button
+                                    onClick={handleShowMore}
+                                    className="flex items-center mx-auto justify-center gap-2 px-6 py-3 bg-gradient-to-r from-purple-500 to-indigo-600 text-white font-bold rounded-full shadow-xl hover:shadow-2xl hover:from-indigo-500 hover:to-purple-600 transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105"
+                                >
+                                    <span>Xem thêm</span>
+                                    <FaChevronDown className="text-lg" />
+                                </button>
+                            </div>
+                        )}
+
+                        {resort && resort.feedbackList && visibleFeedbackCount > 3 && (
+                            <div className="text-center mt-6 col-span-2">
+                                <button
+                                    onClick={handleHidden}
+                                    className="flex items-center mx-auto justify-center gap-2 px-6 py-3 bg-gradient-to-r from-purple-500 to-indigo-600 text-white font-bold rounded-full shadow-xl hover:shadow-2xl hover:from-indigo-500 hover:to-purple-600 transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105"
+                                >
+                                    <span>Ẩn bớt đánh giá</span>
+                                    <FaChevronUp className="text-lg" />
+                                </button>
+                            </div>
+                        )}
+                    </div>
+                </div>
+
                 <div className='py-10 w-full'>
                     <h3 className='text-3xl font-bold text-gray-800 mb-6'>Địa chỉ</h3>
                     <img src="https://preview.redd.it/zj23e4w876p81.png?width=1080&crop=smart&auto=webp&s=b8be04cdcdee17d074c441bb7d663d5023dc82b9" alt="Map" className='w-full h-[50vh] object-cover' />
