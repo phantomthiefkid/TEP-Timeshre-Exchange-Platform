@@ -39,7 +39,7 @@ const UpdateResort = () => {
                         <button
                             onClick={() => handleTabChange('basic')}
                             className={`py-3 h-16 w-full border-gray-300 transition duration-300 
-          ${activeTab === 'basic' ? 'bg-custom-blue-hover-sidebar text-white' : 'bg-gray-300 text-gray-700 hover:bg-gray-300'}`}
+          ${activeTab === 'basic' ? 'bg-blue-600 text-white hover:bg-blue-500' : 'bg-gray-200 text-gray-400 hover:bg-gray-300'}`}
                         >
                             Thông tin cơ bản
                         </button>
@@ -48,7 +48,7 @@ const UpdateResort = () => {
                         <button
                             onClick={() => handleTabChange('amenities')}
                             className={`py-3 h-16 w-full border-gray-300 transition duration-300 
-          ${activeTab === 'amenities' ? 'bg-custom-blue-hover-sidebar text-white' : 'bg-gray-300 text-gray-700 hover:bg-gray-300'}`}
+          ${activeTab === 'amenities' ? 'bg-blue-600 text-white hover:bg-blue-500' : 'bg-gray-200 text-gray-400 hover:bg-gray-300'}`}
                         >
                             Tiện ích khách sạn
                         </button>
@@ -57,7 +57,7 @@ const UpdateResort = () => {
                         <button
                             onClick={() => handleTabChange('unitType')}
                             className={`py-3 h-16 w-full border-gray-300 transition duration-300 
-          ${activeTab === 'unitType' ? 'bg-custom-blue-hover-sidebar text-white' : 'bg-gray-300 text-gray-700 hover:bg-gray-300'}`}
+          ${activeTab === 'unitType' ? 'bg-blue-600 text-white hover:bg-blue-500' : 'bg-gray-200 text-gray-400 hover:bg-gray-300'}`}
                         >
                             Loại phòng
                         </button>

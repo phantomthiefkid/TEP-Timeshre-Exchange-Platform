@@ -141,7 +141,7 @@ const RentalPostingMNG = () => {
                       <h3 className="font-semibold text-gray-800">
                         {post.resortName}
                       </h3>
-                      <span className="text-gray-600">{post.roomCode}</span>
+                      <span className="text-gray-600">{post.roomCode} - {post.roomName}</span>
                       <p className="text-sm text-blue-500">
                         {post.rentalPostingId}
                       </p>

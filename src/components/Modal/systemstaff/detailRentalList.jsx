@@ -41,13 +41,13 @@ const DetailRentalList = ({ isOpen, onClose, postingId, flag }) => {
         };
       case "AwaitingConfirmation":
         return {
-          label: "Chờ định giá",
+          label: "Chờ xác nhận giá",
           style: "bg-orange-100 text-orange-500",
           styleDot: "bg-orange-500",
         };
       case "PendingPricing":
         return {
-          label: "Chờ xác nhận giá",
+          label: "Chờ định giá",
           style: "bg-orange-100 text-orange-500",
           styleDot: "bg-orange-500",
         };
@@ -63,6 +63,16 @@ const DetailRentalList = ({ isOpen, onClose, postingId, flag }) => {
           style: "bg-red-100 text-red-500",
           styleDot: "bg-red-500",
         };
+        case "RejectPrice":
+          return {
+            label: "Từ chối giá", style: "bg-red-100 text-red-500",
+            styleDot: "bg-red-500"
+          };
+          case "Completed":
+          return {
+            label: "Đã thuê", style: "bg-blue-100 text-blue-500",
+            styleDot: "bg-blue-500"
+          };
       default:
         return {
           label: "Không xác định",
@@ -80,6 +90,7 @@ const DetailRentalList = ({ isOpen, onClose, postingId, flag }) => {
     );
     if (data.status === 200) {
       flag();
+      onClose()
       toast.success("Định giá thành công!", { duration: 3000 });
     }
   };
@@ -157,7 +168,7 @@ const DetailRentalList = ({ isOpen, onClose, postingId, flag }) => {
               <h2 className="text-xl font-semibold mb-3 text-gray-700">
                 Thông tin
               </h2>
-              <div className="grid grid-cols-4 gap-4 mb-6 p-2">
+              <div className="grid grid-cols-4 gap-4 mb-6 p-2 px-6">
                 <p className="text-medium text-gray-500 mr-4">Mã đăng bài: </p>
                 <p className="font-medium text-left">
                   {postingId.rentalPostingId}
@@ -179,13 +190,19 @@ const DetailRentalList = ({ isOpen, onClose, postingId, flag }) => {
 
                 <p className="text-medium text-gray-500 mr-4">Giá phòng: </p>
                 <p className="font-medium text-left">
-                  {postingId.totalPrice} VND{" "}
+                {new Intl.NumberFormat("vi-VN", {
+                            style: "currency",
+                            currency: "VND",
+                          }).format(postingId.priceValuation)}
                 </p>
+                {postingId.status === "PendingPricing" && (
+                  <p className="text-medium text-gray-500 mr-4">Định giá: </p>
+                )}
                 {postingId.status === "PendingPricing" && (
                   <p>
                     {editFlag ? (
                       <input
-                        className="border-2 border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200 shadow-sm"
+                        className="border-2 p-2 border-gray-300 rounded-lg py-1 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200 shadow-sm"
                         onChange={(e) => setNewPriceValuation(e.target.value)}
                         type="text"
                         name="newPriceValuation"

@@ -43,7 +43,7 @@ const DetailRentalPostingModal = ({ isOpen, onClose, postingId, onSave }) => {
 
     const formattedValue = numericValue.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
-    return formattedValue;
+    return numericValue;
   };
 
   const handleAccept = async (e) => {
@@ -55,9 +55,7 @@ const DetailRentalPostingModal = ({ isOpen, onClose, postingId, onSave }) => {
       if (!staffRefinementPrice) {
         setStaffRefinementError("Vui lòng nhập giá hỗ trợ.");
         isValid = false;
-      } else if (isNaN(staffRefinementPrice) || staffRefinementPrice <= 0) {
-        setStaffRefinementError("Vui lòng nhập số hợp lệ (VNĐ) lớn hơn 0.");
-        isValid = false;
+      
       } else {
         setStaffRefinementError("");
       }
