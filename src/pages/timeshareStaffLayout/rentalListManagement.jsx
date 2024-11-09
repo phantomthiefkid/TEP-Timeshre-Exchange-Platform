@@ -265,7 +265,7 @@ const RentalListManagement = () => {
                     </div>
                   </td>
                   <td className="p-4">{booking.unitTypeTitle}</td>
-                  <td className="p-4 pl-8">{booking.number_of_nights}</td>
+                  <td className="p-4 pl-8">{booking.nights}</td>
                   <td className="p-4">
                     <span
                       className={`text-medium px-2 py-1 w-3/4 text-center rounded-full ${
