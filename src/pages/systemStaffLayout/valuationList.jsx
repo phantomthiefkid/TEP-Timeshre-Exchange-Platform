@@ -66,7 +66,7 @@ const ValuationList = () => {
 
     useEffect(() => {
         fetchAllRentalPostings();
-    }, [page, resortName])
+    }, [page, resortName, flag])
 
 
     const getStatusStyles = (status) => {
@@ -77,25 +77,35 @@ const ValuationList = () => {
             return { label: "Đã duyệt", style: "bg-green-100 text-green-500", styleDot: "bg-green-500" };
           case "AwaitingConfirmation":
             return {
-              label: "Chờ định giá",
-              style: "bg-orange-100 text-orange-500",
-              styleDot: "bg-orange-500"
+              label: "Chờ xác nhận giá",
+              style: "bg-yellow-100 text-yellow-500",
+              styleDot: "bg-yellow-500"
             };
           case "PendingPricing":
             return {
-              label: "Chờ xác nhận giá",
+              label: "Chờ định giá",
               style: "bg-orange-100 text-orange-500",
               styleDot: "bg-orange-500"
             };
           case "Closed":
             return {
-              label: "Từ chối", style: "bg-yellow-100 text-yellow-500",
-              styleDot: "bg-yellow-500"
+              label: "Từ chối", style: "bg-red-100 text-red-500",
+              styleDot: "bg-red-500"
             };
           case "Expired":
             return {
               label: "Hết hạn", style: "bg-red-100 text-red-500",
               styleDot: "bg-red-500"
+            };
+            case "RejectPrice":
+            return {
+              label: "Từ chối giá", style: "bg-red-100 text-red-500",
+              styleDot: "bg-red-500"
+            };
+            case "Completed":
+            return {
+              label: "Đã thuê", style: "bg-blue-100 text-blue-500",
+              styleDot: "bg-blue-500"
             };
           default:
             return { label: "Không xác định", style: "bg-gray-100 text-gray-500", styleDot: "bg-gray-500" };
@@ -139,7 +149,7 @@ const ValuationList = () => {
                                 Thêm mới
                             </button>
                         </Link>
-                        <button className="flex items-center bg-blue-500 text-white rounded-lg px-4 py-2">
+                        <button onClick={() => setFlag(!flag)} className="bg-gradient-to-r text-white gap-2 from-blue-300 to-blue-400 border border-blue-300 text-gray-560 py-2 px-4 pr-10 rounded-xl shadow-md flex items-center justify-between cursor-pointer transition duration-300 ease-in-out transform hover:from-blue-400 hover:to-blue-300 hover:border-blue-500 focus:outline-none">
                             <FaArrowsRotate className="mr-3" />
                             Làm mới
                         </button>
@@ -187,11 +197,11 @@ const ValuationList = () => {
 
                 <table className="min-w-full bg-white border border-gray-200 ">
                     <thead>
-                        <tr className="w-full bg-gray-100 border-b border-gray-200">
+                        <tr className="w-full bg-gray-200 border-b border-gray-200">
                             <th className="p-4 text-left ml-3">Tên resort</th>
                             <th className="p-4 text-left">Ngày nhận phòng</th>
                             <th className="p-4 text-left">Ngày trả phòng</th>
-                            <th className="p-4 text-left">Giá mỗi đêm</th>
+                            <th className="p-4 text-left">Định giá</th>
                             <th className="p-4 text-left">Tổng tiền</th>
                             <th className="p-4 text-left">Trạng thái</th>
                             <th className="p-4 text-left"></th>
@@ -213,8 +223,19 @@ const ValuationList = () => {
 
                                 <td className="p-4">{posting.checkinDate}</td>
                                 <td className="p-4">{posting.checkoutDate}</td>
-                                <td className="p-4">{posting.pricePerNights} VND</td>
-                                <td className="p-4">{posting.totalPrice} VND</td>
+                                
+                                <td className="p-4"><p >
+                          {new Intl.NumberFormat("vi-VN", {
+                            style: "currency",
+                            currency: "VND",
+                          }).format(posting.priceValuation)}
+                        </p></td>
+                                <td className="p-4"><p >
+                          {new Intl.NumberFormat("vi-VN", {
+                            style: "currency",
+                            currency: "VND",
+                          }).format(posting.priceValuation)}
+                        </p></td>
                                 <td className="p-4">
                                     <span
                                         className={`flex items-center hover:scale-105 transition-all duration-200 py-1 px-2 rounded-full w-36 ${getStatusStyles(posting.status).style}`}

@@ -83,7 +83,25 @@ const UpdateResortUnitTypeModal = ({ onClose, selectedUnitType, flag }) => {
 
   return (
     <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center">
-      <Toaster position="top-center" reverseOrder={false} />
+      <Toaster toastOptions={{
+        style: {
+          fontSize: '18px', // Increase font size
+          padding: '16px',  // Increase padding
+          maxWidth: '600px', // Increase width (optional)
+        },
+        success: {
+          iconTheme: {
+            primary: 'green',
+            secondary: 'white',
+          },
+        },
+        error: {
+          iconTheme: {
+            primary: 'red',
+            secondary: 'white',
+          },
+        },
+      }} position="top-center" reverseOrder={false} />
       <div className="bg-white  rounded-xl shadow-lg w-full max-w-5xl">
 
         <div className='bg-gradient-to-r from-blue-900 to-custom-blue-hover-sidebar text-center text-white py-6 rounded-t-xl shadow-lg'>

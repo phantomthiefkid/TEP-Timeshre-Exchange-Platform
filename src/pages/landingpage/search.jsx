@@ -69,11 +69,12 @@ const Search = () => {
             <div>
               <input
                 type="text"
-                className="px-4 py-2 w-w-search h-h-search"
+                className="px-4 py-2 w-w-search h-h-search focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="Search..."
                 value={keyword}
                 onChange={handleSearch}
               />
+
             </div>
             <button className="flex items-center bg-blue-500 justify-center px-4 border-l w-14">
               <Link to={"/resortsearchlist"}>

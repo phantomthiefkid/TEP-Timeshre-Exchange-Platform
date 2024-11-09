@@ -8,6 +8,7 @@ import { createResortUnitType } from '../../../service/tsCompanyService/tsCompan
 import { toast, Toaster } from 'react-hot-toast';
 
 import SpinnerWaiting from '../../../components/LoadingComponent/spinnerWaiting';
+import { FaArrowRight } from 'react-icons/fa6';
 const CreateUnitType = ({ onUpdateData, onNext, onBack, formData }) => {
   const { resortId } = useSelector((state) => state.resortId);
   const [selectedUnitType, setSelectedUnitType] = useState(null);
@@ -145,8 +146,12 @@ const CreateUnitType = ({ onUpdateData, onNext, onBack, formData }) => {
         {/* <button type="button" onClick={onBack} className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">
           Quay lại
         </button> */}
-        <button type="button" onClick={handleSubmit} className="bg-gradient-to-r z-0 gap-2 from-green-300 to-green-500 border text-gray-560 py-2 px-8 pr-10 rounded-xl shadow-md flex items-center justify-between cursor-pointer transition duration-300 ease-in-out transform hover:from-green-500 hover:to-green-300 hover:scale-105 hover:text-white focus:outline-none">
-          Hoàn tất
+
+        <button
+          className="bg-indigo-400 hover:bg-indigo-700 text-indigo-100 pl-6 rounded-full flex items-center"
+          onClick={handleSubmit}
+        >
+          <span class="mr-6">Hoàn tất</span><span class="bg-indigo-500 hover:bg-indigo-700 w-12 h-12 flex items-center justify-center rounded-full"><FaArrowRight /></span>
         </button>
       </div>
       {loading && (<SpinnerWaiting />)}

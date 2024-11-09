@@ -19,7 +19,7 @@ const UserManagement = () => {
   const [allUser, setAllUser] = useState([]);
 
   const [page, setPage] = useState(0);
-  const [size, setSize] = useState(10);
+  const [size, setSize] = useState(6);
   const [totalPages, setTotalPages] = useState(1);
   const [roleId, setRoleId] = useState("");
   const [userName, setUserName] = useState("");
@@ -232,7 +232,7 @@ const UserManagement = () => {
 
         <table className="min-w-full bg-white border border-gray-200">
           <thead>
-            <tr className="w-full bg-gray-100 border-b border-gray-200">
+            <tr className="w-full bg-gray-300 border-b border-gray-200">
               <th className="p-4 text-left ml-3">STT</th>
               <th className="text-left p-4">Họ và tên</th>
               <th className="text-left p-4">Địa chỉ email</th>
@@ -242,29 +242,24 @@ const UserManagement = () => {
             </tr>
           </thead>
           <tbody className="bg-white">
-            {allUser &&
-              allUser.map((item, index) => (
-                <tr key={index} className="border-b border-gray-200">
-                  <td className="p-4">{index + 1}</td>
-                  <td className="p-4 flex items-center">
-                    <img
-                      src="https://img.freepik.com/premium-vector/customer-testimonials_9206-746.jpg?semt=ais_hybrid"
-                      alt={`${item.name}'s avatar`}
-                      className="w-14 h-14 rounded-full mr-2" // Adjust size as needed
-                    />
-                    <div>
-                      <p className="font-semibold text-gray-700 text-lg">
-                        {item.userName ? item.userName : "Người dùng"}
-                      </p>{" "}
-                      {/* Display Name */}
-                      <p className="text-gray-500 text-md">{item.email}</p>{" "}
-                      {/* Display Email */}
-                    </div>
-                  </td>
-                  <td className="p-4">{item.email}</td>
-                  <td className="p-4">{item.roleName}</td>
-                  <td className="p-4 text-center">
-                    {/* <input
+            {allUser && allUser.map((item, index) => (
+              <tr key={index} className="border-b border-gray-200 hover:bg-gray-200">
+                <td className="p-4">{index + 1}</td>
+                <td className="p-4 flex items-center">
+                  <img
+                    src="https://img.freepik.com/premium-vector/customer-testimonials_9206-746.jpg?semt=ais_hybrid"
+                    alt={`${item.name}'s avatar`}
+                    className="w-14 h-14 rounded-full mr-2" // Adjust size as needed
+                  />
+                  <div>
+                    <p className="font-semibold text-gray-700 text-lg">{item.userName ? item.userName : "Người dùng"}</p> {/* Display Name */}
+                    <p className="text-gray-500 text-md">{item.email}</p> {/* Display Email */}
+                  </div>
+                </td>
+                <td className="p-4">{item.email}</td>
+                <td className="p-4">{item.roleName}</td>
+                <td className="p-4 text-center">
+                  {/* <input
                     type="checkbox"
                     checked={item.state}
                     className={`w-6 h-6 ${item.state ? 'bg-green-500' : 'bg-gray-300'}`}
