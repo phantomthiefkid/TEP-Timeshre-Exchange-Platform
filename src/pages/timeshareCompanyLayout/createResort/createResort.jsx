@@ -9,7 +9,7 @@ import { toast, Toaster } from 'react-hot-toast';
 import SpinnerWaiting from '../../../components/LoadingComponent/spinnerWaiting';
 
 const CreateResort = () => {
-  const [step, setStep] = useState(3); // Quản lý bước hiện tại
+  const [step, setStep] = useState(1); 
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({

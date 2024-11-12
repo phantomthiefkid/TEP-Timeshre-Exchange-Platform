@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import { toast, Toaster } from 'react-hot-toast';
 import { FaPlusCircle, FaUpload } from 'react-icons/fa';
 import { updateResortUnitType } from '../../service/tsCompanyService/tsCompanyAPI';
+import { uploadFileImage } from '../../service/uploadFileService/uploadFileAPI';
 import Loading from '../LoadingComponent/loading';
 import LoadingWaitingComponent from '../LoadingComponent/loadingWaitingComponent';
 
@@ -11,13 +12,7 @@ const UpdateResortUnitTypeModal = ({ onClose, selectedUnitType, flag }) => {
   const [unitType, setUnitType] = useState(selectedUnitType)
   const [amenity, setAmenity] = useState({ name: "", type: "" });
   const [loading, setLoading] = useState(false);
-  const handleUploadFileImage = (e) => {
-    const files = Array.from(e.target.files);
-    const images = files.map((file) => URL.createObjectURL(file));
-    setPicture((prev) => [
-      ...prev, images
-    ])
-  }
+ 
   const handleAmenityChange = (e) => {
     const { name, value } = e.target;
     setAmenity({ ...amenity, [name]: value });
@@ -38,7 +33,6 @@ const UpdateResortUnitTypeModal = ({ onClose, selectedUnitType, flag }) => {
       });
       setAmenity({ name: '', type: '' });
     }
-    console.log(unitType)
   }
 
   const handleRemoveAmenity = (index) => {
@@ -48,21 +42,29 @@ const UpdateResortUnitTypeModal = ({ onClose, selectedUnitType, flag }) => {
     });
   };
 
-  const handleUpdate = () => {
-    // Tạo một biến mới từ đối tượng chứa tất cả các trường ngoại trừ `id`
-    const {
-      id, // loại bỏ trường `id`
-      unitTypeAmenitiesList, // lấy ra unitTypeAmenitiesList để xử lý
-      ...otherFields // chứa tất cả các trường còn lại
-    } = unitType; // giả sử bạn có dữ liệu resort trong state `resort`
+  const handleUploadFileImage = async (e) => {
+    const file = e.target.files[0];
+    const formData = new FormData();
+    formData.append("file", file)
+    const response = await uploadFileImage(formData);
+    if (response.status === 200) {
+      setUnitType({...unitType, photos: response.data[0]});
+    }
+  }
 
-    // Tạo mới unitTypeAmenitiesDTO và loại bỏ trường isActive từ unitTypeAmenitiesList
+  const handleUpdate = () => {
+    const {
+      id,
+      unitTypeAmenitiesList,
+      ...otherFields
+    } = unitType;
+
     const unitTypeAmenitiesDTOS = unitTypeAmenitiesList.map(({ isActive, ...rest }) => rest);
 
-    // Tạo đối tượng cuối cùng để cập nhật
+
     const updatedResort = {
-      ...otherFields, // giữ nguyên các trường khác
-      unitTypeAmenitiesDTOS // thêm trường unitTypeAmenitiesDTO thay thế cho unitTypeAmenitiesList
+      ...otherFields,
+      unitTypeAmenitiesDTOS
     };
 
     setLoading(true)
@@ -74,7 +76,7 @@ const UpdateResortUnitTypeModal = ({ onClose, selectedUnitType, flag }) => {
       toast.error("Cập nhật thất bại!", { duration: 2000 });
     })
       .finally(() => {
-        setLoading(false); // Tắt loading khi hoàn tất
+        setLoading(false);
       });
 
   };
@@ -85,9 +87,9 @@ const UpdateResortUnitTypeModal = ({ onClose, selectedUnitType, flag }) => {
     <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center">
       <Toaster toastOptions={{
         style: {
-          fontSize: '18px', // Increase font size
-          padding: '16px',  // Increase padding
-          maxWidth: '600px', // Increase width (optional)
+          fontSize: '18px',
+          padding: '16px',
+          maxWidth: '600px',
         },
         success: {
           iconTheme: {
@@ -247,17 +249,15 @@ const UpdateResortUnitTypeModal = ({ onClose, selectedUnitType, flag }) => {
               </div>
 
               <div className='min-h-44 py-2'>
-                {picture.length > 0 && (
+                {unitType.photos && (
                   <div className="flex justify-center items-center mt-6">
-                    {picture.map((image, index) => (
-                      <div key={index} className="relative">
-                        <img
-                          src={image}
-                          alt={`Room ${index + 1}`}
-                          className="w-full h-24 object-cover border rounded-lg"
-                        />
-                      </div>
-                    ))}
+                    <div className="relative">
+                      <img
+                        src={unitType.photos}
+                        alt={unitType.title}
+                        className="w-full h-24 object-cover border rounded-lg"
+                      />
+                    </div>
                   </div>
                 )}
               </div>

@@ -2,6 +2,7 @@ import { LocationMarkerIcon } from '@heroicons/react/solid';
 import React, { useState } from 'react';
 import { FaUpload } from 'react-icons/fa';
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa6';
+import { uploadFileImage } from '../../../service/uploadFileService/uploadFileAPI';
 
 const CreateResortBasic = ({ onNext, onUpdateData, formData }) => {
   const [resortData, setResortData] = useState({
@@ -10,14 +11,12 @@ const CreateResortBasic = ({ onNext, onUpdateData, formData }) => {
     maxPrice: formData.maxPrice || 0,
     description: formData.description || '',
     address: formData.address || '',
-    logo: "", // Lưu ảnh phòng tải lên
+    logo: "", 
   });
   const [errors, setErrors] = useState({});
-  // Hàm xử lý thay đổi dữ liệu trong các input
+  
   const handleChange = (e) => {
     const { name, value } = e.target;
-
-    // Kiểm tra nếu là minPrice hoặc maxPrice thì chuyển đổi giá trị sang Number
     const newValue = (name === 'minPrice' || name === 'maxPrice') ? parseFloat(value) : value;
 
     setResortData({
@@ -40,17 +39,7 @@ const CreateResortBasic = ({ onNext, onUpdateData, formData }) => {
     if (!resortData.address.trim()) newErrors.address = 'Địa chỉ không được để trống';
 
     setErrors(newErrors);
-    return Object.keys(newErrors).length === 0; // Return true if no errors
-  };
-  const handleLogoUpload = (e) => {
-    const file = e.target.files[0];
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      onUpdateData({ logo: reader.result });
-    };
-    if (file) {
-      reader.readAsDataURL(file);
-    }
+    return Object.keys(newErrors).length === 0; 
   };
 
   const handleNext = () => {
@@ -58,37 +47,37 @@ const CreateResortBasic = ({ onNext, onUpdateData, formData }) => {
       onNext();
     }
   };
-  // Hàm xử lý upload ảnh phòng
-  const handleFileUpload = (e) => {
+
+  const handleFileUpload = async (e) => {
     const file = e.target.files[0];
-    if (file) {
-      const imageUrl = URL.createObjectURL(file); // Tạo URL tạm cho ảnh
+    const formData = new FormData();
+    formData.append("file", file);
+    const response = await uploadFileImage(formData);
+    if (response.status === 200) {
       setResortData((prevData) => ({
         ...prevData,
-        logo: imageUrl, // Lưu URL thành chuỗi thay vì mảng
+        logo: response.data[0]
+      }))
+    }
+    if (file) {
+      const imageUrl = URL.createObjectURL(file); 
+      setResortData((prevData) => ({
+        ...prevData,
+        logo: imageUrl,
       }));
     }
   };
 
-
-
   return (
     <div className="space-y-2 px-4">
-
-
-      {/* Chia form thành 2 cột */}
       <div className="relative">
-
-
         <div className="grid grid-cols-2 gap-6 px-4 py-4 p-4 bg-white shadow-lg">
 
-          {/* Column 1 */}
           <div className="space-y-8  my-6">
-            {/* Resort Information Section */}
+     
             <div className="p-6 rounded-lg bg-white space-y-6">
               <h1 className="text-2xl font-bold text-gray-700 tracking-wide font-serif mb-4">Thông tin cơ bản</h1>
 
-              {/* Resort Name */}
               <div className="space-y-2">
                 <label className="font-semibold text-gray-700 text-lg tracking-wide">Tên Resort*</label>
                 <input
@@ -102,12 +91,10 @@ const CreateResortBasic = ({ onNext, onUpdateData, formData }) => {
                 {errors.resortName && <p className="text-red-500 text-sm mt-1">{errors.resortName}</p>}
               </div>
 
-              {/* Price Range */}
               <div className="space-y-4">
                 <label className="font-semibold text-gray-700 text-lg tracking-wide">Khoảng giá (VND)*</label>
                 <div className="grid grid-cols-5 gap-4 items-center">
 
-                  {/* Min Price */}
                   <div className="relative col-span-2">
                     <span className="absolute left-3 top-5 transform -translate-y-1/2 text-gray-500">VND:</span>
                     <input
@@ -121,12 +108,9 @@ const CreateResortBasic = ({ onNext, onUpdateData, formData }) => {
                     {errors.minPrice && <p className="text-red-500 text-sm mt-1">{errors.minPrice}</p>}
                   </div>
 
-                  {/* "Đến" Text */}
                   <div className="text-center col-span-1 text-sm font-semibold text-gray-600">
                     Đến
                   </div>
-
-                  {/* Max Price */}
                   <div className="relative col-span-2">
                     <span className="absolute left-3 top-5 transform -translate-y-1/2 text-gray-500">VND:</span>
                     <input
@@ -142,7 +126,6 @@ const CreateResortBasic = ({ onNext, onUpdateData, formData }) => {
                 </div>
               </div>
 
-              {/* Description */}
               <div className="space-y-2">
                 <label className="font-semibold text-gray-700 text-lg tracking-wide">Mô tả</label>
                 <textarea
@@ -192,9 +175,6 @@ const CreateResortBasic = ({ onNext, onUpdateData, formData }) => {
           {/* Column 2 */}
           <div className="space-y-4">
 
-
-            {/* Upload room images */}
-            {/* Upload room images with icon button */}
             <div className="space-y-4">
               <label className="block mb-2 font-medium">Logo resort</label>
 
@@ -246,14 +226,8 @@ const CreateResortBasic = ({ onNext, onUpdateData, formData }) => {
 
 
       {/* Nút tiếp theo */}
-      <div className="mt-6 flex justify-between py-6">
-        <button
-          type="button"
-          disabled
-          className="bg-indigo-400 hover:bg-indigo-700 text-indigo-100 rounded-full flex items-center"
-        >
-          <span class="bg-indigo-500 hover:bg-indigo-700 w-12 h-12 flex items-center justify-center rounded-full mr-4"><FaArrowLeft /></span><span class="mr-6">trở lại</span>
-        </button>
+      <div className="mt-6 flex justify-end py-6">
+        
         <button
           className="bg-indigo-400 hover:bg-indigo-700 text-indigo-100 pl-6 rounded-full flex items-center"
           onClick={handleNext}

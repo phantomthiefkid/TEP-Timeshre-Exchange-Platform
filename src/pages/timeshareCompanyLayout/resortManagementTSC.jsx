@@ -100,7 +100,7 @@ const ResortManagementTSC = () => {
           </div>
           <div className="flex items-center space-x-4">
             <Link to={`/timesharecompany/createresort`}>
-              <button className="bg-gradient-to-r from-blue-300 to-blue-400 border border-blue-300 text-gray-560 py-2 px-4 pr-10 rounded-xl shadow-md flex items-center justify-between cursor-pointer transition duration-300 ease-in-out transform hover:from-blue-400 hover:to-blue-300 hover:border-blue-500 focus:outline-none gap-4">
+              <button className="bg-gradient-to-r from-blue-500 to-purple-600 text-white py-3 px-6 rounded-lg shadow-lg flex items-center gap-3 hover:from-blue-600 hover:to-purple-700 transition-all duration-300 ease-in-out transform focus:outline-none">
                 <PlusIcon className="w-7 h-7" />
                 Tạo mới resort
               </button>
@@ -109,12 +109,14 @@ const ResortManagementTSC = () => {
         </div>
 
         <div className="p-6">
-          <table className="min-w-full bg-white border border-gray-200 ">
+          <table className="min-w-full bg-white border border-gray-200">
             <thead className="bg-gray-100 rounded-lg">
               <tr className="w-full bg-gray-300 border-b border-gray-200">
-                <th className="p-4 text-left ml-3">STT</th>
+                <th className="p-4 text-left">STT</th>
                 <th className="p-4 text-left">Resort</th>
-                <th className="p-4 text-left">Logo</th>
+                <th className="p-4 text-left">Giá Tối Thiểu</th>
+                <th className="p-4 text-left">Giá Tối Đa</th>
+                <th className="p-4 text-left">Địa chỉ</th>
                 <th className="p-4 text-left">Trạng thái</th>
                 <th className="p-4 text-left"></th>
               </tr>
@@ -126,52 +128,70 @@ const ResortManagementTSC = () => {
                     key={item.id}
                     className="border-b border-gray-200 hover:bg-slate-100"
                   >
+                    {/* STT */}
                     <td className="p-4">{index + 1}</td>
-                    <td className="p-4 flex items-center font-medium text-gray-700">
-                      {item.resortName}
-                    </td>
-                    <td className="p-4">
+
+                    {/* Resort Name and Logo */}
+                    <td className="p-4 flex items-center space-x-3 font-medium text-gray-700">
                       <img
-                        src="https://trao.com.vn/wp-content/uploads/2019/08/logo-vinpearl.jpg"
+                        src={item.logo || "default-logo.png"} // Placeholder if logo is null
                         alt="logo"
                         className="w-12 h-12 rounded-full border-2 border-gray-300 shadow-sm"
                       />
+                      <span>{item.resortName}</span>
                     </td>
+
+                    {/* Min Price */}
+                    <td className="p-4 text-gray-700">
+                      {item.minPrice ? item.minPrice.toLocaleString() : "N/A"} VND
+                    </td>
+
+                    {/* Max Price */}
+                    <td className="p-4 text-gray-700">
+                      {item.maxPrice ? item.maxPrice.toLocaleString() : "N/A"} VND
+                    </td>
+
+                    {/* Address */}
+                    <td className="p-4 text-gray-700">{item.address || "N/A"}</td>
+
+                    {/* Timeshare Company ID */}
+
+
+                    {/* Status */}
                     <td className="p-4">
-                      <span
-                        className={`inline-flex items-center space-x-1.5 px-2 py-0.5 rounded-full text-sm font-medium ${item.isActive ? 'bg-green-200 text-green-800' : 'bg-red-100 text-red-800'
-                          }`}
-                      >
-                        <span
-                          className={`inline-block w-2 h-2 rounded-full ${item.isActive ? 'bg-green-500' : 'bg-red-500'
-                            }`}
-                        ></span>
-                        <span>{item.isActive ? 'Đang hoạt động' : 'Ngừng hoạt động'}</span>
-                      </span>
-
+                      <label className="flex items-center">
+                        <input
+                          type="checkbox"
+                          checked={item.isActive}
+                          className="sr-only peer"
+                          disabled
+                        />
+                        <div className="relative w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                        <span className="ms-3 text-sm font-medium text-gray-400 dark:text-gray-500">
+                          {item.isActive ? "Đang hoạt động" : "Đã vô hiệu hóa"}
+                        </span>
+                      </label>
                     </td>
 
+                    {/* Actions */}
                     <td className="p-4 flex gap-4">
                       <button className="hover:text-blue-500 transition duration-300 ease-in-out">
                         <Link to={`/timesharecompany/updateresort/${item.id}`}>
-                          {" "}
                           <DocumentIcon color="gray" className="w-6 h-6" />
                         </Link>
                       </button>
-                      <button className="hover:text-blue-500 transition duration-300 ease-in-out">
-                        <DotsVerticalIcon className="w-6 h-6" />
-                      </button>
+
                     </td>
                   </tr>
                 ))
               ) : !allResort ? (
-                <Loading />
-              ) : (
                 <tr>
-                  <td colSpan="5" className="p-4 text-center text-gray-500">
+                  <td colSpan="8" className="p-4 text-center text-gray-500">
                     Không tìm thấy gì
                   </td>
                 </tr>
+              ) : (
+                <Loading />
               )}
             </tbody>
           </table>
@@ -190,11 +210,10 @@ const ResortManagementTSC = () => {
                   <button
                     key={index}
                     onClick={() => setPage(index)}
-                    className={`w-8 h-8 flex items-center justify-center rounded-full ${
-                      index === page
-                        ? "bg-blue-500 text-white"
-                        : "bg-white text-gray-500"
-                    }`}
+                    className={`w-8 h-8 flex items-center justify-center rounded-full ${index === page
+                      ? "bg-blue-500 text-white"
+                      : "bg-white text-gray-500"
+                      }`}
                   >
                     {index + 1}
                   </button>

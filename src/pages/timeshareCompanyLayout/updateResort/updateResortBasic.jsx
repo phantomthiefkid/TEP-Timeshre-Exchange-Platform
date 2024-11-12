@@ -6,6 +6,7 @@ import { useParams } from 'react-router-dom'
 import Loading from '../../../components/LoadingComponent/loading';
 import SpinnerWaiting from '../../../components/LoadingComponent/spinnerWaiting';
 import { getResortById, updateResortBasic } from '../../../service/tsCompanyService/tsCompanyAPI';
+import { uploadFileImage } from '../../../service/uploadFileService/uploadFileAPI';
 
 const UpdateResortBasic = () => {
 
@@ -65,7 +66,6 @@ const UpdateResortBasic = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
 
-    // Update only fields other than timeshareCompanyId
     if (name !== 'timeshareCompanyId') {
       setResort((prevResort) => ({
         ...prevResort,
@@ -78,13 +78,22 @@ const UpdateResortBasic = () => {
     try {
       await updateResortBasic(resort, id);
       toast.success("Cập nhật thành công!!", { duration: 3000 });
-      setFlag(!flag); // This toggles the flag state
-      // After the update, fetch the resort details again
-      await getResortDetail(); // Fetch updated data
+      setFlag(!flag); 
+      await getResortDetail();
     } catch (error) {
       toast.error("Cập nhật thất bại! Vui lòng thử lại.", { duration: 3000 });
     }
   };
+
+  const handleFileUpload = async (e) => {
+    const file = e.target.files[0];
+    const formData = new FormData();
+    formData.append("file", file);
+    const response = await uploadFileImage(formData);
+    if (response.status === 200) {
+      setResort({...resort, logo: response.data[0]});
+    }
+  }
 
   const hasChanged = () => {
     return JSON.stringify(resort) !== JSON.stringify(originalResort);
@@ -228,24 +237,24 @@ const UpdateResortBasic = () => {
                 accept="image/*"
                 multiple
                 className="hidden"
-              // onChange={handleFileUpload}
+               onChange={handleFileUpload}
               />
             </div>
 
             Display uploaded images
-            {/* {resortData.roomImages.length > 0 && (
+            {resort.logo && (
               <div className="grid grid-cols-4 gap-4 mt-4">
-                {resortData.roomImages.map((image, index) => (
-                  <div key={index} className="relative">
+               
+                  <div  className="relative">
                     <img
-                      src={image}
-                      alt={`Room ${index + 1}`}
+                      src={resort.logo}
+                      alt={`${resort.title}`}
                       className="w-full h-32 object-cover border rounded-lg"
                     />
                   </div>
-                ))}
+              
               </div>
-            )} */}
+            )}
           </div>
 
         </div>

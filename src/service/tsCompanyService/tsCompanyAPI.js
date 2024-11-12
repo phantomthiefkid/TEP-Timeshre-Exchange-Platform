@@ -112,6 +112,7 @@ const updateTimeshareCompanystaff = async (staffId = "", data) => {
   }
 };
 
+
 export {
   getAllResort,
   getAllTimeshareStaff,
@@ -124,4 +125,5 @@ export {
   updateResortUnitType,
   getTimeshareCompanyById,
   getResortById,
+ 
 };

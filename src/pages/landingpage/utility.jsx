@@ -10,7 +10,7 @@ const Utility = () => {
                 <div className='lg:w-1/3 w-full'>
                     <img
                         className='w-w-utility-image h-h-utility-image lg:w-full lg:h-auto object-cover hover:opacity-70 duration-500 transition-opacity'
-                        src='https://noithatmanhhe.vn/media/24624/19-he-tu-bep-chu-l-dep.jpg?width=700&height=482.53333333333336&rmode=boxpad'
+                        src='https://unwinds.s3.ap-southeast-2.amazonaws.com/1731303019325_kitchen.png'
                         alt='outdoor pool'
                     />
                 </div>
@@ -28,7 +28,7 @@ const Utility = () => {
                 <div className='lg:w-1/3 w-full '>
                     <img
                         className='w-w-utility-image h-h-utility-image lg:w-full lg:h-auto object-cover hover:opacity-70 duration-500 transition-opacity'
-                        src='https://hanteco.vn/hinhanh/tintuc/ngay-ngat-voi-nhung-ngoi-nha-so-huu-be-boi-ngoai-troi-cuc-dep-2.jpg'
+                        src='https://unwinds.s3.ap-southeast-2.amazonaws.com/1731303076888_swimpool.png'
                         alt='outdoor pool'
                     />
                 </div>
@@ -47,7 +47,7 @@ const Utility = () => {
                 <div className='lg:w-1/3 w-full'>
                     <img
                         className='w-w-utility-image h-h-utility-image lg:w-full lg:h-auto object-cover hover:opacity-70 duration-500 transition-opacity'
-                        src='https://static.vinwonders.com/production/nha-hang-nha-trang-topbanner.jpg'
+                        src='https://unwinds.s3.ap-southeast-2.amazonaws.com/1731303146131_restaurant.png'
                         alt='outdoor pool'
                     />
                 </div>

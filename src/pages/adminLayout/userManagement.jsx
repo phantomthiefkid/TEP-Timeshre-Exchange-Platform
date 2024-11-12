@@ -15,6 +15,7 @@ import { toast, Toaster } from "react-hot-toast";
 import DetailEditUserModal from "../../components/Modal/detailEditUserModal";
 import SpinnerWaiting from "../../components/LoadingComponent/spinnerWaiting";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa6";
+import { FaBuilding, FaLock, FaUserAlt, FaUserCog, FaUsers } from "react-icons/fa";
 const UserManagement = () => {
   const [allUser, setAllUser] = useState([]);
 
@@ -33,6 +34,13 @@ const UserManagement = () => {
   const [countTSC, setCountTSC] = useState(0);
   const [countCustomer, setCountCustomer] = useState(0);
   const [countAll, setCountAll] = useState(0);
+  const [counts, setCounts] = useState({
+    admin: 0,
+    systemStaff: 0,
+    tsc: 0,
+    customer: 0,
+    total: 0,
+  })
   const fetchAllUser = async () => {
     try {
       let data = await getAllUser(page, size, roleId, userName);
@@ -46,41 +54,96 @@ const UserManagement = () => {
     }
   };
 
-  const fetchAllUserForCount = async () => {
+  // const fetchAllUserForCount = async () => {
+  //   try {
+  //     let data = await getAllUserForCount();
+  //     if (data.status === 200) {
+  //       let admin =
+  //         data.data.content &&
+  //         data.data.content.filter((item) => {
+  //           return item.roleId === 4;
+  //         });
+  //       let systemstaff =
+  //         data.data.content &&
+  //         data.data.content.filter((item) => {
+  //           return item.roleId === 3;
+  //         });
+  //       let tsc =
+  //         data.data.content &&
+  //         data.data.content.filter((item) => {
+  //           return item.roleId === 2;
+  //         });
+  //       let customer =
+  //         data.data.content &&
+  //         data.data.content.filter((item) => {
+  //           return item.roleId === 1;
+  //         });
+
+  //       setCountAdmin(admin.length);
+  //       setCountCustomer(customer.length);
+  //       setCountSystemStaff(systemstaff.length);
+  //       setCountTSC(tsc.length);
+  //       setCountAll(data.data.content.length);
+  //     }
+  //   } catch (error) {
+  //     throw error;
+  //   }
+  // };
+
+  const fetchUserCounts = async () => {
     try {
-      let data = await getAllUserForCount();
-      if (data.status === 200) {
-        let admin =
-          data.data.content &&
-          data.data.content.filter((item) => {
-            return item.roleId === 4;
-          });
-        let systemstaff =
-          data.data.content &&
-          data.data.content.filter((item) => {
-            return item.roleId === 3;
-          });
-        let tsc =
-          data.data.content &&
-          data.data.content.filter((item) => {
-            return item.roleId === 2;
-          });
-        let customer =
-          data.data.content &&
-          data.data.content.filter((item) => {
-            return item.roleId === 1;
+      let currentPage = 0;
+      let fetchedAllPages = false;
+      let roleCounts = { admin: 0, systemStaff: 0, tsc: 0, customer: 0, total: 0 };
+
+      while (!fetchedAllPages) {
+        const data = await getAllUserForCount();
+        if (data.status === 200) {
+          // Count each role in the current page
+          data.data.content.forEach((user) => {
+            switch (user.roleId) {
+              case 4:
+                roleCounts.admin += 1;
+                break;
+              case 3:
+                roleCounts.systemStaff += 1;
+                break;
+              case 2:
+                roleCounts.tsc += 1;
+                break;
+              case 1:
+                roleCounts.customer += 1;
+                break;
+              default:
+                break;
+            }
           });
 
-        setCountAdmin(admin.length);
-        setCountCustomer(customer.length);
-        setCountSystemStaff(systemstaff.length);
-        setCountTSC(tsc.length);
-        setCountAll(data.data.content.length);
+          // Update total count for each page loaded
+          roleCounts.total += data.data.content.length;
+
+          // Check if all pages have been fetched
+          fetchedAllPages = currentPage >= data.data.totalPages - 1;
+          currentPage += 1;
+        }
       }
+
+      // Set final counts after all pages are fetched
+      setCounts(roleCounts);
     } catch (error) {
-      throw error;
+      console.error("Error fetching users:", error);
     }
   };
+
+  useEffect(() => {
+    fetchAllUser();
+    // fetchUserCounts()
+  }, [page, roleId, userName, flag]);
+
+  useEffect(() => {
+    // fetchAllUserForCount();
+    fetchUserCounts()
+  }, []);
 
   const handleNextPage = () => {
     if (page < totalPages - 1) {
@@ -104,13 +167,7 @@ const UserManagement = () => {
     setPage(0);
   };
 
-  useEffect(() => {
-    fetchAllUser();
-  }, [page, roleId, userName, flag]);
-
-  useEffect(() => {
-    fetchAllUserForCount();
-  }, []);
+ 
 
   const handleCreateUser = async (newUser) => {
     try {
@@ -150,78 +207,75 @@ const UserManagement = () => {
               Quản lí tài khoản người dùng và quyền hạn tài khoản ở đây.
             </p>
           </div>
-          <div className="flex space-x-4">
-            <span className="bg-red-100 text-red-600 px-2 py-1 rounded-full text-sm font-medium">
-              Tất cả: <CountUp start={0} end={countAll} duration={2} />
-            </span>
-            <span className="bg-blue-100 text-blue-600 px-2 py-1 rounded-full text-sm font-medium">
-              Customer: <CountUp start={0} end={countCustomer} duration={2} />
-            </span>
-            <span className="bg-green-100 text-green-600 px-2 py-1 rounded-full text-sm font-medium">
-              System Staff:{" "}
-              <CountUp start={0} end={countSystemStaff} duration={2} />
-            </span>
-            <span className="bg-yellow-100 text-yellow-600 px-2 py-1 rounded-full text-sm font-medium">
-              Timeshare Company:{" "}
-              <CountUp start={0} end={countTSC} duration={2} />
-            </span>
-            <span className="bg-blue-100 text-blue-600 px-2 py-1 rounded-full text-sm font-medium">
-              Admin: <CountUp start={0} end={countAdmin} duration={2} />
-            </span>
+          <div className="flex items-center space-x-6">
+            <div className="flex items-center space-x-2 bg-red-100 text-red-600 px-4 py-2 rounded-lg shadow-md hover:bg-red-200 hover:shadow-lg transition-all duration-300">
+              <FaUsers className="text-red-600" />
+              <span className="text-sm font-medium">Tất cả: </span>
+              <CountUp start={0} end={counts.total} duration={4} />
+            </div>
+
+            <div className="flex items-center space-x-2 bg-blue-100 text-blue-600 px-4 py-2 rounded-lg shadow-md hover:bg-blue-200 hover:shadow-lg transition-all duration-300">
+              <FaUserAlt className="text-blue-600" />
+              <span className="text-sm font-medium">Customer: </span>
+              <CountUp start={0} end={counts.customer} duration={4} />
+            </div>
+
+            <div className="flex items-center space-x-2 bg-green-100 text-green-600 px-4 py-2 rounded-lg shadow-md hover:bg-green-200 hover:shadow-lg transition-all duration-300">
+              <FaUserCog className="text-green-600" />
+              <span className="text-sm font-medium">System Staff: </span>
+              <CountUp start={0} end={counts.systemStaff} duration={4} />
+            </div>
+
+            <div className="flex items-center space-x-2 bg-yellow-100 text-yellow-600 px-4 py-2 rounded-lg shadow-md hover:bg-yellow-200 hover:shadow-lg transition-all duration-300">
+              <FaBuilding className="text-yellow-600" />
+              <span className="text-sm font-medium">Timeshare Company: </span>
+              <CountUp start={0} end={counts.tsc} duration={4} />
+            </div>
+
+            <div className="flex items-center space-x-2 bg-blue-100 text-blue-600 px-4 py-2 rounded-lg shadow-md hover:bg-blue-200 hover:shadow-lg transition-all duration-300">
+              <FaLock className="text-blue-600" />
+              <span className="text-sm font-medium">Admin: </span>
+              <CountUp start={0} end={counts.admin} duration={4} />
+            </div>
           </div>
+
+
         </div>
 
-        <div className="flex justify-end items-center p-6">
+        <div className="flex justify-end items-center p-6 space-x-6">
           <div className="flex space-x-4">
             {/* Search User */}
             <input
               type="text"
               placeholder="Tìm kiếm người dùng..."
-              className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="px-6 py-3 w-80 border border-gray-300 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-700 placeholder-gray-400 transition duration-300 ease-in-out transform hover:border-blue-500"
               onChange={handleSearch}
             />
 
             {/* Filter */}
             <select
-              className="bg-gradient-to-r from-blue-50 to-blue-100 text-gray-700 py-2 px-4 pr-10 rounded-xl shadow-md flex items-center justify-between cursor-pointer transition duration-300 ease-in-out transform  hover:border-blue-500 focus:outline-none"
+              className="bg-white text-gray-700 py-3 px-5 pr-12 rounded-lg shadow-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300 ease-in-out transform hover:border-blue-500"
               value={roleId}
               onChange={handleRoleFilter}
             >
               <option value="">Tất cả</option>
-              <option
-                class="block px-4 py-2 text-gray-700 hover:bg-blue-100 hover:text-blue-700 cursor-pointer rounded-lg transition"
-                value="4"
-              >
-                Admin
-              </option>
-              <option
-                class="block px-4 py-2 text-gray-700 hover:bg-blue-100 hover:text-blue-700 cursor-pointer rounded-lg transition"
-                value="2"
-              >
-                Timeshare Company
-              </option>
-              <option
-                class="block px-4 py-2 text-gray-700 hover:bg-blue-100 hover:text-blue-700 cursor-pointer rounded-lg transition"
-                value="3"
-              >
-                System Staff
-              </option>
-              <option
-                class="block px-4 py-2 text-gray-700 hover:bg-blue-100 hover:text-blue-700 cursor-pointer rounded-lg transition"
-                value="1"
-              >
-                Customer
-              </option>
+              <option value="4">Admin</option>
+              <option value="2">Timeshare Company</option>
+              <option value="3">System Staff</option>
+              <option value="1">Customer</option>
             </select>
 
-            {/* Add New User */}
+            {/* Add New User Button */}
             <button
               onClick={() => setIsModalOpen(true)}
-              className="bg-gradient-to-r gap-2 from-blue-300 to-blue-400 border border-blue-300 text-gray-560 py-2 px-4 pr-10 rounded-xl shadow-md flex items-center justify-between cursor-pointer transition duration-300 ease-in-out transform hover:from-blue-400 hover:to-blue-300 hover:border-blue-500 focus:outline-none"
+              className="bg-gradient-to-r from-blue-500 to-purple-600 text-white py-3 px-6 rounded-lg shadow-lg flex items-center gap-3 hover:from-blue-600 hover:to-purple-700 transition-all duration-300 ease-in-out transform focus:outline-none"
             >
-              <PlusIcon className="w-7 h-7" />
-              Thêm người dùng mới
+              <PlusIcon className="w-6 h-6" />
+              <span className="font-semibold">Thêm người dùng mới</span>
             </button>
+
+
+
             <CreateUserModal
               isOpen={isModalOpen}
               onClose={() => setIsModalOpen(false)}
@@ -229,6 +283,8 @@ const UserManagement = () => {
             />
           </div>
         </div>
+
+
 
         <table className="min-w-full bg-white border border-gray-200">
           <thead>
@@ -264,29 +320,29 @@ const UserManagement = () => {
                     checked={item.state}
                     className={`w-6 h-6 ${item.state ? 'bg-green-500' : 'bg-gray-300'}`}
                   /> */}
-                    <label className="flex items-center">
-                      <input
-                        type="checkbox"
-                        checked={item.isActive}
-                        className="sr-only peer"
-                        disabled
-                      />
-                      <div className="relative w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
-                      <span className="ms-3 text-sm font-medium text-gray-400 dark:text-gray-500">
-                        {item.isActive ? "Đang hoạt động" : "Đã vô hiệu hóa"}
-                      </span>
-                    </label>
-                  </td>
-                  <td className="p-4 flex gap-4">
-                    <button onClick={() => handleOpenUpdateModal(item)}>
-                      <DocumentIcon color="gray" className="w-6 h-6" />
-                    </button>
-                    <button>
-                      <DotsVerticalIcon className="w-6 h-6" />
-                    </button>
-                  </td>
-                </tr>
-              ))}
+                  <label className="flex items-center">
+                    <input
+                      type="checkbox"
+                      checked={item.isActive}
+                      className="sr-only peer"
+                      disabled
+                    />
+                    <div className="relative w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                    <span className="ms-3 text-sm font-medium text-gray-400 dark:text-gray-500">
+                      {item.isActive ? "Đang hoạt động" : "Đã vô hiệu hóa"}
+                    </span>
+                  </label>
+                </td>
+                <td className="p-4 flex gap-4">
+                  <button onClick={() => handleOpenUpdateModal(item)}>
+                    <DocumentIcon color="gray" className="w-6 h-6" />
+                  </button>
+                  <button>
+                    <DotsVerticalIcon className="w-6 h-6" />
+                  </button>
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
 
@@ -311,11 +367,10 @@ const UserManagement = () => {
                 <button
                   key={index}
                   onClick={() => setPage(index)}
-                  className={`w-8 h-8 flex items-center justify-center rounded-full ${
-                    index === page
-                      ? "bg-blue-500 text-white"
-                      : "bg-white text-gray-500"
-                  }`}
+                  className={`w-8 h-8 flex items-center justify-center rounded-full ${index === page
+                    ? "bg-blue-500 text-white"
+                    : "bg-white text-gray-500"
+                    }`}
                 >
                   {index + 1}
                 </button>

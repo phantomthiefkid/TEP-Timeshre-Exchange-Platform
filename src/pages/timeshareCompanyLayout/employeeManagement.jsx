@@ -135,13 +135,13 @@ const employeeManagement = () => {
             <input
               type="text"
               placeholder="Tìm kiếm nhân viên..."
-              className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="px-6 py-3 w-80 border border-gray-300 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-700 placeholder-gray-400 transition duration-300 ease-in-out transform hover:border-blue-500"
               onChange={handleSearch}
             />
 
             <button
               onClick={() => setIsModalOpen(true)}
-              className="bg-gradient-to-r from-blue-300 to-blue-400 border border-blue-300 text-gray-560 py-2 px-4 pr-10 rounded-xl shadow-md flex items-center justify-between cursor-pointer transition duration-300 ease-in-out transform hover:from-blue-400 hover:to-blue-300 hover:border-blue-500 focus:outline-none gap-4"
+              className="bg-gradient-to-r from-blue-500 to-purple-600 text-white py-3 px-6 rounded-lg shadow-lg flex items-center gap-3 hover:from-blue-600 hover:to-purple-700 transition-all duration-300 ease-in-out transform focus:outline-none"
             >
               <PlusIcon className="w-7 h-7" />
               Thêm mới nhân viên
@@ -177,16 +177,18 @@ const employeeManagement = () => {
                       {item.userName}
                     </td>
                     <td className="p-4">
-                      <span
-                        className={`inline-flex items-center space-x-1.5 px-2 py-0.5 rounded-full text-sm font-medium ${item.isActive ? "bg-green-200 text-green-800" : "bg-red-100 text-red-800"
-                          }`}
-                      >
-                        <span
-                          className={`inline-block w-2 h-2 rounded-full ${item.isActive ? "bg-green-500" : "bg-red-500"
-                            }`}
-                        ></span>
-                        <span>{item.isActive ? "Đang hoạt động" : "Ngừng hoạt động"}</span>
-                      </span>
+                    <label className="flex items-center">
+                    <input
+                      type="checkbox"
+                      checked={item.isActive}
+                      className="sr-only peer"
+                      disabled
+                    />
+                    <div className="relative w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-green-500"></div>
+                    <span className="ms-3 text-sm font-medium text-gray-400 dark:text-gray-500">
+                      {item.isActive ? "Đang hoạt động" : "Đã vô hiệu hóa"}
+                    </span>
+                  </label>
                     </td>
 
                     <td className="p-4 flex gap-4">
