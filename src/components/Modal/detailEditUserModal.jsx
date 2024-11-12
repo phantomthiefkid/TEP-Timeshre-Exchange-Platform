@@ -77,7 +77,7 @@ const DetailEditUserModal = ({ isOpen, onClose, userData, setFlag }) => {
                     {/* Avatar (Positioned to overlap the cover image) */}
                     <div className="absolute -bottom-12 left-1/4 transform -translate-x-1/2">
                         <img
-                            src="https://scontent.fsgn2-3.fna.fbcdn.net/v/t39.30808-6/456978924_1023718513095323_6685386592485683304_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=833d8c&_nc_eui2=AeHWHixMEiiuVoHgnI4QgzdJ-OThygECg9b45OHKAQKD1oSvJYLdliv5F7eKFBLlYtcSVkHAPA9SwcCEzXE0Xkc3&_nc_ohc=X-6YpJ3D4S0Q7kNvgEGA0Dy&_nc_ht=scontent.fsgn2-3.fna&_nc_gid=ACqM8mZ5ZKFwrUNTIFVHpbX&oh=00_AYAQ_DFKDMSnCWMZmjfLxFLV416WUPpG0fTxAd8FgWJOvg&oe=6711E7D3"
+                            src="https://img.freepik.com/premium-vector/customer-testimonials_9206-746.jpg?semt=ais_hybrid"
                             alt="User Avatar"
                             className="w-28 h-28 rounded-full border-4 border-white object-cover"
                         />

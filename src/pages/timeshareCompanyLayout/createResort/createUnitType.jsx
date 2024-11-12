@@ -1,16 +1,15 @@
 import { PlusIcon, XIcon } from '@heroicons/react/solid';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import UnitTypeModal from '../../../components/Modal/unitTypeModal';
-import { setResortId } from '../../../redux/ResortSlice/Resort';
+
 import { createResortUnitType } from '../../../service/tsCompanyService/tsCompanyAPI';
 import { toast, Toaster } from 'react-hot-toast';
 
 import SpinnerWaiting from '../../../components/LoadingComponent/spinnerWaiting';
 import { FaArrowRight } from 'react-icons/fa6';
 const CreateUnitType = ({ onUpdateData, onNext, onBack, formData }) => {
-  const { resortId } = useSelector((state) => state.resortId);
   const [selectedUnitType, setSelectedUnitType] = useState(null);
   const [isOpenModalUnitType, setIsOpenModalUnitType] = useState(false);
   const [roomTypes, setRoomTypes] = useState([]);
@@ -37,18 +36,12 @@ const CreateUnitType = ({ onUpdateData, onNext, onBack, formData }) => {
     try {
       setLoading(true)
       for (const roomType of roomTypes) {
-
-
-        // Gọi API tạo loại phòng
         const response = await createResortUnitType(roomType);
 
-        // Kiểm tra nếu POST thất bại
         if (response.status === 200) {
           setLoading(false);
         }
       }
-
-      // dispatch(setResortId(null))
       toast.success("Tạo mới thành công!", { duration: 1000 })
       setTimeout(() => {
         navigate('/timesharecompany/resortmanagementtsc');

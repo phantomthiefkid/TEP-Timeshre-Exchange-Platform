@@ -94,7 +94,7 @@ const SidebarSystemStaff = () => {
   return (
     <div className="w-64 bg-white h-screen shadow-lg flex flex-col">
       <div className="flex items-center space-x-2 mb-8 px-6 mt-10">
-        <img src="../src/assets/logoTEPblack.png" className="w-auto px-4" />
+        <img src="https://unwinds.s3.ap-southeast-2.amazonaws.com/1731303353778_logoTEPblack.png" alt="logo" className="w-auto px-4" />
       </div>
       <div className="flex-grow space-y-2">
         <MenuItem icon={FaChartBar} title="Dashboard" path="#" />

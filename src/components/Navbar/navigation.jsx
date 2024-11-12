@@ -10,7 +10,7 @@ const Navigation = () => {
         <div className="flex w-1/5 justify-start">
           <a href="/">
             {" "}
-            <img src={logo} alt="Unwind Logo" className="h-[50px]  mr-2" />
+            <img src="https://unwinds.s3.ap-southeast-2.amazonaws.com/1731302217106_logoTEP.png" alt="Unwind Logo" className="h-[50px]  mr-2" />
           </a>
           {/* <label className='font-bold text-3xl text-white'>Unwind</label> */}
         </div>

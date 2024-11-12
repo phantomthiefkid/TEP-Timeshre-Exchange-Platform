@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { FaUpload } from 'react-icons/fa';
 import { useSelector } from 'react-redux';
+import { uploadFileImage } from '../../service/uploadFileService/uploadFileAPI';
 
 const UnitTypeModal = ({ isOpen, onClose, onAddRoomType, selectedUnitType, onUpdateRoomType }) => {
     const { resortId } = useSelector((state) => state.resortId);
@@ -103,26 +104,28 @@ const UnitTypeModal = ({ isOpen, onClose, onAddRoomType, selectedUnitType, onUpd
     const handleSubmit = () => {
         if (selectedUnitType) {
             onUpdateRoomType(formData);
-            console.log("Update", formData)
         } else {
             onAddRoomType(formData);
-            console.log("Add", formData)
             resetFormData()
         }
         onClose();
     };
 
-    const handleUploadFileImage = (e) => {
-        const files = Array.from(e.target.files);
-        const images = files.map((file) => URL.createObjectURL(file));
-        setPicture((prev) => [
-            ...prev, images
-        ])
-        console.log(picture)
+    const handleUploadFileImage = async (e) => {
+        const files = e.target.files[0];
+        const upload = new FormData();
+        upload.append("file", files)
+        const response = await uploadFileImage(upload);
+        if (response.status === 200) {
+            setFormData({ ...formData, photos: response.data[0] })
+        }
+
+
+
     }
 
     if (!isOpen) return null;
-    // console.log(formData)
+    console.log(formData)
     return (
         <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center z-50">
             <div className="bg-white  rounded-xl shadow-lg w-full max-w-5xl">
@@ -241,13 +244,8 @@ const UnitTypeModal = ({ isOpen, onClose, onAddRoomType, selectedUnitType, onUpd
                                         onChange={handleChange}
 
                                     />
-
                                 </div>
-
-
                             </div>
-
-
                         </div>
 
                         {/* Right column */}
@@ -273,17 +271,17 @@ const UnitTypeModal = ({ isOpen, onClose, onAddRoomType, selectedUnitType, onUpd
                             </div>
 
                             <div className='min-h-24'>
-                                {picture.length > 0 && (
+                                {formData.photos && (
                                     <div className="grid grid-cols-3 gap-4 mt-4">
-                                        {picture.map((image, index) => (
-                                            <div key={index} className="relative">
+                                       
+                                            <div className="relative">
                                                 <img
-                                                    src={image}
-                                                    alt={`Room ${index + 1}`}
+                                                    src={formData.photos}
+                                                    alt={`${formData.title}`}
                                                     className="w-full h-24 object-cover border rounded-lg"
                                                 />
                                             </div>
-                                        ))}
+                                        
                                     </div>
                                 )}
                             </div>

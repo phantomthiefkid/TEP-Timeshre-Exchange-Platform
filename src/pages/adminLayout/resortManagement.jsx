@@ -1,18 +1,17 @@
 import { DotsVerticalIcon, PlusIcon } from "@heroicons/react/outline";
 import React, { useEffect, useState } from "react";
-import HeaderAdmin from "../../components/Header/headerAdmin";
 import {
   createTimeshareCompany,
   getAllTimeshareCompany,
+  getAllTimeshareCompanyForCount,
   getTimeshareCompanyById,
 } from "../../service/adminAPIService/adminAPI";
 import CreateTimeshareCompanyModal from "../../components/Modal/createTimeshareCompanyModal";
 import DetailTimeshareCompanyModal from "../../components/Modal/detailTimeshareCompanyModal";
 import { toast, Toaster } from "react-hot-toast";
-import Loading from "../../components/LoadingComponent/loading";
 import SpinnerWaiting from "../../components/LoadingComponent/spinnerWaiting";
-import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
-
+import { FaChevronLeft, FaChevronRight, FaBuilding } from "react-icons/fa";
+import CountUp from "react-countup";
 const resortManagement = () => {
   const [allTimeshareCompany, setAllTimeshareCompany] = useState([]);
   const [page, setPage] = useState(0);
@@ -23,14 +22,18 @@ const resortManagement = () => {
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
   const [selectedCompany, setSelectedCompany] = useState(null);
   const [loading, setLoading] = useState(true);
-
+  const [countPartner, setCountPartner] = useState(0);
   const fetchAllTimeshareCompany = async () => {
     try {
       let data = await getAllTimeshareCompany(page, size, timeshareCompanyName);
+      let count = await getAllTimeshareCompanyForCount();
       if (data.status === 200) {
         setAllTimeshareCompany(data.data.content);
         setTotalPages(data.data.totalPages);
         setLoading(false);
+      }
+      if (data.status === 200) {
+        setCountPartner(count.data.content.length)
       }
     } catch (error) {
       console.log(error);
@@ -102,6 +105,13 @@ const resortManagement = () => {
               Quản lí đối tác công ty timeshare ở đây.
             </p>
           </div>
+          <div className="flex items-center space-x-6">
+          <div className="flex items-center space-x-2 bg-red-100 text-red-600 px-4 py-2 rounded-lg shadow-md hover:bg-red-200 hover:shadow-lg transition-all duration-300">
+              <FaBuilding className="text-red-600" />
+              <span className="text-sm font-medium">Tất cả: </span>
+              <CountUp start={0} end={countPartner} duration={4} />
+            </div>
+          </div>
         </div>
 
         <div className="flex justify-end items-center p-6">
@@ -109,13 +119,13 @@ const resortManagement = () => {
             <input
               type="text"
               placeholder="Tìm kiếm đối tác..."
-              className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="px-6 py-3 w-80 border border-gray-300 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-700 placeholder-gray-400 transition duration-300 ease-in-out transform hover:border-blue-500"
               onChange={handleSearch}
             />
 
             <button
               onClick={() => setIsModalOpen(true)}
-              className="bg-gradient-to-r from-blue-300 to-blue-400 border border-blue-300 text-gray-560 py-2 px-4 pr-10 rounded-xl shadow-md flex items-center justify-between cursor-pointer transition duration-300 ease-in-out transform hover:from-blue-400 hover:to-blue-300 hover:border-blue-500 focus:outline-none gap-4"
+              className="bg-gradient-to-r from-blue-500 to-purple-600 text-white py-3 px-6 rounded-lg shadow-lg flex items-center gap-3 hover:from-blue-600 hover:to-purple-700 transition-all duration-300 ease-in-out transform focus:outline-none"
             >
               <PlusIcon className="w-7 h-7" />
               Thêm đối tác mới

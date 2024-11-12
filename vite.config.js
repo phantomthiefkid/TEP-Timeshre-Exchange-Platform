@@ -12,4 +12,7 @@ export default defineConfig({
   build: {
     outDir: "dist", // Ensure 'dist' is the directory being used
   },
+  define: {
+    global: 'globalThis',
+  },
 });

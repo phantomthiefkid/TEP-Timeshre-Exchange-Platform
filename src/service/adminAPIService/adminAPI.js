@@ -31,7 +31,7 @@ const getAllUserForCount = async (
     return await axiosConfig.get(`admin/users`, {
       params: {
         pageNo : 0,
-        pageSize : 200,
+        pageSize : 100,
         roleId : "", // Filter by role
         userName : "", // Search by username
       },
@@ -82,6 +82,24 @@ const getAllTimeshareCompany = async (
   }
 };
 
+const getAllTimeshareCompanyForCount = async (
+  pageNo = 0,
+  pageSize = 50,
+  tsName = ""
+) => {
+  try {
+    return await axiosConfig.get(`admin/timeshare-company`, {
+      params: {
+        pageNo,
+        pageSize,
+        tsName,
+      },
+    });
+  } catch (error) {
+    return error;
+  }
+};
+
 const getTimeshareCompanyById = async (tsId = "") => {
   try {
     return await axiosConfig.get(`admin/timeshare-company/${tsId}`, {});
@@ -120,5 +138,6 @@ export {
   getAllTimeshareCompanyAccount,
   createTimeshareCompany,
   updateTimeshareCompany,
-  getAllUserForCount
+  getAllUserForCount,
+  getAllTimeshareCompanyForCount
 };

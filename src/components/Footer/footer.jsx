@@ -1,13 +1,12 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import logoTEP from "../../assets/logoTEP.png";
 import { PhoneIcon, MailIcon } from "@heroicons/react/solid";
 const Footer = () => {
   return (
     <footer className="min-h-[200px] bg-custom-blue flex flex-wrap w-full py-14 text-white">
       <div className="w-2/5 flex justify-center items-center">
         <a href="/">
-          <img src={logoTEP} className="w-[246px]" alt="logo" />
+          <img src="https://unwinds.s3.ap-southeast-2.amazonaws.com/1731303236589_logoTEP.png" className="w-[246px]" alt="logo" />
         </a>
       </div>
       <div className="w-1/5 p-6">

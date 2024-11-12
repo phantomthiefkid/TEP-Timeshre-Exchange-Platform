@@ -3,6 +3,7 @@ import { toast, Toaster } from 'react-hot-toast';
 import { FaPlusCircle, FaUpload } from 'react-icons/fa';
 import { useParams } from 'react-router-dom';
 import { createResortUnitType } from '../../service/tsCompanyService/tsCompanyAPI';
+import { uploadFileImage } from '../../service/uploadFileService/uploadFileAPI';
 import Loading from '../LoadingComponent/loading';
 const CreateUnitTypeForUpdateModal = ({ onClose, flag }) => {
     const [picture, setPicture] = useState([]);
@@ -30,12 +31,14 @@ const CreateUnitTypeForUpdateModal = ({ onClose, flag }) => {
         unitTypeAmenitiesDTOS: []
     })
     const [amenity, setAmenity] = useState({ name: "", type: "" });
-    const handleUploadFileImage = (e) => {
-        const files = Array.from(e.target.files);
-        const images = files.map((file) => URL.createObjectURL(file));
-        setPicture((prev) => [
-            ...prev, images
-        ])
+    const handleUploadFileImage = async (e) => {
+        const file = e.target.files[0];
+        const formData = new FormData();
+        formData.append("file", file);
+        const response = await uploadFileImage(formData)
+        if (response.status === 200) {
+            setUnitType({ ...unitType, photos: response.data[0] });
+        }
     }
     const handleAmenityChange = (e) => {
         const { name, value } = e.target;
@@ -252,17 +255,16 @@ const CreateUnitTypeForUpdateModal = ({ onClose, flag }) => {
                             </div>
 
                             <div className='min-h-44 py-2'>
-                                {picture.length > 0 && (
+                                {unitType.photos && (
                                     <div className="flex justify-center items-center mt-6">
-                                        {picture.map((image, index) => (
-                                            <div key={index} className="relative">
+                                            <div className="relative">
                                                 <img
-                                                    src={image}
-                                                    alt={`Room ${index + 1}`}
+                                                    src={unitType.photos}
+                                                    alt={`${unitType.title}`}
                                                     className="w-full h-24 object-cover border rounded-lg"
                                                 />
                                             </div>
-                                        ))}
+                                     
                                     </div>
                                 )}
                             </div>

@@ -18,10 +18,6 @@ const UpdateResortUnitType = ({ unitType, flag }) => {
     setOpenUnitTypeModal(false)
   }
 
-  const handleOpenCreate = () => {
-
-  }
-
   useEffect(() => {
     setUnitTypeList(unitType)
   }, [unitType])

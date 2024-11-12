@@ -6,33 +6,30 @@ import { getAllResortByName } from "../../service/public/resortService/resortAPI
 const Search = () => {
   const [keyword, setKeyword] = useState("");
   const [resort, setResort] = useState([]);
-  const [debounceTimeout, setDebounceTimeout] = useState(null); // Dùng để lưu timeout của debounce
+  const [debounceTimeout, setDebounceTimeout] = useState(null); 
 
   const handleSearch = (e) => {
     const searchInput = e.target.value;
     setKeyword(searchInput);
 
-    // Nếu không có từ khóa thì reset kết quả tìm kiếm
     if (!searchInput) {
       setResort([]);
-      clearTimeout(debounceTimeout); // Dừng timeout nếu không có từ khóa
+      clearTimeout(debounceTimeout); 
     }
 
-    // Nếu có từ khóa, dùng debounce để chờ trước khi gọi API
     if (debounceTimeout) {
-      clearTimeout(debounceTimeout); // Xóa timeout trước đó nếu có
+      clearTimeout(debounceTimeout); 
     }
 
     const timeout = setTimeout(() => {
       fetchResortList(searchInput);
-    }, 300); // Chờ 300ms sau khi người dùng dừng nhập
+    }, 300); 
 
-    setDebounceTimeout(timeout); // Lưu timeout mới
+    setDebounceTimeout(timeout);
   };
 
   const fetchResortList = async (searchInput) => {
     if (searchInput) {
-      // Chỉ fetch khi có keyword
       try {
         let data = await getAllResortByName(0, 20, searchInput);
         if (data.status) {
@@ -53,7 +50,7 @@ const Search = () => {
         <div className="w-2/5">
           <img
             className="h-logo-300-h w-logo-300-w"
-            src={logoUnwind}
+            src="https://unwinds.s3.ap-southeast-2.amazonaws.com/1731302661734_Unwind.png"
             alt="Unwind Logo"
           />
         </div>
