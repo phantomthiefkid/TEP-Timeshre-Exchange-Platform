@@ -26,17 +26,16 @@ const Partner = () => {
       </h1>
       <div className="mt-10 px-4 md:px-10">
         <div className="space-y-10">
-          {/* Row 1 with 4 images, centered */}
           <div className="flex justify-center">
             <div className="grid grid-cols-4 gap-4 max-w-6xl w-full">
               {tsCompany.slice(0, 8).map((item, index) => (
-                <Link to={`/partner/${item.id}`} key={index}>
+                <div key={index}>
                   <img
                     src={item.logo}
                     alt={item.timeshareCompanyName}
                     className="w-[370px] h-[170px] object-contain border rounded-2xl shadow-xl"
                   />
-                </Link>
+                </div>
               ))}
             </div>
           </div>

@@ -41,8 +41,6 @@ const DetailRentalPostingModal = ({ isOpen, onClose, postingId, onSave }) => {
   const validatePriceInput = (value) => {
     const numericValue = value.replace(/[^0-9]/g, "");
 
-    const formattedValue = numericValue.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-
     return numericValue;
   };
 
@@ -55,7 +53,9 @@ const DetailRentalPostingModal = ({ isOpen, onClose, postingId, onSave }) => {
       if (!staffRefinementPrice) {
         setStaffRefinementError("Vui lòng nhập giá hỗ trợ.");
         isValid = false;
-      
+      } else if (staffRefinementPrice <= 0) {
+        setStaffRefinementError("Vui lòng nhập số hợp lệ (VNĐ) lớn hơn 0.");
+        isValid = false;
       } else {
         setStaffRefinementError("");
       }
@@ -66,7 +66,7 @@ const DetailRentalPostingModal = ({ isOpen, onClose, postingId, onSave }) => {
       if (!priceValuation) {
         setPriceValuationError("Vui lòng nhập định giá.");
         isValid = false;
-      } else if (isNaN(priceValuation) || priceValuation <= 0) {
+      } else if (priceValuation <= 0) {
         setPriceValuationError("Vui lòng nhập số hợp lệ (VNĐ) lớn hơn 0.");
         isValid = false;
       } else {
