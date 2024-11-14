@@ -4,7 +4,8 @@ import UpdateResortAmenity from './updateResortAmenity.jsx';
 import UpdateResortUnitType from './updateResortUnitType.jsx';
 import { useParams } from 'react-router-dom';
 import { getResortById } from '../../../service/tsCompanyService/tsCompanyAPI';
-
+import { FaInfoCircle, FaHotel, FaBed } from 'react-icons/fa';
+import { SparklesIcon } from '@heroicons/react/solid';
 const UpdateResort = () => {
     const { id } = useParams();
     const [activeTab, setActiveTab] = useState('basic');
@@ -31,45 +32,86 @@ const UpdateResort = () => {
     }
     return (
         <div className="w-full p-10 bg-white">
-            <h2 className="text-3xl text-gray-800 font-bold mb-6">Chỉnh sửa thông tin Resort</h2>
+            {/* Resort Images Section */}
+            <div className="flex gap-4 mb-8">
+                <img
+                    src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/350288700.jpg?k=3fa03303a1b6e890b9f1dc50f00f70df2525cde1a21230c464db9a23533529bf&o=&hp=1"
+                    alt="Resort view 1"
+                    className="w-1/3 h-60 object-cover shadow-lg"
+                />
+                <img
+                    src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/198352021.jpg?k=e3e164187bededb636a4176381d7b687d17263c4ec36cd243a4647798b64e695&o=&hp=1"
+                    alt="Resort view 2"
+                    className="w-1/3 h-60 object-cover shadow-lg"
+                />
+                <img
+                    src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/588139600.jpg?k=cb99ba50cb7c74ac4e7c9e3b4843a4f5c4c07bbfd204b3dcc45a47b0c66e3e60&o=&hp=1"
+                    alt="Resort view 3"
+                    className="w-1/3 h-60 object-cover shadow-lg"
+                />
+            </div>
+            <div className="py-4 space-y-4">
+                <h2 className="text-2xl font-extrabold text-sky-600 leading-tight">
+                    <SparklesIcon className="inline-block mr-2 h-8 w-8 text-sky-500" />
+                    Cập nhật thông tin một khu nghỉ dưỡng sang trọng với đầy đủ các tiện nghi và dịch vụ
+                </h2>
 
-            <div className="">
-                <ul className="flex space-x-1 w-1/2 text-xl font-semibold">
+                <span className="block text-lg text-gray-600 font-medium mt-4">
+                    Chỉnh sửa các thông tin chi tiết về resort bao gồm <span className="text-blue-600 hover:text-blue-800">thông tin cơ bản</span>,
+                    <span className="text-blue-600 hover:text-blue-800"> tiện ích nổi bật</span>, và <span className="text-blue-600 hover:text-blue-800">các loại phòng</span> để đáp ứng nhu cầu của khách hàng.
+                </span>
+            </div>
+
+
+
+            <div className="w-full flex justify-center">
+                <ul className="flex space-x-2 w-3/4 text-lg font-semibold rounded-lg shadow-lg bg-gray-50 p-2">
                     <li className="flex-grow">
                         <button
                             onClick={() => handleTabChange('basic')}
-                            className={`py-3 h-16 w-full border-gray-300 transition duration-300 
-          ${activeTab === 'basic' ? 'bg-blue-600 text-white hover:bg-blue-500' : 'bg-gray-200 text-gray-400 hover:bg-gray-300'}`}
+                            className={`py-3 h-16 w-full rounded-md transition duration-300 flex items-center justify-center gap-2
+          ${activeTab === 'basic'
+                                    ? 'bg-blue-600 text-white hover:bg-blue-500 shadow-lg'
+                                    : 'bg-white text-gray-500 hover:bg-gray-200 shadow-md'}`}
                         >
-                            Thông tin cơ bản
+                            <FaInfoCircle className={`text-2xl ${activeTab === 'basic' ? 'text-gray-300' : 'text-gray-400'}`} />
+                            <span>Thông tin cơ bản</span>
                         </button>
                     </li>
                     <li className="flex-grow">
                         <button
                             onClick={() => handleTabChange('amenities')}
-                            className={`py-3 h-16 w-full border-gray-300 transition duration-300 
-          ${activeTab === 'amenities' ? 'bg-blue-600 text-white hover:bg-blue-500' : 'bg-gray-200 text-gray-400 hover:bg-gray-300'}`}
+                            className={`py-3 h-16 w-full rounded-md transition duration-300 flex items-center justify-center gap-2
+          ${activeTab === 'amenities'
+                                    ? 'bg-blue-600 text-white hover:bg-blue-500 shadow-lg'
+                                    : 'bg-white text-gray-500 hover:bg-gray-200 shadow-md'}`}
                         >
-                            Tiện ích khách sạn
+                            <FaHotel className={`text-2xl ${activeTab === 'amenities' ? 'text-green-300' : 'text-gray-400'}`} />
+                            <span>Tiện ích khách sạn</span>
                         </button>
                     </li>
                     <li className="flex-grow">
                         <button
                             onClick={() => handleTabChange('unitType')}
-                            className={`py-3 h-16 w-full border-gray-300 transition duration-300 
-          ${activeTab === 'unitType' ? 'bg-blue-600 text-white hover:bg-blue-500' : 'bg-gray-200 text-gray-400 hover:bg-gray-300'}`}
+                            className={`py-3 h-16 w-full rounded-md transition duration-300 flex items-center justify-center gap-2
+          ${activeTab === 'unitType'
+                                    ? 'bg-blue-600 text-white hover:bg-blue-500 shadow-lg'
+                                    : 'bg-white text-gray-500 hover:bg-gray-200 shadow-md'}`}
                         >
-                            Loại phòng
+                            <FaBed className={`text-2xl ${activeTab === 'unitType' ? 'text-purple-300' : 'text-gray-400'}`} />
+                            <span>Loại phòng</span>
                         </button>
                     </li>
                 </ul>
             </div>
 
 
-            <div className='mb-20'>
+
+
+            <div className='mb-20 py-6'>
                 {activeTab === 'basic' && <UpdateResortBasic />}
                 {activeTab === 'amenities' && <UpdateResortAmenity />}
-                {activeTab === 'unitType' && <UpdateResortUnitType unitType={unitType} flag={autoSetFlag}/>}
+                {activeTab === 'unitType' && <UpdateResortUnitType unitType={unitType} flag={autoSetFlag} />}
             </div>
         </div>
     );

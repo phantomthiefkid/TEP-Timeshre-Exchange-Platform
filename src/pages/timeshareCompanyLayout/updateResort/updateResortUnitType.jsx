@@ -29,7 +29,7 @@ const UpdateResortUnitType = ({ unitType, flag }) => {
           <div key={item.id} onClick={() => handleOpen(item)} className="flex items-stretch gap-4 rounded-xl border shadow-md hover:shadow-lg relative">
             {/* Bên trái là ảnh */}
             <img
-              src="https://dyf.vn/wp-content/uploads/2021/11/thiet-ke-noi-that-phong-khach-san-hien-dai.jpg"
+              src={item.photos}
               alt="Room Image"
               className="w-56 h-full rounded-l-xl object-cover"
             />

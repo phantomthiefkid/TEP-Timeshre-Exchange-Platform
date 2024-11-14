@@ -9,6 +9,16 @@ const uploadFileImage = async (data) => {
     }
 };
 
+const uploadMultipleFileImage = async (data) => {
+    try {
+        const response = await axiosConfig.post(`s3/file/upload`, data);
+        return response;
+    } catch (error) {
+        throw error;
+    }
+};
+
 export {
-    uploadFileImage
+    uploadFileImage,
+    uploadMultipleFileImage
 }

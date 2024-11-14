@@ -1,30 +1,27 @@
 import { XIcon } from '@heroicons/react/solid';
 import React, { useEffect, useState } from 'react';
 import { getDetailUnitType } from '../../service/public/resortService/resortAPI';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import 'swiper/css'; 
-import resorts from '../../util/ResortData';
+
+
 
 const DetailUnitTypeModal = ({ selectedId, onClose }) => {
     const [unitType, setUnitType] = useState({});
-    const [selectedImage, setSelectedImage] = useState(''); 
-    const [arrImg, setArrImg] = useState([]);
+    const [selectedImage, setSelectedImage] = useState('');
+   
     const getUnitTypeDetailById = async () => {
         let data = await getDetailUnitType(selectedId);
         if (data.status === 200) {
             setUnitType(data.data);
-            // if (data.data.photos && data.data.photos.length > 0) {
-            //     setSelectedImage(data.data.photos[0]);
-            // }
+            setSelectedImage(data.data.photos)
         }
     };
 
     useEffect(() => {
         getUnitTypeDetailById();
-        setArrImg(resorts);
-       
-            setSelectedImage(resorts[0].img);
-        
+      
+
+  
+
     }, [selectedId]);
 
 
@@ -49,26 +46,12 @@ const DetailUnitTypeModal = ({ selectedId, onClose }) => {
                     <div>
 
                         <img
-                            src={selectedImage}
+                            src={unitType.photos}
                             alt="Room"
                             className="w-full h-80 object-cover mb-4"
                         />
 
-                        {/* Swiper cho các ảnh phụ */}
-
-                        <Swiper spaceBetween={10} slidesPerView={4}>
-                            {arrImg &&
-                                arrImg.map((image, index) => (
-                                    <SwiperSlide key={index}>
-                                        <img
-                                            src={image.img}
-                                            alt="Sub Image"
-                                            className="w-full h-24 object-cover cursor-pointer"
-                                            onClick={() => setSelectedImage(image.img)}
-                                        />
-                                    </SwiperSlide>
-                                ))}
-                        </Swiper>
+                      
 
                     </div>
 

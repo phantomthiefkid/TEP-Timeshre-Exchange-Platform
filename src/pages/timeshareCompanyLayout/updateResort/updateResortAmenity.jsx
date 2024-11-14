@@ -5,6 +5,7 @@ import { PlusCircleIcon, XCircleIcon } from '@heroicons/react/solid'; // Make su
 import { toast, Toaster } from 'react-hot-toast';
 import Loading from '../../../components/LoadingComponent/loading';
 import SpinnerWaiting from '../../../components/LoadingComponent/spinnerWaiting';
+import { FaArrowRight } from 'react-icons/fa';
 
 const UpdateResortAmenity = () => {
   const { id } = useParams();
@@ -57,12 +58,12 @@ const UpdateResortAmenity = () => {
     return amenities
       .filter((amenity) => amenity.type === type)
       .map((amenity) => (
-        <div key={amenity.name} className="relative  bg-slate-100 hover:bg-slate-200 flex justify-center items-center rounded-2xl border mt-2 p-3">
-          <span>{amenity.name}</span>
+        <div key={amenity.name} className="relative flex justify-center items-center rounded-full border  mt-2 p-2 transition-colors duration-200 ease-in-out hover:border-sky-500 focus-within:border-sky-500">
+          <span className="text-sky-500 font-bold">{amenity.name}</span>
           <button
             type="button"
             onClick={() => handleRemoveAmenity(amenity.name)}
-            className="absolute top-1 right-0 text-red-400 hover:text-red-500 flex items-center"
+            className="absolute right-0 text-red-400 flex items-center p-2 rounded-full hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-red-500 transition-all duration-300 ease-in-out"
           >
             <XCircleIcon className="h-7 w-7" />
           </button>
@@ -95,7 +96,7 @@ const UpdateResortAmenity = () => {
   };
 
   if (loading) {
-    return (<SpinnerWaiting/>)
+    return (<SpinnerWaiting />)
   }
   return (
     <div className='border rounded shadow-md bg-white p-6'>
@@ -107,10 +108,10 @@ const UpdateResortAmenity = () => {
           <h2 className='text-xl font-semibold mb-3 text-gray-800'>Các tính năng và tiện nghi tại chỗ</h2>
           <div className='grid grid-cols-6 gap-4 px-6'>
             {renderAmenitiesByType('1')}
-            <div className='flex'>
+            <div className="col-span-2 flex items-center space-x-4">
               <input
                 type="text"
-                className="border rounded-2xl focus:outline-none focus:border-sky-500"
+                className="w-full max-w-md border border-gray-300 ease-in-out hover:border-sky-500 focus-within:border-sky-500 rounded-full px-4 py-2 placeholder-sky-500 text-gray-700 transition duration-200"
                 value={onSiteFeature}
                 onChange={(e) => setOnSiteFeature(e.target.value)}
                 placeholder="Thêm tính năng tại chỗ"
@@ -118,9 +119,10 @@ const UpdateResortAmenity = () => {
               <button
                 type="button"
                 onClick={() => handleAddAmenity(onSiteFeature, '1')}
-                className=" text-white p-2 rounded flex items-center space-x-2"
+                className="flex items-center justify-center bg-gradient-to-r from-sky-500 to-sky-400 hover:bg-sky-600 text-white font-semibold py-2 px-6 rounded-full shadow-lg transition-all duration-300 transform hover:scale-105"
               >
-                <PlusCircleIcon color='#2D99AE' className="h-8 w-8" />
+                <PlusCircleIcon color='#FFFFFF' className="h-6 w-6" />
+                <span className="ml-2">Thêm</span>
               </button>
             </div>
           </div>
@@ -131,10 +133,10 @@ const UpdateResortAmenity = () => {
           <h2 className='text-xl font-semibold mb-3 text-gray-800'>Các điểm tham quan lân cận</h2>
           <div className='grid grid-cols-6 gap-4 px-6 '>
             {renderAmenitiesByType('2')}
-            <div className='flex'>
+            <div className="col-span-2 flex items-center space-x-4">
               <input
                 type="text"
-                className="border rounded-2xl focus:outline-none focus:border-sky-500"
+                className="w-full max-w-md border border-gray-300 ease-in-out hover:border-sky-500 focus-within:border-sky-500 rounded-full px-4 py-2 placeholder-sky-500 text-gray-700 transition duration-200"
                 value={nearbyAttraction}
                 onChange={(e) => setNearbyAttraction(e.target.value)}
                 placeholder="Thêm điểm tham quan lân cận"
@@ -142,23 +144,24 @@ const UpdateResortAmenity = () => {
               <button
                 type="button"
                 onClick={() => handleAddAmenity(nearbyAttraction, '2')}
-                className=" text-white p-2 rounded flex items-center space-x-2"
+                className="flex items-center justify-center bg-gradient-to-r from-sky-500 to-sky-400 hover:bg-sky-600 text-white font-semibold py-2 px-6 rounded-full shadow-lg transition-all duration-300 transform hover:scale-105"
               >
-                <PlusCircleIcon color='#2D99AE' className="h-8 w-8" />
+                <PlusCircleIcon color='#FFFFFF' className="h-6 w-6" />
+                <span className="ml-2">Thêm</span>
               </button>
             </div>
           </div>
         </div>
 
         {/* Policies */}
-        <div className='border-b pb-4 p-4 py-6'>
-          <h2 className='text-xl font-semibold mb-3 text-gray-800'>Các chính sách</h2>
-          <div className='grid grid-cols-6 gap-4 px-6'>
+        <div className="mt-4">
+          <h3 className="text-lg font-semibold text-gray-800">Các chính sách</h3>
+          <div className="grid grid-cols-6 py-4 gap-6">
             {renderAmenitiesByType('3')}
-            <div className='flex'>
+            <div className="col-span-2 flex items-center space-x-4">
               <input
                 type="text"
-                className="border rounded-2xl focus:outline-none focus:border-sky-500"
+                className="w-full max-w-md border border-gray-300 ease-in-out hover:border-sky-500 focus-within:border-sky-500 rounded-full px-4 py-2 placeholder-sky-500 text-gray-700 transition duration-200"
                 value={policy}
                 onChange={(e) => setPolicy(e.target.value)}
                 placeholder="Thêm chính sách"
@@ -166,9 +169,10 @@ const UpdateResortAmenity = () => {
               <button
                 type="button"
                 onClick={() => handleAddAmenity(policy, '3')}
-                className=" text-white p-2 rounded flex items-center space-x-2"
+                className="flex items-center justify-center bg-gradient-to-r from-sky-500 to-sky-400 hover:bg-sky-600 text-white font-semibold py-2 px-6 rounded-full shadow-lg transition-all duration-300 transform hover:scale-105"
               >
-                <PlusCircleIcon color='#2D99AE' className="h-8 w-8" />
+                <PlusCircleIcon color='#FFFFFF' className="h-6 w-6" />
+                <span className="ml-2">Thêm</span>
               </button>
             </div>
           </div>
@@ -176,13 +180,15 @@ const UpdateResortAmenity = () => {
       </div>
 
       <div className="mt-6 flex justify-end">
-       
+
         <button
-          type="button"
+          className="flex items-center justify-center bg-gradient-to-r from-sky-400 to-sky-500 text-white font-semibold py-3 px-8 rounded-full shadow-lg hover:bg-sky-800 transition-all duration-300 transform hover:scale-105"
           onClick={handleSubmit}
-          className="bg-gradient-to-r z-0 gap-2 from-green-300 to-green-500 border text-gray-560 py-2 px-8 pr-10 rounded-xl shadow-md flex items-center justify-between cursor-pointer transition duration-300 ease-in-out transform hover:from-green-500 hover:to-green-300 hover:scale-105 hover:text-white focus:outline-none"
         >
-          Cập nhật
+          <span className="mr-3">Cập nhật</span>
+          <span className="bg-white text-sky-700 w-8 h-8 flex items-center justify-center rounded-full shadow-md transform transition-all duration-300 hover:scale-110">
+            <FaArrowRight />
+          </span>
         </button>
       </div>
     </div>

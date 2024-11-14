@@ -1,8 +1,8 @@
 import { LocationMarkerIcon } from '@heroicons/react/solid';
 import React, { useState } from 'react';
-import { FaUpload } from 'react-icons/fa';
-import { FaArrowLeft, FaArrowRight } from 'react-icons/fa6';
-import { uploadFileImage } from '../../../service/uploadFileService/uploadFileAPI';
+import { FaCloudUploadAlt, FaUpload } from 'react-icons/fa';
+import { FaArrowRight, FaXmark } from 'react-icons/fa6';
+import { uploadFileImage, uploadMultipleFileImage } from '../../../service/uploadFileService/uploadFileAPI';
 
 const CreateResortBasic = ({ onNext, onUpdateData, formData }) => {
   const [resortData, setResortData] = useState({
@@ -11,10 +11,13 @@ const CreateResortBasic = ({ onNext, onUpdateData, formData }) => {
     maxPrice: formData.maxPrice || 0,
     description: formData.description || '',
     address: formData.address || '',
-    logo: "", 
+    logo: "",
+    imageUrls: []
   });
   const [errors, setErrors] = useState({});
-  
+  const [listUrlImage, setlistUrlImage] = useState([])
+  const [selectedFiles, setSelectedFiles] = useState([]);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     const newValue = (name === 'minPrice' || name === 'maxPrice') ? parseFloat(value) : value;
@@ -39,7 +42,7 @@ const CreateResortBasic = ({ onNext, onUpdateData, formData }) => {
     if (!resortData.address.trim()) newErrors.address = 'Địa chỉ không được để trống';
 
     setErrors(newErrors);
-    return Object.keys(newErrors).length === 0; 
+    return Object.keys(newErrors).length === 0;
   };
 
   const handleNext = () => {
@@ -52,189 +55,309 @@ const CreateResortBasic = ({ onNext, onUpdateData, formData }) => {
     const file = e.target.files[0];
     const formData = new FormData();
     formData.append("file", file);
-    const response = await uploadFileImage(formData);
-    if (response.status === 200) {
-      setResortData((prevData) => ({
-        ...prevData,
-        logo: response.data[0]
-      }))
-    }
-    if (file) {
-      const imageUrl = URL.createObjectURL(file); 
-      setResortData((prevData) => ({
-        ...prevData,
-        logo: imageUrl,
-      }));
+
+    try {
+      const response = await uploadFileImage(formData);
+      if (response.status === 200) {
+        response.data[0]
+        setResortData((prevData) => ({
+          ...prevData,
+          logo: response.data[0]
+        }));
+        onUpdateData({
+          logo: response.data[0],
+        });
+      }
+    } catch (error) {
+      console.error("Error uploading logo image:", error);
     }
   };
 
+
+  const handleRemoveLogo = () => {
+    setResortData(prevData => ({ ...prevData, logo: null }));
+    onUpdateData({
+      logo: "",
+    });
+  };
+  const handleSelectAndUploadImages = async (e) => {
+    const files = Array.from(e.target.files);
+    const urls = files.map(file => URL.createObjectURL(file));
+
+    // Cập nhật URL tạm thời để hiển thị trước khi upload
+    setlistUrlImage(prevUrls => [...prevUrls, ...urls]);
+
+    // Tạo bản sao của imageUrls hiện có
+    const updatedImageUrls = [...resortData.imageUrls];
+
+    try {
+      // Lặp qua từng file, upload và cập nhật URL
+      for (const file of files) {
+        const formData = new FormData();
+        formData.append("file", file);
+
+        const response = await uploadMultipleFileImage(formData);
+        console.log("Response from API for each image:", response);
+
+        if (response && response.data && response.data[0]) {
+          updatedImageUrls.push(response.data[0]); // Thêm URL từ API vào danh sách
+        } else {
+          console.error("Upload failed or response format is incorrect for file:", file.name);
+        }
+      }
+
+      // Cập nhật state với các URL ảnh đã upload
+      setResortData((prevData) => ({
+        ...prevData,
+        imageUrls: updatedImageUrls
+      }));
+      onUpdateData({
+        imageUrls: updatedImageUrls,
+      });
+      console.log("All uploaded image URLs:", updatedImageUrls);
+
+    } catch (error) {
+      console.error("Error uploading images:", error);
+    }
+  };
+  const handleRemoveImage = (index) => {
+    // Xóa URL khỏi listUrlImage
+    setlistUrlImage(prevUrls => prevUrls.filter((_, i) => i !== index));
+
+    // Xóa file gốc khỏi selectedFiles
+    setSelectedFiles(prevFiles => prevFiles.filter((_, i) => i !== index));
+
+    // Xóa URL đã upload khỏi imageUrls trong resortData
+    setResortData(prevData => ({
+      ...prevData,
+      imageUrls: prevData.imageUrls.filter((_, i) => i !== index)
+    }));
+    onUpdateData(prevData => ({
+      ...prevData,
+      imageUrls: prevData.imageUrls.filter((_, i) => i !== index)
+    }));
+  };
+
+
+
   return (
-    <div className="space-y-2 px-4">
-      <div className="relative">
-        <div className="grid grid-cols-2 gap-6 px-4 py-4 p-4 bg-white shadow-lg">
+    <div className="bg-white p-8 rounded-lg shadow-lg mx-auto">
 
-          <div className="space-y-8  my-6">
-     
-            <div className="p-6 rounded-lg bg-white space-y-6">
-              <h1 className="text-2xl font-bold text-gray-700 tracking-wide font-serif mb-4">Thông tin cơ bản</h1>
+      <div className="grid grid-cols-2 gap-8 px-10 border-2 p-8 rounded-lg shadow-lg">
 
-              <div className="space-y-2">
-                <label className="font-semibold text-gray-700 text-lg tracking-wide">Tên Resort*</label>
-                <input
-                  className="border border-gray-300 bg-gray-50 p-3 rounded-lg w-full focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-300 transition-all"
-                  type="text"
-                  name="resortName"
-                  value={resortData.resortName}
-                  onChange={handleChange}
-                  placeholder="Nhập tên resort"
-                />
-                {errors.resortName && <p className="text-red-500 text-sm mt-1">{errors.resortName}</p>}
-              </div>
+        <div className="space-y-6">
 
-              <div className="space-y-4">
-                <label className="font-semibold text-gray-700 text-lg tracking-wide">Khoảng giá (VND)*</label>
-                <div className="grid grid-cols-5 gap-4 items-center">
+          <div className="p-6 rounded-lg bg-white space-y-6">
+            <h1 className="text-2xl font-bold text-gray-700 font-serif">Thông tin cơ bản</h1>
 
-                  <div className="relative col-span-2">
-                    <span className="absolute left-3 top-5 transform -translate-y-1/2 text-gray-500">VND:</span>
-                    <input
-                      className="pl-16 pr-4 py-2 border border-gray-300 rounded-lg w-full bg-white focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-300 shadow transition-all"
-                      type="number"
-                      name="minPrice"
-                      value={resortData.minPrice}
-                      onChange={handleChange}
-                      placeholder="0"
-                    />
-                    {errors.minPrice && <p className="text-red-500 text-sm mt-1">{errors.minPrice}</p>}
-                  </div>
+            <div className="space-y-1">
+              <label className="font-semibold text-gray-700 text-lg tracking-wide">Tên Resort*</label>
+              <input
+                className="border border-gray-300 bg-gray-50 p-3 rounded-lg w-full focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-300 transition-all"
+                type="text"
+                name="resortName"
+                value={resortData.resortName}
+                onChange={handleChange}
+                placeholder="Nhập tên resort"
+              />
+              {errors.resortName && <p className="text-red-500 text-sm mt-1">{errors.resortName}</p>}
+            </div>
 
-                  <div className="text-center col-span-1 text-sm font-semibold text-gray-600">
-                    Đến
-                  </div>
-                  <div className="relative col-span-2">
-                    <span className="absolute left-3 top-5 transform -translate-y-1/2 text-gray-500">VND:</span>
-                    <input
-                      className="pl-16 pr-4 py-2 border border-gray-300 rounded-lg w-full bg-white focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-300 shadow transition-all"
-                      type="number"
-                      name="maxPrice"
-                      value={resortData.maxPrice}
-                      onChange={handleChange}
-                      placeholder="0"
-                    />
-                    {errors.maxPrice && <p className="text-red-500 text-sm mt-1">{errors.maxPrice}</p>}
-                  </div>
+            <div className="space-y-1">
+              <label className="text-gray-700 text-lg font-medium">Khoảng giá (VND)*</label>
+              <div className="flex gap-4">
+
+                <div className="relative flex-1">
+                  <span className="absolute left-3 top-3 text-gray-500">VND:</span>
+                  <input
+                    className="pl-14 border border-gray-300 rounded-lg w-full p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+                    type="number"
+                    name="minPrice"
+                    value={resortData.minPrice}
+                    onChange={handleChange}
+                    placeholder="0"
+                  />
+                  {errors.minPrice && <p className="text-red-500 text-sm mt-1">{errors.minPrice}</p>}
                 </div>
-              </div>
 
-              <div className="space-y-2">
-                <label className="font-semibold text-gray-700 text-lg tracking-wide">Mô tả</label>
-                <textarea
-                  className="border border-gray-300 bg-gray-50 p-4 rounded-lg w-full focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-300 transition-all"
-                  name="description"
-                  value={resortData.description}
-                  onChange={handleChange}
-                  placeholder="Mô tả về resort"
-                  rows="4"
-                ></textarea>
-                {errors.description && <p className="text-red-500 text-sm mt-1">{errors.description}</p>}
+                <span className="text-gray-500 text-sm self-center">Đến</span>
+                <div className="relative flex-1">
+                  <span className="absolute left-3 top-3 text-gray-500">VND:</span>
+                  <input
+                    className="pl-14 border border-gray-300 rounded-lg w-full p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+                    type="number"
+                    name="maxPrice"
+                    value={resortData.maxPrice}
+                    onChange={handleChange}
+                    placeholder="0"
+                  />
+                  {errors.maxPrice && <p className="text-red-500 text-sm mt-1">{errors.maxPrice}</p>}
+                </div>
               </div>
             </div>
 
-            {/* Address Section */}
-            <div className="p-4 shadow-lg rounded-lg bg-white space-y-6">
-              <div className="space-y-2">
-                <label className="font-semibold text-gray-700 text-lg tracking-wide">Địa chỉ*</label>
-                <div className="relative">
-                  <span className="absolute left-3 top-6 transform -translate-y-1/2 text-red-500">
-                    <LocationMarkerIcon className="w-5 h-5" />
-                  </span>
-                  <input
-                    className="pl-10 pr-4 py-3 border border-gray-300 rounded-lg w-full bg-gray-50 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-300 transition-all"
-                    type="text"
-                    name="address"
-                    value={resortData.address}
-                    onChange={handleChange}
-                    placeholder="Nhập địa chỉ resort"
-                  />
-                  {errors.address && <p className="text-red-500 text-sm mt-1">{errors.address}</p>}
-                </div>
-              </div>
+            <div className="space-y-1">
+              <label className="text-gray-700 text-lg font-medium">Địa chỉ*</label>
+              <div className="relative">
 
-              {/* Map Display */}
-              <div className="mt-4">
-                <img
-                  src="https://thanhnien.mediacdn.vn/Uploaded/trungnq/2022_10_29/1-2829.jpg" // Temporary map image
-                  alt="Map"
-                  className="w-full h-60 object-cover border rounded-lg shadow-lg"
+                <LocationMarkerIcon className="absolute left-3 top-4 w-5 text-red-500" />
+                <input
+                  className="pl-10 border border-gray-300 rounded-lg w-full p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+                  type="text"
+                  name="address"
+                  value={resortData.address}
+                  onChange={handleChange}
+                  placeholder="Nhập địa chỉ resort"
                 />
+                {errors.address && <p className="text-red-500 text-sm mt-1">{errors.address}</p>}
               </div>
+            </div>
+
+            <div className="space-y-1">
+              <label className="font-semibold text-gray-700 text-lg tracking-wide">Mô tả</label>
+              <textarea
+                className="border border-gray-300 rounded-lg w-full p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition h-40"
+                name="description"
+                value={resortData.description}
+                onChange={handleChange}
+                placeholder="Mô tả về resort"
+                rows="4"
+              ></textarea>
+              {errors.description && <p className="text-red-500 text-sm mt-1">{errors.description}</p>}
             </div>
           </div>
+        </div>
 
 
-          {/* Column 2 */}
+        {/* Column 2 */}
+        <div className="space-y-4">
+
           <div className="space-y-4">
+            <label className="block mb-2 font-medium">Logo resort</label>
 
-            <div className="space-y-4">
-              <label className="block mb-2 font-medium">Logo resort</label>
+            {/* Upload button with icon */}
+            {!resortData.logo && (
+              <label
+                htmlFor="upload-room-images"
+                className="w-full h-32 border-dashed border-2 border-gray-300 rounded-lg flex flex-col items-center justify-center cursor-pointer bg-gradient-to-r from-gray-50 to-gray-100 hover:shadow-lg hover:border-blue-400 transition-all duration-300"
+              >
+                <div className="flex flex-col items-center text-gray-500">
+                  <FaCloudUploadAlt size={40} className="text-blue-500 transition-transform duration-300 hover:scale-110" />
+                  <span className="mt-2 text-base font-semibold">Chọn ảnh</span>
+                </div>
+              </label>
+            )}
 
-              {/* Upload button with icon */}
-              <div className="flex items-center space-x-4 w-full">
+            {/* Input ẩn để chọn file */}
+            <input
+              id="upload-room-images"
+              type="file"
+              accept="image/*"
+              multiple
+              className="hidden"
+              onChange={handleFileUpload}
+            />
+
+            {/* Hiển thị ảnh logo đã upload */}
+            <div className="flex justify-center items-center mt-4">
+              {resortData.logo && (
+                <div className="relative flex justify-center items-center">
+                  <div className="p-2 bg-gradient-to-tr from-gray-200 to-gray-400 rounded-full">
+                    <div className="p-1 bg-gradient-to-tr from-blue-300 to-purple-400 rounded-full">
+                      <img
+                        src={resortData.logo}
+                        alt="Resort Logo"
+                        className="w-32 h-32 object-cover border-2 border-white rounded-full shadow-lg transition-transform duration-300 ease-in-out transform hover:scale-105"
+                      />
+                    </div>
+                  </div>
+                  {/* Icon X để xóa ảnh */}
+                  <button
+                    onClick={handleRemoveLogo}
+                    className="absolute top-0 right-0 bg-red-500 text-white rounded-full p-1 -mt-2 -mr-2 hover:bg-red-600 transition-transform duration-300"
+                  >
+                    <FaXmark size={16} />
+                  </button>
+                </div>
+              ) }
+            </div>
+
+          </div>
+          <div className="space-y-4">
+            <label className="block mb-2 font-medium">Ảnh resort</label>
+
+            <div className="flex flex-col justify-start items-center mt-4 space-y-4">
+            
+
+              {/* Nút Choose Images và Upload Images */}
+              <div className="flex space-x-4">
+                {/* Nút Choose Images */}
                 <label
-                  htmlFor="upload-room-images"
-                  className="w-full h-36 border-dashed border-4 border-gray-300 rounded-lg flex flex-col justify-center items-center cursor-pointer transition hover:border-blue-400 hover:bg-gray-100"
+                  htmlFor="upload-image-resort"
+                  className="bg-blue-500 text-white px-4 py-2 rounded-lg cursor-pointer hover:bg-blue-600 transition"
                 >
-                  <FaUpload size={40} className="text-gray-400 mb-2" />
-                  <span className="text-gray-500 font-semibold">Tải lên ảnh loại phòng</span>
-                  <span className="text-sm text-gray-400">(Kéo thả hoặc nhấn để chọn ảnh)</span>
+                  Tải ảnh lên
                 </label>
-
-                {/* Hidden input to trigger file upload */}
                 <input
-                  id="upload-room-images"
+                  id="upload-image-resort"
                   type="file"
                   accept="image/*"
                   multiple
                   className="hidden"
-                  onChange={handleFileUpload}
+                  onChange={handleSelectAndUploadImages}
                 />
-              </div>
 
-              {/* Display uploaded images */}
-              {resortData.logo && (
-                <div className="flex justify-center items-center mt-4">
-                  <div className="relative flex justify-center items-center">
-                    <div className="p-2 bg-gradient-to-tr from-gray-200 to-gray-400 rounded-full"> {/* Outer Frame */}
-                      <div className="p-1 bg-gradient-to-tr from-blue-300 to-purple-400 rounded-full"> {/* Inner Gradient Frame */}
-                        <img
-                          src={resortData.logo}
-                          alt="Resort Logo"
-                          className="w-32 h-32 object-cover border-4 border-white rounded-full shadow-lg transition-transform duration-300 ease-in-out transform hover:scale-105"
-                        />
+
+              </div>
+              {resortData.imageUrls && resortData.imageUrls.length > 0 && (
+                <div className="grid grid-cols-6 gap-4">
+                  {resortData.imageUrls.map((url, index) => (
+                    <div key={index} className="relative flex justify-center items-center">
+                      <div className="p-2 bg-gradient-to-tr from-gray-200 to-gray-400 rounded-xl">
+                        <div className="p-1 bg-gradient-to-tr from-blue-300 to-purple-400 rounded-xl relative">
+                          {/* Ảnh */}
+                          <img
+                            src={url}
+                            alt={`Resort Image ${index + 1}`}
+                            className="w-28 h-24 object-cover border-4 border-white rounded-xl shadow-lg transition-transform duration-300 ease-in-out transform hover:scale-105"
+                          />
+
+                          {/* Icon xóa */}
+                          <button
+                            onClick={() => handleRemoveImage(index)}
+                            className="absolute top-0 right-0 bg-red-500 text-white rounded-full p-1 hover:bg-red-600 transition"
+                            aria-label="Remove image"
+                          >
+                            <FaXmark />
+                          </button>
+                        </div>
                       </div>
                     </div>
-                  </div>
+                  ))}
+
                 </div>
-              )}
-
-
+              ) }
             </div>
 
+
           </div>
+
+
         </div>
       </div>
 
-
-      {/* Nút tiếp theo */}
-      <div className="mt-6 flex justify-end py-6">
-        
+      <div className="mt-6 flex justify-center py-6">
         <button
-          className="bg-indigo-400 hover:bg-indigo-700 text-indigo-100 pl-6 rounded-full flex items-center"
+          className="flex items-center justify-center bg-gradient-to-r from-sky-400 to-sky-500 text-white font-semibold py-3 px-8 rounded-full shadow-lg hover:bg-sky-800 transition-all duration-300 transform hover:scale-105"
           onClick={handleNext}
         >
-          <span class="mr-6">Bước tiếp theo</span><span class="bg-indigo-500 hover:bg-indigo-700 w-12 h-12 flex items-center justify-center rounded-full"><FaArrowRight /></span>
+          <span className="mr-3">Bước tiếp theo</span>
+          <span className="bg-white text-sky-700 w-8 h-8 flex items-center justify-center rounded-full shadow-md transform transition-all duration-300 hover:scale-110">
+            <FaArrowRight />
+          </span>
         </button>
       </div>
+
     </div>
   );
 };

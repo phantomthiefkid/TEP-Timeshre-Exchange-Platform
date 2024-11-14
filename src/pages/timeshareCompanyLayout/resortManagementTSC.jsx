@@ -10,7 +10,8 @@ import { getAllResort } from "../../service/tsCompanyService/tsCompanyAPI";
 import Loading from "../../components/LoadingComponent/loading";
 import { Link } from "react-router-dom";
 import SpinnerWaiting from "../../components/LoadingComponent/spinnerWaiting";
-import { FaChevronLeft, FaChevronRight, FaSearch } from "react-icons/fa";
+import { FaChevronLeft, FaChevronRight, FaInfoCircle, FaSearch } from "react-icons/fa";
+import FormatCurrency from "../../components/Validate/formatCurrency";
 
 const ResortManagementTSC = () => {
   const [allResort, setAllResort] = useState([]);
@@ -73,7 +74,7 @@ const ResortManagementTSC = () => {
             </h3>
           </div>
           <div className="flex items-center space-x-4">
-            <span className="flex items-center bg-gradient-to-r from-red-100 to-red-300 text-red-700 px-3 py-1 rounded-full text-lg font-semibold shadow-lg transform transition duration-500 ease-in-out hover:scale-105">
+            <span className="flex items-center space-x-2 bg-red-200 text-red-600 px-4 py-2 rounded-lg shadow-md hover:bg-red-300 hover:shadow-lg transition-all duration-300">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="currentColor"
@@ -83,7 +84,7 @@ const ResortManagementTSC = () => {
                 <path d="M12 2L2 12h3v8h14v-8h3L12 2zm5 15h-2v-4h-2v4H9v-4H7v4H5v-5.586L12 4.828l7 6.586V17h-2v-4h-2v4z" />
               </svg>
               Số lượng resort:{" "}
-              <CountUp start={0} end={count} duration={2} className="ml-1" />
+              <CountUp start={0} end={count} duration={4} className="ml-1" />
             </span>
           </div>
         </div>
@@ -143,12 +144,12 @@ const ResortManagementTSC = () => {
 
                     {/* Min Price */}
                     <td className="p-4 text-gray-700">
-                      {item.minPrice ? item.minPrice.toLocaleString() : "N/A"} VND
+                      {item.minPrice ? FormatCurrency(item.minPrice) : "N/A"}
                     </td>
 
                     {/* Max Price */}
                     <td className="p-4 text-gray-700">
-                      {item.maxPrice ? item.maxPrice.toLocaleString() : "N/A"} VND
+                      {item.maxPrice ? FormatCurrency(item.maxPrice) : "N/A"}
                     </td>
 
                     {/* Address */}
@@ -166,7 +167,7 @@ const ResortManagementTSC = () => {
                           className="sr-only peer"
                           disabled
                         />
-                        <div className="relative w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                        <div className="relative w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-green-500"></div>
                         <span className="ms-3 text-sm font-medium text-gray-400 dark:text-gray-500">
                           {item.isActive ? "Đang hoạt động" : "Đã vô hiệu hóa"}
                         </span>
@@ -177,22 +178,19 @@ const ResortManagementTSC = () => {
                     <td className="p-4 flex gap-4">
                       <button className="hover:text-blue-500 transition duration-300 ease-in-out">
                         <Link to={`/timesharecompany/updateresort/${item.id}`}>
-                          <DocumentIcon color="gray" className="w-6 h-6" />
+                          <FaInfoCircle className="w-6 h-6 text-gray-500 hover:text-blue-500 hover:scale-105 duration-150" />
                         </Link>
                       </button>
-
                     </td>
                   </tr>
                 ))
-              ) : !allResort ? (
+              ) :  (
                 <tr>
                   <td colSpan="8" className="p-4 text-center text-gray-500">
                     Không tìm thấy gì
                   </td>
                 </tr>
-              ) : (
-                <Loading />
-              )}
+              ) }
             </tbody>
           </table>
 

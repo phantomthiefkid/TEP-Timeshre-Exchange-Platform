@@ -4,6 +4,7 @@ import {
     FaChevronLeft,
     FaChevronRight,
     FaDotCircle,
+    FaInfoCircle,
     FaPlus,
     FaSearch
 } from "react-icons/fa";
@@ -238,14 +239,14 @@ const ValuationList = () => {
                         </p></td>
                                 <td className="p-4">
                                     <span
-                                        className={`flex items-center hover:scale-105 transition-all duration-200 py-1 px-2 rounded-full w-36 ${getStatusStyles(posting.status).style}`}
+                                        className={`flex items-center hover:scale-105 transition-all duration-200 py-1 px-2 rounded-full w-44 text-center ${getStatusStyles(posting.status).style}`}
                                     >
                                         <FaDotCircle className="mr-2" />
                                         {getStatusStyles(posting.status).label}
                                     </span>
                                 </td>
                                 <td className="p-4">
-                                    <button onClick={() => handleOpenDetailModal(posting.rentalPostingId)}><DocumentIcon className="w-6 hover:scale-110" color="gray"/></button>
+                                    <button onClick={() => handleOpenDetailModal(posting.rentalPostingId)}><FaInfoCircle size={20} className="hover:scale-110" color="#2D99AE"/></button>
                                 </td>
                             </tr>
                         ))}

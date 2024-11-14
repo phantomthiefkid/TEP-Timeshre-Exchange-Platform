@@ -18,7 +18,6 @@ import { FaChevronLeft, FaChevronRight } from "react-icons/fa6";
 import { FaBuilding, FaLock, FaUserAlt, FaUserCog, FaUsers } from "react-icons/fa";
 const UserManagement = () => {
   const [allUser, setAllUser] = useState([]);
-
   const [page, setPage] = useState(0);
   const [size, setSize] = useState(6);
   const [totalPages, setTotalPages] = useState(1);
