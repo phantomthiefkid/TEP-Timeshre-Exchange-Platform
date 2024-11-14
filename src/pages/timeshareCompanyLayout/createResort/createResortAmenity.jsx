@@ -1,4 +1,4 @@
-import { PlusCircleIcon, TrashIcon, XCircleIcon, XIcon } from '@heroicons/react/outline';
+import { PlusCircleIcon, XCircleIcon, XIcon } from '@heroicons/react/outline';
 import React, { useEffect, useState } from 'react';
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa6';
 
@@ -51,37 +51,44 @@ const CreateResortAmenity = ({ onUpdateData, onNext, onBack, formData }) => {
     return amenities
       .filter((amenity) => amenity.type === type)
       .map((amenity) => (
-        <div key={amenity.name} className="relative flex justify-center items-center rounded-full border mt-2 p-2">
-          <span>{amenity.name}</span>
+        <div
+          key={amenity.name}
+          className="relative flex justify-center items-center rounded-full border  mt-2 p-2 transition-colors duration-200 ease-in-out hover:border-sky-500 focus-within:border-sky-500"
+        >
+          <span className="text-sky-500 font-bold">{amenity.name}</span>
 
           <button
             type="button"
             onClick={() => handleRemoveAmenity(amenity.name)}
-            className="absolute top-1 right-0 text-red-500 flex items-center"
+            className="absolute right-0 text-red-400 flex items-center p-2 rounded-full hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-red-500 transition-all duration-300 ease-in-out"
           >
             <XCircleIcon className="h-7 w-7" />
           </button>
-        </div>
 
+        </div>
       ));
   };
+
 
 
 
   return (
     <div className="p-6">
       <div className="border border-sky-400 rounded-md p-8 space-y-14">
-        <h4 className="text-2xl font-bold mb-4">Tiện ích khách sạn</h4>
+        <h4 className="text-2xl font-bold mb-4 text-gray-600">Tiện ích khách sạn</h4>
 
         {/* Section for Adding On-site Features */}
-        <div className="mt-4">
-          <h3 className="text-md font-semibold">Các tính năng và tiện nghi tại chỗ</h3>
-          <div className="grid grid-cols-6 py-4 gap-4">
+        <div className="mt-6">
+          <h3 className="text-lg font-semibold text-gray-800">Các tính năng và tiện nghi tại chỗ</h3>
+          <div className="grid grid-cols-6 py-4 gap-6">
+            {/* Render amenities by type */}
             {renderAmenitiesByType('1')}
-            <div className='flex'>
+
+            {/* Input and Add Button */}
+            <div className="col-span-2 flex items-center space-x-4">
               <input
                 type="text"
-               className="border p-2 rounded-full focus:outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-300 transition duration-200"
+                className="w-full max-w-md border border-gray-300 ease-in-out hover:border-sky-500 focus-within:border-sky-500 rounded-full px-4 py-2 placeholder-sky-500 text-gray-700 transition duration-200"
                 value={onSiteFeature}
                 onChange={(e) => setOnSiteFeature(e.target.value)}
                 placeholder="Thêm tính năng tại chỗ"
@@ -89,25 +96,24 @@ const CreateResortAmenity = ({ onUpdateData, onNext, onBack, formData }) => {
               <button
                 type="button"
                 onClick={() => handleAddAmenity(onSiteFeature, '1')}
-                className=" text-white p-2 rounded flex items-center space-x-2"
+                className="flex items-center justify-center bg-gradient-to-r from-sky-500 to-sky-400 hover:bg-sky-600 text-white font-semibold py-2 px-6 rounded-full shadow-lg transition-all duration-300 transform hover:scale-105"
               >
-                <PlusCircleIcon color='#6A9CFD' className="h-8 w-8" />
-                <span>Thêm</span>
+                <PlusCircleIcon color='#FFFFFF' className="h-6 w-6" />
+                <span className="ml-2">Thêm</span>
               </button>
             </div>
           </div>
-
-
         </div>
 
+
         <div className="mt-4">
-          <h3 className="text-md font-semibold">Các điểm tham quan lân cận</h3>
-          <div className="grid grid-cols-6 py-4 gap-4">
+          <h3 className="text-lg font-semibold text-gray-800">Các điểm tham quan lân cận</h3>
+          <div className="grid grid-cols-6 py-4 gap-6">
             {renderAmenitiesByType('2')}
-            <div className='flex'>
+            <div className="col-span-2 flex items-center space-x-4">
               <input
                 type="text"
-               className="border p-2 rounded-full focus:outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-300 transition duration-200"
+                className="w-full max-w-md border border-gray-300 ease-in-out hover:border-sky-500 focus-within:border-sky-500 rounded-full px-4 py-2 placeholder-sky-500 text-gray-700 transition duration-200"
                 value={nearbyAttraction}
                 onChange={(e) => setNearbyAttraction(e.target.value)}
                 placeholder="Thêm điểm tham quan lân cận"
@@ -115,10 +121,10 @@ const CreateResortAmenity = ({ onUpdateData, onNext, onBack, formData }) => {
               <button
                 type="button"
                 onClick={() => handleAddAmenity(nearbyAttraction, '2')}
-                className=" text-white p-2 rounded flex items-center space-x-2"
+                className="flex items-center justify-center bg-gradient-to-r from-sky-500 to-sky-400 hover:bg-sky-600 text-white font-semibold py-2 px-6 rounded-full shadow-lg transition-all duration-300 transform hover:scale-105"
               >
-                <PlusCircleIcon color='#6A9CFD' className="h-8 w-8" />
-                <span>Thêm</span>
+                <PlusCircleIcon color='#FFFFFF' className="h-6 w-6" />
+                <span className="ml-2">Thêm</span>
               </button>
             </div>
           </div>
@@ -127,13 +133,13 @@ const CreateResortAmenity = ({ onUpdateData, onNext, onBack, formData }) => {
         </div>
 
         <div className="mt-4">
-          <h3 className="text-md font-semibold">Các chính sách</h3>
-          <div className="grid grid-cols-6 py-4 gap-4">
+          <h3 className="text-lg font-semibold text-gray-800">Các chính sách</h3>
+          <div className="grid grid-cols-6 py-4 gap-6">
             {renderAmenitiesByType('3')}
-            <div className='flex'>
+            <div className="col-span-2 flex items-center space-x-4">
               <input
                 type="text"
-                className="border p-2 rounded-full focus:outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-300 transition duration-200"
+                className="w-full max-w-md border border-gray-300 ease-in-out hover:border-sky-500 focus-within:border-sky-500 rounded-full px-4 py-2 placeholder-sky-500 text-gray-700 transition duration-200"
                 value={policy}
                 onChange={(e) => setPolicy(e.target.value)}
                 placeholder="Thêm chính sách"
@@ -141,10 +147,10 @@ const CreateResortAmenity = ({ onUpdateData, onNext, onBack, formData }) => {
               <button
                 type="button"
                 onClick={() => handleAddAmenity(policy, '3')}
-                className="text-white p-2 rounded flex items-center space-x-2"
+                className="flex items-center justify-center bg-gradient-to-r from-sky-500 to-sky-400 hover:bg-sky-600 text-white font-semibold py-2 px-6 rounded-full shadow-lg transition-all duration-300 transform hover:scale-105"
               >
-                <PlusCircleIcon color='#6A9CFD' className="h-8 w-8" />
-                <span>Thêm</span>
+                <PlusCircleIcon color='#FFFFFF' className="h-6 w-6" />
+                <span className="ml-2">Thêm</span>
               </button>
             </div>
           </div>
@@ -154,22 +160,32 @@ const CreateResortAmenity = ({ onUpdateData, onNext, onBack, formData }) => {
 
       </div>
 
-      <div className="mt-6 flex justify-between">
-        <button
+      <div className="mt-6 flex justify-between space-x-4">
+        {/* Back Button */}
+        {/* <button
           type="button"
           onClick={onBack}
-          className="bg-indigo-400 hover:bg-indigo-700 text-indigo-100 rounded-full flex items-center"
+          className="flex items-center justify-center bg-gradient-to-r from-sky-400 to-sky-600 text-white font-semibold py-3 px-8 rounded-full shadow-lg hover:bg-sky-800 transition-all duration-300 transform hover:scale-105"
         >
-          <span class="bg-indigo-500 hover:bg-indigo-700 w-12 h-12 flex items-center justify-center rounded-full mr-4"><FaArrowLeft /></span><span class="mr-6">trở lại</span>
-        </button>
+          <span className="bg-white text-sky-700 w-8 h-8 flex items-center justify-center rounded-full shadow-md transform transition-all duration-300 hover:scale-110 mr-3">
+            <FaArrowLeft />
+          </span>
+          <span>Trở lại</span>
+        </button> */}
+
+        {/* Next Button */}
         <button
           type="button"
           onClick={handleSubmit}
-          className="bg-indigo-400 hover:bg-indigo-700 text-indigo-100 pl-6 rounded-full flex items-center"
+          className="flex items-center justify-center bg-gradient-to-r from-sky-400 to-sky-600 text-white font-semibold py-3 px-8 rounded-full shadow-lg hover:bg-sky-800 transition-all duration-300 transform hover:scale-105"
         >
-          <span class="mr-6">Bước tiếp theo</span><span class="bg-indigo-500 hover:bg-indigo-700 w-12 h-12 flex items-center justify-center rounded-full"><FaArrowRight /></span>
+          <span className="mr-3">Bước tiếp theo</span>
+          <span className="bg-white text-sky-700 w-8 h-8 flex items-center justify-center rounded-full shadow-md transform transition-all duration-300 hover:scale-110">
+            <FaArrowRight />
+          </span>
         </button>
       </div>
+
     </div>
   );
 };

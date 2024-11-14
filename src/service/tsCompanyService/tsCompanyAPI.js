@@ -81,6 +81,7 @@ const updateResortUnitType = async (data, unitTypeId) => {
       data
     );
   } catch (error) {
+    console.log(error)
     throw error;
   }
 };

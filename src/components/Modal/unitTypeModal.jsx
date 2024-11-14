@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { FaUpload } from 'react-icons/fa';
+import { FaXmark } from 'react-icons/fa6';
 import { useSelector } from 'react-redux';
 import { uploadFileImage } from '../../service/uploadFileService/uploadFileAPI';
 
@@ -251,37 +252,45 @@ const UnitTypeModal = ({ isOpen, onClose, onAddRoomType, selectedUnitType, onUpd
                         {/* Right column */}
                         <div className="space-y-4">
                             <label className="block mb-2 font-medium">Ảnh phòng:</label>
-                            <div className="flex items-center space-x-4 w-full">
-                                <label
-                                    htmlFor="upload-room-images"
-                                    className="w-full h-36 border-dashed border-4 border-gray-300 rounded-lg flex flex-col justify-center items-center cursor-pointer transition hover:border-blue-400 hover:bg-gray-100"
-                                >
-                                    <FaUpload size={40} className="text-gray-400 mb-2" />
-                                    <span className="text-gray-500 font-semibold">Tải lên ảnh loại phòng</span>
-                                    <span className="text-sm text-gray-400">(Kéo thả hoặc nhấn để chọn ảnh)</span>
-                                </label>
-                                <input
-                                    id="upload-room-images"
-                                    type="file"
-                                    accept="image/*"
-                                    multiple
-                                    className="hidden"
-                                    onChange={handleUploadFileImage}
-                                />
-                            </div>
+                            {
+                                !formData.photos && (<div className="flex items-center space-x-4 w-full">
+                                    <label
+                                        htmlFor="upload-room-images"
+                                        className="w-full h-36 border-dashed border-4 border-gray-300 rounded-lg flex flex-col justify-center items-center cursor-pointer transition hover:border-blue-400 hover:bg-gray-100"
+                                    >
+                                        <FaUpload size={40} className="text-gray-400 mb-2" />
+                                        <span className="text-gray-500 font-semibold">Tải lên ảnh loại phòng</span>
+                                        <span className="text-sm text-gray-400">(Kéo thả hoặc nhấn để chọn ảnh)</span>
+                                    </label>
+                                    <input
+                                        id="upload-room-images"
+                                        type="file"
+                                        accept="image/*"
+                                        multiple
+                                        className="hidden"
+                                        onChange={handleUploadFileImage}
+                                    />
+                                </div>)
+                            }
 
                             <div className='min-h-24'>
                                 {formData.photos && (
-                                    <div className="grid grid-cols-3 gap-4 mt-4">
-                                       
-                                            <div className="relative">
-                                                <img
-                                                    src={formData.photos}
-                                                    alt={`${formData.title}`}
-                                                    className="w-full h-24 object-cover border rounded-lg"
-                                                />
-                                            </div>
-                                        
+                                    <div className="grid grid-cols-1 gap-4 mt-4">
+
+                                        <div className="relative">
+                                            <img
+                                                src={formData.photos}
+                                                alt={`${formData.title}`}
+                                                className="w-full h-40 object-cover border rounded-lg"
+                                            />
+                                            <button
+
+                                                className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 hover:bg-red-600 transition-transform duration-300"
+                                            >
+                                                <FaXmark size={16} />
+                                            </button>
+                                        </div>
+
                                     </div>
                                 )}
                             </div>
@@ -592,14 +601,14 @@ const UnitTypeModal = ({ isOpen, onClose, onAddRoomType, selectedUnitType, onUpd
                     {/* Submit and cancel buttons */}
                     <div className="flex justify-end space-x-4 py-4 mb-2 px-8">
                         <button
-                            className="bg-gradient-to-r gap-2 border border-red-400 text-red-500 py-2 px-8 pr-10 rounded-xl shadow-md flex items-center justify-between cursor-pointer transition duration-300 ease-in-out transform hover:from-red-500 hover:to-red-300 hover:text-white hover:scale-105 focus:outline-none"
+                            className="flex items-center justify-center bg-gradient-to-r from-red-200 to-red-400 text-white font-semibold py-3 px-8 rounded-full shadow-lg hover:bg-sky-800 transition-all duration-300 transform hover:scale-105"
                             onClick={onClose}
                         >
                             Hủy bỏ
                         </button>
                         <button
                             type='button'
-                            className="bg-gradient-to-r gap-2 from-green-300 to-green-500 border text-gray-560 py-2 px-8 pr-10 rounded-xl shadow-md flex items-center justify-between cursor-pointer transition duration-300 ease-in-out transform hover:from-green-500 hover:to-green-300 hover:scale-105 hover:text-white focus:outline-none"
+                            className="flex items-center justify-center bg-gradient-to-r from-sky-400 to-sky-500 text-white font-semibold py-3 px-8 rounded-full shadow-lg hover:bg-sky-800 transition-all duration-300 transform hover:scale-105"
                             onClick={handleSubmit}
                         >
                             {selectedUnitType ? 'Cập nhật' : 'Tạo mới'}

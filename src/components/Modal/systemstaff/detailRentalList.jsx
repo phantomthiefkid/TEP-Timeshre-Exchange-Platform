@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { toast, Toaster } from "react-hot-toast";
 import { FaEdit, FaMap, FaMapMarkerAlt } from "react-icons/fa";
-import { FaPencil, FaXmark } from "react-icons/fa6";
+import { FaLocationPin, FaPencil, FaXmark } from "react-icons/fa6";
 import { acceptNewPriceValuation } from "../../../service/systemStaffService/systemStaffAPI";
 const DetailRentalList = ({ isOpen, onClose, postingId, flag }) => {
   const [isVisible, setIsVisible] = useState(false);
@@ -20,10 +20,10 @@ const DetailRentalList = ({ isOpen, onClose, postingId, flag }) => {
   const modalStyles = isOpen
     ? {}
     : {
-        opacity: 0,
-        transform: "translateX(100%)",
-        transition: "all 0.3s ease",
-      };
+      opacity: 0,
+      transform: "translateX(100%)",
+      transition: "all 0.3s ease",
+    };
 
   const getStatusStyles = (status) => {
     switch (status) {
@@ -63,16 +63,16 @@ const DetailRentalList = ({ isOpen, onClose, postingId, flag }) => {
           style: "bg-red-100 text-red-500",
           styleDot: "bg-red-500",
         };
-        case "RejectPrice":
-          return {
-            label: "Từ chối giá", style: "bg-red-100 text-red-500",
-            styleDot: "bg-red-500"
-          };
-          case "Completed":
-          return {
-            label: "Đã thuê", style: "bg-blue-100 text-blue-500",
-            styleDot: "bg-blue-500"
-          };
+      case "RejectPrice":
+        return {
+          label: "Từ chối giá", style: "bg-red-100 text-red-500",
+          styleDot: "bg-red-500"
+        };
+      case "Completed":
+        return {
+          label: "Đã thuê", style: "bg-blue-100 text-blue-500",
+          styleDot: "bg-blue-500"
+        };
       default:
         return {
           label: "Không xác định",
@@ -108,61 +108,60 @@ const DetailRentalList = ({ isOpen, onClose, postingId, flag }) => {
         style={{ zIndex: 1000, ...modalStyles }}
       >
         {/* Header Section */}
-        <div className="p-6 border-b flex justify-between items-center bg-gradient-to-r from-blue-500 to-purple-500 text-white">
-          <h1 className="text-xl font-bold tracking-wider">
-            Thông tin chi tiết
+        <div className="p-5 border-b flex justify-between items-center bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-t-lg shadow-md">
+          <h1 className="text-lg font-semibold tracking-wide">
+            <span className="bg-white/20 py-1 px-3 rounded-md">Thông tin chi tiết</span>
           </h1>
-          <div className="flex items-center">
-            <button
-              onClick={onClose}
-              className="text-white hover:text-gray-300 transition duration-200"
-            >
-              <FaXmark size={28} />
-            </button>
-          </div>
+          <button
+            onClick={onClose}
+            className="flex items-center justify-center p-2 rounded-full bg-white/20 hover:bg-white/30 transition duration-200"
+            aria-label="Close"
+          >
+            <FaXmark size={24} className="text-white" />
+          </button>
         </div>
+
 
         {postingId ? (
           <>
             <div className="border-b">
-              <div className="flex items-center p-4 m-3 border border-red-400 shadow-sm transition duration-200 relative">
+              <div className="flex items-center p-4 m-3 border border-gray-200 rounded-lg shadow-md transition duration-200 relative bg-white">
                 <img
                   src="https://cdn5.redweek.com/photos/full-preview/3/0/3/303804.jpg?1"
                   alt="Hotel Thumbnail"
-                  className="w-20 h-20 rounded-lg mr-4 object-cover"
+                  className="w-24 h-24 rounded-lg mr-4 object-cover shadow-sm"
                 />
-                <div className="flex justify-between items-center w-full gap-4">
+                <div className="flex justify-between items-start w-full gap-6">
                   <div className="w-2/3">
-                    <h2 className="text-xl text-gray-700 font-semibold mb-1">
+                    <h2 className="text-lg text-gray-800 font-semibold mb-1">
                       {postingId.resortName}
                     </h2>
-                    <div className="flex items-center text-blue-500">
-                      <FaMap className="mr-2" />
+                    <div className="flex items-center text-blue-500 text-sm mt-1">
+                      <FaLocationPin size={18} color="red" className="mr-2" />
                       <p>{postingId.address}</p>
                     </div>
                   </div>
-                  <div>
-                    <span className="bg-red-100 px-6 py-1 font-semibold text-red-500 rounded-full whitespace-nowrap absolute top-2 right-2">
+                  <div className="absolute top-2 right-2">
+                    <span className="bg-red-100 px-4 py-1 font-medium text-red-500 rounded-full whitespace-nowrap shadow-sm text-sm">
                       Yêu cầu hỗ trợ
                     </span>
                   </div>
                 </div>
 
-                {/* Nhãn Đang chờ ở góc dưới bên phải với dấu chấm tròn */}
+                {/* Status label at the bottom-right with circular indicator */}
                 <span
-                  className={`absolute bottom-2 right-2 flex items-center px-3 py-1 font-semibold ${
-                    getStatusStyles(postingId.status).style
-                  } rounded-full whitespace-nowrap`}
+                  className={`absolute bottom-2 right-2 flex items-center px-3 py-1 font-medium text-sm ${getStatusStyles(postingId.status).style
+                    } rounded-full shadow-md`}
                 >
                   <span
-                    className={`inline-block w-2 h-2 mr-1 ${
-                      getStatusStyles(postingId.status).styleDot
-                    } rounded-full`}
+                    className={`inline-block w-2.5 h-2.5 mr-1 ${getStatusStyles(postingId.status).styleDot
+                      } rounded-full`}
                   ></span>
                   {getStatusStyles(postingId.status).label}
                 </span>
               </div>
             </div>
+
 
             <div className="flex-1 overflow-y-auto p-8">
               <h2 className="text-xl font-semibold mb-3 text-gray-700">
@@ -190,10 +189,10 @@ const DetailRentalList = ({ isOpen, onClose, postingId, flag }) => {
 
                 <p className="text-medium text-gray-500 mr-4">Giá phòng: </p>
                 <p className="font-medium text-left">
-                {new Intl.NumberFormat("vi-VN", {
-                            style: "currency",
-                            currency: "VND",
-                          }).format(postingId.priceValuation)}
+                  {new Intl.NumberFormat("vi-VN", {
+                    style: "currency",
+                    currency: "VND",
+                  }).format(postingId.priceValuation)}
                 </p>
                 {postingId.status === "PendingPricing" && (
                   <p className="text-medium text-gray-500 mr-4">Định giá: </p>
@@ -224,7 +223,7 @@ const DetailRentalList = ({ isOpen, onClose, postingId, flag }) => {
                 <h2 className="text-xl text-gray-700 font-semibold mb-3">
                   Mô tả
                 </h2>
-                <p className="text-medium text-gray-600">
+                <p className="text-medium text-gray-600 p-2">
                   {postingId.resortDescription}
                 </p>
               </div>
@@ -235,8 +234,8 @@ const DetailRentalList = ({ isOpen, onClose, postingId, flag }) => {
                 </h2>
                 <div className="w-full mb-6">
                   <img
-                    src="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/2a/9b/0d/b8/nh-t-ng-quan-resort.jpg?w=1200&h=-1&s=1"
-                    alt="Room Thumbnail"
+                    src={postingId.unitType.photos}
+                    alt={postingId.unitType.title}
                     className="w-full h-64 object-cover rounded-lg shadow-md"
                   />
                 </div>
@@ -362,15 +361,6 @@ const DetailRentalList = ({ isOpen, onClose, postingId, flag }) => {
                 </div>
               </div>
 
-              <div className="mb-4">
-                <h2 className="text-xl text-gray-700 font-semibold mb-3">
-                  Địa chỉ
-                </h2>
-                <img
-                  src="https://placehold.co/600x300"
-                  className="max-w-full "
-                />
-              </div>
             </div>
           </>
         ) : (

@@ -42,7 +42,9 @@ const ResortDetail = () => {
             let data = await getResortById(id);
             if (data && data.status === 200) {
                 setResort(data.data)
+                console.log(data.data)
                 setLoading(false);
+                setSelectedImage(data.data.logo)
             }
         } catch (error) {
             throw error
@@ -70,7 +72,7 @@ const ResortDetail = () => {
     return (
         <>
             <Navigation />
-            <div className='lg:px-32 md:px-24 py-10'>
+            <div className='lg:px-14 md:px-14 py-10 w-3/4 mx-auto'>
                 {/* Back to Search Link */}
 
 
@@ -78,7 +80,7 @@ const ResortDetail = () => {
 
                 {/* Resort Title and Favorite Button */}
                 <div className='flex justify-between py-4'>
-                    <h1 className='text-2xl md:text-3xl font-medium'>{resort ? resort.resortName : ""}</h1>
+                    <h1 className='text-2xl md:text-3xl font-medium text-gray-600'>{resort ? resort.resortName : ""}</h1>
 
                 </div>
 
@@ -97,41 +99,50 @@ const ResortDetail = () => {
                 {/* Image Grid with 6:4 ratio */}
                 <div className='flex flex-col lg:flex-row gap-6'>
                     {/* Large image on the left (75% width) */}
-                    <div className='w-full lg:w-[75%]'>
+                    <div className={`w-full ${resort.imageUrls?.length === 0 || !resort.imageUrls[0] && !resort.imageUrls[1] && !resort.imageUrls[2] ? 'lg:w-full' : 'lg:w-[75%]'}`}>
                         <img
                             className='h-[550px] w-full object-cover rounded-lg'
-                            src={images[0]}
+                            src={resort.logo}
                             alt='Resort Main'
                         />
                     </div>
 
                     {/* Stacked images on the right (25% width) */}
-                    <div className='w-full lg:w-[25%] flex flex-col justify-between gap-2 mt-4 lg:mt-0'>
-                        <img
-                            className='h-[180px] w-full object-cover rounded-lg'
-                            src={images[1]}
-                            alt='Resort Image 1'
-                        />
-                        <img
-                            className='h-[180px] w-full object-cover rounded-lg'
-                            src={images[2]}
-                            alt='Resort Image 2'
-                        />
-                        <div className='relative h-[180px] w-full'>
-                            <img
-                                className='h-full w-full object-cover rounded-lg opacity-60'
-                                src={images[2]}
-                                alt='Resort Image 3'
-                            />
-                            <div
-                                className='absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 rounded-lg cursor-pointer'
-                                onClick={openModal}
-                            >
-                                <span className='text-white font-semibold text-lg'>Xem thêm</span>
-                            </div>
+                    {resort.imageUrls?.length !== 0 && resort.imageUrls[0] && resort.imageUrls[1] && resort.imageUrls[2] && (
+                        <div className='w-full lg:w-[25%] flex flex-col justify-between gap-2 mt-4 lg:mt-0'>
+                            {resort.imageUrls[0] && (
+                                <img
+                                    className='h-[180px] w-full object-cover rounded-lg'
+                                    src={resort.imageUrls[0]}
+                                    alt='Resort Image 1'
+                                />
+                            )}
+                            {resort.imageUrls[1] && (
+                                <img
+                                    className='h-[180px] w-full object-cover rounded-lg'
+                                    src={resort.imageUrls[1]}
+                                    alt='Resort Image 2'
+                                />
+                            )}
+                            {resort.imageUrls[2] && (
+                                <div className='relative h-[180px] w-full'>
+                                    <img
+                                        className='h-full w-full object-cover rounded-lg opacity-60'
+                                        src={resort.imageUrls[2]}
+                                        alt='Resort Image 3'
+                                    />
+                                    <div
+                                        className='absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 rounded-lg cursor-pointer'
+                                        onClick={openModal}
+                                    >
+                                        <span className='text-white font-semibold text-lg'>Xem thêm</span>
+                                    </div>
+                                </div>
+                            )}
                         </div>
-                    </div>
+                    )}
                 </div>
+
 
                 {/* Modal Popup with Swiper */}
                 {isOpen && (
@@ -147,7 +158,7 @@ const ResortDetail = () => {
                             {/* Large Image Display */}
                             <div className='mb-4'>
                                 <img
-                                    src={images[selectedImage]} // Display the selected image
+                                    src={selectedImage} // Display the selected image
                                     className='h-[500px] w-full object-cover rounded-lg'
                                     alt={`Slide ${selectedImage}`}
                                 />
@@ -161,13 +172,13 @@ const ResortDetail = () => {
                             // pagination={{ clickable: true }}
                             // modules={[Navigation]}
                             >
-                                {images.map((image, index) => (
+                                {resort && resort.imageUrls && resort.imageUrls.map((image, index) => (
                                     <SwiperSlide key={index}>
                                         <img
                                             src={image}
                                             className={`h-[100px] w-full object-cover rounded-lg cursor-pointer ${selectedImage === index ? 'border-4 border-blue-500' : ''}`} // Highlight the selected image
                                             alt={`Thumbnail ${index}`}
-                                            onClick={() => setSelectedImage(index)} // Set image on click
+                                            onClick={() => setSelectedImage(image)} // Set image on click
                                         />
                                     </SwiperSlide>
                                 ))}
@@ -191,13 +202,13 @@ const ResortDetail = () => {
                     {resort && resort.unitTypeDtoList && resort.unitTypeDtoList.map((item, index) => (
                         <div
                             key={index}
-                            className="grid grid-cols-2 gap-6 border rounded-lg bg-white hover:bg-gray-100 px-16 py-8 shadow-sm transition-transform transform hover:scale-105"
+                            className="grid grid-cols-2 gap-6 border rounded-lg bg-white hover:bg-gray-100 px-16 py-4 shadow-sm transition-transform transform"
                         >
                             {/* Phần Thông Tin Phòng */}
-                            <div className="p-2 grid grid-cols-2 gap-4 items-start px-10">
+                            <div className="p-2 grid grid-cols-2 gap-4 items-start">
                                 <img
-                                    src='https://storage.timviec365.vn/timviec365/pictures/images/phong-doi-la-gi.jpg'
-                                    className="w-full h-auto rounded-lg shadow-md"
+                                    src={item.photos}
+                                    className="w-full h-44 flex justify-center items-center rounded-lg shadow-md"
                                     alt='phòng đôi'
                                 />
                                 <div className="py-4 space-y-4">

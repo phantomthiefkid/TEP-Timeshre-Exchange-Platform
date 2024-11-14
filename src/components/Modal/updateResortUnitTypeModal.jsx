@@ -2,6 +2,7 @@ import { XIcon } from '@heroicons/react/solid'
 import React, { useState } from 'react'
 import { toast, Toaster } from 'react-hot-toast';
 import { FaPlusCircle, FaUpload } from 'react-icons/fa';
+import { FaXmark } from 'react-icons/fa6';
 import { updateResortUnitType } from '../../service/tsCompanyService/tsCompanyAPI';
 import { uploadFileImage } from '../../service/uploadFileService/uploadFileAPI';
 import Loading from '../LoadingComponent/loading';
@@ -12,7 +13,7 @@ const UpdateResortUnitTypeModal = ({ onClose, selectedUnitType, flag }) => {
   const [unitType, setUnitType] = useState(selectedUnitType)
   const [amenity, setAmenity] = useState({ name: "", type: "" });
   const [loading, setLoading] = useState(false);
- 
+
   const handleAmenityChange = (e) => {
     const { name, value } = e.target;
     setAmenity({ ...amenity, [name]: value });
@@ -48,8 +49,13 @@ const UpdateResortUnitTypeModal = ({ onClose, selectedUnitType, flag }) => {
     formData.append("file", file)
     const response = await uploadFileImage(formData);
     if (response.status === 200) {
-      setUnitType({...unitType, photos: response.data[0]});
+      setUnitType({ ...unitType, photos: response.data[0] });
+      console.log("Link: ", response.data[0])
     }
+  }
+
+  const handleRemoveImage = async (e) => {
+    setUnitType({...unitType, photos: ""})
   }
 
   const handleUpdate = () => {
@@ -68,6 +74,7 @@ const UpdateResortUnitTypeModal = ({ onClose, selectedUnitType, flag }) => {
     };
 
     setLoading(true)
+    console.log(updatedResort, "data")
     updateResortUnitType(updatedResort, selectedUnitType.id).then(() => {
       // onClose()
       flag()
@@ -229,34 +236,38 @@ const UpdateResortUnitTypeModal = ({ onClose, selectedUnitType, flag }) => {
             {/* Right column */}
             <div className="space-y-2">
               <label className="font-semibold text-gray-700 mb-2 text-lg tracking-wide ">Ảnh phòng:</label>
-              <div className="flex items-center space-x-4 w-full">
-                <label
-                  htmlFor="upload-room-images"
-                  className="w-full h-36 border-dashed border-4 border-gray-300 rounded-lg flex flex-col justify-center items-center cursor-pointer transition hover:border-blue-400 hover:bg-gray-100"
-                >
-                  <FaUpload size={40} className="text-gray-400 mb-2" />
-                  <span className="text-gray-500 font-semibold">Tải lên ảnh loại phòng</span>
-                  <span className="text-sm text-gray-400">(Kéo thả hoặc nhấn để chọn ảnh)</span>
-                </label>
-                <input
-                  id="upload-room-images"
-                  type="file"
-                  accept="image/*"
-                  multiple
-                  className="hidden"
-                  onChange={handleUploadFileImage}
-                />
-              </div>
+              {
+                !unitType.photos && (<div className="flex items-center space-x-4 w-full">
+                  <label
+                    htmlFor="upload-room-images"
+                    className="w-full h-36 border-dashed border-4 border-gray-300 rounded-lg flex flex-col justify-center items-center cursor-pointer transition hover:border-blue-400 hover:bg-gray-100"
+                  >
+                    <FaUpload size={40} className="text-gray-400 mb-2" />
+                    <span className="text-gray-500 font-semibold">Tải lên ảnh loại phòng</span>
+                    <span className="text-sm text-gray-400">(Kéo thả hoặc nhấn để chọn ảnh)</span>
+                  </label>
+                  <input
+                    id="upload-room-images"
+                    type="file"
+                    accept="image/*"
+                    multiple
+                    className="hidden"
+                    onChange={handleUploadFileImage}
+                  />
+                </div>)
+              }
 
               <div className='min-h-44 py-2'>
                 {unitType.photos && (
-                  <div className="flex justify-center items-center mt-6">
+                  <div className="flex relative justify-center items-center mt-6">
                     <div className="relative">
                       <img
                         src={unitType.photos}
                         alt={unitType.title}
                         className="w-full h-24 object-cover border rounded-lg"
                       />
+                      <button onClick={handleRemoveImage} className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 hover:bg-red-600 transition-transform duration-300 z-10"
+                      > <FaXmark size={15}/> </button>
                     </div>
                   </div>
                 )}
@@ -479,14 +490,14 @@ const UpdateResortUnitTypeModal = ({ onClose, selectedUnitType, flag }) => {
 
           <div className="flex justify-end space-x-4 py-4 mb-2 px-8">
             <button
-              className="bg-gradient-to-r gap-2 border border-red-400 text-red-500 py-2 px-8 pr-10 rounded-xl shadow-md flex items-center justify-between cursor-pointer transition duration-300 ease-in-out transform hover:from-red-500 hover:to-red-300 hover:text-white hover:scale-105 focus:outline-none"
+              className="flex items-center justify-center bg-gradient-to-r from-red-200 to-red-400 text-white font-semibold py-3 px-8 rounded-full shadow-lg hover:bg-sky-800 transition-all duration-300 transform hover:scale-105"
               onClick={onClose}
             >
               Hủy bỏ
             </button>
             <button
               type="button"
-              className="bg-gradient-to-r gap-2 from-green-400 to-green-600 border text-gray-560 py-2 px-8 pr-10 rounded-xl shadow-md flex items-center justify-between cursor-pointer transition duration-300 ease-in-out transform hover:from-green-500 hover:to-green-300 hover:scale-105 text-white focus:outline-none"
+              className="flex items-center justify-center bg-gradient-to-r from-sky-400 to-sky-500 text-white font-semibold py-3 px-8 rounded-full shadow-lg hover:bg-sky-800 transition-all duration-300 transform hover:scale-105"
               onClick={handleUpdate}
               disabled={loading} // Optionally disable the button while loading
             >

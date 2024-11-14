@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { toast, Toaster } from 'react-hot-toast';
 import { FaPlusCircle, FaUpload } from 'react-icons/fa';
+import { FaXmark } from 'react-icons/fa6';
 import { useParams } from 'react-router-dom';
 import { createResortUnitType } from '../../service/tsCompanyService/tsCompanyAPI';
 import { uploadFileImage } from '../../service/uploadFileService/uploadFileAPI';
@@ -235,38 +236,46 @@ const CreateUnitTypeForUpdateModal = ({ onClose, flag }) => {
                         {/* Right column */}
                         <div className="space-y-2">
                             <label className="font-semibold text-gray-700 mb-2 text-lg tracking-wide ">Ảnh phòng:</label>
-                            <div className="flex justify-center items-center w-full">
-                                <label
-                                    htmlFor="upload-room-images"
-                                    className="w-full h-36 border-dashed border-4 border-gray-300 rounded-lg flex flex-col justify-center items-center cursor-pointer transition hover:border-blue-400 hover:bg-gray-100"
-                                >
-                                    <FaUpload size={40} className="text-gray-400 mb-2" />
-                                    <span className="text-gray-500 font-semibold">Tải lên ảnh loại phòng</span>
-                                    <span className="text-sm text-gray-400">(Kéo thả hoặc nhấn để chọn ảnh)</span>
-                                </label>
-                                <input
-                                    id="upload-room-images"
-                                    type="file"
-                                    accept="image/*"
-                                    multiple
-                                    className="hidden"
-                                    onChange={handleUploadFileImage}
-                                />
-                            </div>
+                            {
+                                !unitType.photos && (<div className="flex justify-center items-center w-full">
+                                    <label
+                                        htmlFor="upload-room-images"
+                                        className="w-full h-24 border-dashed border-4 border-gray-300 rounded-lg flex flex-col justify-center items-center cursor-pointer bg-gradient-to-r from-blue-50 to-blue-100 hover:from-blue-100 hover:to-blue-200 transition-shadow hover:shadow-lg"
+                                    >
+                                        <FaUpload size={22} className="text-gray-400 mb-2" />
+                                        <span className="text-gray-500 font-semibold">Tải lên ảnh loại phòng</span>
+                                        <span className="text-sm text-gray-400">(Kéo thả hoặc nhấn để chọn ảnh)</span>
+                                    </label>
+                                    <input
+                                        id="upload-room-images"
+                                        type="file"
+                                        accept="image/*"
+                                        multiple
+                                        className="hidden"
+                                        onChange={handleUploadFileImage}
+                                    />
+                                </div>)
+                            }
 
                             <div className='min-h-44 py-2'>
                                 {unitType.photos && (
                                     <div className="flex justify-center items-center mt-6">
-                                            <div className="relative">
-                                                <img
-                                                    src={unitType.photos}
-                                                    alt={`${unitType.title}`}
-                                                    className="w-full h-24 object-cover border rounded-lg"
-                                                />
-                                            </div>
-                                     
+                                        <div className="relative w-40 h-40">
+                                            <img
+                                                src={unitType.photos}
+                                                alt={`${unitType.title}`}
+                                                className="w-full h-full object-cover border rounded-lg"
+                                            />
+                                            <button
+                                                onClick={() => setUnitType({ ...unitType, photos: '' })} // Clears the image when clicked
+                                                className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 hover:bg-red-600 transition-transform duration-300"
+                                            >
+                                                <FaXmark size={16} />
+                                            </button>
+                                        </div>
                                     </div>
                                 )}
+
                             </div>
                             <div className="flex flex-col py-4">
                                 <label className="font-semibold text-md mb-2">View:</label>
@@ -566,14 +575,14 @@ hover:border-blue-400 hover:bg-blue-50`}
 
                     <div className="flex justify-end space-x-4 py-4 mb-2 px-8">
                         <button
-                            className="bg-gradient-to-r gap-2 border border-red-400 text-red-500 py-2 px-8 pr-10 rounded-xl shadow-md flex items-center justify-between cursor-pointer transition duration-300 ease-in-out transform hover:from-red-500 hover:to-red-300 hover:text-white hover:scale-105 focus:outline-none"
+                            className="flex items-center justify-center bg-gradient-to-r from-red-200 to-red-400 text-white font-semibold py-3 px-8 rounded-full shadow-lg hover:bg-sky-800 transition-all duration-300 transform hover:scale-105"
                             onClick={onClose}
                         >
                             Hủy bỏ
                         </button>
                         <button
                             type="button"
-                            className="bg-gradient-to-r gap-2 from-green-400 to-green-600 border text-gray-560 py-2 px-8 pr-10 rounded-xl shadow-md flex items-center justify-between cursor-pointer transition duration-300 ease-in-out transform hover:from-green-500 hover:to-green-300 hover:scale-105 text-white focus:outline-none"
+                            className="flex items-center justify-center bg-gradient-to-r from-sky-400 to-sky-500 text-white font-semibold py-3 px-8 rounded-full shadow-lg hover:bg-sky-800 transition-all duration-300 transform hover:scale-105"
                             onClick={handleSubmit}
                             disabled={loading}
                         >

@@ -9,6 +9,7 @@ import { toast, Toaster } from 'react-hot-toast';
 
 import SpinnerWaiting from '../../../components/LoadingComponent/spinnerWaiting';
 import { FaArrowRight } from 'react-icons/fa6';
+import { FaPlusCircle } from 'react-icons/fa';
 const CreateUnitType = ({ onUpdateData, onNext, onBack, formData }) => {
   const [selectedUnitType, setSelectedUnitType] = useState(null);
   const [isOpenModalUnitType, setIsOpenModalUnitType] = useState(false);
@@ -64,12 +65,16 @@ const CreateUnitType = ({ onUpdateData, onNext, onBack, formData }) => {
     <div>
       <Toaster position="top-right" reverseOrder={false} />
       <div className=' p-6 '>
-        <div className="py-4 space-y-2">
-          <h1 className="text-3xl font-bold text-gray-800">Loại phòng</h1>
-          <h3 className="text-xl text-gray-500">
-            Tạo các loại phòng cụ thể và những thông tin chi tiết
+        <div className="py-6 space-y-3">
+          <h1 className="text-2xl font-semibold text-gray-600">
+            Quản lý và tạo mới các loại phòng với thông tin chi tiết để phục vụ nhu cầu khách hàng
+          </h1>
+          <h3 className="text-lg text-gray-600">
+            Cung cấp các loại phòng với thông tin tiện nghi cụ thể và quản lý chi tiết để nâng cao trải nghiệm người dùng
           </h3>
         </div>
+
+
         <div className='grid grid-cols-3 gap-4 p-4 min-h-96'>
           {roomTypes.map((room, index) => (
             <div
@@ -112,12 +117,15 @@ const CreateUnitType = ({ onUpdateData, onNext, onBack, formData }) => {
 
           {/* Add Room Type Button */}
           <button
-            className="flex flex-col items-center h-44 w-full gap-2 justify-center p-6 border-4 border-dashed border-gray-300 text-gray-700 rounded-xl hover:bg-slate-100 hover:border-sky-500 hover:text-sky-600 transition-all duration-200 ease-in-out shadow-sm hover:shadow-md"
+            className="flex flex-col items-center justify-center p-6 w-full h-44 gap-4 bg-gradient-to-r from-indigo-400 from-10% via-sky-400 via-30% to-emerald-400 to-90% text-white rounded-lg transform transition-all duration-300 ease-in-out hover:shadow-xl shadow-md border-none hover:bg-gradient-to-r hover:from-sky-400 hover:to-purple-400"
             onClick={handleOpenModalAdd} // Open modal on click
           >
-            <label className="text-lg font-semibold tracking-wide">Thêm mới</label>
-            <PlusIcon className="h-8 w-8" />
+            <label className="text-lg font-semibold">Tạo mới</label>
+            <FaPlusCircle className="h-8 w-8 transform transition-transform duration-300 ease-in-out hover:rotate-45" />
           </button>
+
+
+
 
         </div>
 
@@ -141,10 +149,12 @@ const CreateUnitType = ({ onUpdateData, onNext, onBack, formData }) => {
         </button> */}
 
         <button
-          className="bg-indigo-400 hover:bg-indigo-700 text-indigo-100 pl-6 rounded-full flex items-center"
+          className="flex items-center justify-center bg-gradient-to-r from-sky-400 to-sky-600 text-white font-semibold py-3 px-8 rounded-full shadow-lg hover:bg-sky-800 transition-all duration-300 transform hover:scale-105"
           onClick={handleSubmit}
         >
-          <span class="mr-6">Hoàn tất</span><span class="bg-indigo-500 hover:bg-indigo-700 w-12 h-12 flex items-center justify-center rounded-full"><FaArrowRight /></span>
+          <span class="mr-6">Hoàn tất</span> <span className="bg-white text-sky-700 w-8 h-8 flex items-center justify-center rounded-full shadow-md transform transition-all duration-300 hover:scale-110">
+            <FaArrowRight />
+          </span>
         </button>
       </div>
       {loading && (<SpinnerWaiting />)}
