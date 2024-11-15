@@ -44,6 +44,7 @@ const getAllTimeshareCompany = async (
       },
     });
   } catch (error) {
+    console.log(error)
     return error;
   }
 };
