@@ -31,6 +31,7 @@ const SignInStaff = () => {
         const data = await getAllTimeshareCompany();
         if (data && data.status === 200) {
           setCompanyList(data.data.content);
+          console.log(data)
         }
       } catch (error) {
         console.error("Error fetching companies:", error);

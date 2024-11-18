@@ -1,0 +1,38 @@
+/* styleBlog.css */
+.prose h1 {
+  font-size: 2rem;  /* Kích thước chữ hợp lý hơn */
+  font-weight: 300;  /* Chữ hơi đậm nhưng không quá mạnh mẽ */
+  letter-spacing: -0.5px; /* Khoảng cách giữa các chữ */
+  line-height: 1.4; /* Khoảng cách giữa các dòng */
+  color: #3f4140; /* Màu chữ tối để dễ đọc */
+  text-transform: capitalize; /* Chữ hoa hóa từng từ */
+  text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); /* Đổ bóng nhẹ */
+  font-family: 'Georgia', serif; /* Sử dụng font serif để tăng tính trang trọng */
+  text-align: center;
+}
+
+.prose h2 {
+  font-size: 1.5rem;  /* Kích thước chữ hợp lý hơn */
+  font-weight: 300;  /* Chữ hơi đậm nhưng không quá mạnh mẽ */
+  letter-spacing: -0.5px; /* Khoảng cách giữa các chữ */
+  line-height: 1.4; /* Khoảng cách giữa các dòng */
+  color: #3f4140;  /* Màu chữ tối để dễ đọc */
+  text-transform: capitalize; /* Chữ hoa hóa từng từ */
+  text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); /* Đổ bóng nhẹ */
+  font-family: 'Georgia', serif; /* Sử dụng font serif để tăng tính trang trọng */
+  text-align: left;
+}
+
+.prose p {
+  line-height: 1.5; /* Khoảng cách giữa các dòng */
+  color: #515352;  /* Màu chữ tối để dễ đọc */
+  text-transform: capitalize; /* Chữ hoa hóa từng từ */
+  text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); /* Đổ bóng nhẹ */
+  font-family: 'Georgia', serif; /* Sử dụng font serif để tăng tính trang trọng */
+  text-align: left;
+  margin: 5px 0px;
+}
+
+.prose img {
+  margin: 5px auto;
+}

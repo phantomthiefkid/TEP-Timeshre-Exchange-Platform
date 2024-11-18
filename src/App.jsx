@@ -42,6 +42,12 @@ import CreatePosting from "./pages/systemStaffLayout/createPosting";
 import ValuationList from "./pages/systemStaffLayout/valuationList";
 import Feedback from "./pages/systemStaffLayout/feedback";
 import FeedbackResortDetail from "./pages/systemStaffLayout/feedbackResortDetail";
+import BlogManagement from "./pages/systemStaffLayout/blogManagement/blogManagement";
+import CreateBlog from "./pages/systemStaffLayout/blogManagement/createBlog";
+import BlogDetail from "./pages/systemStaffLayout/blogManagement/blogDetail";
+import BlogListGuest from "./pages/landingpage/blog/blogListGuest";
+import BlogDetailGuest from "./pages/landingpage/blog/blogDetailGuest";
+import ProfileTsCompany from "./pages/timeshareCompanyLayout/profileTsCompany";
 function App() {
   const dispatch = useDispatch();
   const { isLogin, role } = useSelector((state) => state.isLogin);
@@ -77,6 +83,8 @@ function App() {
         <Route path="/signup" element={<SignUp />} />
         <Route path="/resortsearchlist" element={<ResortSearchList />} />
         <Route path="/resortdetail/:id" element={<ResortDetail />} />
+        <Route path="/blogs" element={<BlogListGuest />} />
+        <Route path="/blogs/:id" element={<BlogDetailGuest />} />
         <Route path="/timesharecompanylist" element={<TimeshareCompany />} />
         <Route
           path="/timesharecompanydetail/:tsId"
@@ -128,7 +136,10 @@ function App() {
             <Route path="faqs" element={<FaqManagement />} />
             <Route path="createposting" element={<CreatePosting />} />
             <Route path="valuationList" element={<ValuationList />} />
+            <Route path="blogmanagement" element={<BlogManagement />} />
+            <Route path="blogmanagement/newblog" element={<CreateBlog />} />
             <Route path="feedbackmng" element={<Feedback />} />
+            <Route path="blogmanagement/:id" element={<BlogDetail />} />
             <Route
               path={`feedbackdetail/:id`}
               element={<FeedbackResortDetail />}
@@ -155,6 +166,7 @@ function App() {
             <Route path="employeemanagement" element={<EmployeeManagement />} />
             <Route path="createresort" element={<CreateResort />} />
             <Route path="updateresort/:id" element={<UpdateResort />} />
+            <Route path="profiletscompany" element={<ProfileTsCompany />} />
           </Route>
         </Route>
         {/* Timeshare staff routes */}

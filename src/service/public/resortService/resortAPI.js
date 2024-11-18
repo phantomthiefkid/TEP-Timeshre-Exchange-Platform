@@ -33,14 +33,14 @@ const getDetailUnitType = async (unitTypeId) => {
 const getAllTimeshareCompany = async (
   pageNo = 0,
   pageSize = 20,
-  timeshareCompanyName
+  tsName
 ) => {
   try {
     return await axios.get(`${baseURL}public/timeshare-company`, {
       params: {
         pageNo,
         pageSize,
-        timeshareCompanyName,
+        tsName,
       },
     });
   } catch (error) {
