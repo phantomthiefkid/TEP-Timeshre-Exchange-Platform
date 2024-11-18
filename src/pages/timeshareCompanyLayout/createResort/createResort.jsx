@@ -10,7 +10,7 @@ import SpinnerWaiting from '../../../components/LoadingComponent/spinnerWaiting'
 import { SparklesIcon } from '@heroicons/react/solid';
 
 const CreateResort = () => {
-  const [step, setStep] = useState(3);
+  const [step, setStep] = useState(1);
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
@@ -32,12 +32,12 @@ const CreateResort = () => {
       ...newData,
     }));
   };
-console.log(formData, "Pảent")
+
   const updateUnitType = (newData) => {
     setUnitType(...newData);
-    console.log(unitType)
+   
   };
-
+console.log("praren", formData)
 
   const handleNext = async () => {
     if (step === 1) {
@@ -64,7 +64,7 @@ console.log(formData, "Pảent")
       } else {
         toast.error("Tạo thất bại!", { duration: 2000 });
       }
-console.log(formData)
+
     } catch (error) {
       console.error("Failed to create resort:", error);
     }

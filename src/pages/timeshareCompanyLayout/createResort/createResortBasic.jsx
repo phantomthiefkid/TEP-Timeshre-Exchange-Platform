@@ -46,9 +46,9 @@ const CreateResortBasic = ({ onNext, onUpdateData, formData }) => {
   };
 
   const handleNext = () => {
-    if (validateFields()) {
-      onNext();
-    }
+    console.log(resortData)
+    onNext();
+
   };
 
   const handleFileUpload = async (e) => {
@@ -59,13 +59,13 @@ const CreateResortBasic = ({ onNext, onUpdateData, formData }) => {
     try {
       const response = await uploadFileImage(formData);
       if (response.status === 200) {
-        response.data[0]
+        const newLogoUrl = response.data[0];
         setResortData((prevData) => ({
           ...prevData,
-          logo: response.data[0]
+          logo: newLogoUrl,
         }));
         onUpdateData({
-          logo: response.data[0],
+          logo: newLogoUrl,
         });
       }
     } catch (error) {
@@ -73,7 +73,7 @@ const CreateResortBasic = ({ onNext, onUpdateData, formData }) => {
     }
   };
 
-
+  console.log(resortData)
   const handleRemoveLogo = () => {
     setResortData(prevData => ({ ...prevData, logo: null }));
     onUpdateData({
@@ -97,7 +97,7 @@ const CreateResortBasic = ({ onNext, onUpdateData, formData }) => {
         formData.append("file", file);
 
         const response = await uploadMultipleFileImage(formData);
-        console.log("Response from API for each image:", response);
+
 
         if (response && response.data && response.data[0]) {
           updatedImageUrls.push(response.data[0]); // Thêm URL từ API vào danh sách
@@ -114,28 +114,31 @@ const CreateResortBasic = ({ onNext, onUpdateData, formData }) => {
       onUpdateData({
         imageUrls: updatedImageUrls,
       });
-      console.log("All uploaded image URLs:", updatedImageUrls);
+
 
     } catch (error) {
-      console.error("Error uploading images:", error);
+      throw error
     }
   };
   const handleRemoveImage = (index) => {
-    // Xóa URL khỏi listUrlImage
+    // Remove URL from local list (for preview)
     setlistUrlImage(prevUrls => prevUrls.filter((_, i) => i !== index));
 
-    // Xóa file gốc khỏi selectedFiles
+    // Remove image from the selected files array (if necessary)
     setSelectedFiles(prevFiles => prevFiles.filter((_, i) => i !== index));
 
-    // Xóa URL đã upload khỏi imageUrls trong resortData
+    // Remove image URL from resortData
+    const updatedImageUrls = resortData.imageUrls.filter((_, i) => i !== index);
+
     setResortData(prevData => ({
       ...prevData,
-      imageUrls: prevData.imageUrls.filter((_, i) => i !== index)
+      imageUrls: updatedImageUrls,
     }));
-    onUpdateData(prevData => ({
-      ...prevData,
-      imageUrls: prevData.imageUrls.filter((_, i) => i !== index)
-    }));
+
+    // Update parent state via onUpdateData
+    onUpdateData({
+      imageUrls: updatedImageUrls,
+    });
   };
 
 
@@ -279,7 +282,7 @@ const CreateResortBasic = ({ onNext, onUpdateData, formData }) => {
                     <FaXmark size={16} />
                   </button>
                 </div>
-              ) }
+              )}
             </div>
 
           </div>
@@ -287,7 +290,7 @@ const CreateResortBasic = ({ onNext, onUpdateData, formData }) => {
             <label className="block mb-2 font-medium">Ảnh resort</label>
 
             <div className="flex flex-col justify-start items-center mt-4 space-y-4">
-            
+
 
               {/* Nút Choose Images và Upload Images */}
               <div className="flex space-x-4">
@@ -312,14 +315,13 @@ const CreateResortBasic = ({ onNext, onUpdateData, formData }) => {
               {resortData.imageUrls && resortData.imageUrls.length > 0 && (
                 <div className="grid grid-cols-6 gap-4">
                   {resortData.imageUrls.map((url, index) => (
-                    <div key={index} className="relative flex justify-center items-center">
-                      <div className="p-2 bg-gradient-to-tr from-gray-200 to-gray-400 rounded-xl">
-                        <div className="p-1 bg-gradient-to-tr from-blue-300 to-purple-400 rounded-xl relative">
+                    <div key={index} className="relative flex justify-center items-center shadow-xl">
+                     
                           {/* Ảnh */}
                           <img
                             src={url}
                             alt={`Resort Image ${index + 1}`}
-                            className="w-28 h-24 object-cover border-4 border-white rounded-xl shadow-lg transition-transform duration-300 ease-in-out transform hover:scale-105"
+                            className="w-28 h-24 object-cover border-4 border-white rounded-md transition-transform duration-300 ease-in-out transform hover:scale-105"
                           />
 
                           {/* Icon xóa */}
@@ -330,19 +332,13 @@ const CreateResortBasic = ({ onNext, onUpdateData, formData }) => {
                           >
                             <FaXmark />
                           </button>
-                        </div>
-                      </div>
+                       
                     </div>
                   ))}
-
                 </div>
-              ) }
+              )}
             </div>
-
-
           </div>
-
-
         </div>
       </div>
 

@@ -27,6 +27,7 @@ const ResortManagementTSC = () => {
       let amount = await getAllResort(0, 100, "");
       if (data.status === 200) {
         setAllResort(data.data.content);
+        console.log(data.data.content)
         setTotalPages(data.data.totalPages);
         setLoading(false);
         setCount(amount.data.content.length);

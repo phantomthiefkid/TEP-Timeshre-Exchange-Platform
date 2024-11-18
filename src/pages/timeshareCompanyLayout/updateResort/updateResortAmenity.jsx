@@ -5,7 +5,7 @@ import { PlusCircleIcon, XCircleIcon } from '@heroicons/react/solid'; // Make su
 import { toast, Toaster } from 'react-hot-toast';
 import Loading from '../../../components/LoadingComponent/loading';
 import SpinnerWaiting from '../../../components/LoadingComponent/spinnerWaiting';
-import { FaArrowRight } from 'react-icons/fa';
+import { FaArrowRight, FaSave } from 'react-icons/fa';
 
 const UpdateResortAmenity = () => {
   const { id } = useParams();
@@ -59,7 +59,7 @@ const UpdateResortAmenity = () => {
       .filter((amenity) => amenity.type === type)
       .map((amenity) => (
         <div key={amenity.name} className="relative flex justify-center items-center rounded-full border  mt-2 p-2 transition-colors duration-200 ease-in-out hover:border-sky-500 focus-within:border-sky-500">
-          <span className="text-sky-500 font-bold">{amenity.name}</span>
+          <span className="text-sky-500 font-normal">{amenity.name}</span>
           <button
             type="button"
             onClick={() => handleRemoveAmenity(amenity.name)}
@@ -182,12 +182,12 @@ const UpdateResortAmenity = () => {
       <div className="mt-6 flex justify-end">
 
         <button
-          className="flex items-center justify-center bg-gradient-to-r from-sky-400 to-sky-500 text-white font-semibold py-3 px-8 rounded-full shadow-lg hover:bg-sky-800 transition-all duration-300 transform hover:scale-105"
+          className="flex items-center justify-center bg-gradient-to-r from-sky-400 to-sky-500 text-white font-semibold py-2 px-8 rounded-full shadow-lg hover:bg-sky-800 transition-all duration-300 transform hover:scale-105"
           onClick={handleSubmit}
         >
           <span className="mr-3">Cập nhật</span>
-          <span className="bg-white text-sky-700 w-8 h-8 flex items-center justify-center rounded-full shadow-md transform transition-all duration-300 hover:scale-110">
-            <FaArrowRight />
+          <span className="text-white w-8 h-8 flex items-center justify-center rounded-full shadow-md transform transition-all duration-300 hover:scale-110">
+            <FaSave />
           </span>
         </button>
       </div>
