@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import Bloglist from './Bloglist';
-import CreateBlog from './CreateBlog';
+import Bloglist from "./blogList"
+import CreateBlog from './createBlog';
 
 const BlogManagement = () => {
     // State to track which component to display
