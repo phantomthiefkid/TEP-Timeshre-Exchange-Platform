@@ -74,7 +74,7 @@ const Search = () => {
 
             </div>
             <button className="flex items-center bg-blue-500 justify-center px-4 border-l w-14">
-              <Link to={"/resortsearchlist"}>
+              {/* <Link to={"/resortsearchlist"}> */}
                 <svg
                   className="h-4 w-4 text-grey-dark"
                   fill="white"
@@ -83,7 +83,7 @@ const Search = () => {
                 >
                   <path d="M16.32 14.9l5.39 5.4a1 1 0 0 1-1.42 1.4l-5.38-5.38a8 8 0 1 1 1.41-1.41zM10 16a6 6 0 1 0 0-12 6 6 0 0 0 0 12z" />
                 </svg>
-              </Link>
+              {/* </Link> */}
             </button>
           </div>
           {resort && resort.length > 0 && (

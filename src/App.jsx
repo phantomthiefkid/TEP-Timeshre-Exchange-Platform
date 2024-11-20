@@ -48,6 +48,7 @@ import BlogDetail from "./pages/systemStaffLayout/blogManagement/blogDetail";
 import BlogListGuest from "./pages/landingpage/blog/blogListGuest";
 import BlogDetailGuest from "./pages/landingpage/blog/blogDetailGuest";
 import ProfileTsCompany from "./pages/timeshareCompanyLayout/profileTsCompany";
+import TimeshareCompanyProfile from "./pages/company/timeshareCompanyProfile";
 function App() {
   const dispatch = useDispatch();
   const { isLogin, role } = useSelector((state) => state.isLogin);
@@ -90,6 +91,7 @@ function App() {
           path="/timesharecompanydetail/:tsId"
           element={<TimeshareCompanyDetail />}
         />
+        <Route path="/timesharecompanyprofile/:tsId" element={<TimeshareCompanyProfile/>} />
         <Route path="/aboutus" element={<AboutUs />} />
         <Route path="/policy" element={<Policy />} />
         <Route path="/faqs" element={<Faqs />} />

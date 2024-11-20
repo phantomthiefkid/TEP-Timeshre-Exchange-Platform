@@ -92,6 +92,7 @@ const UpdateResortBasic = () => {
   };
 
   const handleUpdate = async () => {
+    console.log(resort, "basic")
     try {
       await updateResortBasic(resort, id);
       toast.success("Cập nhật thành công!!", { duration: 3000 });

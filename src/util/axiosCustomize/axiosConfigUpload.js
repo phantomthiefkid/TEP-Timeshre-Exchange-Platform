@@ -1,8 +1,8 @@
 import axios from "axios";
 
 const axiosConfig = axios.create({
-    // baseURL: "https://fams-management.tech/",
-    baseURL: "http://35.247.160.131/",
+    baseURL: "https://unwind.id.vn/"
+    // baseURL: "http://35.247.160.131/",
 });
 
 axiosConfig.interceptors.request.use(

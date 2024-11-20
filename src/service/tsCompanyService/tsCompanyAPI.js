@@ -68,6 +68,7 @@ const getResortById = async (id) => {
 
 const updateResortBasic = async (data, resortId) => {
   try {
+    console.log(data, "api")
     return await axiosConfig.put(`timeshare-company/resort/${resortId}`, data);
   } catch (error) {
     throw error;

@@ -15,6 +15,22 @@ const getAllRentalPosting = async (pageNo, pageSize, resortName, status) => {
     }
 }
 
+const getAllRentalPackagePosting = async (pageNo, pageSize, resortName, packageId, status) => {
+    try {
+        return await axiosConfig.get(`system-staff/rental/package/postings`, {
+            params: {
+                pageNo,
+                pageSize,
+                resortName,
+                packageId,
+                status
+            },
+        })
+    } catch (error) {
+        return error
+    }
+}
+
 const getRentalPostingById = async (postingId) => {
     try {
         return await axiosConfig.get(`system-staff/rental/posting/${postingId}`)
@@ -104,5 +120,6 @@ export {
     deactiveFeedback,
     createBlog,
     getAllBlog,
-    getBlogById
+    getBlogById,
+    getAllRentalPackagePosting
 }

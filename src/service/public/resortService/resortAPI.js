@@ -63,7 +63,23 @@ const getAllResort = async (pageNo = 0, pageSize = 20, resortName) => {
   }
 };
 
+const getAllResortByTsId = async (pageNo = 0, pageSize = 20, resortName, tsId) => {
+  try {
+    return await axios.get(`${baseURL}public/resort`, {
+      params: {
+        pageNo,
+        pageSize,
+        resortName,
+        tsId
+      },
+    });
+  } catch (error) {
+    return error;
+  }
+};
+
 const getTimeshareCompanyDetail = async (tsId) => {
+  
   try {
     return await axios.get(`${baseURL}public/timeshare-company/${tsId} 
 `);
@@ -79,4 +95,5 @@ export {
   getTimeshareCompanyDetail,
   getDetailUnitType,
   getAllResort,
+  getAllResortByTsId
 };

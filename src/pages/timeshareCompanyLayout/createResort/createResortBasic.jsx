@@ -11,12 +11,13 @@ const CreateResortBasic = ({ onNext, onUpdateData, formData }) => {
     maxPrice: formData.maxPrice || 0,
     description: formData.description || '',
     address: formData.address || '',
-    logo: "",
-    imageUrls: []
+    logo: formData.logo,
+    imageUrls: formData.imageUrls
   });
   const [errors, setErrors] = useState({});
   const [listUrlImage, setlistUrlImage] = useState([])
   const [selectedFiles, setSelectedFiles] = useState([]);
+  const [imageResort, setImageResort] = useState("");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -60,6 +61,7 @@ const CreateResortBasic = ({ onNext, onUpdateData, formData }) => {
       const response = await uploadFileImage(formData);
       if (response.status === 200) {
         const newLogoUrl = response.data[0];
+        setImageResort(response.data[0])
         setResortData((prevData) => ({
           ...prevData,
           logo: newLogoUrl,
@@ -239,7 +241,7 @@ const CreateResortBasic = ({ onNext, onUpdateData, formData }) => {
             <label className="block mb-2 font-medium">Logo resort</label>
 
             {/* Upload button with icon */}
-            {!resortData.logo && (
+            {!imageResort.logo && (
               <label
                 htmlFor="upload-room-images"
                 className="w-full h-32 border-dashed border-2 border-gray-300 rounded-lg flex flex-col items-center justify-center cursor-pointer bg-gradient-to-r from-gray-50 to-gray-100 hover:shadow-lg hover:border-blue-400 transition-all duration-300"

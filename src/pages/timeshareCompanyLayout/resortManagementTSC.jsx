@@ -16,7 +16,7 @@ import FormatCurrency from "../../components/Validate/formatCurrency";
 const ResortManagementTSC = () => {
   const [allResort, setAllResort] = useState([]);
   const [page, setPage] = useState(0);
-  const [size, setSize] = useState(10);
+  const [size, setSize] = useState(7);
   const [totalPages, setTotalPages] = useState(1);
   const [resortName, setResortName] = useState("");
   const [loading, setLoading] = useState(true);
@@ -24,13 +24,13 @@ const ResortManagementTSC = () => {
   const fetAllResort = async () => {
     try {
       let data = await getAllResort(page, size, resortName);
-      let amount = await getAllResort(0, 100, "");
+      // let amount = await getAllResort(0, 100, "");
       if (data.status === 200) {
         setAllResort(data.data.content);
         console.log(data.data.content)
         setTotalPages(data.data.totalPages);
         setLoading(false);
-        setCount(amount.data.content.length);
+        // setCount(amount.data.content.length);
       }
     } catch (error) {
       throw error;
@@ -85,7 +85,7 @@ const ResortManagementTSC = () => {
                 <path d="M12 2L2 12h3v8h14v-8h3L12 2zm5 15h-2v-4h-2v4H9v-4H7v4H5v-5.586L12 4.828l7 6.586V17h-2v-4h-2v4z" />
               </svg>
               Số lượng resort:{" "}
-              <CountUp start={0} end={count} duration={4} className="ml-1" />
+              <CountUp start={0} end={count || 100} duration={4} className="ml-1" />
             </span>
           </div>
         </div>

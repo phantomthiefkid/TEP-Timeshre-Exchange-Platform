@@ -162,7 +162,7 @@ const CreateResortAmenity = ({ onUpdateData, onNext, onBack, formData }) => {
 
       <div className="mt-6 flex justify-between space-x-4">
         {/* Back Button */}
-        {/* <button
+        <button
           type="button"
           onClick={onBack}
           className="flex items-center justify-center bg-gradient-to-r from-sky-400 to-sky-600 text-white font-semibold py-3 px-8 rounded-full shadow-lg hover:bg-sky-800 transition-all duration-300 transform hover:scale-105"
@@ -171,7 +171,7 @@ const CreateResortAmenity = ({ onUpdateData, onNext, onBack, formData }) => {
             <FaArrowLeft />
           </span>
           <span>Trở lại</span>
-        </button> */}
+        </button>
 
         {/* Next Button */}
         <button

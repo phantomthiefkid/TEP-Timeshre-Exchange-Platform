@@ -164,7 +164,7 @@ const ValuationList = () => {
                         { label: "Đang chờ", status: "PendingApproval", color: "bg-gradient-to-r from-yellow-300 to-yellow-600" },
                         { label: "Đã thuê", status: "Completed", color: "bg-gradient-to-r from-green-300 to-green-600" },
                         { label: "Chờ xác nhận giá", status: "AwaitingConfirmation", color: "bg-gradient-to-r from-orange-300 to-orange-600" },
-                        { label: "Chờ định giá", status: "PendingPrice", color: "bg-gradient-to-r from-blue-300 to-purple-500" },
+                        { label: "Chờ định giá", status: "PendingPricing", color: "bg-gradient-to-r from-blue-300 to-purple-500" },
                         { label: "Từ chối giá", status: "RejectPrice", color: "bg-gradient-to-r from-red-300 to-red-600" },
                     ].map(({ label, status, color }) => (
                         <button
