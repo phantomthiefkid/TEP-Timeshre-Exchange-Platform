@@ -23,7 +23,7 @@ const UpdateResortUnitType = ({ unitType, flag }) => {
   }, [unitType])
 
   return (
-    <div className=''>
+    <div className='min-h-screen'>
       <div className="grid grid-cols-2 gap-8 py-6 border p-8">
         {unitTypeList && unitTypeList.map((item, index) => (
           <div key={item.id} onClick={() => handleOpen(item)} className="flex items-stretch gap-4 rounded-xl border shadow-md hover:shadow-lg relative">

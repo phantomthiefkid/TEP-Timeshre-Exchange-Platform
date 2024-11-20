@@ -9,15 +9,15 @@ import {
 } from "react-icons/fa";
 import { FaArrowsRotate, FaEllipsisVertical } from "react-icons/fa6";
 import {
-  getAllRentalPosting,
+  getAllRentalPackagePosting,
   getRentalPostingById,
 } from "../../service/systemStaffService/systemStaffAPI";
-import DetailRentalList from "../../components/Modal/systemstaff/detailRentalList";
-import { Link } from "react-router-dom";
-import Loading from "../../components/LoadingComponent/loading";
 import SpinnerWaiting from "../../components/LoadingComponent/spinnerWaiting";
+import DetaillRentalPackageModal from "../../components/Modal/systemstaff/detailRentalPackageModal";
 const PostManagement = () => {
-  const [filterStatus, setFilterStatus] = useState("");
+  const [filterStatus, setFilterStatus] = useState(null);
+  const [selectedOption, setSelectedOption] = useState("Tất cả");
+  const [packageId, setPackageId] = useState(null);
   const [rentalPostings, setRentalPostings] = useState([]);
   const [openDetailModal, setOpenDetailModal] = useState(false);
   const [selectPosting, setSelectPosting] = useState();
@@ -28,7 +28,7 @@ const PostManagement = () => {
   const [resortName, setResortName] = useState("");
   const fetchAllRentalPostings = async () => {
     try {
-      let data = await getAllRentalPosting(page, size, resortName);
+      let data = await getAllRentalPackagePosting(page, size, resortName, packageId, filterStatus);
       if (data.status === 200) {
         setLoading(false);
         setRentalPostings(data.data.content);
@@ -37,6 +37,10 @@ const PostManagement = () => {
     } catch (error) {
       throw error;
     }
+  };
+  const handlePackageSelect = (value, label) => {
+    setSelectedOption(label); // Cập nhật tên hiển thị
+    setPackageId(value); // Cập nhật ID gói
   };
 
   const handleOpenDetailModal = async (postingId) => {
@@ -65,26 +69,60 @@ const PostManagement = () => {
     }
   };
 
-  useEffect(() => {
-    fetchAllRentalPostings();
-  }, [page, resortName]);
-
-  const transactions = [
-    {
-      name: "Wilson Rhiel Madsen",
-      checkin_date: "08 Sep 2024 ",
-      checkout_date: "02 Sep 2024 ",
-      amount: "$66.00",
-      status: "Từ chối",
-      statusColor: "bg-red-100 text-red-500",
-      image: "https://placehold.co/32x32",
-      postId: "Profile picture of Wilson Rhiel Madsen",
-    },
+  const packageOptions = [
+    { value: null, label: "Tất cả" },
+    { value: 1, label: "Gói cơ bản" },
+    { value: 2, label: "Gói nâng cao" },
+    { value: 3, label: "Gói Premium" },
+    { value: 4, label: "Gói ủy quyền" },
   ];
 
-  const filteredTransactions = filterStatus
-    ? transactions.filter((transaction) => transaction.status === filterStatus)
-    : transactions;
+  useEffect(() => {
+    fetchAllRentalPostings();
+  }, [page, resortName, filterStatus, packageId]);
+
+  const getStatusStyles = (status) => {
+    switch (status) {
+      case "PendingApproval":
+        return { label: "Đang chờ", style: "bg-blue-100 text-blue-500", styleDot: "bg-blue-500" };
+      case "Processing":
+        return { label: "Đã duyệt", style: "bg-green-100 text-green-500", styleDot: "bg-green-500" };
+      case "AwaitingConfirmation":
+        return {
+          label: "Chờ xác nhận giá",
+          style: "bg-yellow-100 text-yellow-500",
+          styleDot: "bg-yellow-500"
+        };
+      case "PendingPricing":
+        return {
+          label: "Chờ định giá",
+          style: "bg-orange-100 text-orange-500",
+          styleDot: "bg-orange-500"
+        };
+      case "Closed":
+        return {
+          label: "Từ chối", style: "bg-red-100 text-red-500",
+          styleDot: "bg-red-500"
+        };
+      case "Expired":
+        return {
+          label: "Hết hạn", style: "bg-red-100 text-red-500",
+          styleDot: "bg-red-500"
+        };
+      case "RejectPrice":
+        return {
+          label: "Từ chối giá", style: "bg-red-100 text-red-500",
+          styleDot: "bg-red-500"
+        };
+      case "Completed":
+        return {
+          label: "Đã thuê", style: "bg-blue-100 text-blue-500",
+          styleDot: "bg-blue-500"
+        };
+      default:
+        return { label: "Không xác định", style: "bg-gray-100 text-gray-500", styleDot: "bg-gray-500" };
+    }
+  }
 
   if (loading) {
     return <SpinnerWaiting />;
@@ -100,7 +138,7 @@ const PostManagement = () => {
             Quản lí các bài đăng cho thuê ở đây.
           </h3>
         </div>
-        <div className="flex items-center justify-between p-2 mt-3 py-4">
+        <div className="flex items-center justify-start gap-6 p-2 mt-3 py-4">
           <div className="flex items-center border border-gray-300 rounded-lg px-4 py-2 w-full max-w-xl">
             <FaSearch className="text-gray-500 mr-2" />
             <input
@@ -122,20 +160,19 @@ const PostManagement = () => {
                   Lọc theo:
                 </label>
               </div>
-              <div className="relative w-full">
+              <div className="relative w-36">
                 <input
                   type="checkbox"
                   id="dropdownToggle"
-                  className="peer hidden"
+                  className="peer hidden w-full"
                 />
-
                 <label
-                  for="dropdownToggle"
-                  className=" bg-gradient-to-r from-blue-50 to-blue-100 border border-blue-300 text-gray-700 py-2 px-4 pr-10 rounded-xl shadow-md flex items-center justify-between cursor-pointer transition duration-300 ease-in-out transform  hover:border-blue-500 focus:outline-none"
+                  htmlFor="dropdownToggle"
+                  className="bg-gradient-to-r from-blue-300 to-purple-400 text-white border border-blue-300 py-2 px-4 pr-2 rounded-xl shadow-md flex items-center justify-between cursor-pointer transition duration-300 ease-in-out transform hover:border-blue-500 focus:outline-none"
                 >
-                  <span id="selectedOption">Chọn bộ lọc</span>
+                  <span id="selectedOption">{selectedOption}</span>
                   <svg
-                    className="fill-current h-5 w-5 text-blue-500"
+                    className="fill-current h-5 w-5 text-white"
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 20 20"
                   >
@@ -144,82 +181,58 @@ const PostManagement = () => {
                 </label>
 
                 <div className="absolute hidden peer-checked:block w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-10">
-                  <label
-                    for="dropdownToggle"
-                    className="block px-4 py-2 text-gray-700 hover:bg-blue-100 hover:text-blue-700 cursor-pointer rounded-lg transition"
-                  >
-                    Lựa chọn 1
-                  </label>
-                  <label
-                    for="dropdownToggle"
-                    className="block px-4 py-2 text-gray-700 hover:bg-blue-100 hover:text-blue-700 cursor-pointer rounded-lg transition"
-                  >
-                    Lựa chọn 2
-                  </label>
-                  <label
-                    for="dropdownToggle"
-                    className="block px-4 py-2 text-gray-700 hover:bg-blue-100 hover:text-blue-700 cursor-pointer rounded-lg transition"
-                  >
-                    Lựa chọn 3
-                  </label>
+                  {packageOptions.map(({ value, label }) => (
+                    <label
+                      key={value}
+                      htmlFor="dropdownToggle"
+                      className="block px-4 py-2 text-gray-700 hover:bg-blue-100 hover:text-blue-700 cursor-pointer rounded-lg transition"
+                      onClick={() => handlePackageSelect(value, label)}
+                    >
+                      {label}
+                    </label>
+                  ))}
+
                 </div>
               </div>
+
             </div>
 
-            <Link to={`/systemstaff/createposting`}>
+            {/* <Link to={`/systemstaff/createposting`}>
               <button className="bg-gradient-to-r from-green-300 to-green-400 border border-blue-300 text-gray-560 py-2 px-4 pr-10 rounded-xl shadow-md flex items-center justify-between cursor-pointer transition duration-300 ease-in-out transform hover:from-green-400 hover:to-green-300 hover:border-blue-500 focus:outline-none">
                 <FaPlus className="mr-3" />
                 Thêm mới
               </button>
-            </Link>
-            <button className="bg-gradient-to-r from-blue-300 to-blue-400 border border-blue-300 text-gray-560 py-2 px-4 pr-10 rounded-xl shadow-md flex items-center justify-between cursor-pointer transition duration-300 ease-in-out transform hover:from-blue-400 hover:to-blue-300 hover:border-blue-500 focus:outline-none">
-              <FaArrowsRotate className="mr-3" />
-              Làm mới
-            </button>
+            </Link> */}
+
           </div>
         </div>
         {/* Filter Buttons */}
         <div className="flex items-center py-4 space-x-4 mb-5">
-          <button
-            onClick={() => setFilterStatus("")} // Reset filter
-            className={`px-4 py-2 rounded-md ${
-              filterStatus === ""
-                ? "bg-blue-500 text-white"
-                : "bg-gray-100 text-gray-700 hover:bg-blue-500 hover:text-white"
-            }`}
-          >
-            Tất cả
-          </button>
-          <button
-            onClick={() => setFilterStatus("Đang chờ")}
-            className={`px-4 py-2 rounded-md ${
-              filterStatus === "Đang chờ"
-                ? "bg-blue-500 text-white"
-                : "bg-gray-100 text-gray-700 hover:bg-blue-500 hover:text-white"
-            }`}
-          >
-            Đang chờ
-          </button>
-          <button
-            onClick={() => setFilterStatus("Đã duyệt")}
-            className={`px-4 py-2 rounded-md ${
-              filterStatus === "Đã duyệt"
-                ? "bg-blue-500 text-white"
-                : "bg-gray-100 text-gray-700 hover:bg-blue-500 hover:text-white"
-            }`}
-          >
-            Đã duyệt
-          </button>
-          <button
-            onClick={() => setFilterStatus("Từ chối")}
-            className={`px-4 py-2 rounded-md ${
-              filterStatus === "Từ chối"
-                ? "bg-blue-500 text-white"
-                : "bg-gray-100 text-gray-700 hover:bg-blue-500 hover:text-white"
-            }`}
-          >
-            Từ chối
-          </button>
+          {[
+            { label: "Tất cả", status: null, color: "bg-gradient-to-r from-gray-300 to-gray-500" },
+            { label: "Đang chờ", status: "PendingApproval", color: "bg-gradient-to-r from-yellow-200 to-yellow-400" },
+            { label: "Đã thuê", status: "Completed", color: "bg-gradient-to-r from-green-200 to-green-400" },
+            { label: "Chờ xác nhận giá", status: "AwaitingConfirmation", color: "bg-gradient-to-r from-orange-200 to-orange-400" },
+            { label: "Chờ định giá", status: "PendingPricing", color: "bg-gradient-to-r from-blue-200 to-blue-400" },
+            { label: "Từ chối giá", status: "RejectPrice", color: "bg-gradient-to-r from-pink-200 to-pink-400" },
+            { label: "Đã duyệt", status: "Processing", color: "bg-gradient-to-r from-purple-200 to-purple-400" },
+            { label: "Từ chối", status: "Closed", color: "bg-gradient-to-r from-red-200 to-red-400" },
+            { label: "Hết hạn", status: "Expired", color: "bg-gradient-to-r from-indigo-200 to-indigo-400" },
+          ]
+            .map(({ label, status, color }) => (
+              <button
+                key={status}
+                onClick={() => setFilterStatus(status)}
+                className={`px-6 py-3 rounded-full font-medium transition-all duration-300 ease-in-out
+                ${filterStatus === status
+                    ? `${color} text-white shadow-lg border-transparent`
+                    : `bg-gray-100 text-gray-700 border border-gray-300 hover:${color} hover:text-white hover:shadow-lg`
+                  }
+            `}
+              >
+                {label}
+              </button>
+            ))}
         </div>
 
         <table className="min-w-full bg-white border border-gray-200 ">
@@ -252,10 +265,10 @@ const PostManagement = () => {
                   <td className="p-4">{posting.pricePerNights}</td>
                   <td className="p-4">
                     <span
-                      className={`flex items-center px-2 py-1 rounded-full w-32 bg-red-100 text-red-500`}
+                      className={`flex items-center hover:scale-105 transition-all duration-200 py-1 px-2 rounded-full w-44 text-center ${getStatusStyles(posting.status).style}`}
                     >
                       <FaDotCircle className="mr-2" />
-                      {posting.status}
+                      {getStatusStyles(posting.status).label}
                     </span>
                   </td>
                   <td className="p-4">
@@ -272,7 +285,7 @@ const PostManagement = () => {
           </tbody>
         </table>
         {openDetailModal && (
-          <DetailRentalList
+          <DetaillRentalPackageModal
             isOpen={openDetailModal}
             onClose={() => setOpenDetailModal(false)}
             postingId={selectPosting}
@@ -293,11 +306,10 @@ const PostManagement = () => {
                 <button
                   key={index}
                   onClick={() => setPage(index)}
-                  className={`w-8 h-8 flex items-center justify-center rounded-full ${
-                    index === page
-                      ? "bg-blue-500 text-white"
-                      : "bg-white text-gray-500"
-                  }`}
+                  className={`w-8 h-8 flex items-center justify-center rounded-full ${index === page
+                    ? "bg-blue-500 text-white"
+                    : "bg-white text-gray-500"
+                    }`}
                 >
                   {index + 1}
                 </button>

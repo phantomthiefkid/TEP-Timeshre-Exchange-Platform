@@ -1,13 +1,23 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { GlobeIcon, BellIcon } from '@heroicons/react/solid';
 import { jwtDecode } from 'jwt-decode';
 import { FaBell, FaCog } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
 const Header = () => {
   const [info, setInfo] = useState()
   const token = localStorage.getItem("token")
   const decodeToken = jwtDecode(token);
-
-
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null);
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setDropdownOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
   return (
     <>
       <header className="flex items-center justify-between p-6 w-full h-[7rem] bg-gradient-to-r from-white to-blue-50 border-b-2 ">
@@ -28,8 +38,35 @@ const Header = () => {
           </div>
 
           {/* Settings Icon */}
-          <div className="relative bg-blue-200 rounded-full p-3 shadow-lg cursor-pointer transition duration-300 hover:bg-blue-300">
-            <FaCog className="h-6 w-6 text-blue-600" />
+          <div className="relative">
+            {/* Settings Icon */}
+            <div
+              className="bg-blue-200 rounded-full p-3 shadow-lg cursor-pointer transition duration-300 hover:bg-blue-300"
+              onClick={() => setDropdownOpen(!dropdownOpen)}
+            >
+              <FaCog className="h-6 w-6 text-blue-600" />
+            </div>
+
+            {/* Dropdown Menu */}
+            {dropdownOpen && decodeToken.RoleName === "TIMESHARECOMPANY" && (
+              <div
+                className="absolute right-0 mt-2 w-52 bg-white rounded-lg shadow-lg border z-10"
+              >
+                <ul>
+                  <Link to={`/timesharecompany/profiletscompany`}>
+                    <li
+                      className="px-4 py-2 text-gray-700 hover:bg-blue-100 cursor-pointer"
+                    >
+                      Chỉnh sửa hồ sơ công ty
+                    </li></Link>
+                  <li
+                    className="px-4 py-2 text-gray-700 hover:bg-blue-100 cursor-pointer"
+                  >
+                    Đăng xuất
+                  </li>
+                </ul>
+              </div>
+            )}
           </div>
 
           {/* Profile Section */}

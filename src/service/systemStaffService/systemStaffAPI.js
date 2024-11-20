@@ -1,12 +1,29 @@
 import axiosConfig from "../../util/axiosCustomize/axiosConfig";
 
-const getAllRentalPosting = async (pageNo, pageSize, resortName) => {
+const getAllRentalPosting = async (pageNo, pageSize, resortName, status) => {
     try {
         return await axiosConfig.get(`system-staff/rental/postings`, {
             params: {
                 pageNo,
                 pageSize,
-                resortName
+                resortName,
+                status
+            },
+        })
+    } catch (error) {
+        return error
+    }
+}
+
+const getAllRentalPackagePosting = async (pageNo, pageSize, resortName, packageId, status) => {
+    try {
+        return await axiosConfig.get(`system-staff/rental/package/postings`, {
+            params: {
+                pageNo,
+                pageSize,
+                resortName,
+                packageId,
+                status
             },
         })
     } catch (error) {
@@ -39,7 +56,7 @@ const acceptNewPriceValuation = async (postingId, newPriceValuation) => {
 
 const getAllFeedbackResortListST = async (isReport, pageNo, pageSize, resortId) => {
     try {
-        return await axiosConfig.get(`system-staff/feedback/resort/${resortId}`,{
+        return await axiosConfig.get(`system-staff/feedback/resort/${resortId}`, {
             params: {
                 isReport: isReport,
                 pageNo: pageNo,
@@ -61,10 +78,48 @@ const deactiveFeedback = async (feedbackId) => {
     }
 }
 
+const createBlog = async (blog) => {
+    try {
+        return await axiosConfig.post(`system-staff/blog`, blog);
+    } catch (error) {
+        throw error
+    }
+}
+
+const getAllBlog = async (title, page, size) => {
+    try {
+        const response = await axiosConfig.get(`system-staff/blog`, {
+            params: {
+                page,
+                size,
+                title,
+            },
+        });
+        return response;
+    } catch (error) {
+        throw error;
+    }
+};
+
+
+const getBlogById = async (id) => {
+    try {
+        const response = await axiosConfig.get(`system-staff/blog/${id}`,);
+        return response;
+    } catch (error) {
+        throw error;
+    }
+};
+
+
 export {
     getAllRentalPosting,
     getRentalPostingById,
     acceptNewPriceValuation,
     getAllFeedbackResortListST,
-    deactiveFeedback
+    deactiveFeedback,
+    createBlog,
+    getAllBlog,
+    getBlogById,
+    getAllRentalPackagePosting
 }

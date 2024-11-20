@@ -3,7 +3,7 @@ import Navigation from "../../components/Navbar/navigation";
 import Footer from "../../components/Footer/footer";
 import { Link, useNavigate } from "react-router-dom";
 import {
-  getAllResortByName,
+
   getAllTimeshareCompany,
 } from "../../service/public/resortService/resortAPI";
 import { FaSearch } from "react-icons/fa";
@@ -11,7 +11,7 @@ import { FaSearch } from "react-icons/fa";
 const TimeshareCompany = () => {
   const navigate = useNavigate();
   const [keyword, setKeyword] = useState("");
-  const [resort, setResort] = useState([]);
+  const [company, setCompany] = useState([]);
   const [debounceTimeout, setDebounceTimeout] = useState(null);
   const [tsCompany, setTsCompany] = useState("");
 
@@ -21,7 +21,7 @@ const TimeshareCompany = () => {
 
     // Nếu không có từ khóa thì reset kết quả tìm kiếm
     if (!searchInput) {
-      setResort([]);
+      setCompany([]);
       clearTimeout(debounceTimeout); // Dừng timeout nếu không có từ khóa
     }
 
@@ -31,25 +31,25 @@ const TimeshareCompany = () => {
     }
 
     const timeout = setTimeout(() => {
-      fetchResortList(searchInput);
+      fetchTimeshareCompanyList(searchInput);
     }, 300); // Chờ 300ms sau khi người dùng dừng nhập
 
     setDebounceTimeout(timeout); // Lưu timeout mới
   };
 
-  const fetchResortList = async (searchInput) => {
+  const fetchTimeshareCompanyList = async (searchInput) => {
     if (searchInput) {
       // Chỉ fetch khi có keyword
       try {
-        let data = await getAllResortByName(0, 20, searchInput);
+        let data = await getAllTimeshareCompany(0, 20, searchInput);
         if (data.status) {
-          setResort(data.data.content);
+          setCompany(data.data.content);
         }
       } catch (error) {
         console.error(error);
       }
     } else {
-      setResort([]);
+      setCompany([]);
     }
   };
 
@@ -77,7 +77,7 @@ const TimeshareCompany = () => {
     <>
       <Navigation />
       <div className="max-w-full h-auto relative">
-        <img src="../src/assets/tsCom-banner.png" className="w-full h-auto" />
+        <img src="https://unwinds.s3.ap-southeast-2.amazonaws.com/1731836579381_tsCom-banner.png" className="w-full h-auto" />
         <div className="grid grid-rows-2 font-sans w-full max-w-[1720px] h-[210px] text-black px-5 lg:px-20 absolute top-10 left-10 space-y-4">
           <h1 className="text-4xl text-white font-bold text-left mt-14">
             Công ty Timeshare
@@ -99,19 +99,19 @@ const TimeshareCompany = () => {
             </div>
           </div>
 
-          {resort && resort.length > 0 && (
+          {company && company.length > 0 && (
             <div className="absolute top-44 left-24 w-[1480px] bg-gray-100 border border-gray-300 shadow-xl rounded-lg z-10 mt-2">
               <ul className="max-h-60 overflow-y-auto">
-                {resort.map((item) => (
+                {company.map((item) => (
                   <li
                     key={item.id}
                     className="px-4 py-2 border-b border-gray-200 hover:bg-gray-300"
                   >
                     <Link
-                      to={`/resortdetail/${item.id}`}
+                      to={`/timesharecompanydetail/${item.id}`}
                       className="text-black hover:text-blue-800"
                     >
-                      {item.resortName} - {item.address}
+                      Công ty: {item.timeshareCompanyName} - {item.address}
                     </Link>
                   </li>
                 ))}

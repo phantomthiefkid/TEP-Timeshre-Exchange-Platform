@@ -1,84 +1,28 @@
 import React, { useEffect, useState } from "react";
 import Footer from "../../components/Footer/footer";
 import Navigation from "../../components/Navbar/navigation";
-import {
-  ArrowRightIcon,
-  StarIcon,
-  LocationMarkerIcon,
-} from "@heroicons/react/solid";
 import { Link, useParams } from "react-router-dom";
-import { getTimeshareCompanyDetail } from "../../service/public/resortService/resortAPI";
+import { getAllResortByTsId, getTimeshareCompanyDetail } from "../../service/public/resortService/resortAPI";
 import SpinnerWaiting from "../../components/LoadingComponent/spinnerWaiting";
-
-// Hardcoded resort data
-const resorts = [
-  {
-    id: 1,
-    name: "Nha Trang Vinpearl Resort",
-    location: "Đảo Hòn Tre, Nha Trang, Khánh Hòa",
-    imageUrl:
-      "https://cf.bstatic.com/xdata/images/hotel/max1024x768/412883158.jpg?k=a220ece8f04054da35466bd13ee87342354cc18122b73eb0fbdcfef850115325&o=&hp=1",
-    rating: 4.6,
-    reviews: 16,
-  },
-  {
-    id: 2,
-    name: "Phú Quốc Vinpearl Resort",
-    location: "Phú Quốc, Kiên Giang",
-    imageUrl:
-      "https://cf.bstatic.com/xdata/images/hotel/max1024x768/412883158.jpg?k=a220ece8f04054da35466bd13ee87342354cc18122b73eb0fbdcfef850115325&o=&hp=1",
-    rating: 4.8,
-    reviews: 24,
-  },
-  {
-    id: 3,
-    name: "Đà Nẵng Vinpearl Resort",
-    location: "Ngũ Hành Sơn, Đà Nẵng",
-    imageUrl:
-      "https://cf.bstatic.com/xdata/images/hotel/max1024x768/412883158.jpg?k=a220ece8f04054da35466bd13ee87342354cc18122b73eb0fbdcfef850115325&o=&hp=1",
-    rating: 4.7,
-    reviews: 18,
-  },
-  {
-    id: 4,
-    name: "Hạ Long Vinpearl Resort",
-    location: "Hạ Long, Quảng Ninh",
-    imageUrl:
-      "https://cf.bstatic.com/xdata/images/hotel/max1024x768/412883158.jpg?k=a220ece8f04054da35466bd13ee87342354cc18122b73eb0fbdcfef850115325&o=&hp=1",
-    rating: 4.5,
-    reviews: 14,
-  },
-  {
-    id: 5,
-    name: "Sapa Vinpearl Resort",
-    location: "Sapa, Lào Cai",
-    imageUrl:
-      "https://cf.bstatic.com/xdata/images/hotel/max1024x768/412883158.jpg?k=a220ece8f04054da35466bd13ee87342354cc18122b73eb0fbdcfef850115325&o=&hp=1",
-    rating: 4.4,
-    reviews: 12,
-  },
-  {
-    id: 6,
-    name: "Hội An Vinpearl Resort",
-    location: "Hội An, Quảng Nam",
-    imageUrl:
-      "https://cf.bstatic.com/xdata/images/hotel/max1024x768/412883158.jpg?k=a220ece8f04054da35466bd13ee87342354cc18122b73eb0fbdcfef850115325&o=&hp=1",
-    rating: 4.6,
-    reviews: 20,
-  },
-];
+import { HeartIcon, LocationMarkerIcon, SearchIcon, StarIcon } from "@heroicons/react/solid";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
 const TimeshareCompanyDetail = () => {
   const { tsId } = useParams();
   const [companyDetail, setCompanyDetail] = useState(null);
   const [loading, setLoading] = useState(true);
-
+  const [resorts, setResort] = useState([]);
+  const [page, setPage] = useState(0);
+  const [size, setSize] = useState(8)
+  const [totalPages, setTotalPages] = useState(1);
+  const [resortName, setResortName] = useState('');
   useEffect(() => {
     const fetchCompanyDetail = async () => {
       try {
         const response = await getTimeshareCompanyDetail(tsId);
         if (response.status === 200) {
           setCompanyDetail(response.data);
+          setLoading(false)
         }
       } catch (error) {
         console.error("Failed to fetch company detail:", error);
@@ -89,6 +33,39 @@ const TimeshareCompanyDetail = () => {
 
     fetchCompanyDetail();
   }, [tsId]);
+
+  useEffect(() => {
+    const fetchAllReosrtByTsId = async () => {
+      try {
+        const resortList = await getAllResortByTsId(page, size, resortName, tsId);
+        if (resortList.status === 200) {
+          setResort(resortList.data.content);
+          setTotalPages(resortList.data.totalPages)
+          console.log(resortList.data.content)
+        }
+      } catch (error) {
+        throw error
+      }
+    }
+    fetchAllReosrtByTsId();
+  }, [page, resortName])
+
+  const handleSearch = (e) => {
+    setResortName(e.target.value)
+    setPage(0)
+  }
+
+  const handleNextPage = () => {
+    if (page < totalPages - 1) {
+      setPage(page + 1);
+    }
+  };
+
+  const handlePreviousPage = () => {
+    if (page > 0) {
+      setPage(page - 1);
+    }
+  };
 
   if (loading) {
     return (
@@ -101,30 +78,150 @@ const TimeshareCompanyDetail = () => {
   return (
     <>
       <Navigation />
-      <section className="flex flex-row px-32 py-14 gap-4 min-h-screen">
-        {/* Content Block */}
-        <div className="flex-1">
-          <Link className="text-blue-500" to="/timesharecompanylist">
-            <u>Danh sách công ty Timeshare</u>
-          </Link>
-          <h1 className="text-4xl font-bold text-custom-blue-text py-12">
-            {companyDetail.timeshareCompanyName}
-          </h1>
-          <p className="mt-2 w-full text-lg">{companyDetail.description}</p>
-          {/* <button className="bg-blue-500 w-[500px] h-[50px] rounded-xl text-white font-medium flex justify-center items-center gap-4 mt-16">
-            Đi đến danh sách Resort <ArrowRightIcon className="w-6" />
-          </button> */}
-        </div>
-
-        {/* Image Block */}
-        <div className="w-1/3 py-12 ml-36">
+      <div>
+        <div className='py-6 md:py-12 px-4 md:px-12 lg:px-28 grid grid-cols-1 lg:grid-cols-4 gap-6 border-b-4'>
           <img
+            className='w-full md:w-auto rounded-xl border shadow-lg col-span-1'
             src={companyDetail.logo}
             alt={companyDetail.timeshareCompanyName}
-            className="w-full h-auto object-contain mt-10"
           />
+          <div className='col-span-1 lg:col-span-3 py-6 relative p-4 md:p-6'>
+            <span className='font-semibold text-base md:text-lg text-gray-600'>Timeshare company</span>
+            <h3 className='text-xl md:text-2xl lg:text-3xl font-bold'>{companyDetail.timeshareCompanyName}</h3>
+            <Link to={`/timesharecompanyprofile/${tsId}`}>
+              <button className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-xl absolute bottom-4 lg:bottom-0">
+                Thông tin chi tiết
+              </button>
+            </Link>
+          </div>
         </div>
-      </section>
+
+
+        {/* Sorting and Filtering Section */}
+        {/* <div className='flex flex-col lg:flex-row justify-between items-center px-4 md:px-12 lg:px-28 py-6 md:py-10'>
+                    <div className='flex items-center mb-4 lg:mb-0'>
+                        <span className='font-semibold mr-4'>Xếp theo:</span>
+                        <select className='border border-gray-300 rounded-md px-3 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500'>
+                            <option value='default'>Nổi bật</option>
+                            <option value='price-asc'>Giá: Thấp đến Cao</option>
+                            <option value='price-desc'>Giá: Cao đến Thấp</option>
+                            <option value='rating'>Đánh giá</option>
+                        </select>
+                    </div>
+                    <button onClick={toggleOpenFilter} className='text-gray-900 border-2 py-2 px-6 flex justify-center items-center rounded-lg gap-4'>
+                        <AdjustmentsIcon className='w-5 h-5' />
+                        Bộ lọc
+                    </button>
+                    {
+                        openFilter && (<FilterModal isOpen={openFilter} onClose={toggleOpenFilter}></FilterModal>)
+                    }
+                </div> */}
+
+        <div className='grid grid-cols-1 lg:grid-cols-10 px-4 md:px-12 lg:px-28 py-6 md:py-10 gap-6'>
+
+          <div className='col-span-6'>
+            <div className='mb-6 relative'>
+              <input
+                type='text'
+                placeholder='Tìm kiếm resort...'
+                className='w-full px-4 py-4 pl-12 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500'
+                onChange={(e) => handleSearch(e)}
+              />
+              <div className='absolute top-1/2 left-4 transform -translate-y-1/2 text-gray-400'>
+                <SearchIcon className='w-5 h-5' />
+              </div>
+            </div>
+
+            <div className='grid grid-cols-1 gap-6'>
+
+              {resorts && resorts.map((item, index) => (
+                <div
+                  key={index}
+                  className='border border-gray-300 flex flex-col md:flex-row items-start gap-4 relative shadow-lg hover:shadow-xl'
+                >
+                  <img
+                    className='w-56 h-52 object-cover'
+                    src={item.logo || 'https://via.placeholder.com/300x200?text=No+Image'}
+                    alt={item.resortName || 'Resort'}
+                  />
+                  <div className='relative h-full md:w-2/3'>
+                    <div className='absolute top-4 right-4'>
+                      <button>
+                        <HeartIcon className='w-6 h-6 text-red-600' />
+                      </button>
+                    </div>
+                    <div className='md:ml-4 flex flex-col justify-between py-4'>
+                      <Link to={`/resortdetail/${item.id}`}>
+                        <h3 className='text-xl md:text-2xl font-bold mb-2'>{item.resortName || 'Tên resort'}</h3>
+                      </Link>
+                      <p className='text-gray-600 mb-4 flex gap-2'>
+                        <LocationMarkerIcon className='w-5 h-5' color='red' />
+                        {item.address || 'Địa chỉ không xác định'}
+                      </p>
+                      <div className='flex items-center absolute bottom-4 left-4'>
+                        <StarIcon className='w-5 h-5 text-yellow-500' />
+                        <span className='ml-1'>{item.averageRating || '0'}</span>
+                        <span className='text-gray-500 ml-2'>({item.totalRating || '0'} đánh giá)</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+
+              ))}
+
+
+
+            </div>
+            {
+              resorts && resorts.length > 0 ? (
+                <div className="flex items-center justify-center space-x-2 mt-5 w-full">
+                  <button
+                    onClick={handlePreviousPage}
+                    disabled={page === 0}
+                    className="w-8 h-8 flex items-center justify-center rounded-full bg-white text-gray-500"
+                  >
+                    <FaChevronLeft />
+                  </button>
+                  <div className="flex space-x-2 bg-gray-200 rounded-full px-2 py-1">
+                    {Array.from({ length: totalPages }, (_, index) => (
+                      <button
+                        key={index}
+                        onClick={() => setPage(index)}
+                        className={`w-8 h-8 flex items-center justify-center rounded-full ${index === page
+                          ? "bg-blue-500 text-white"
+                          : "bg-white text-gray-500"
+                          }`}
+                      >
+                        {index + 1}
+                      </button>
+                    ))}
+                  </div>
+                  <button
+                    onClick={handleNextPage}
+                    disabled={page === totalPages - 1}
+                    className="w-8 h-8 flex items-center justify-center rounded-full bg-blue-500 text-white"
+                  >
+                    <FaChevronRight />
+                  </button>
+                </div>
+              ) : (<span className="flex items-center justify-center space-x-2 mt-5 w-full">
+                Không tìm thấy resort!!!
+              </span>)
+            }
+          </div>
+          {/* Map View */}
+          <div className='col-span-4'>
+            <div className='border border-gray-300 rounded-lg h-full'>
+              <h4 className='text-xl font-semibold p-4 border-b'>Bản đồ</h4>
+              <div className='h-[300px] md:h-[400px]'>
+                {/* Replace with actual map */}
+                <p className='text-center pt-16'>Đây là map view</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
       <Footer />
     </>
   );

@@ -167,10 +167,10 @@ const DetailRentalList = ({ isOpen, onClose, postingId, flag }) => {
               <h2 className="text-xl font-semibold mb-3 text-gray-700">
                 Thông tin
               </h2>
-              <div className="grid grid-cols-4 gap-4 mb-6 p-2 px-6">
-                <p className="text-medium text-gray-500 mr-4">Mã đăng bài: </p>
+              <div className="grid grid-cols-4 gap-4 mb-6 mr-6 px-6 p-2">
+                <p className="text-medium text-gray-500 mr-4">Tên phòng: </p>
                 <p className="font-medium text-left">
-                  {postingId.rentalPostingId}
+                  {postingId.roomName}
                 </p>
 
                 <p className="text-medium text-gray-500 mr-4">Đăng bởi: </p>
@@ -201,7 +201,7 @@ const DetailRentalList = ({ isOpen, onClose, postingId, flag }) => {
                   <p>
                     {editFlag ? (
                       <input
-                        className="border-2 p-2 border-gray-300 rounded-lg py-1 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200 shadow-sm"
+                        className="border-2 w-40 p-2 border-gray-300 rounded-lg py-1 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200 shadow-sm"
                         onChange={(e) => setNewPriceValuation(e.target.value)}
                         type="text"
                         name="newPriceValuation"
