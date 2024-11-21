@@ -5,7 +5,8 @@ import { PlusCircleIcon, XCircleIcon } from '@heroicons/react/solid'; // Make su
 import { toast, Toaster } from 'react-hot-toast';
 import Loading from '../../../components/LoadingComponent/loading';
 import SpinnerWaiting from '../../../components/LoadingComponent/spinnerWaiting';
-import { FaArrowRight } from 'react-icons/fa';
+import { FaArrowRight, FaSave } from 'react-icons/fa';
+import { data } from 'autoprefixer';
 
 const UpdateResortAmenity = () => {
   const { id } = useParams();
@@ -27,15 +28,39 @@ const UpdateResortAmenity = () => {
   const [nearbyAttraction, setNearbyAttraction] = useState('');
   const [policy, setPolicy] = useState('');
 
+  // const getResortDetail = async () => {
+  //   const data = await getResortById(id);
+  //   if (data.status === 200) {
+  //     const newResort = data.data;
+  //     setResort(newResort);
+  //     setAmenities(newResort.resortAmenityList); // Initialize amenities from resort data
+  //     setLoading(false);
+  //     console.log(newResort, "Last check")
+  //   }
+  // };
+
   const getResortDetail = async () => {
-    const data = await getResortById(id);
-    if (data.status === 200) {
-      const newResort = data.data;
-      setResort(newResort);
-      setAmenities(newResort.resortAmenityList); // Initialize amenities from resort data
-      setLoading(false);
+    try {
+      const data = await getResortById(id);
+      if (data.status === 200) {
+        const newResort = data.data;
+
+        // Loại bỏ trường "free" khỏi resortAmenityList
+        const updatedAmenities = newResort.resortAmenityList.map(({ name, type }) => ({
+          name,
+          type,
+        }));
+
+        setResort(newResort);
+        setAmenities(updatedAmenities); // Cập nhật amenities
+        setLoading(false);
+        console.log(newResort, "Last check");
+      }
+    } catch (error) {
+      console.error("Error fetching resort details:", error);
     }
   };
+
 
   useEffect(() => {
     getResortDetail();
@@ -59,7 +84,7 @@ const UpdateResortAmenity = () => {
       .filter((amenity) => amenity.type === type)
       .map((amenity) => (
         <div key={amenity.name} className="relative flex justify-center items-center rounded-full border  mt-2 p-2 transition-colors duration-200 ease-in-out hover:border-sky-500 focus-within:border-sky-500">
-          <span className="text-sky-500 font-bold">{amenity.name}</span>
+          <span className="text-sky-500 font-normal">{amenity.name}</span>
           <button
             type="button"
             onClick={() => handleRemoveAmenity(amenity.name)}
@@ -82,15 +107,19 @@ const UpdateResortAmenity = () => {
       address: resort.address, // Assuming you have a way to update this
       timeshareCompanyId: resort.timeshareCompanyId, // Assuming you have a way to update this
       description: resort.description,
-      resortAmenityList: amenities
+      resortAmenityList: amenities,
+      imageUrls: resort.imageUrls
     };
 
     try {
       await updateResortBasic(updatedResort, id).then(() => {
         toast.success("Cập nhật thành công!!!", { duration: 3000 })
+      
       })
     } catch (error) {
       toast.error("Cập nhật thất bại! Vui lòng thử lại.", { duration: 3000 });
+    } finally {
+      console.log(data, "check")
     }
 
   };
@@ -107,7 +136,7 @@ const UpdateResortAmenity = () => {
         <div className='border-b pb-4 p-4 py-6'>
           <h2 className='text-xl font-semibold mb-3 text-gray-800'>Các tính năng và tiện nghi tại chỗ</h2>
           <div className='grid grid-cols-6 gap-4 px-6'>
-            {renderAmenitiesByType('1')}
+            {renderAmenitiesByType("1")}
             <div className="col-span-2 flex items-center space-x-4">
               <input
                 type="text"
@@ -118,7 +147,7 @@ const UpdateResortAmenity = () => {
               />
               <button
                 type="button"
-                onClick={() => handleAddAmenity(onSiteFeature, '1')}
+                onClick={() => handleAddAmenity(onSiteFeature, "1")}
                 className="flex items-center justify-center bg-gradient-to-r from-sky-500 to-sky-400 hover:bg-sky-600 text-white font-semibold py-2 px-6 rounded-full shadow-lg transition-all duration-300 transform hover:scale-105"
               >
                 <PlusCircleIcon color='#FFFFFF' className="h-6 w-6" />
@@ -132,7 +161,7 @@ const UpdateResortAmenity = () => {
         <div className='border-b pb-4 p-4 py-6'>
           <h2 className='text-xl font-semibold mb-3 text-gray-800'>Các điểm tham quan lân cận</h2>
           <div className='grid grid-cols-6 gap-4 px-6 '>
-            {renderAmenitiesByType('2')}
+            {renderAmenitiesByType("2")}
             <div className="col-span-2 flex items-center space-x-4">
               <input
                 type="text"
@@ -143,7 +172,7 @@ const UpdateResortAmenity = () => {
               />
               <button
                 type="button"
-                onClick={() => handleAddAmenity(nearbyAttraction, '2')}
+                onClick={() => handleAddAmenity(nearbyAttraction, "2")}
                 className="flex items-center justify-center bg-gradient-to-r from-sky-500 to-sky-400 hover:bg-sky-600 text-white font-semibold py-2 px-6 rounded-full shadow-lg transition-all duration-300 transform hover:scale-105"
               >
                 <PlusCircleIcon color='#FFFFFF' className="h-6 w-6" />
@@ -157,7 +186,7 @@ const UpdateResortAmenity = () => {
         <div className="mt-4">
           <h3 className="text-lg font-semibold text-gray-800">Các chính sách</h3>
           <div className="grid grid-cols-6 py-4 gap-6">
-            {renderAmenitiesByType('3')}
+            {renderAmenitiesByType("3")}
             <div className="col-span-2 flex items-center space-x-4">
               <input
                 type="text"
@@ -168,7 +197,7 @@ const UpdateResortAmenity = () => {
               />
               <button
                 type="button"
-                onClick={() => handleAddAmenity(policy, '3')}
+                onClick={() => handleAddAmenity(policy, "3")}
                 className="flex items-center justify-center bg-gradient-to-r from-sky-500 to-sky-400 hover:bg-sky-600 text-white font-semibold py-2 px-6 rounded-full shadow-lg transition-all duration-300 transform hover:scale-105"
               >
                 <PlusCircleIcon color='#FFFFFF' className="h-6 w-6" />
@@ -182,12 +211,12 @@ const UpdateResortAmenity = () => {
       <div className="mt-6 flex justify-end">
 
         <button
-          className="flex items-center justify-center bg-gradient-to-r from-sky-400 to-sky-500 text-white font-semibold py-3 px-8 rounded-full shadow-lg hover:bg-sky-800 transition-all duration-300 transform hover:scale-105"
+          className="flex items-center justify-center bg-gradient-to-r from-sky-400 to-sky-500 text-white font-semibold py-2 px-8 rounded-full shadow-lg hover:bg-sky-800 transition-all duration-300 transform hover:scale-105"
           onClick={handleSubmit}
         >
           <span className="mr-3">Cập nhật</span>
-          <span className="bg-white text-sky-700 w-8 h-8 flex items-center justify-center rounded-full shadow-md transform transition-all duration-300 hover:scale-110">
-            <FaArrowRight />
+          <span className="text-white w-8 h-8 flex items-center justify-center rounded-full shadow-md transform transition-all duration-300 hover:scale-110">
+            <FaSave />
           </span>
         </button>
       </div>

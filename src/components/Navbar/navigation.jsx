@@ -34,6 +34,12 @@ const Navigation = () => {
             <div className="border-b-4 border-blue-400 group-hover:scale-x-100 scale-x-0 transform transition-transform duration-300 origin-left mt-1"></div>
           </li>
           <li className="group">
+            <a href="/blogs" className="hover:text-gray-200">
+              Blog
+            </a>
+            <div className="border-b-4 border-blue-400 group-hover:scale-x-100 scale-x-0 transform transition-transform duration-300 origin-left mt-1"></div>
+          </li>
+          <li className="group">
             <a href="/contact" className="hover:text-gray-200">
               Liên hệ
             </a>

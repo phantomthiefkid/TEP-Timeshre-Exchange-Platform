@@ -1,7 +1,7 @@
 import { LocationMarkerIcon } from '@heroicons/react/solid';
 import React, { useEffect, useState } from 'react'
 import { toast, Toaster } from 'react-hot-toast';
-import { FaUpload, FaMapMarkerAlt, FaArrowRight } from 'react-icons/fa';
+import { FaUpload, FaMapMarkerAlt, FaArrowRight, FaEdit, FaSave } from 'react-icons/fa';
 import { FaXmark } from 'react-icons/fa6';
 import { useParams } from 'react-router-dom'
 import Loading from '../../../components/LoadingComponent/loading';
@@ -92,6 +92,7 @@ const UpdateResortBasic = () => {
   };
 
   const handleUpdate = async () => {
+    console.log(resort, "basic")
     try {
       await updateResortBasic(resort, id);
       toast.success("Cập nhật thành công!!", { duration: 3000 });
@@ -354,12 +355,12 @@ const UpdateResortBasic = () => {
       {hasChanged() && (
         <div className="flex justify-end mt-8">
           <button
-            className="flex items-center justify-center bg-gradient-to-r from-sky-400 to-sky-500 text-white font-semibold py-3 px-8 rounded-full shadow-lg hover:bg-sky-800 transition-all duration-300 transform hover:scale-105"
+            className="flex items-center justify-center bg-gradient-to-r from-sky-400 to-sky-500 text-white font-semibold py-2 px-8 rounded-full shadow-lg hover:bg-sky-800 transition-all duration-300 transform hover:scale-105"
             onClick={handleUpdate}
           >
             <span className="mr-3">Cập nhật</span>
-            <span className="bg-white text-sky-700 w-8 h-8 flex items-center justify-center rounded-full shadow-md transform transition-all duration-300 hover:scale-110">
-              <FaArrowRight />
+            <span className=" text-white w-6 h-6 flex items-center justify-center rounded-full shadow-md transform transition-all duration-300 hover:scale-110">
+              <FaSave />
             </span>
           </button>
         </div>

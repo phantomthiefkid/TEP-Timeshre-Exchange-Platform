@@ -68,6 +68,7 @@ const getResortById = async (id) => {
 
 const updateResortBasic = async (data, resortId) => {
   try {
+    console.log(data, "api")
     return await axiosConfig.put(`timeshare-company/resort/${resortId}`, data);
   } catch (error) {
     throw error;
@@ -113,6 +114,22 @@ const updateTimeshareCompanystaff = async (staffId = "", data) => {
   }
 };
 
+const getProfileTsCompany = async () => {
+  try {
+    return await axiosConfig.get(`/timeshare-company/resort/profile`);
+  } catch (error) {
+    return error;
+  }
+};
+
+const updateProfileTsCompany = async (data) => {
+  try {
+    return await axiosConfig.put(`/timeshare-company/resort/profile`, data);
+  } catch (error) {
+    return error;
+  }
+};
+
 
 export {
   getAllResort,
@@ -126,5 +143,6 @@ export {
   updateResortUnitType,
   getTimeshareCompanyById,
   getResortById,
- 
+  getProfileTsCompany,
+  updateProfileTsCompany
 };

@@ -96,7 +96,7 @@ const CreateUnitTypeForUpdateModal = ({ onClose, flag }) => {
                 setLoading(false); // Tắt loading khi hoàn tất
             });
 
-
+        console.log(unitType)
     }
 
 
