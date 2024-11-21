@@ -10,7 +10,7 @@ const aboutUs = () => {
         <div>
           <div className="relative">
             <img
-              src="../src/assets/aboutHeader.png"
+              src="https://unwinds.s3.ap-southeast-2.amazonaws.com/1731986630878_aboutHeader.png"
               className="w-full h-96 object-cover"
             />
             <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
@@ -61,7 +61,7 @@ const aboutUs = () => {
                 </div>
                 <div className="flex justify-center items-center mt-10">
                   <img
-                    src="../src/assets/aboutLogo.png"
+                    src="https://unwinds.s3.ap-southeast-2.amazonaws.com/1731986631926_aboutLogo.png"
                     className="rounded-lg"
                   />
                 </div>
@@ -69,7 +69,7 @@ const aboutUs = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 mt-8">
                 <div>
                   <img
-                    src="../src/assets/aboutService.png"
+                    src="https://unwinds.s3.ap-southeast-2.amazonaws.com/1731986632137_aboutService.png"
                     className="rounded-lg"
                   />
                 </div>
@@ -92,7 +92,7 @@ const aboutUs = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-16">
               <div>
                 <img
-                  src="../src/assets/service1.png"
+                  src="https://unwinds.s3.ap-southeast-2.amazonaws.com/1731986517362_service1.png"
                   className="w-full h-64 object-cover rounded-lg shadow-md mb-4"
                 />
                 <h3 className="text-2xl font-bold mb-2">
@@ -107,7 +107,7 @@ const aboutUs = () => {
               </div>
               <div>
                 <img
-                  src="../src/assets/service2.png"
+                  src="https://unwinds.s3.ap-southeast-2.amazonaws.com/1731986518212_service2.png"
                   className="w-full h-64 object-cover rounded-lg shadow-md mb-4"
                 />
                 <h3 className="text-2xl font-bold mb-2">
@@ -135,14 +135,14 @@ const aboutUs = () => {
               </p>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-10 mb-6">
                 <div className="flex flex-col items-center mt-16">
-                  <img src="../src/assets/serviceLogo1.png" />
+                  <img src="https://unwinds.s3.ap-southeast-2.amazonaws.com/1731986518567_serviceLogo1.png" />
                   <h4 className="text-xl font-bold">Tôn trọng</h4>
                   <p className="text-gray-500 mt-3">
                     lẫn nhau trong môi trường đa dạng văn hóa của chúng tôi
                   </p>
                 </div>
                 <div className="flex flex-col items-center mt-16">
-                  <img src="../src/assets/serviceLogo2.png" />
+                  <img src="https://unwinds.s3.ap-southeast-2.amazonaws.com/1731986518779_serviceLogo2.png" />
 
                   <h4 className="text-xl font-bold">Trung thành</h4>
                   <p className="text-gray-500 mt-3">
@@ -150,7 +150,7 @@ const aboutUs = () => {
                   </p>
                 </div>
                 <div className="flex flex-col items-center mt-16">
-                  <img src="../src/assets/serviceLogo3.png" />
+                  <img src="https://unwinds.s3.ap-southeast-2.amazonaws.com/1731986518989_serviceLogo3.png" />
 
                   <h4 className="text-xl font-bold">Liêm chính và Công bằng</h4>
                   <p className="text-gray-500 mt-3">
@@ -158,7 +158,7 @@ const aboutUs = () => {
                   </p>
                 </div>
                 <div className="flex flex-col items-center mt-10">
-                  <img src="../src/assets/serviceLogo4.png" />
+                  <img src="https://unwinds.s3.ap-southeast-2.amazonaws.com/1731986519197_serviceLogo4.png" />
 
                   <h4 className="text-xl font-bold">
                     Độ linh hoạt và Khả năng thích ứng
@@ -168,7 +168,7 @@ const aboutUs = () => {
                   </p>
                 </div>
                 <div className="flex flex-col items-center mt-10">
-                  <img src="../src/assets/serviceLogo5.png" />
+                  <img src="https://unwinds.s3.ap-southeast-2.amazonaws.com/1731986519406_serviceLogo5.png" />
 
                   <h4 className="text-xl font-bold">Đầu tư vào Nhân sự</h4>
                   <p className="text-gray-500 mt-3">
@@ -177,7 +177,7 @@ const aboutUs = () => {
                   </p>
                 </div>
                 <div className="flex flex-col items-center mt-10">
-                  <img src="../src/assets/serviceLogo6.png" />
+                  <img src="https://unwinds.s3.ap-southeast-2.amazonaws.com/1731986519613_serviceLogo6.png" />
 
                   <h4 className="text-xl font-bold">Thoải mái</h4>
                   <p className="text-gray-500 mt-3">

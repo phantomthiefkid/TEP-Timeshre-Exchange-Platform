@@ -19,6 +19,9 @@ const DetailRentalPostingModal = ({ isOpen, onClose, postingId, onSave }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [staffRefinementError, setStaffRefinementError] = useState("");
   const [priceValuationError, setPriceValuationError] = useState("");
+  const [isDetailEdit, setIsDetailEdit] = useState(false);
+  const [unitTypes, setUnitTypes] = useState([]);
+  const [selectedUnitType, setSelectedUnitType] = useState(postingId.unitType);
 
   const modalStyles = isOpen
     ? {}
@@ -412,7 +415,7 @@ const DetailRentalPostingModal = ({ isOpen, onClose, postingId, onSave }) => {
               </div>
 
               <div className="mb-4">
-                <h2 className="text-2xl font-semibold mb-3">Loại Phòng</h2>
+                <h2 className="text-2xl font-semibold mb-4">Loại Phòng</h2>
                 {postingId.unitType ? (
                   <div className="flex border p-4 rounded-lg shadow-sm">
                     <div className="w-1/4">
@@ -451,13 +454,13 @@ const DetailRentalPostingModal = ({ isOpen, onClose, postingId, onSave }) => {
                 <h2 className="text-2xl font-semibold mb-4">
                   Các tiện năng và tiện nghi tại chỗ
                 </h2>
-                {postingId.resortAmenities &&
-                postingId.resortAmenities.some(
+                {postingId.roomAmenities &&
+                postingId.roomAmenities.some(
                   (amenity) =>
                     amenity.type === "Các tính năng và tiện nghi tại chỗ"
                 ) ? (
                   <div className="grid grid-cols-3 gap-2">
-                    {postingId.resortAmenities
+                    {postingId.roomAmenities
                       .filter(
                         (amenity) =>
                           amenity.type === "Các tính năng và tiện nghi tại chỗ"
@@ -479,12 +482,12 @@ const DetailRentalPostingModal = ({ isOpen, onClose, postingId, onSave }) => {
                 <h2 className="text-2xl font-semibold mb-4">
                   Các điểm tham quan gần đó
                 </h2>
-                {postingId.resortAmenities &&
-                postingId.resortAmenities.some(
+                {postingId.roomAmenities &&
+                postingId.roomAmenities.some(
                   (amenity) => amenity.type === "Các điểm tham quan gần đó"
                 ) ? (
                   <div className="grid grid-cols-3 gap-2">
-                    {postingId.resortAmenities
+                    {postingId.roomAmenities
                       .filter(
                         (amenity) =>
                           amenity.type === "Các điểm tham quan gần đó"
@@ -504,14 +507,14 @@ const DetailRentalPostingModal = ({ isOpen, onClose, postingId, onSave }) => {
 
               <div className="mb-4">
                 <h2 className="text-2xl font-semibold mb-4">Chính sách</h2>
-                {postingId.resortAmenities &&
-                postingId.resortAmenities.some(
+                {postingId.roomAmenities &&
+                postingId.roomAmenities.some(
                   (amenity) =>
                     amenity.type !== "Các điểm tham quan gần đó" &&
                     amenity.type !== "Các tính năng và tiện nghi tại chỗ"
                 ) ? (
                   <div className="grid grid-cols-3 gap-2">
-                    {postingId.resortAmenities
+                    {postingId.roomAmenities
                       .filter(
                         (amenity) =>
                           amenity.type !== "Các điểm tham quan gần đó" &&

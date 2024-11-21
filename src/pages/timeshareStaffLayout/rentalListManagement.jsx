@@ -280,7 +280,7 @@ const RentalListManagement = () => {
                       "CheckIn" ? (
                       <div className="flex justify-evenly">
                         <img
-                          src="../src/assets/checkin.png"
+                          src="https://unwinds.s3.ap-southeast-2.amazonaws.com/1731986050405_checkin.png"
                           alt="Check-in"
                           className="w-6 h-6"
                         />
@@ -288,12 +288,12 @@ const RentalListManagement = () => {
                     ) : booking.status === "CheckOut" ? (
                       <div className="flex justify-evenly items-center">
                         <img
-                          src="../src/assets/checkin.png"
+                          src="https://unwinds.s3.ap-southeast-2.amazonaws.com/1731986050405_checkin.png"
                           alt="Check-in"
                           className="w-6 h-6 mr-2"
                         />
                         <img
-                          src="../src/assets/checkout.png"
+                          src="https://unwinds.s3.ap-southeast-2.amazonaws.com/1731986050843_checkout.png"
                           alt="Check-out"
                           className="w-6 h-6"
                         />

@@ -2,14 +2,14 @@ import React, { useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { FaEdit, FaMap } from "react-icons/fa";
 import { FaXmark } from "react-icons/fa6";
-import RejectExchangePostingModal from "../../Modal/requestPostingModal/rejectExchangePostingModal";
+import RejectExchangeRequestModal from "../../Modal/requestPostingModal/rejectExchangeVerifyModal";
 import {
-  approveExchangePostingById,
-  rejectExchangePostingById,
+  approveExchangeRequestById,
+  rejectExchangeRequestById,
 } from "../../../service/tsStaffService/tsStaffAPI";
 import SpinnerWaiting from "../../LoadingComponent/spinnerWaiting";
 
-const detailExchangePostingModal = ({ isOpen, onClose, postingId, onSave }) => {
+const detailExchangeRequestModal = ({ isOpen, onClose, requestId, onSave }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [isRejectModalOpen, setIsRejectModalOpen] = useState(false);
 
@@ -20,7 +20,6 @@ const detailExchangePostingModal = ({ isOpen, onClose, postingId, onSave }) => {
         transform: "translateX(100%)",
         transition: "all 0.3s ease",
       };
-
   const getStatusStyles = (status) => {
     switch (status) {
       case "PendingApproval":
@@ -33,14 +32,12 @@ const detailExchangePostingModal = ({ isOpen, onClose, postingId, onSave }) => {
   const handleAccept = async (e) => {
     e.preventDefault();
     try {
-      await approveExchangePostingById(postingId.exchangePostingId, {
-        staffRefinementPrice: 0,
+      await approveExchangeRequestById(requestId.id, {
         note: "",
-        priceValuation: 0,
         unitTypeId: 0,
       });
       onSave();
-      toast.success("Chấp nhận bài đăng", { duration: 2000 });
+      toast.success("Chấp nhận yêu cầu", { duration: 2000 });
       onClose();
     } catch (error) {
       toast.error("Đã có lỗi xảy ra", { duration: 2000 });
@@ -49,8 +46,8 @@ const detailExchangePostingModal = ({ isOpen, onClose, postingId, onSave }) => {
 
   const handleReject = async (reason) => {
     try {
-      await rejectExchangePostingById(reason, postingId.exchangePostingId);
-      toast.success("Đã từ chối bài đăng", { duration: 2000 });
+      await rejectExchangeRequestById(reason, requestId.id);
+      toast.success("Đã từ chối yêu cầu", { duration: 2000 });
       onClose();
     } catch (error) {
       toast.error("Đã có lỗi xảy ra", { duration: 2000 });
@@ -64,7 +61,7 @@ const detailExchangePostingModal = ({ isOpen, onClose, postingId, onSave }) => {
     } else {
       setTimeout(() => setIsVisible(false), 300);
     }
-  }, [isOpen, postingId]);
+  }, [isOpen, requestId]);
 
   if (!isVisible) return null;
 
@@ -100,39 +97,28 @@ const detailExchangePostingModal = ({ isOpen, onClose, postingId, onSave }) => {
           </div>
         </div>
 
-        {postingId ? (
+        {requestId ? (
           <>
             <div className="border-b">
               <div className="flex items-center p-4 m-3 border border-gray-300 rounded-xl">
                 <img
-                  src="https://placehold.co/100x100"
+                  src={requestId.exchangePosting.roomInfoResortLogo}
                   alt="Hotel Thumbnail"
                   className="w-20 h-20 rounded-lg mr-4"
                 />
                 <div className="flex justify-between items-center w-full">
                   <div className="flex items-center">
-                    <div>
-                      <h2 className="text-xl font-bold mb-2">
-                        {postingId.resortName}
-                      </h2>
-                      <div className="flex flex-row">
-                        <FaMap
-                          className="text-gray-500 mr-2 mt-1"
-                          style={{ color: "blue" }}
-                        />
-                        <p className="text-base text-blue-500 w-3/4">
-                          {postingId.address}
-                        </p>
-                      </div>
-                    </div>
+                    <h2 className="text-xl font-bold">
+                      {requestId.exchangePosting.roomInfoResortResortName}
+                    </h2>
                   </div>
                   <div className="flex justify-end w-1/3">
                     <span
                       className={`text-medium px-2 py-1 w-3/4 text-center rounded-full ${
-                        getStatusStyles(postingId.status).style
+                        getStatusStyles(requestId.status).style
                       }`}
                     >
-                      {getStatusStyles(postingId.status).label}
+                      {getStatusStyles(requestId.status).label}
                     </span>
                   </div>
                 </div>
@@ -144,46 +130,35 @@ const detailExchangePostingModal = ({ isOpen, onClose, postingId, onSave }) => {
               <div className="grid grid-cols-2 gap-4 mb-6">
                 <div className="space-y-2">
                   <p className="text-medium text-gray-500">Mã đăng bài</p>
-                  <p className="font-medium">{postingId.exchangePostingId}</p>
+                  <p className="font-medium">{requestId.id}</p>
                 </div>
                 <div className="space-y-2">
                   <p className="text-medium text-gray-500">Đăng bởi</p>
                   <div className="flex flex-row items-center">
                     <img
-                      src="https://placehold.co/25x25"
-                      alt="Hotel Thumbnail"
+                      src={requestId.ownerAvatar}
                       className="w-12 h-12 rounded-full mr-4 border border-blue-400"
                     />
-                    <p className="font-medium">{postingId.ownerName}</p>
+                    <p className="font-medium">{requestId.ownerFullName}</p>
                   </div>
                 </div>
                 <div className="space-y-2">
                   <p className="text-medium text-gray-500">Ngày nhận phòng</p>
-                  <p className="font-medium">{postingId.checkinDate}</p>
+                  <p className="font-medium">{requestId.startDate}</p>
                 </div>
                 <div className="space-y-2">
                   <p className="text-medium text-gray-500">Ngày trả phòng</p>
-                  <p className="font-medium">{postingId.checkoutDate}</p>
+                  <p className="font-medium">{requestId.endDate}</p>
                 </div>
-              </div>
-
-              <div className="mb-4">
-                <h2 className="text-2xl font-semibold mb-3">Mô tả</h2>
-                {postingId.resortDescription ? (
-                  <p className="text-medium">{postingId.resortDescription}</p>
-                ) : (
-                  <p className="text-gray-500">Mô tả chi tiết không có sẵn</p>
-                )}
               </div>
 
               <div className="mb-4">
                 <h2 className="text-2xl font-semibold mb-4">Loại Phòng</h2>
-                {postingId.unitType ? (
+                {requestId.exchangePosting ? (
                   <div className="flex border p-4 rounded-lg shadow-sm">
                     <div className="w-1/4">
                       <img
-                        src={postingId.unitType.photos}
-                        alt={postingId.unitType.title}
+                        src={requestId.exchangePosting.roomInfoUnitTypePhotos}
                         className="w-full h-full rounded-lg border border-gray-200"
                       />
                     </div>
@@ -192,15 +167,9 @@ const detailExchangePostingModal = ({ isOpen, onClose, postingId, onSave }) => {
                         <div className="w-1/2">
                           <h2 className="text-lg font-bold">Thông tin phòng</h2>
                           <h1 className="text-2xl font-bold mt-2">
-                            {postingId.unitType.title}
+                            {requestId.exchangePosting.roomInfoUnitTypeTitle}
                           </h1>
-                        </div>
-                        <div className="w-1/2 space-y-2">
-                          <h2 className="text-lg font-bold">Đặc điểm phòng</h2>
-                          <p>Giường: {postingId.unitType.bedsFull}</p>
-                          <p>Phòng tắm: {postingId.unitType.bathrooms}</p>
-                          <p>Nhà bếp: {postingId.unitType.kitchen}</p>
-                          <p>Số người: {postingId.unitType.sleeps}</p>
+                          <p>Số đêm: {requestId.exchangePosting.nights} đêm</p>
                         </div>
                       </div>
                     </div>
@@ -210,98 +179,6 @@ const detailExchangePostingModal = ({ isOpen, onClose, postingId, onSave }) => {
                     Thông tin loại phòng không có sẵn
                   </p>
                 )}
-              </div>
-
-              <div className="mb-4">
-                <h2 className="text-2xl font-semibold mb-4">
-                  Các tiện năng và tiện nghi tại chỗ
-                </h2>
-                {postingId.resortAmenities &&
-                postingId.resortAmenities.some(
-                  (amenity) =>
-                    amenity.type === "Các tính năng và tiện nghi tại chỗ"
-                ) ? (
-                  <div className="grid grid-cols-3 gap-2">
-                    {postingId.resortAmenities
-                      .filter(
-                        (amenity) =>
-                          amenity.type === "Các tính năng và tiện nghi tại chỗ"
-                      )
-                      .map((amenity) => (
-                        <p key={amenity.id} className="text-medium">
-                          {amenity.name}
-                        </p>
-                      ))}
-                  </div>
-                ) : (
-                  <p className="text-medium text-gray-500">
-                    Tiện ích không có sẵn
-                  </p>
-                )}
-              </div>
-
-              <div className="mb-4">
-                <h2 className="text-2xl font-semibold mb-4">
-                  Các điểm tham quan gần đó
-                </h2>
-                {postingId.resortAmenities &&
-                postingId.resortAmenities.some(
-                  (amenity) => amenity.type === "Các điểm tham quan gần đó"
-                ) ? (
-                  <div className="grid grid-cols-3 gap-2">
-                    {postingId.resortAmenities
-                      .filter(
-                        (amenity) =>
-                          amenity.type === "Các điểm tham quan gần đó"
-                      )
-                      .map((amenity) => (
-                        <p key={amenity.id} className="text-medium">
-                          {amenity.name}
-                        </p>
-                      ))}
-                  </div>
-                ) : (
-                  <p className="text-medium text-gray-500">
-                    Các điểm tham quan không có sẵn
-                  </p>
-                )}
-              </div>
-
-              <div className="mb-4">
-                <h2 className="text-2xl font-semibold mb-4">Chính sách</h2>
-                {postingId.resortAmenities &&
-                postingId.resortAmenities.some(
-                  (amenity) =>
-                    amenity.type !== "Các điểm tham quan gần đó" &&
-                    amenity.type !== "Các tính năng và tiện nghi tại chỗ"
-                ) ? (
-                  <div className="grid grid-cols-3 gap-2">
-                    {postingId.resortAmenities
-                      .filter(
-                        (amenity) =>
-                          amenity.type !== "Các điểm tham quan gần đó" &&
-                          amenity.type !== "Các tính năng và tiện nghi tại chỗ"
-                      )
-                      .map((amenity) => (
-                        <p key={amenity.id} className="text-medium">
-                          {amenity.name}
-                        </p>
-                      ))}
-                  </div>
-                ) : (
-                  <p className="text-medium text-gray-500">
-                    Chính sách không có sẵn
-                  </p>
-                )}
-              </div>
-
-              <div className="mb-4">
-                <h2 className="text-2xl font-semibold mb-3">Địa chỉ</h2>
-                <p className="text-base mb-3">{postingId.address}</p>
-                <img
-                  src="https://placehold.co/600x300"
-                  className="max-w-full "
-                />
               </div>
             </div>
           </>
@@ -336,7 +213,7 @@ const detailExchangePostingModal = ({ isOpen, onClose, postingId, onSave }) => {
         </div>
       </div>
 
-      <RejectExchangePostingModal
+      <RejectExchangeRequestModal
         isOpen={isRejectModalOpen}
         onClose={() => setIsRejectModalOpen(false)}
         onReject={handleReject}
@@ -345,4 +222,4 @@ const detailExchangePostingModal = ({ isOpen, onClose, postingId, onSave }) => {
   );
 };
 
-export default detailExchangePostingModal;
+export default detailExchangeRequestModal;

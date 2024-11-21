@@ -77,7 +77,10 @@ const TimeshareCompany = () => {
     <>
       <Navigation />
       <div className="max-w-full h-auto relative">
-        <img src="../src/assets/tsCom-banner.png" className="w-full h-auto" />
+        <img
+          src="https://unwinds.s3.ap-southeast-2.amazonaws.com/1731986455075_tsCom-banner.png"
+          className="w-full h-auto"
+        />
         <div className="grid grid-rows-2 font-sans w-full max-w-[1720px] h-[210px] text-black px-5 lg:px-20 absolute top-10 left-10 space-y-4">
           <h1 className="text-4xl text-white font-bold text-left mt-14">
             Công ty Timeshare
@@ -167,7 +170,7 @@ const TimeshareCompany = () => {
       </div>
       <div className="relative">
         <img
-          src="..\src\assets\contact-banner.png"
+          src="https://unwinds.s3.ap-southeast-2.amazonaws.com/1731986454094_contact-banner.png"
           className="w-full h-auto mb-10 mt-10"
         />
         <div className="absolute top-0 left-12 max-w-full h-full flex items-center justify-start p-8">
