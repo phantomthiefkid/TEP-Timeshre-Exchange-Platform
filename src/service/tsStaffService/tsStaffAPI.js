@@ -249,6 +249,14 @@ const approveExchangeRequestById = async (requestId, data) => {
   }
 };
 
+const updateRoomAmenities = async (roomId, data) => {
+  try {
+    return await axiosConfig.post(`customer/room/room-amenity/${roomId}`, data);
+  } catch (error) {
+    throw error;
+  }
+};
+
 export {
   getAllRentalPosting,
   getRentalPostingById,
@@ -270,4 +278,5 @@ export {
   getExchangeRequestById,
   rejectExchangeRequestById,
   approveExchangeRequestById,
+  updateRoomAmenities,
 };

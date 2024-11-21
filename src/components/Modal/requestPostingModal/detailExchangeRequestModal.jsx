@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
-import { FaEdit, FaMap } from "react-icons/fa";
+import { FaEdit, FaMap, FaPlusCircle } from "react-icons/fa";
 import { FaXmark } from "react-icons/fa6";
 import RejectExchangeRequestModal from "../../Modal/requestPostingModal/rejectExchangeVerifyModal";
 import {
@@ -8,10 +8,15 @@ import {
   rejectExchangeRequestById,
 } from "../../../service/tsStaffService/tsStaffAPI";
 import SpinnerWaiting from "../../LoadingComponent/spinnerWaiting";
+import { getUnitTypeByResortId } from "../../../service/public/resortService/resortAPI";
 
 const detailExchangeRequestModal = ({ isOpen, onClose, requestId, onSave }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [isRejectModalOpen, setIsRejectModalOpen] = useState(false);
+  //  Unit Type Edit
+  const [isDetailEdit, setIsDetailEdit] = useState(false);
+  const [unitTypes, setUnitTypes] = useState([]);
+  const [selectedUnitType, setSelectedUnitType] = useState("");
 
   const modalStyles = isOpen
     ? {}
@@ -29,16 +34,20 @@ const detailExchangeRequestModal = ({ isOpen, onClose, requestId, onSave }) => {
     }
   };
 
+  const handleOnClose = () => {
+    setIsDetailEdit(false);
+    onClose();
+  };
   const handleAccept = async (e) => {
     e.preventDefault();
     try {
       await approveExchangeRequestById(requestId.id, {
         note: "",
-        unitTypeId: 0,
+        unitTypeId: selectedUnitType?.id || 0,
       });
       onSave();
       toast.success("Chấp nhận yêu cầu", { duration: 2000 });
-      onClose();
+      handleOnClose();
     } catch (error) {
       toast.error("Đã có lỗi xảy ra", { duration: 2000 });
     }
@@ -48,19 +57,31 @@ const detailExchangeRequestModal = ({ isOpen, onClose, requestId, onSave }) => {
     try {
       await rejectExchangeRequestById(reason, requestId.id);
       toast.success("Đã từ chối yêu cầu", { duration: 2000 });
-      onClose();
+      handleOnClose();
     } catch (error) {
       toast.error("Đã có lỗi xảy ra", { duration: 2000 });
       return error;
+    }
+  };
+  const fetchUnitTypes = async (resortId) => {
+    try {
+      const response = await getUnitTypeByResortId(resortId);
+      setUnitTypes(response.data);
+    } catch (error) {
+      console.log("Error fetching unit types:", error);
     }
   };
 
   useEffect(() => {
     if (isOpen) {
       setIsVisible(true);
+      if (requestId.roomInfo.resortId) {
+        fetchUnitTypes(requestId.roomInfo.resortId);
+      }
     } else {
       setTimeout(() => setIsVisible(false), 300);
     }
+    return () => setUnitTypes([]);
   }, [isOpen, requestId]);
 
   if (!isVisible) return null;
@@ -71,7 +92,7 @@ const detailExchangeRequestModal = ({ isOpen, onClose, requestId, onSave }) => {
 
       <div
         className="fixed inset-0 bg-black opacity-50"
-        onClick={() => onClose()}
+        onClick={() => handleOnClose()}
       ></div>
       <div
         className="bg-white rounded-lg shadow-lg w-full max-w-3xl h-full flex flex-col"
@@ -89,7 +110,7 @@ const detailExchangeRequestModal = ({ isOpen, onClose, requestId, onSave }) => {
             </div>
 
             <button
-              onClick={() => onClose()}
+              onClick={() => handleOnClose()}
               className="text-gray-500 hover:text-zinc-300 focus:outline-none"
             >
               <FaXmark size={28} />
@@ -153,8 +174,60 @@ const detailExchangeRequestModal = ({ isOpen, onClose, requestId, onSave }) => {
               </div>
 
               <div className="mb-4">
-                <h2 className="text-2xl font-semibold mb-4">Loại Phòng</h2>
-                {requestId.exchangePosting ? (
+                <div className="flex flex-row justify-between mb-3">
+                  <h2 className="text-2xl font-semibold mb-4">Loại Phòng</h2>
+                  {isDetailEdit ? (
+                    <button
+                      className="border border-red-500 text-red-500 px-4 py-2 rounded-xl mr-2 hover:bg-red-500 hover:text-white transition duration-150"
+                      onClick={() => setIsDetailEdit(!isDetailEdit)}
+                    >
+                      Hủy bỏ
+                    </button>
+                  ) : (
+                    <div className="bg-white border-2 border-gray-300 rounded-xl p-2  hover:bg-gray-300 cursor-pointer">
+                      <button
+                        className="text-gray-500 focus:outline-none flex flex-row items-center"
+                        onClick={() => setIsDetailEdit(!isDetailEdit)}
+                      >
+                        <FaEdit size={20} />
+                        <span className="ml-1">Chỉnh sửa</span>
+                      </button>
+                    </div>
+                  )}
+                </div>
+                {isDetailEdit ? (
+                  <div>
+                    <label
+                      htmlFor="unitType"
+                      className="block text-gray-700 font-medium"
+                    >
+                      Chọn loại phòng:
+                    </label>
+                    <select
+                      id="unitType"
+                      className="mt-2 block w-full p-3 border rounded-lg shadow-sm focus:outline-none"
+                      value={selectedUnitType?.id || ""}
+                      onChange={(e) => {
+                        const selectedValue = parseInt(e.target.value, 10);
+                        if (selectedValue !== selectedUnitType?.id) {
+                          const selected = unitTypes.find(
+                            (unitType) => unitType.id === selectedValue
+                          );
+                          setSelectedUnitType(selected);
+                        }
+                      }}
+                    >
+                      <option value="" disabled>
+                        Chọn loại phòng
+                      </option>
+                      {unitTypes.map((unitType) => (
+                        <option key={unitType.id} value={unitType.id}>
+                          {unitType.title}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                ) : requestId.exchangePosting ? (
                   <div className="flex border p-4 rounded-lg shadow-sm">
                     <div className="w-1/4">
                       <img
@@ -166,7 +239,7 @@ const detailExchangeRequestModal = ({ isOpen, onClose, requestId, onSave }) => {
                       <div className="flex justify-between">
                         <div className="w-1/2">
                           <h2 className="text-lg font-bold">Thông tin phòng</h2>
-                          <h1 className="text-2xl font-bold mt-2">
+                          <h1 className="text-2xl font-bold mb-2">
                             {requestId.exchangePosting.roomInfoUnitTypeTitle}
                           </h1>
                           <p>Số đêm: {requestId.exchangePosting.nights} đêm</p>
@@ -191,7 +264,7 @@ const detailExchangeRequestModal = ({ isOpen, onClose, requestId, onSave }) => {
           <div>
             <button
               className="text-gray-700 px-4 py-2 rounded-lg mr-2 border border-gray-500 hover:bg-gray-200 transition duration-150"
-              onClick={() => onClose()}
+              onClick={() => handleOnClose()}
             >
               Đóng
             </button>

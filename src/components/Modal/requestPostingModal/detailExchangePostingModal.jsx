@@ -1,18 +1,62 @@
 import React, { useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
-import { FaEdit, FaMap } from "react-icons/fa";
+import { FaDotCircle, FaEdit, FaMap, FaPlusCircle } from "react-icons/fa";
 import { FaXmark } from "react-icons/fa6";
 import RejectExchangePostingModal from "../../Modal/requestPostingModal/rejectExchangePostingModal";
 import {
   approveExchangePostingById,
   rejectExchangePostingById,
+  updateRoomAmenities,
 } from "../../../service/tsStaffService/tsStaffAPI";
 import SpinnerWaiting from "../../LoadingComponent/spinnerWaiting";
+import { getUnitTypeByResortId } from "../../../service/public/resortService/resortAPI";
 
 const detailExchangePostingModal = ({ isOpen, onClose, postingId, onSave }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [isRejectModalOpen, setIsRejectModalOpen] = useState(false);
-
+  //  Unit Type Edit
+  const [isDetailEdit, setIsDetailEdit] = useState(false);
+  const [unitTypes, setUnitTypes] = useState([]);
+  const [selectedUnitType, setSelectedUnitType] = useState("");
+  // Room Amenities Edit
+  const [isEditRoomAmenity, setIsEditRoomAmenity] = useState(false);
+  const [updatedAmenities, setUpdatedAmenities] = useState([]);
+  const [selectedAmenity, setSelectedAmenity] = useState({});
+  const amenityOptions = {
+    KITCHEN: [
+      "Máy pha cà phê",
+      "Máy rửa chén",
+      "Máy nướng bánh mì",
+      "Tủ lạnh (lớn)",
+      "Tủ lạnh (nhỏ)",
+      "Bếp lò",
+    ],
+    ENTERTAINMENT: [
+      "Máy phát DVD",
+      "Quầy Bar",
+      "Máy Chiếu Phim",
+      "Mạng LAN Internet",
+      "Radio",
+      "TV thông minh",
+      "Điện thoại bàn",
+    ],
+    FEATURES: [
+      "Máy Điều Hòa",
+      "Wifi",
+      "Nước nóng/lạnh",
+      "Nước uống miễn phí",
+      "Sân hiên hoặc Ban Công",
+      "Bàn ăn",
+      "Bàn làm việc",
+      "Máy giặt và máy sấy (trong căn hộ)",
+    ],
+    POLICY: [
+      "Không hút thuốc",
+      "Không thú cưng",
+      "Không tổ chức tiệc",
+      "Độ tuổi tối thiểu để nhận phòng: 18",
+    ],
+  };
   const modalStyles = isOpen
     ? {}
     : {
@@ -30,6 +74,11 @@ const detailExchangePostingModal = ({ isOpen, onClose, postingId, onSave }) => {
     }
   };
 
+  const handleOnClose = () => {
+    setIsEditRoomAmenity(false);
+    setIsDetailEdit(false);
+    onClose();
+  };
   const handleAccept = async (e) => {
     e.preventDefault();
     try {
@@ -37,11 +86,11 @@ const detailExchangePostingModal = ({ isOpen, onClose, postingId, onSave }) => {
         staffRefinementPrice: 0,
         note: "",
         priceValuation: 0,
-        unitTypeId: 0,
+        unitTypeId: selectedUnitType?.id || 0,
       });
       onSave();
       toast.success("Chấp nhận bài đăng", { duration: 2000 });
-      onClose();
+      handleOnClose();
     } catch (error) {
       toast.error("Đã có lỗi xảy ra", { duration: 2000 });
     }
@@ -51,19 +100,94 @@ const detailExchangePostingModal = ({ isOpen, onClose, postingId, onSave }) => {
     try {
       await rejectExchangePostingById(reason, postingId.exchangePostingId);
       toast.success("Đã từ chối bài đăng", { duration: 2000 });
-      onClose();
+      handleOnClose();
     } catch (error) {
       toast.error("Đã có lỗi xảy ra", { duration: 2000 });
       return error;
     }
   };
 
+  const fetchUnitTypes = async (resortId) => {
+    try {
+      const response = await getUnitTypeByResortId(resortId);
+      setUnitTypes(response.data);
+    } catch (error) {
+      console.log("Error fetching unit types:", error);
+    }
+  };
+
+  const toggleEditAmenity = () => {
+    setIsEditRoomAmenity((prev) => {
+      return !prev;
+    });
+  };
+
+  const handleAddAmenity = (type) => {
+    const newAmenity = selectedAmenity[type];
+    if (!newAmenity) return;
+
+    setUpdatedAmenities((prev) => [
+      ...prev,
+      { id: Math.random().toString(), name: newAmenity, type },
+    ]);
+    setSelectedAmenity((prev) => ({ ...prev, [type]: "" }));
+  };
+
+  const handleUpdateAmenity = async () => {
+    try {
+      const response = await updateRoomAmenities(
+        postingId.roomInfoId,
+        updatedAmenities
+      );
+
+      if (response.success) {
+        console.log("Amenities updated successfully:", response.data);
+        toast.success("Tiện ích đã được cập nhật!");
+      } else {
+        toast.error("Cập nhật tiện ích thất bại.");
+      }
+    } catch (error) {
+      console.error("Error updating amenities:", error);
+      toast.error("Có lỗi xảy ra khi cập nhật tiện ích.");
+    }
+  };
+
+  const renderAmenityDropdown = (type) => (
+    <div className="grid grid-cols-3 gap-4 items-center">
+      <select
+        value={selectedAmenity[type] || ""}
+        onChange={(e) =>
+          setSelectedAmenity((prev) => ({ ...prev, [type]: e.target.value }))
+        }
+        className="col-span-2 border border-gray-300 rounded px-3 py-2"
+      >
+        <option value="">Chọn tiện ích...</option>
+        {amenityOptions[type].map((amenity) => (
+          <option key={amenity} value={amenity}>
+            {amenity}
+          </option>
+        ))}
+      </select>
+      <button
+        onClick={() => handleAddAmenity(type)}
+        className="bg-blue-500 text-white w-5 h-5 rounded-full flex items-center justify-center hover:bg-blue-600 transition duration-150"
+      >
+        <FaPlusCircle size={16} />
+      </button>
+    </div>
+  );
+
   useEffect(() => {
     if (isOpen) {
       setIsVisible(true);
+      if (postingId.resortId) {
+        fetchUnitTypes(postingId.resortId);
+      }
+      setUpdatedAmenities(postingId.roomAmenities || []);
     } else {
       setTimeout(() => setIsVisible(false), 300);
     }
+    return () => setUnitTypes([]);
   }, [isOpen, postingId]);
 
   if (!isVisible) return null;
@@ -74,7 +198,7 @@ const detailExchangePostingModal = ({ isOpen, onClose, postingId, onSave }) => {
 
       <div
         className="fixed inset-0 bg-black opacity-50"
-        onClick={() => onClose()}
+        onClick={() => handleOnClose()}
       ></div>
       <div
         className="bg-white rounded-lg shadow-lg w-full max-w-3xl h-full flex flex-col"
@@ -92,7 +216,7 @@ const detailExchangePostingModal = ({ isOpen, onClose, postingId, onSave }) => {
             </div>
 
             <button
-              onClick={() => onClose()}
+              onClick={() => handleOnClose()}
               className="text-gray-500 hover:text-zinc-300 focus:outline-none"
             >
               <FaXmark size={28} />
@@ -105,7 +229,7 @@ const detailExchangePostingModal = ({ isOpen, onClose, postingId, onSave }) => {
             <div className="border-b">
               <div className="flex items-center p-4 m-3 border border-gray-300 rounded-xl">
                 <img
-                  src="https://placehold.co/100x100"
+                  src={postingId.imageUrls}
                   alt="Hotel Thumbnail"
                   className="w-20 h-20 rounded-lg mr-4"
                 />
@@ -150,7 +274,7 @@ const detailExchangePostingModal = ({ isOpen, onClose, postingId, onSave }) => {
                   <p className="text-medium text-gray-500">Đăng bởi</p>
                   <div className="flex flex-row items-center">
                     <img
-                      src="https://placehold.co/25x25"
+                      src={postingId.imageUrls}
                       alt="Hotel Thumbnail"
                       className="w-12 h-12 rounded-full mr-4 border border-blue-400"
                     />
@@ -177,8 +301,60 @@ const detailExchangePostingModal = ({ isOpen, onClose, postingId, onSave }) => {
               </div>
 
               <div className="mb-4">
-                <h2 className="text-2xl font-semibold mb-4">Loại Phòng</h2>
-                {postingId.unitType ? (
+                <div className="flex flex-row justify-between mb-3">
+                  <h2 className="text-2xl font-semibold mb-4">Loại Phòng</h2>
+                  {isDetailEdit ? (
+                    <button
+                      className="border border-red-500 text-red-500 px-4 py-2 rounded-xl mr-2 hover:bg-red-500 hover:text-white transition duration-150"
+                      onClick={() => setIsDetailEdit(!isDetailEdit)}
+                    >
+                      Hủy bỏ
+                    </button>
+                  ) : (
+                    <div className="bg-white border-2 border-gray-300 rounded-xl p-2  hover:bg-gray-300 cursor-pointer">
+                      <button
+                        className="text-gray-500 focus:outline-none flex flex-row items-center"
+                        onClick={() => setIsDetailEdit(!isDetailEdit)}
+                      >
+                        <FaEdit size={20} />
+                        <span className="ml-1">Chỉnh sửa</span>
+                      </button>
+                    </div>
+                  )}
+                </div>
+                {isDetailEdit ? (
+                  <div>
+                    <label
+                      htmlFor="unitType"
+                      className="block text-gray-700 font-medium"
+                    >
+                      Chọn loại phòng:
+                    </label>
+                    <select
+                      id="unitType"
+                      className="mt-2 block w-full p-3 border rounded-lg shadow-sm focus:outline-none"
+                      value={selectedUnitType?.id || ""}
+                      onChange={(e) => {
+                        const selectedValue = parseInt(e.target.value, 10);
+                        if (selectedValue !== selectedUnitType?.id) {
+                          const selected = unitTypes.find(
+                            (unitType) => unitType.id === selectedValue
+                          );
+                          setSelectedUnitType(selected);
+                        }
+                      }}
+                    >
+                      <option value="" disabled>
+                        Chọn loại phòng
+                      </option>
+                      {unitTypes.map((unitType) => (
+                        <option key={unitType.id} value={unitType.id}>
+                          {unitType.title}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                ) : postingId.unitType ? (
                   <div className="flex border p-4 rounded-lg shadow-sm">
                     <div className="w-1/4">
                       <img
@@ -212,96 +388,114 @@ const detailExchangePostingModal = ({ isOpen, onClose, postingId, onSave }) => {
                 )}
               </div>
 
+              {/* Amenity */}
               <div className="mb-4">
-                <h2 className="text-2xl font-semibold mb-4">
-                  Các tiện năng và tiện nghi tại chỗ
-                </h2>
-                {postingId.resortAmenities &&
-                postingId.resortAmenities.some(
-                  (amenity) =>
-                    amenity.type === "Các tính năng và tiện nghi tại chỗ"
-                ) ? (
-                  <div className="grid grid-cols-3 gap-2">
-                    {postingId.resortAmenities
-                      .filter(
-                        (amenity) =>
-                          amenity.type === "Các tính năng và tiện nghi tại chỗ"
-                      )
-                      .map((amenity) => (
-                        <p key={amenity.id} className="text-medium">
-                          {amenity.name}
-                        </p>
-                      ))}
-                  </div>
-                ) : (
-                  <p className="text-medium text-gray-500">
-                    Tiện ích không có sẵn
-                  </p>
-                )}
-              </div>
+                <div className="flex flex-row justify-between">
+                  <h2 className="text-2xl font-semibold mb-4">
+                    Tiện ích và chính sách
+                  </h2>
+                  <button
+                    className="text-gray-500 focus:outline-none flex flex-row items-center"
+                    onClick={() => toggleEditAmenity()}
+                  >
+                    {!isEditRoomAmenity ? (
+                      <div className="bg-white border-2 border-gray-300 rounded-xl p-2 hover:bg-gray-300 cursor-pointer flex flex-row">
+                        <FaEdit size={20} />
+                        <span className="ml-1">Chỉnh sửa</span>
+                      </div>
+                    ) : (
+                      <div>
+                        <button
+                          className="border border-red-500 text-red-500 px-4 py-2 rounded-xl mr-2 hover:bg-red-500 hover:text-white transition duration-150"
+                          onClick={() => setIsEditRoomAmenity(false)}
+                        >
+                          Hủy bỏ
+                        </button>
+                        <button
+                          className="bg-green-500 border-2 text-white p-2 rounded-xl hover:bg-green-600 cursor-pointer"
+                          onClick={() => handleUpdateAmenity()}
+                        >
+                          Hoàn tất
+                        </button>
+                      </div>
+                    )}
+                  </button>
+                </div>
+                <div className="space-y-4">
+                  {[
+                    ...new Set(updatedAmenities.map((amenity) => amenity.type)),
+                  ].map((type) => {
+                    const roomAmenitiesByType = updatedAmenities.filter(
+                      (amenity) => amenity.type === type
+                    );
+                    const label =
+                      {
+                        KITCHEN: "Tiện ích bếp",
+                        ENTERTAINMENT: "Tiện ích giải trí",
+                        FEATURES: "Đặc trưng phòng",
+                        POLICY: "Chính sách",
+                      }[type] || "Khác";
 
-              <div className="mb-4">
-                <h2 className="text-2xl font-semibold mb-4">
-                  Các điểm tham quan gần đó
-                </h2>
-                {postingId.resortAmenities &&
-                postingId.resortAmenities.some(
-                  (amenity) => amenity.type === "Các điểm tham quan gần đó"
-                ) ? (
-                  <div className="grid grid-cols-3 gap-2">
-                    {postingId.resortAmenities
-                      .filter(
-                        (amenity) =>
-                          amenity.type === "Các điểm tham quan gần đó"
-                      )
-                      .map((amenity) => (
-                        <p key={amenity.id} className="text-medium">
-                          {amenity.name}
-                        </p>
-                      ))}
-                  </div>
-                ) : (
-                  <p className="text-medium text-gray-500">
-                    Các điểm tham quan không có sẵn
-                  </p>
-                )}
-              </div>
-
-              <div className="mb-4">
-                <h2 className="text-2xl font-semibold mb-4">Chính sách</h2>
-                {postingId.resortAmenities &&
-                postingId.resortAmenities.some(
-                  (amenity) =>
-                    amenity.type !== "Các điểm tham quan gần đó" &&
-                    amenity.type !== "Các tính năng và tiện nghi tại chỗ"
-                ) ? (
-                  <div className="grid grid-cols-3 gap-2">
-                    {postingId.resortAmenities
-                      .filter(
-                        (amenity) =>
-                          amenity.type !== "Các điểm tham quan gần đó" &&
-                          amenity.type !== "Các tính năng và tiện nghi tại chỗ"
-                      )
-                      .map((amenity) => (
-                        <p key={amenity.id} className="text-medium">
-                          {amenity.name}
-                        </p>
-                      ))}
-                  </div>
-                ) : (
-                  <p className="text-medium text-gray-500">
-                    Chính sách không có sẵn
-                  </p>
-                )}
+                    return (
+                      <div key={type}>
+                        <h3 className="text-xl font-semibold mb-2">{label}</h3>
+                        {!isEditRoomAmenity ? (
+                          <div className="grid grid-cols-3 gap-2">
+                            {roomAmenitiesByType.length > 0 ? (
+                              roomAmenitiesByType.map((amenity) => (
+                                <div className="flex items-center">
+                                  <FaDotCircle
+                                    size={13}
+                                    className="text-blue-300 mr-2"
+                                  />
+                                  <p key={amenity.id} className="text-medium">
+                                    {amenity.name}
+                                  </p>
+                                </div>
+                              ))
+                            ) : (
+                              <p className="text-gray-500">
+                                Không có tiện ích nào
+                              </p>
+                            )}
+                          </div>
+                        ) : (
+                          <div className="grid grid-cols-3 gap-4">
+                            {roomAmenitiesByType.map((amenity) => (
+                              <div
+                                key={amenity.id}
+                                className="flex items-center justify-between border border-gray-300 p-2 rounded-lg"
+                              >
+                                <p className="text-medium truncate">
+                                  {amenity.name}
+                                </p>
+                                <button
+                                  onClick={() =>
+                                    setUpdatedAmenities((prev) =>
+                                      prev.filter(
+                                        (item) => item.id !== amenity.id
+                                      )
+                                    )
+                                  }
+                                  className="text-red-500 hover:text-red-600 focus:outline-none"
+                                >
+                                  <FaXmark size={16} />
+                                </button>
+                              </div>
+                            ))}
+                            {renderAmenityDropdown(type)}
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
 
               <div className="mb-4">
                 <h2 className="text-2xl font-semibold mb-3">Địa chỉ</h2>
                 <p className="text-base mb-3">{postingId.address}</p>
-                <img
-                  src="https://placehold.co/600x300"
-                  className="max-w-full "
-                />
+                <img src={postingId.imageUrls} className="max-w-full " />
               </div>
             </div>
           </>
@@ -314,7 +508,7 @@ const detailExchangePostingModal = ({ isOpen, onClose, postingId, onSave }) => {
           <div>
             <button
               className="text-gray-700 px-4 py-2 rounded-lg mr-2 border border-gray-500 hover:bg-gray-200 transition duration-150"
-              onClick={() => onClose()}
+              onClick={() => handleOnClose()}
             >
               Đóng
             </button>
