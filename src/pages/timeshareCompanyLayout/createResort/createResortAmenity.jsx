@@ -43,8 +43,6 @@ const CreateResortAmenity = ({ onUpdateData, onNext, onBack, formData }) => {
     }
   };
 
-  console.log(amenities)
-  // Filter amenities by type for rendering
   const renderAmenitiesByType = (type) => {
     return amenities
       .filter((amenity) => amenity.type === type)
@@ -66,9 +64,6 @@ const CreateResortAmenity = ({ onUpdateData, onNext, onBack, formData }) => {
         </div>
       ));
   };
-
-
-
 
   return (
     <div className="p-6">
