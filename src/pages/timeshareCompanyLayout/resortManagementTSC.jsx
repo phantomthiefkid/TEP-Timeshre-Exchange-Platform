@@ -27,13 +27,15 @@ const ResortManagementTSC = () => {
       // let amount = await getAllResort(0, 100, "");
       if (data.status === 200) {
         setAllResort(data.data.content);
-        console.log(data.data.content)
+        console.log(data.data.content, "check")
         setTotalPages(data.data.totalPages);
         setLoading(false);
         // setCount(amount.data.content.length);
       }
     } catch (error) {
       throw error;
+    } finally {
+      setLoading(false)
     }
   };
 
@@ -68,10 +70,12 @@ const ResortManagementTSC = () => {
     <>
       <div className="container mx-auto p-4 bg-white rounded-xl shadow-xl">
         <div className="p-6 flex justify-between items-center">
-          <div className="py-4 p-6 space-y-2">
-            <h1 className="text-4xl font-bold text-gray-700">Quản lí resort</h1>
+          <div className="py-2 p-6 space-y-1">
+            <h1 className="text-4xl font-bold text-gray-600">
+              Quản lý Resort - Theo dõi và điều chỉnh thông tin
+            </h1>
             <h3 className="text-xl text-gray-500">
-              Quản lí resort và các thông tin chi tiết
+              Hệ thống hỗ trợ quản lý danh sách resort, trạng thái hoạt động và các chi tiết liên quan.
             </h3>
           </div>
           <div className="flex items-center space-x-4">
@@ -90,7 +94,8 @@ const ResortManagementTSC = () => {
           </div>
         </div>
 
-        <div className="flex items-center justify-between p-2 mt-3 py-4">
+
+        <div className="flex items-center justify-between p-2 py-2 px-4">
           <div className="flex items-center border border-gray-300 rounded-lg px-4 py-2 w-full max-w-xl">
             <FaSearch className="text-gray-500 mr-2" />
             <input
@@ -110,14 +115,14 @@ const ResortManagementTSC = () => {
           </div>
         </div>
 
-        <div className="p-6">
+        <div className="p-4">
           <table className="min-w-full bg-white border border-gray-200">
             <thead className="bg-gray-100 rounded-lg">
               <tr className="w-full bg-gray-300 border-b border-gray-200">
                 <th className="p-4 text-left">STT</th>
                 <th className="p-4 text-left">Resort</th>
-                <th className="p-4 text-left">Giá Tối Thiểu</th>
-                <th className="p-4 text-left">Giá Tối Đa</th>
+                <th className="p-4 text-left">Giá từ</th>
+                <th className="p-4 text-left">đến</th>
                 <th className="p-4 text-left">Địa chỉ</th>
                 <th className="p-4 text-left">Trạng thái</th>
                 <th className="p-4 text-left"></th>
@@ -185,17 +190,17 @@ const ResortManagementTSC = () => {
                     </td>
                   </tr>
                 ))
-              ) :  (
+              ) : (
                 <tr>
                   <td colSpan="8" className="p-4 text-center text-gray-500">
-                    Không tìm thấy gì
+                    Không tìm thấy resorrt nào!!!
                   </td>
                 </tr>
-              ) }
+              )}
             </tbody>
           </table>
 
-          {allResort && allResort.length > 0 ? (
+          {allResort && allResort.length > 0 && (
             <div className="flex items-center justify-center space-x-2 mt-5 w-full">
               <button
                 onClick={handlePreviousPage}
@@ -226,10 +231,6 @@ const ResortManagementTSC = () => {
                 <FaChevronRight />
               </button>
             </div>
-          ) : (
-            <span className="flex items-center justify-center space-x-2 mt-5 w-full">
-              Không có bài đăng nào!!!
-            </span>
           )}
         </div>
       </div>

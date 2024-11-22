@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { FaPlusCircle } from 'react-icons/fa';
 import CreateUnitTypeForUpdateModal from '../../../components/Modal/createUnitTypeForUpdateModal';
 import UpdateResortUnitTypeModal from '../../../components/Modal/updateResortUnitTypeModal';
+import FormatCurrency from '../../../components/Validate/formatCurrency';
 
 const UpdateResortUnitType = ({ unitType, flag }) => {
 
@@ -26,26 +27,38 @@ const UpdateResortUnitType = ({ unitType, flag }) => {
     <div className='min-h-screen'>
       <div className="grid grid-cols-2 gap-8 py-6 border p-8">
         {unitTypeList && unitTypeList.map((item, index) => (
-          <div key={item.id} onClick={() => handleOpen(item)} className="flex items-stretch gap-4 rounded-xl border shadow-md hover:shadow-lg relative">
-            {/* Bên trái là ảnh */}
+          <div
+            key={item.id}
+            onClick={() => handleOpen(item)}
+            className="flex flex-col md:flex-row items-stretch gap-4 rounded-lg border shadow-md hover:shadow-lg hover:border-2 hover:border-blue-200 transition-transform relative bg-white"
+          >
+            {/* Phần ảnh bên trái */}
             <img
               src={item.photos}
               alt="Room Image"
-              className="w-56 h-full rounded-l-xl object-cover"
+              className="w-full md:w-56 h-48 md:h-auto rounded-t-lg md:rounded-l-lg md:rounded-tr-none object-cover"
             />
 
-            {/* Bên phải là thông tin phòng */}
-            <div className="space-y-1 p-2">
-              <h3 className="text-xl font-semibold text-blue-500">{item.title}</h3>
-              <div className='flex space-x-2'>
-                <p>{item.bedrooms} phòng ngủ,</p>
-                <p>{item.sleeps} người,</p>
-                <p>{item.kitchen}</p>
+            {/* Phần thông tin bên phải */}
+            <div className="flex-1 flex flex-col justify-between p-4">
+              <div className="space-y-2">
+                <h3 className="text-lg md:text-xl font-semibold text-blue-500">{item.title}</h3>
+                <div className="flex flex-wrap gap-2 text-gray-700">
+                  <p>{item.bedrooms} phòng ngủ</p>
+                  <span className="text-gray-400">|</span>
+                  <p>{item.sleeps} người</p>
+                  <span className="text-gray-400">|</span>
+                  <p>{item.kitchen}</p>
+                </div>
+                <p className="font-mono text-gray-500">{item.bathrooms} phòng tắm</p>
               </div>
-              <p className='font-mono'>{item.bathrooms} phòng tắm</p>
-              <p className='absolute bottom-0 right-6 text-blue-500 text-xl font-semibold'>{item.price} VND</p>
+              <p className="text-blue-500 text-lg md:text-xl font-semibold mt-4 md:mt-0">
+                {FormatCurrency(item.price)}
+              </p>
             </div>
-          </div>))}
+          </div>
+        ))}
+
 
         {
           openUnitTypeModal && (<UpdateResortUnitTypeModal onClose={onClose} selectedUnitType={selectedUnitType} flag={flag} />)}
@@ -59,7 +72,7 @@ const UpdateResortUnitType = ({ unitType, flag }) => {
         </div>
 
       </div>
-      
+
     </div>
 
   )

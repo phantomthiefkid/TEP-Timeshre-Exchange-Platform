@@ -51,6 +51,8 @@ const ResortDetail = () => {
         }
     }
 
+    console.log(resort)
+
     useEffect(() => {
         if (id) {
             fetchResortById();
@@ -108,8 +110,8 @@ const ResortDetail = () => {
                     </div>
 
                     {/* Stacked images on the right (25% width) */}
-                    {resort.imageUrls?.length !== 0 && resort.imageUrls[0] && resort.imageUrls[1] && resort.imageUrls[2] && (
-                        <div className='w-full lg:w-[25%] flex flex-col justify-between gap-2 mt-4 lg:mt-0'>
+                    {resort.imageUrls?.length > 0 && (
+                        <div className='w-full lg:w-[25%] flex flex-col justify-end gap-2 mt-4 lg:mt-0'>
                             {resort.imageUrls[0] && (
                                 <img
                                     className='h-[180px] w-full object-cover rounded-lg'
@@ -187,7 +189,7 @@ const ResortDetail = () => {
                     </div>
                 )}
 
-                <div className="py-10 mt-6 px-12 space-y-8 bg-gray-50 rounded-lg shadow-md">
+                <div className="py-10 mt-6 px-12 space-y-8 bg-gray-50 rounded-lg border shadow-lg">
                     <h3 className="text-4xl font-semibold text-indigo-600 mb-4 border-b-4 border-indigo-500 pb-2 inline-block">
                         Giới thiệu
                     </h3>
@@ -196,53 +198,50 @@ const ResortDetail = () => {
                     </p>
                 </div>
 
-                <div className="py-10 px-12 space-y-8 bg-gray-50 rounded-lg shadow-md mt-8">
+                <div className="py-10 px-12 space-y-8 bg-stone-100 rounded-lg shadow-md mt-8">
                     <h3 className="text-3xl font-semibold text-indigo-600 mb-8">Loại phòng</h3>
 
                     {resort && resort.unitTypeDtoList && resort.unitTypeDtoList.map((item, index) => (
                         <div
                             key={index}
-                            className="grid grid-cols-2 gap-6 border rounded-lg bg-white hover:bg-gray-100 px-16 py-4 shadow-sm transition-transform transform"
+                            className="grid grid-cols-2 gap-6 border rounded-lg bg-white hover:bg-gray-50 px-8 py-6 shadow-md transition-transform transform hover:scale-105"
                         >
-                            {/* Phần Thông Tin Phòng */}
-                            <div className="p-2 grid grid-cols-2 gap-4 items-start">
+                            {/* Thông Tin Phòng */}
+                            <div className="flex flex-col md:flex-row items-start gap-4">
                                 <img
                                     src={item.photos}
-                                    className="w-full h-44 flex justify-center items-center rounded-lg shadow-md"
-                                    alt='phòng đôi'
+                                    className="w-full md:w-48 h-44 object-cover rounded-lg shadow-lg"
+                                    alt={`Ảnh của ${item.title}`}
                                 />
-                                <div className="py-4 space-y-4">
-                                    <span className="text-xl text-gray-600 font-medium">Thông tin phòng</span>
-                                    <h3 className="text-3xl font-bold text-indigo-700">{item.title}</h3>
+                                <div className="space-y-3">
+                                    <span className="text-lg font-medium text-gray-600">Thông tin phòng</span>
+                                    <h3 className="text-2xl font-bold text-indigo-600">{item.title}</h3>
                                     <button
                                         onClick={() => handleOpenUnitTypeModal(item.id)}
-                                        className="text-indigo-500 underline font-semibold hover:text-indigo-700"
+                                        className="text-indigo-500 underline font-medium hover:text-indigo-700 transition-colors"
                                     >
                                         Xem chi tiết phòng
                                     </button>
                                 </div>
                             </div>
 
-                            {/* Phần Đặc Điểm Phòng */}
-                            <div className="p-4 space-y-4 text-lg text-gray-700">
-                                <div className="text-xl font-semibold text-gray-600">
-                                    Đặc điểm phòng
-                                </div>
-
-                                <div className="grid grid-cols-2 gap-4">
+                            {/* Đặc Điểm Phòng */}
+                            <div className="space-y-4">
+                                <div className="text-lg font-semibold text-gray-700">Đặc điểm phòng</div>
+                                <div className="grid grid-cols-2 gap-4 text-gray-600">
                                     <div>
-                                        <span>Phòng ngủ: {item.bedrooms}</span>
+                                        <span>Phòng ngủ: <strong>{item.bedrooms}</strong></span>
                                     </div>
                                     <div>
-                                        <span>Số người: {item.sleeps}</span>
+                                        <span>Số người: <strong>{item.sleeps}</strong></span>
                                     </div>
                                 </div>
-
-                                <div>Phòng tắm: {item.bathrooms}</div>
-                                <div>Nhà bếp: {item.kitchen}</div>
+                                <div>Phòng tắm: <strong>{item.bathrooms}</strong></div>
+                                <div>Nhà bếp: <strong>{item.kitchen}</strong></div>
                             </div>
                         </div>
                     ))}
+
 
                     {isOpenUnitTypeModal && (
                         <DetailUnitTypeModal
@@ -253,68 +252,93 @@ const ResortDetail = () => {
                 </div>
 
 
-                <div className="space-y-12 w-full mx-auto">
+                <div className="space-y-12 w-full mx-auto mt-6">
                     {/* Các tính năng và tiện nghi tại chỗ */}
-                    <div className="py-10 px-8 bg-gray-50 rounded-lg shadow-md">
+                    <div className="py-10 px-8 bg-gray-50 rounded-lg shadow-md border">
                         <h3 className="text-3xl font-semibold text-indigo-600 mb-6 border-b-2 pb-2 border-indigo-400 inline-block">
                             Các tính năng và tiện nghi tại chỗ
                         </h3>
                         <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-6">
-                            {["Tiện ích 1", "Tiện ích 2", "Tiện ích 3", "Tiện ích 4", "Tiện ích 5", "Tiện ích 6"].map((item, index) => (
-                                <li key={index} className="flex items-center p-4 bg-white rounded-md shadow-sm hover:bg-indigo-50 transition-colors">
-                                    <svg className="w-6 h-6 text-indigo-500 mr-3" fill="currentColor" viewBox="0 0 24 24">
-                                        {/* Icon placeholder */}
-                                        <path d="M12 2L15.09 8H21l-4.91 4L16 18l-4-3.09L8 18l.91-6L4 8h5.91L12 2z" />
-                                    </svg>
-                                    <span className="text-gray-700 font-medium">{item}</span>
-                                </li>
-                            ))}
+                            {resort && resort.resortAmenityList
+                                .filter((amenity) => amenity.type === "AMENITIES")
+                                .map((amenity, index) => (
+                                    <li
+                                        key={index}
+                                        className="flex items-center p-4 bg-white rounded-md shadow-sm hover:bg-indigo-50 transition-colors"
+                                    >
+                                        <svg
+                                            className="w-6 h-6 text-indigo-500 mr-3"
+                                            fill="currentColor"
+                                            viewBox="0 0 24 24"
+                                        >
+                                            <path d="M12 2L15.09 8H21l-4.91 4L16 18l-4-3.09L8 18l.91-6L4 8h5.91L12 2z" />
+                                        </svg>
+                                        <span className="text-gray-700 font-medium">{amenity.name}</span>
+                                    </li>
+                                ))}
                         </ul>
                     </div>
 
-                    {/* Tính năng và tiện nghi gần kề */}
-                    <div className="py-10 px-8 bg-gray-50 rounded-lg shadow-md">
+                    {/* Các tiện nghi gần kề */}
+                    <div className="py-10 px-8 bg-gray-50 rounded-lg shadow-md border">
                         <h3 className="text-3xl font-semibold text-indigo-600 mb-6 border-b-2 pb-2 border-indigo-400 inline-block">
-                            Các tính năng và tiện nghi gần kề
+                            Các tiện nghi gần kề
                         </h3>
                         <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-6">
-                            {["Tiện ích 1", "Tiện ích 2", "Tiện ích 3", "Tiện ích 4", "Tiện ích 5", "Tiện ích 6"].map((item, index) => (
-                                <li key={index} className="flex items-center p-4 bg-white rounded-md shadow-sm hover:bg-indigo-50 transition-colors">
-                                    <svg className="w-6 h-6 text-indigo-500 mr-3" fill="currentColor" viewBox="0 0 24 24">
-                                        {/* Icon placeholder */}
-                                        <path d="M12 2L15.09 8H21l-4.91 4L16 18l-4-3.09L8 18l.91-6L4 8h5.91L12 2z" />
-                                    </svg>
-                                    <span className="text-gray-700 font-medium">{item}</span>
-                                </li>
-                            ))}
+                            {resort && resort.resortAmenityList
+                                .filter((amenity) => amenity.type === "NEARBY ATTRACTIONS")
+                                .map((amenity, index) => (
+                                    <li
+                                        key={index}
+                                        className="flex items-center p-4 bg-white rounded-md shadow-sm hover:bg-indigo-50 transition-colors"
+                                    >
+                                        <svg
+                                            className="w-6 h-6 text-indigo-500 mr-3"
+                                            fill="currentColor"
+                                            viewBox="0 0 24 24"
+                                        >
+                                            <path d="M12 2L15.09 8H21l-4.91 4L16 18l-4-3.09L8 18l.91-6L4 8h5.91L12 2z" />
+                                        </svg>
+                                        <span className="text-gray-700 font-medium">{amenity.name}</span>
+                                    </li>
+                                ))}
                         </ul>
                     </div>
 
                     {/* Chính sách */}
-                    <div className="py-10 px-8 bg-gray-50 rounded-lg shadow-md">
+                    <div className="py-10 px-8 bg-gray-50 rounded-lg shadow-md border">
                         <h3 className="text-3xl font-semibold text-indigo-600 mb-6 border-b-2 pb-2 border-indigo-400 inline-block">
                             Chính sách
                         </h3>
                         <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-6">
-                            {["Chính sách 1", "Chính sách 2", "Chính sách 3"].map((item, index) => (
-                                <li key={index} className="flex items-center p-4 bg-white rounded-md shadow-sm hover:bg-indigo-50 transition-colors">
-                                    <svg className="w-6 h-6 text-indigo-500 mr-3" fill="currentColor" viewBox="0 0 24 24">
-                                        {/* Icon placeholder */}
-                                        <path d="M12 2L15.09 8H21l-4.91 4L16 18l-4-3.09L8 18l.91-6L4 8h5.91L12 2z" />
-                                    </svg>
-                                    <span className="text-gray-700 font-medium">{item}</span>
-                                </li>
-                            ))}
+                            {resort && resort.resortAmenityList
+                                .filter((amenity) => amenity.type === "POLICY")
+                                .map((amenity, index) => (
+                                    <li
+                                        key={index}
+                                        className="flex items-center p-4 bg-white rounded-md shadow-sm hover:bg-indigo-50 transition-colors"
+                                    >
+                                        <svg
+                                            className="w-6 h-6 text-indigo-500 mr-3"
+                                            fill="currentColor"
+                                            viewBox="0 0 24 24"
+                                        >
+                                            <path d="M12 2L15.09 8H21l-4.91 4L16 18l-4-3.09L8 18l.91-6L4 8h5.91L12 2z" />
+                                        </svg>
+                                        <span className="text-gray-700 font-medium">{amenity.name}</span>
+                                    </li>
+                                ))}
                         </ul>
                     </div>
                 </div>
+
 
                 <div className='py-16 text-indigo-600'>
                     <h3 className="text-3xl font-bold mb-6">Đánh giá</h3>
                     <span className="text-2xl flex items-center gap-2 font-semibold">
                         <StarIcon className="w-12" color="yellow" />
-                        <span className="text-3xl">4,6</span>/5
-                        <span className="text-gray-400 text-xl mt-1 font-light">16 đánh giá</span>
+                        <span className="text-3xl">{resort && resort.averageRating && "/5" || "N/A"}</span>
+                        <span className="text-gray-400 text-xl mt-1 font-light">{resort && resort.totalRating} đánh giá</span>
                     </span>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 py-8">
