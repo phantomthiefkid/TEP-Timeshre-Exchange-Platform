@@ -18,6 +18,7 @@ const CreateUnitType = ({ onUpdateData, onNext, onBack, formData }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
+  const [isWaiting, setIsWaiting] = useState(false);
   const handleAddUnitType = (newUnitType) => {
     setRoomTypes([...roomTypes, newUnitType]);
     setIsOpenModalUnitType(false)
@@ -33,9 +34,10 @@ const CreateUnitType = ({ onUpdateData, onNext, onBack, formData }) => {
   };
 
   const handleSubmit = async () => {
-    console.log(roomTypes)
+
     try {
-      setLoading(true)
+
+      setIsWaiting(true)
       for (const roomType of roomTypes) {
         const response = await createResortUnitType(roomType);
 
@@ -51,7 +53,7 @@ const CreateUnitType = ({ onUpdateData, onNext, onBack, formData }) => {
     } catch (error) {
       console.log('Error creating unit types:', error);
     } finally {
-      setLoading(false)
+      setIsWaiting(false)
     }
   };
 
@@ -152,9 +154,28 @@ const CreateUnitType = ({ onUpdateData, onNext, onBack, formData }) => {
           className="flex items-center justify-center bg-gradient-to-r from-sky-400 to-sky-600 text-white font-semibold py-3 px-8 rounded-full shadow-lg hover:bg-sky-800 transition-all duration-300 transform hover:scale-105"
           onClick={handleSubmit}
         >
-          <span class="mr-6">Hoàn tất</span> <span className="bg-white text-sky-700 w-8 h-8 flex items-center justify-center rounded-full shadow-md transform transition-all duration-300 hover:scale-110">
-            <FaArrowRight />
-          </span>
+          {
+            isWaiting ? (
+              <>
+                {/* Spinner */}
+                <svg
+                  className="animate-spin h-5 w-5 mr-3"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <circle className="opacity-25" cx="12" cy="12" r="10" strokeWidth="4"></circle>
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8v8H4z"
+                  ></path>
+                </svg>
+                Đợi trong giây lát...
+              </>
+            ) : "Hoàn tất"
+          }
         </button>
       </div>
       {loading && (<SpinnerWaiting />)}

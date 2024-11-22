@@ -35,17 +35,17 @@ const UpdateResort = () => {
             {/* Resort Images Section */}
             <div className="flex gap-4 mb-8">
                 <img
-                    src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/350288700.jpg?k=3fa03303a1b6e890b9f1dc50f00f70df2525cde1a21230c464db9a23533529bf&o=&hp=1"
+                    src="https://unwinds.s3.ap-southeast-2.amazonaws.com/1732110520952_image1.jpg"
                     alt="Resort view 1"
                     className="w-1/3 h-60 object-cover shadow-lg"
                 />
                 <img
-                    src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/198352021.jpg?k=e3e164187bededb636a4176381d7b687d17263c4ec36cd243a4647798b64e695&o=&hp=1"
+                    src="https://unwinds.s3.ap-southeast-2.amazonaws.com/1732110521667_image2.jpg"
                     alt="Resort view 2"
                     className="w-1/3 h-60 object-cover shadow-lg"
                 />
                 <img
-                    src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/588139600.jpg?k=cb99ba50cb7c74ac4e7c9e3b4843a4f5c4c07bbfd204b3dcc45a47b0c66e3e60&o=&hp=1"
+                    src="https://unwinds.s3.ap-southeast-2.amazonaws.com/1732110521884_image3.jpg"
                     alt="Resort view 3"
                     className="w-1/3 h-60 object-cover shadow-lg"
                 />

@@ -14,6 +14,7 @@ import {
 } from "../../service/systemStaffService/systemStaffAPI";
 import SpinnerWaiting from "../../components/LoadingComponent/spinnerWaiting";
 import DetaillRentalPackageModal from "../../components/Modal/systemstaff/detailRentalPackageModal";
+import FormatCurrency from "../../components/Validate/formatCurrency";
 const PostManagement = () => {
   const [filterStatus, setFilterStatus] = useState(null);
   const [selectedOption, setSelectedOption] = useState("Tất cả");
@@ -38,6 +39,8 @@ const PostManagement = () => {
       throw error;
     }
   };
+
+  console.log(rentalPostings)
   const handlePackageSelect = (value, label) => {
     setSelectedOption(label); // Cập nhật tên hiển thị
     setPackageId(value); // Cập nhật ID gói
@@ -133,7 +136,7 @@ const PostManagement = () => {
       <Toaster position="top-right" reverseOrder={false} />
       <div className="container mx-auto p-4 bg-white rounded-xl shadow-xl">
         <div className="py-4 p-6 space-y-2">
-          <h1 className="text-4xl font-bold">Danh sách bài đăng</h1>
+          <h1 className="text-4xl font-bold text-gray-600">Danh sách bài đăng</h1>
           <h3 className="text-xl text-gray-500">
             Quản lí các bài đăng cho thuê ở đây.
           </h3>
@@ -256,13 +259,13 @@ const PostManagement = () => {
                       className="w-12 h-12 rounded-2xl mr-5"
                     />
                     <div className="flex flex-col">
-                      <h3 className="font-semibold">{posting.resortName}</h3>
+                      <h3 className="font-light">{posting.resortName}</h3>
                     </div>
                   </td>
 
                   <td className="p-4">{posting.checkinDate}</td>
                   <td className="p-4">{posting.checkoutDate}</td>
-                  <td className="p-4">{posting.pricePerNights}</td>
+                  <td className="p-4">{FormatCurrency(posting.totalPrice)}</td>
                   <td className="p-4">
                     <span
                       className={`flex items-center hover:scale-105 transition-all duration-200 py-1 px-2 rounded-full w-44 text-center ${getStatusStyles(posting.status).style}`}

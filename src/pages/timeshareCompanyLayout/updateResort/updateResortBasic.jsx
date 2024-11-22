@@ -1,7 +1,7 @@
 import { LocationMarkerIcon } from '@heroicons/react/solid';
 import React, { useEffect, useState } from 'react'
 import { toast, Toaster } from 'react-hot-toast';
-import { FaUpload, FaMapMarkerAlt, FaArrowRight, FaEdit, FaSave } from 'react-icons/fa';
+import { FaUpload, FaMapMarkerAlt, FaArrowRight, FaEdit, FaSave, FaSpinner } from 'react-icons/fa';
 import { FaXmark } from 'react-icons/fa6';
 import { useParams } from 'react-router-dom'
 import Loading from '../../../components/LoadingComponent/loading';
@@ -30,6 +30,7 @@ const UpdateResortBasic = () => {
   const [flag, setFlag] = useState(false);
   const [isViewImageModal, setIsViewImageModal] = useState(false);
   const [selectedImage, setSelectedImage] = useState('');
+  const [isSpinner, setIsSpinner] = useState(false);
   const getResortDetail = async () => {
     let data = await getResortById(id);
     if (data.status === 200) {
@@ -92,14 +93,17 @@ const UpdateResortBasic = () => {
   };
 
   const handleUpdate = async () => {
-    console.log(resort, "basic")
+    setIsSpinner(true)
     try {
       await updateResortBasic(resort, id);
       toast.success("Cập nhật thành công!!", { duration: 3000 });
       setFlag(!flag);
       await getResortDetail();
+      setIsSpinner(false)
     } catch (error) {
       toast.error("Cập nhật thất bại! Vui lòng thử lại.", { duration: 3000 });
+    } finally {
+      setIsSpinner(false)
     }
   };
 
@@ -357,10 +361,14 @@ const UpdateResortBasic = () => {
           <button
             className="flex items-center justify-center bg-gradient-to-r from-sky-400 to-sky-500 text-white font-semibold py-2 px-8 rounded-full shadow-lg hover:bg-sky-800 transition-all duration-300 transform hover:scale-105"
             onClick={handleUpdate}
+            disabled={isSpinner}
           >
-            <span className="mr-3">Cập nhật</span>
-            <span className=" text-white w-6 h-6 flex items-center justify-center rounded-full shadow-md transform transition-all duration-300 hover:scale-110">
-              <FaSave />
+            <span className="mr-3"> {isSpinner ? "Đợi trong giây lát..." : "Cập nhật"}</span>
+            <span
+              className={`text-white w-8 h-8 flex items-center justify-center rounded-full shadow-md transform transition-all duration-300 ${isSpinner ? "animate-spin" : "hover:scale-110"
+                }`}
+            >
+              {isSpinner ? <FaSpinner /> : <FaSave />}
             </span>
           </button>
         </div>
