@@ -6,38 +6,32 @@ import { toast, Toaster } from 'react-hot-toast';
 import Loading from '../../../components/LoadingComponent/loading';
 import SpinnerWaiting from '../../../components/LoadingComponent/spinnerWaiting';
 import { FaArrowRight, FaSave, FaSpinner } from 'react-icons/fa';
-import { data } from 'autoprefixer';
 
-const UpdateResortAmenity = () => {
+
+const UpdateResortAmenity = ({ resortSelect, flag }) => {
   const { id } = useParams();
-  const [resort, setResort] = useState({
-    resortName: '',
-    logo: '',
-    minPrice: 0,
-    maxPrice: 0,
-    status: '',
-    address: '',
-    timeshareCompanyId: 0,
-    description: '',
-    resortAmenityList: []
-  });
-  const [flag, setFlag] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [resort, setResort] = useState(resortSelect);
+  // const [flag, setFlag] = useState(false);
+
   const [amenities, setAmenities] = useState([]);
   const [onSiteFeature, setOnSiteFeature] = useState('');
   const [nearbyAttraction, setNearbyAttraction] = useState('');
   const [policy, setPolicy] = useState('');
   const [isSpinner, setIsSpinner] = useState(false);
-  const getResortDetail = async () => {
-    const data = await getResortById(id);
-    if (data.status === 200) {
-      const newResort = data.data;
-      setResort(newResort);
-      setAmenities(newResort.resortAmenityList); // Initialize amenities from resort data
-      setLoading(false);
-      console.log(newResort, "Last check")
-    }
-  };
+  // const getResortDetail = async () => {
+  //   const data = await getResortById(id);
+  //   if (data.status === 200) {
+  //     const newResort = data.data;
+  //     setResort(resortSelect);
+  //     setAmenities(resortSelect.resortAmenityList); // Initialize amenities from resort data
+
+  //     console.log(resortSelect, "Last check")
+  //   }
+  // };
+  useEffect(() => {
+    setResort(resortSelect)
+    setAmenities(resortSelect.resortAmenityList)
+  }, [resortSelect])
 
   // const getResortDetail = async () => {
   //   try {
@@ -62,15 +56,15 @@ const UpdateResortAmenity = () => {
   // };
 
 
-  useEffect(() => {
-    getResortDetail();
-  }, [id, flag]);
+  // useEffect(() => {
+  //   getResortDetail();
+  // }, [id, flag]);
 
   const handleAddAmenity = (name, type) => {
     if (name) {
       setAmenities((prev) => [...prev, { name, type }]);
       if (type === 'AMENITIES') setOnSiteFeature('');
-      if (type === 'NEARBY ATTRACTIONS') setNearbyAttraction('');
+      if (type === 'NEARBY_ATTRACTIONS') setNearbyAttraction('');
       if (type === 'POLICY') setPolicy('');
     }
   };
@@ -80,7 +74,7 @@ const UpdateResortAmenity = () => {
   };
 
   const renderAmenitiesByType = (type) => {
-    return amenities
+    return amenities && amenities
       .filter((amenity) => amenity.type === type)
       .map((amenity) => (
         <div key={amenity.name} className="relative flex justify-center items-center rounded-full border bg-gray-100 shadow-md mt-2 p-2 transition-colors duration-200 ease-in-out hover:border-sky-500 focus-within:border-sky-500">
@@ -115,6 +109,7 @@ const UpdateResortAmenity = () => {
       await updateResortBasic(updatedResort, id).then(() => {
         toast.success("Cập nhật thành công!!!", { duration: 3000 })
         setIsSpinner(false)
+        flag()
       })
     } catch (error) {
       toast.error("Cập nhật thất bại! Vui lòng thử lại.", { duration: 3000 });
@@ -124,10 +119,7 @@ const UpdateResortAmenity = () => {
 
   };
 
-  if (loading) {
-    return (<SpinnerWaiting />)
-  }
- 
+
   return (
     <div className='border rounded shadow-md bg-white p-6'>
       <Toaster position="top-center" reverseOrder={false} />
@@ -174,7 +166,7 @@ const UpdateResortAmenity = () => {
         <div className='border-b pb-4 p-4 py-6'>
           <h2 className='text-2xl font-semibold mb-3 text-gray-600'>Các điểm tham quan lân cận</h2>
           <div className='grid grid-cols-6 gap-4 px-6 '>
-            {renderAmenitiesByType("NEARBY ATTRACTIONS")}
+            {renderAmenitiesByType("NEARBY_ATTRACTIONS")}
             <div className="col-span-2 flex items-center space-x-4">
               <select
                 className="w-full max-w-md border border-gray-300 ease-in-out hover:border-sky-500 focus-within:border-sky-500 rounded-full px-4 py-2 text-gray-700 transition duration-200"
@@ -196,7 +188,7 @@ const UpdateResortAmenity = () => {
               </select>
               <button
                 type="button"
-                onClick={() => handleAddAmenity(nearbyAttraction, "NEARBY ATTRACTIONS")}
+                onClick={() => handleAddAmenity(nearbyAttraction, "NEARBY_ATTRACTIONS")}
                 className="flex items-center justify-center bg-gradient-to-r from-sky-500 to-sky-400 hover:bg-sky-600 text-white font-semibold py-2 px-6 rounded-full shadow-lg transition-all duration-300 transform hover:scale-105"
               >
                 <PlusCircleIcon color="#FFFFFF" className="h-6 w-6" />

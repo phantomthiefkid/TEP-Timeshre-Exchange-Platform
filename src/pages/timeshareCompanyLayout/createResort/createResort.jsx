@@ -35,9 +35,8 @@ const CreateResort = () => {
 
   const updateUnitType = (newData) => {
     setUnitType(...newData);
-   
+
   };
-console.log("praren", formData)
 
   const handleNext = async () => {
     if (step === 1) {
@@ -60,7 +59,6 @@ console.log("praren", formData)
         const resortId = data.data.id;
         dispatch(setResortId(resortId));
         setLoading(false);
-        console.log(data.data.id)
       } else {
         toast.error("Tạo thất bại!", { duration: 2000 });
       }

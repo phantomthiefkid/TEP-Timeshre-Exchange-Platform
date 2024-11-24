@@ -17,7 +17,7 @@ const CreateResortAmenity = ({ onUpdateData, onNext, onBack, formData }) => {
 
       // Clear the corresponding input field based on type
       if (type === 'AMENITIES') setOnSiteFeature('');
-      else if (type === 'NEARBY ATTRACTIONS') setNearbyAttraction('');
+      else if (type === 'NEARBY_ATTRACTIONS') setNearbyAttraction('');
       else if (type === 'POLICY') setPolicy('');
     }
   };
@@ -114,7 +114,7 @@ const CreateResortAmenity = ({ onUpdateData, onNext, onBack, formData }) => {
           <h3 className="text-lg font-semibold text-gray-800">Các điểm tham quan lân cận</h3>
           <div className="grid grid-cols-6 py-4 gap-6">
             {/* Render amenities by type */}
-            {renderAmenitiesByType('NEARBY ATTRACTIONS')}
+            {renderAmenitiesByType('NEARBY_ATTRACTIONS')}
 
             {/* Select and Add Button */}
             <div className="col-span-2 flex items-center space-x-4">
@@ -138,7 +138,7 @@ const CreateResortAmenity = ({ onUpdateData, onNext, onBack, formData }) => {
 
               <button
                 type="button"
-                onClick={() => handleAddAmenity(nearbyAttraction, 'NEARBY ATTRACTIONS')}
+                onClick={() => handleAddAmenity(nearbyAttraction, 'NEARBY_ATTRACTIONS')}
                 className="flex items-center justify-center bg-gradient-to-r from-sky-500 to-sky-400 hover:bg-sky-600 text-white font-semibold py-2 px-6 rounded-full shadow-lg transition-all duration-300 transform hover:scale-105"
               >
                 <PlusCircleIcon color="#FFFFFF" className="h-6 w-6" />

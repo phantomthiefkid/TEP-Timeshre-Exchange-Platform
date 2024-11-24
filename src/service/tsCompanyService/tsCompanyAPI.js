@@ -86,6 +86,16 @@ const updateResortUnitType = async (data, unitTypeId) => {
   }
 };
 
+const deactiveUnitType = async (unitTypeId) => {
+  try {
+    return await axiosConfig.put(
+      `timeshare-company/resort/unit-type/${unitTypeId}/deactivate`
+    );
+  } catch (error) {
+    throw error;
+  }
+};
+
 const getTimeshareCompanyById = async (tsId = "") => {
   try {
     return await axiosConfig.get(`admin/timeshare-company/${tsId}`, {});
@@ -129,6 +139,51 @@ const updateProfileTsCompany = async (data) => {
   }
 };
 
+const getTotalMoney = async () => {
+  try {
+    return await axiosConfig.get(`timeshare-company/total-money`);
+  } catch (error) {
+    return error;
+  }
+};
+
+const getTotalResort = async () => {
+  try {
+    return await axiosConfig.get(`timeshare-company/total-resorts`);
+  } catch (error) {
+    return error;
+  }
+};
+
+const getTotalStaff = async () => {
+  try {
+    return await axiosConfig.get(`timeshare-company/total-staffs`);
+  } catch (error) {
+    return error;
+  }
+};
+
+const getAllWalletTransactions = async (page, size) => {
+  try {
+    return await axiosConfig.get(`wallet/timeshare-company/wallet-transaction/money-received`, {
+      params: {
+        page,
+        size
+      }
+    });
+  } catch (error) {
+    return error;
+  }
+};
+
+const getRevenueTSC = async () => {
+  try {
+    return await axiosConfig.get(`timeshare-company/total-money/month`);
+  } catch (error) {
+    return error;
+  }
+};
+
 export {
   getAllResort,
   getAllTimeshareStaff,
@@ -143,4 +198,10 @@ export {
   getResortById,
   getProfileTsCompany,
   updateProfileTsCompany,
+  getTotalMoney,
+  getTotalResort,
+  getTotalStaff,
+  getAllWalletTransactions,
+  getRevenueTSC,
+  deactiveUnitType
 };

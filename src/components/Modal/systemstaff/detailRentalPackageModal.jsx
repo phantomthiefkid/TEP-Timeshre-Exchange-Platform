@@ -290,13 +290,13 @@ const DetaillRentalPackageModal = ({ isOpen, onClose, postingId, flag }) => {
                   </h2>
                   <div className="grid grid-cols-3 gap-4">
                     {postingId.resortAmenities
-                      .filter((amenity) => amenity.type === "1")
+                      .filter((amenity) => amenity.type === "AMENITIES")
                       .map((amenity) => (
                         <p
                           key={amenity.id}
                           className="text-medium flex gap-4  items-center before:content-[''] before:inline-block before:w-2 before:h-2 before:mr-2 before:bg-blue-500 before:rounded-full"
                         >
-                          <FaMapMarkerAlt className="mr-2 text-blue-500" />
+                         
                           {amenity.name}
                         </p>
                       ))}
@@ -309,7 +309,7 @@ const DetaillRentalPackageModal = ({ isOpen, onClose, postingId, flag }) => {
                   </h2>
                   <div className="grid grid-cols-3 gap-2">
                     {postingId.resortAmenities
-                      .filter((amenity) => amenity.type === "2")
+                      .filter((amenity) => amenity.type === "NEARBY_ATTRACTIONS")
                       .map((amenity) => (
                         <p
                           key={amenity.id}
@@ -326,7 +326,7 @@ const DetaillRentalPackageModal = ({ isOpen, onClose, postingId, flag }) => {
                   <div className="grid grid-cols-3 gap-2">
                     {postingId.resortAmenities
                       .filter(
-                        (amenity) => amenity.type !== "1" && amenity.type !== "2"
+                        (amenity) => amenity.type === "POLICY"
                       )
                       .map((amenity) => (
                         <p

@@ -99,7 +99,7 @@ const PostManagement = () => {
       case "PendingPricing":
         return {
           label: "Chờ định giá",
-          style: "bg-orange-100 text-orange-500",
+          style: "bg-yellow-200 text-orange-400",
           styleDot: "bg-orange-500"
         };
       case "Closed":
@@ -109,7 +109,7 @@ const PostManagement = () => {
         };
       case "Expired":
         return {
-          label: "Hết hạn", style: "bg-red-100 text-red-500",
+          label: "Hết hạn", style: "bg-gray-100 text-gray-500",
           styleDot: "bg-red-500"
         };
       case "RejectPrice":
@@ -119,7 +119,7 @@ const PostManagement = () => {
         };
       case "Completed":
         return {
-          label: "Đã thuê", style: "bg-blue-100 text-blue-500",
+          label: "Đã thuê", style: "bg-green-100 text-green-500",
           styleDot: "bg-blue-500"
         };
       default:
@@ -212,15 +212,15 @@ const PostManagement = () => {
         {/* Filter Buttons */}
         <div className="flex items-center py-4 space-x-4 mb-5">
           {[
-            { label: "Tất cả", status: null, color: "bg-gradient-to-r from-gray-300 to-gray-500" },
-            { label: "Đang chờ", status: "PendingApproval", color: "bg-gradient-to-r from-yellow-200 to-yellow-400" },
-            { label: "Đã thuê", status: "Completed", color: "bg-gradient-to-r from-green-200 to-green-400" },
+            { label: "Tất cả", status: null, color: "bg-gradient-to-r from-blue-400 to-blue-600" },
+            { label: "Đang chờ", status: "PendingApproval", color: "bg-gradient-to-r from-blue-200 to-blue-400" },
+            { label: "Đã thuê", status: "Completed", color: "bg-gradient-to-r from-green-300 to-green-400" },
             { label: "Chờ xác nhận giá", status: "AwaitingConfirmation", color: "bg-gradient-to-r from-orange-200 to-orange-400" },
-            { label: "Chờ định giá", status: "PendingPricing", color: "bg-gradient-to-r from-blue-200 to-blue-400" },
-            { label: "Từ chối giá", status: "RejectPrice", color: "bg-gradient-to-r from-pink-200 to-pink-400" },
-            { label: "Đã duyệt", status: "Processing", color: "bg-gradient-to-r from-purple-200 to-purple-400" },
+            { label: "Chờ định giá", status: "PendingPricing", color: "bg-gradient-to-r from-yellow-200 to-yellow-400" },
+            { label: "Từ chối giá", status: "RejectPrice", color: "bg-gradient-to-r from-red-200 to-red-400" },
+            { label: "Đã duyệt", status: "Processing", color: "bg-gradient-to-r from-green-300 to-green-400" },
             { label: "Từ chối", status: "Closed", color: "bg-gradient-to-r from-red-200 to-red-400" },
-            { label: "Hết hạn", status: "Expired", color: "bg-gradient-to-r from-indigo-200 to-indigo-400" },
+            { label: "Hết hạn", status: "Expired", color: "bg-gradient-to-r from-gray-200 to-gray-400" },
           ]
             .map(({ label, status, color }) => (
               <button

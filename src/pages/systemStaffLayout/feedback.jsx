@@ -76,46 +76,45 @@ const Feedback = () => {
           </div>
 
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-10 mt-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-6 bg-slate-50 px-4 py-8">
           {resorts && resorts.length > 0 ? (
             resorts.map((resort) => (
-              <Link to={`/systemstaff/feedbackdetail/${resort.id}`}>
-                <div
-                  key={resort.id}
-                  className="relative bg-white rounded-lg border border-gray-200 shadow-lg overflow-hidden transition-transform transform hover:scale-105 hover:shadow-xl max-w-sm"
-                >
-                  {/* Image with gradient overlay */}
-                  <div className="relative h-48">
+              <Link
+                to={`/systemstaff/feedbackdetail/${resort.id}`}
+                key={resort.id}
+                className="block"
+              >
+                <div className="relative bg-white rounded-lg shadow-md hover:shadow-lg transition-transform transform duration-300 hover:scale-105 overflow-hidden">
+                  {/* Resort Image */}
+                  <div className="relative h-56">
                     <img
                       src={resort.logo}
                       alt={resort.resortName}
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-cover rounded-t-lg"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-gray-900 to-transparent opacity-70"></div>
+                    <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-50"></div>
                   </div>
 
-                  {/* Content */}
-                  <div className="p-6">
-                    <div className="flex items-center justify-center text-xl font-bold text-gray-800 mb-2 space-x-2">
-                      <FaHotel className="text-gold-500" />
-                      <h2 className="truncate w-full text-center">{resort.resortName}</h2>
+                  {/* Resort Details */}
+                  <div className="p-4">
+                    {/* Resort Name */}
+                    <h3 className="text-lg font-semibold text-gray-800 truncate mb-2">
+                      {resort.resortName}
+                    </h3>
+
+                    {/* Address */}
+                    <div className="flex items-center text-sm text-gray-600 space-x-2">
+                      <FaMapMarkerAlt className="text-red-400" />
+                      <p className="truncate">{resort.address}</p>
                     </div>
 
-                    <div className="flex items-center justify-center text-gray-600 space-x-2 mb-4">
-                      <FaMapMarkerAlt className="text-red-500" />
-                      <p className="truncate w-full text-center">{resort.address}</p>
-                    </div>
-
-                    <button className="w-full mt-4 py-2 text-gray-900 font-semibold bg-gradient-to-r from-yellow-400 to-gold-500 rounded-full shadow-lg hover:from-yellow-500 hover:to-gold-600">
+                    {/* Button */}
+                    <button className="w-full mt-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-blue-400 to-blue-600 rounded-md shadow-md hover:from-blue-500 hover:to-blue-700 transition duration-200">
                       Xem đánh giá
                     </button>
-
                   </div>
-                </div></Link>
-
-
-
-
+                </div>
+              </Link>
             ))
           ) : (
             <div className="col-span-full text-center text-gray-500 mt-5">
@@ -123,6 +122,7 @@ const Feedback = () => {
             </div>
           )}
         </div>
+
         {
           resorts && resorts.length > 0 ? (
             <div className="flex items-center justify-center space-x-2 mt-5 w-full">
