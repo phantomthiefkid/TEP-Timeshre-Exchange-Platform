@@ -17,42 +17,51 @@ const rejectExchangeVerifyModal = ({ isOpen, onClose, onReject }) => {
   if (!isOpen) return null;
   return (
     <div
-      className="fixed inset-0 flex justify-center items-center"
+      className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center z-50"
+      onClick={onClose}
       style={{ zIndex: 10000 }}
     >
       <Toaster position="top-right" reverseOrder={false} />
       <div
-        className="fixed inset-0 bg-black opacity-50"
-        onClick={onClose}
-      ></div>
-      <div className="bg-white rounded-lg p-4 shadow-lg z-50 w-1/3">
-        <div className="flex flex-row justify-between">
-          <h2 className="text-lg font-bold mb-2">Lý do từ chối</h2>
-          <div
-            onClick={onClose}
-            className="text-gray-500 hover:text-zinc-300 focus:outline-none"
-          >
-            <FaXmark size={24} />
-          </div>
+        className="bg-white rounded-xl shadow-lg w-full max-w-4xl p-6 relative"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <button
+          className="absolute top-4 right-4 text-gray-600 hover:text-gray-800"
+          onClick={onClose}
+        >
+          <FaXmark size={24} />
+        </button>
+
+        <div className="flex justify-center mb-4">
+          <img
+            src="https://unwinds.s3.ap-southeast-2.amazonaws.com/1731986300333_logoTEPblack.png"
+            alt="System Logo"
+            className="h-16 w-auto"
+          />
         </div>
-        <textarea
-          value={reason}
-          onChange={(e) => setReason(e.target.value)}
-          placeholder="Vui lòng nhập lí do từ chối bài đăng..."
-          rows={7}
-          className="w-full border border-gray-300 rounded-lg p-2 mt-3"
-          style={{ resize: "none" }}
-        />
-        <div className="mt-4 flex justify-end">
-          <button
-            onClick={onClose}
-            className="mr-2 border border-gray-400 px-4 py-2 rounded-lg"
-          >
-            Hủy
-          </button>
+
+        <h2 className="text-2xl font-semibold text-gray-700 mb-4">
+          Lý do từ chối
+        </h2>
+        <p className="text-gray-600 mb-6">
+          Vui lòng nhập lý do từ chối dưới đây.
+        </p>
+
+        <div>
+          <textarea
+            className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:outline-none resize-none h-44"
+            placeholder="Vui lòng nhập lí do từ chối bài đăng..."
+            value={reason}
+            onChange={(e) => setReason(e.target.value)}
+          ></textarea>
+        </div>
+
+        <div className="flex justify-center mt-4">
           <button
             onClick={handleReject}
-            className="bg-red-500 text-white px-4 py-2 rounded-lg"
+            className="bg-red-500 px-6 py-2 rounded-lg text-white focus:outline-none hover:bg-red-600"
+            disabled={!reason.trim()}
           >
             Từ chối
           </button>

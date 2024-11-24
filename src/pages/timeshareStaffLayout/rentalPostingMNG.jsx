@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Toaster } from "react-hot-toast";
-import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import { FaChevronLeft, FaChevronRight, FaList } from "react-icons/fa";
 import { FaArrowsRotate, FaEllipsisVertical } from "react-icons/fa6";
 import DetailRentalPostingModal from "../../components/Modal/requestPostingModal/detailRentalPostingModal";
 import {
@@ -204,72 +204,81 @@ const RentalPostingMNG = () => {
         </table>
 
         {/* Pagination */}
-        <div className="flex justify-between items-center p-6">
-          <button
-            onClick={handlePreviousPage}
-            disabled={page === 0}
-            className="w-10 h-10 flex items-center justify-center rounded-full bg-white text-gray-500 hover:bg-blue-500 hover:text-white transition-colors duration-300"
-          >
-            <FaChevronLeft />
-          </button>
+        {allRentalPosts && allRentalPosts.length > 0 ? (
+          <div className="flex justify-between items-center p-6">
+            <button
+              onClick={handlePreviousPage}
+              disabled={page === 0}
+              className="w-10 h-10 flex items-center justify-center rounded-full bg-white text-gray-500 hover:bg-blue-500 hover:text-white transition-colors duration-300"
+            >
+              <FaChevronLeft />
+            </button>
 
-          <div className="flex space-x-2 bg-white px-2 py-1">
-            {page > 2 && (
-              <>
-                <button
-                  onClick={() => setPage(0)}
-                  className="w-10 h-10 flex items-center justify-center rounded-full text-gray-500 hover:text-blue-500"
-                >
-                  1
-                </button>
-                <span className="flex items-center justify-center text-gray-500">
-                  ...
-                </span>
-              </>
-            )}
-
-            {Array.from({ length: totalPages }, (_, index) => {
-              if (index >= page - 2 && index <= page + 2) {
-                return (
+            <div className="flex space-x-2 bg-white px-2 py-1">
+              {page > 2 && (
+                <>
                   <button
-                    key={index}
-                    onClick={() => setPage(index)}
-                    className={`w-10 h-10 flex items-center justify-center rounded-xl ${
-                      index === page
-                        ? "bg-blue-500 text-white shadow-lg font-semibold"
-                        : "text-gray-500 hover:text-blue-500 hover:font-semibold"
-                    }`}
+                    onClick={() => setPage(0)}
+                    className="w-10 h-10 flex items-center justify-center rounded-full text-gray-500 hover:text-blue-500"
                   >
-                    {index + 1}
+                    1
                   </button>
-                );
-              }
-              return null;
-            })}
+                  <span className="flex items-center justify-center text-gray-500">
+                    ...
+                  </span>
+                </>
+              )}
 
-            {page < totalPages - 3 && (
-              <>
-                <span className="flex items-center justify-center text-gray-500">
-                  ...
-                </span>
-                <button
-                  onClick={() => setPage(totalPages - 1)}
-                  className="w-10 h-10 flex items-center justify-center rounded-full text-gray-500 hover:text-blue-500"
-                >
-                  {totalPages}
-                </button>
-              </>
-            )}
+              {Array.from({ length: totalPages }, (_, index) => {
+                if (index >= page - 2 && index <= page + 2) {
+                  return (
+                    <button
+                      key={index}
+                      onClick={() => setPage(index)}
+                      className={`w-10 h-10 flex items-center justify-center rounded-xl ${
+                        index === page
+                          ? "bg-blue-500 text-white shadow-lg font-semibold"
+                          : "text-gray-500 hover:text-blue-500 hover:font-semibold"
+                      }`}
+                    >
+                      {index + 1}
+                    </button>
+                  );
+                }
+                return null;
+              })}
+
+              {page < totalPages - 3 && (
+                <>
+                  <span className="flex items-center justify-center text-gray-500">
+                    ...
+                  </span>
+                  <button
+                    onClick={() => setPage(totalPages - 1)}
+                    className="w-10 h-10 flex items-center justify-center rounded-full text-gray-500 hover:text-blue-500"
+                  >
+                    {totalPages}
+                  </button>
+                </>
+              )}
+            </div>
+
+            <button
+              onClick={handleNextPage}
+              disabled={page === totalPages - 1}
+              className="w-10 h-10 flex items-center justify-center rounded-full bg-white text-gray-500 hover:bg-blue-500 hover:text-white transition-colors duration-300"
+            >
+              <FaChevronRight />
+            </button>
           </div>
-
-          <button
-            onClick={handleNextPage}
-            disabled={page === totalPages - 1}
-            className="w-10 h-10 flex items-center justify-center rounded-full bg-white text-gray-500 hover:bg-blue-500 hover:text-white transition-colors duration-300"
-          >
-            <FaChevronRight />
-          </button>
-        </div>
+        ) : (
+          <div className="flex flex-col items-center justify-center mt-5 w-full min-h-[370px] border-2 border-dashed border-gray-300 rounded-lg bg-gradient-to-b from-gray-50 to-gray-100">
+            <FaList className="text-gray-400 text-6xl animate-pulse mb-4" />
+            <span className="text-gray-600 text-lg font-medium">
+              Không có bài đăng cho thuê nào có sẵn
+            </span>
+          </div>
+        )}
       </div>
 
       {/* Detail Modal */}
