@@ -286,7 +286,7 @@ const ResortDetail = () => {
                         </h3>
                         <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-6">
                             {resort && resort.resortAmenityList
-                                .filter((amenity) => amenity.type === "NEARBY ATTRACTIONS")
+                                .filter((amenity) => amenity.type === "NEARBY_ATTRACTIONS")
                                 .map((amenity, index) => (
                                     <li
                                         key={index}

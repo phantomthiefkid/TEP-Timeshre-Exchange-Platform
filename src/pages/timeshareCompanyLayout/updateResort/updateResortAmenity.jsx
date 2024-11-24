@@ -70,7 +70,7 @@ const UpdateResortAmenity = () => {
     if (name) {
       setAmenities((prev) => [...prev, { name, type }]);
       if (type === 'AMENITIES') setOnSiteFeature('');
-      if (type === 'NEARBY ATTRACTIONS') setNearbyAttraction('');
+      if (type === 'NEARBY_ATTRACTIONS') setNearbyAttraction('');
       if (type === 'POLICY') setPolicy('');
     }
   };
@@ -174,7 +174,7 @@ const UpdateResortAmenity = () => {
         <div className='border-b pb-4 p-4 py-6'>
           <h2 className='text-2xl font-semibold mb-3 text-gray-600'>Các điểm tham quan lân cận</h2>
           <div className='grid grid-cols-6 gap-4 px-6 '>
-            {renderAmenitiesByType("NEARBY ATTRACTIONS")}
+            {renderAmenitiesByType("NEARBY_ATTRACTIONS")}
             <div className="col-span-2 flex items-center space-x-4">
               <select
                 className="w-full max-w-md border border-gray-300 ease-in-out hover:border-sky-500 focus-within:border-sky-500 rounded-full px-4 py-2 text-gray-700 transition duration-200"
@@ -196,7 +196,7 @@ const UpdateResortAmenity = () => {
               </select>
               <button
                 type="button"
-                onClick={() => handleAddAmenity(nearbyAttraction, "NEARBY ATTRACTIONS")}
+                onClick={() => handleAddAmenity(nearbyAttraction, "NEARBY_ATTRACTIONS")}
                 className="flex items-center justify-center bg-gradient-to-r from-sky-500 to-sky-400 hover:bg-sky-600 text-white font-semibold py-2 px-6 rounded-full shadow-lg transition-all duration-300 transform hover:scale-105"
               >
                 <PlusCircleIcon color="#FFFFFF" className="h-6 w-6" />

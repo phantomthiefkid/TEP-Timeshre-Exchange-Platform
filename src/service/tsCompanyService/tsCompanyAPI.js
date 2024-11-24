@@ -129,6 +129,51 @@ const updateProfileTsCompany = async (data) => {
   }
 };
 
+const getTotalMoney = async () => {
+  try {
+    return await axiosConfig.get(`timeshare-company/total-money`);
+  } catch (error) {
+    return error;
+  }
+};
+
+const getTotalResort = async () => {
+  try {
+    return await axiosConfig.get(`timeshare-company/total-resorts`);
+  } catch (error) {
+    return error;
+  }
+};
+
+const getTotalStaff = async () => {
+  try {
+    return await axiosConfig.get(`timeshare-company/total-staffs`);
+  } catch (error) {
+    return error;
+  }
+};
+
+const getAllWalletTransactions = async (page, size) => {
+  try {
+    return await axiosConfig.get(`wallet/timeshare-company/wallet-transaction/money-received`, {
+      params: {
+        page,
+        size
+      }
+    });
+  } catch (error) {
+    return error;
+  }
+};
+
+const getRevenueTSC = async () => {
+  try {
+    return await axiosConfig.get(`timeshare-company/total-money/month`);
+  } catch (error) {
+    return error;
+  }
+};
+
 export {
   getAllResort,
   getAllTimeshareStaff,
@@ -143,4 +188,9 @@ export {
   getResortById,
   getProfileTsCompany,
   updateProfileTsCompany,
+  getTotalMoney,
+  getTotalResort,
+  getTotalStaff,
+  getAllWalletTransactions,
+  getRevenueTSC
 };

@@ -3,12 +3,14 @@ import { GlobeIcon, BellIcon } from '@heroicons/react/solid';
 import { jwtDecode } from 'jwt-decode';
 import { FaBell, FaCog } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
+import { getProfileTsCompany } from '../../service/tsCompanyService/tsCompanyAPI';
 const Header = () => {
   const [info, setInfo] = useState()
   const token = localStorage.getItem("token")
   const decodeToken = jwtDecode(token);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
+  const [tsc, setTsc] = useState({});
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -18,6 +20,25 @@ const Header = () => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        if (decodeToken && decodeToken.RoleName === "TIMESHARECOMPANY") {
+          let data = await getProfileTsCompany();
+          if (data.status === 200) {
+            setTsc(data.data);
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching profile:", error);
+      }
+    };
+
+    fetchProfile();
+  }, [decodeToken]); 
+
+
   return (
     <>
       <header className="flex items-center justify-between p-6 w-full h-[7rem] bg-gradient-to-r from-white to-blue-50 border-b-2 ">
@@ -54,7 +75,7 @@ const Header = () => {
               >
                 <ul>
                   <Link to={`/timesharecompany/profiletscompany`}>
-                    <li
+                    <li onClick={() => setDropdownOpen(false)}
                       className="px-4 py-2 text-gray-700 hover:bg-blue-100 cursor-pointer"
                     >
                       Chỉnh sửa hồ sơ công ty
@@ -72,9 +93,9 @@ const Header = () => {
           {/* Profile Section */}
           <div className="flex items-center space-x-4  p-4 rounded-lg">
             <img
-              src="https://scontent.fsgn2-6.fna.fbcdn.net/v/t39.30808-6/404249021_917204383097753_8133391908993607780_n.jpg?_nc_cat=111&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=d0IUGZEqzCQQ7kNvgF4nPMZ&_nc_zt=23&_nc_ht=scontent.fsgn2-6.fna&_nc_gid=AaYNOwW4xElRCgCOqM5cxeV&oh=00_AYAMM6wsRoQVYOLV_ss-US9t6bFdz5rSEjU935t2p6wohw&oe=67282FBC"
+              src={tsc && tsc.logo || "https://cdn3.iconfinder.com/data/icons/30-office-business-sticker-icons-part-1/202/Businesman-512.png"}
               alt="Admin Avatar"
-              className="w-12 h-12 rounded-full border-4 border-blue-300 shadow-sm"
+              className="w-12 h-12 rounded-full border-2 border-blue-300 shadow-sm"
             />
             <div>
               <h2 className="font-bold text-gray-700">{decodeToken ? decodeToken.RoleName : ""}</h2>

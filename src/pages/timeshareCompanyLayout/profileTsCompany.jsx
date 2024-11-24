@@ -8,6 +8,7 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import { toast, Toaster } from "react-hot-toast";
 import { InformationCircleIcon, LocationMarkerIcon, PhoneIcon, XIcon } from "@heroicons/react/solid";
+import SpinnerWaiting from "../../components/LoadingComponent/spinnerWaiting";
 
 const ProfileTsCompany = () => {
     const [profile, setProfile] = useState({});
@@ -23,6 +24,7 @@ const ProfileTsCompany = () => {
     const [openSwipper, setOpenSwipper] = useState(false);
     const [selectedImage, setSelectedImage] = useState(0);
     const [isLoading, setIsLoading] = useState(false);
+    const [waitingProfile, setWaitingProfile] = useState(true);
     const fetchProfileTsCompany = async () => {
         try {
             let data = await getProfileTsCompany();
@@ -53,6 +55,7 @@ const ProfileTsCompany = () => {
                     contact,
                     imageUrls,
                 });
+                setWaitingProfile(false)
             }
         } catch (error) {
             throw error;
@@ -162,6 +165,10 @@ const ProfileTsCompany = () => {
         setLogo(originalLogo);
         setImageUrls(imageUrlsOrigin)
     };
+
+    if (waitingProfile) {
+        return <SpinnerWaiting/>
+    }
 
     return (
         <div className="max-w-6xl mx-auto">

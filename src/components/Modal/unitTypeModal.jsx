@@ -146,11 +146,11 @@ const UnitTypeModal = ({ isOpen, onClose, onAddRoomType, selectedUnitType, onUpd
         return (
             <div>
                 {amenities.length > 0 ? (
-                    <div className="grid grid-cols-5 gap-4">
+                    <div className="grid grid-cols-3 gap-4">
                         {amenities.map((amenity, index) => (
                             <div
                                 key={`${type}-${index}`}
-                                className="relative bg-gray-100 shadow-md flex justify-between items-center rounded-full border p-2 transition-colors duration-200 ease-in-out hover:border-sky-500"
+                                className="relative bg-gray-100 shadow-md p-1 flex justify-between items-center rounded-full border-2 transition-colors duration-200 ease-in-out hover:border-sky-500"
                             >
                                 <span className="text-gray-500 font-normal">{amenity.name}</span>
                                 <button
@@ -174,7 +174,7 @@ const UnitTypeModal = ({ isOpen, onClose, onAddRoomType, selectedUnitType, onUpd
 
 
     if (!isOpen) return null;
-    console.log(formData)
+    
     return (
         <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center z-50">
             <div className="bg-white rounded-xl shadow-lg w-full max-w-7xl">
@@ -191,11 +191,11 @@ const UnitTypeModal = ({ isOpen, onClose, onAddRoomType, selectedUnitType, onUpd
                     {/* Content */}
                     <div className="relative z-10 text-center">
                         <h3 className="text-2xl font-extrabold tracking-wider uppercase font-serif mb-2">
-                            Cập nhật loại phòng
+                            Thêm loại phòng
                         </h3>
                         <div className="mt-1">
                             <p className="text-lg font-medium italic text-blue-100">
-                                Cập nhật thông tin chi tiết để hoàn thiện danh mục
+                               Thông tin chi tiết của phòng
                             </p>
                         </div>
                     </div>
@@ -277,7 +277,7 @@ const UnitTypeModal = ({ isOpen, onClose, onAddRoomType, selectedUnitType, onUpd
                                         </div>
                                     </div>
                                     <div className="flex flex-col col-span-2">
-                                        <label className="font-semibold text-md mb-2">Buildings Option:</label>
+                                        <label className="font-semibold text-md mb-2">Mã phòng (nếu có):</label>
                                         <input
                                             type="text"
                                             name="buildingsOption"
@@ -305,26 +305,26 @@ const UnitTypeModal = ({ isOpen, onClose, onAddRoomType, selectedUnitType, onUpd
                                     />
                                 </div>
                                 <div className="flex flex-col">
-                                    <label className="font-semibold text-md mb-2">View:</label>
+                                    <label className="font-semibold text-md mb-2">Hướng phòng:</label>
                                     <input
                                         type="text"
                                         name="view"
                                         className="border-b bg-slate-100 p-4 focus:outline-none focus:border-b-2 focus:border-blue-500 transition-all"
                                         value={formData.view}
                                         onChange={handleChange}
-                                        placeholder="View"
+                                        placeholder="Nhập hướng phòng"
                                     />
 
                                 </div>
                                 <div className="flex flex-col">
-                                    <label className="font-semibold text-md mb-2">Khu vực:</label>
+                                    <label className="font-semibold text-md mb-2">Diện tích:</label>
                                     <input
                                         type="text"
                                         name="area"
                                         className="border-b bg-slate-100 p-4 focus:outline-none focus:border-b-2 focus:border-blue-500 transition-all"
                                         value={formData.area}
                                         onChange={handleChange}
-                                        placeholder="Nhập khu vực"
+                                        placeholder="Nhập diện tích:"
                                     />
 
                                 </div>
