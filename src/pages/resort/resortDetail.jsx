@@ -204,13 +204,13 @@ const ResortDetail = () => {
                     {resort && resort.unitTypeDtoList && resort.unitTypeDtoList.map((item, index) => (
                         <div
                             key={index}
-                            className="grid grid-cols-2 gap-6 border rounded-lg bg-white hover:bg-gray-50 px-8 py-6 shadow-md transition-transform transform hover:scale-105"
+                            className="grid grid-cols-2 gap-6 border rounded-lg bg-white hover:bg-gray-100 px-8 py-6 shadow-md hover:shadow-lg transition-transform transform"
                         >
                             {/* Thông Tin Phòng */}
                             <div className="flex flex-col md:flex-row items-start gap-4">
                                 <img
                                     src={item.photos}
-                                    className="w-full md:w-48 h-44 object-cover rounded-lg shadow-lg"
+                                    className="w-full md:w-48 h-44 object-cover shadow-lg"
                                     alt={`Ảnh của ${item.title}`}
                                 />
                                 <div className="space-y-3">
@@ -236,8 +236,8 @@ const ResortDetail = () => {
                                         <span>Số người: <strong>{item.sleeps}</strong></span>
                                     </div>
                                 </div>
-                                <div>Phòng tắm: <strong>{item.bathrooms}</strong></div>
-                                <div>Nhà bếp: <strong>{item.kitchen}</strong></div>
+                                <div className='text-gray-600'>Phòng tắm: <strong>{item.bathrooms}</strong></div>
+                                <div className='text-gray-600'>Nhà bếp: <strong>{item.kitchen}</strong></div>
                             </div>
                         </div>
                     ))}
@@ -282,7 +282,8 @@ const ResortDetail = () => {
                     {/* Các tiện nghi gần kề */}
                     <div className="py-10 px-8 bg-gray-50 rounded-lg shadow-md border">
                         <h3 className="text-3xl font-semibold text-indigo-600 mb-6 border-b-2 pb-2 border-indigo-400 inline-block">
-                            Các tiện nghi gần kề
+                            Các điểm tham quan gần đó
+
                         </h3>
                         <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-6">
                             {resort && resort.resortAmenityList
