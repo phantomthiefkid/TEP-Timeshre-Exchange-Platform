@@ -12,6 +12,8 @@ import {
   Legend,
   ArcElement,
 } from "chart.js";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 ChartJS.register(
   CategoryScale,
@@ -26,10 +28,12 @@ ChartJS.register(
 );
 
 const Dashboard = () => {
-  const [selectedDate, setSelectedDate] = useState(() => {
-    const today = new Date();
-    return today.toISOString().split("T")[0];
-  });
+  const today = new Date();
+  const defaultStartDate = new Date(today);
+  defaultStartDate.setDate(today.getDate() - 5);
+
+  const [startDate, setStartDate] = useState(defaultStartDate);
+  const [endDate, setEndDate] = useState(today);
 
   const ProgressBar = ({ progress }) => (
     <div className="w-full bg-gray-200 rounded-full h-2.5">
@@ -40,7 +44,7 @@ const Dashboard = () => {
     </div>
   );
 
-  const [projects] = useState([
+  const [transaction] = useState([
     {
       project: "Website Redesign",
       progress: 80,
@@ -124,15 +128,71 @@ const Dashboard = () => {
     ],
   };
 
-  // Data for Column Chart (Revenue by filtered months)
+  const generateSampleProjects = () => {
+    const pkgs = ["pkg1", "pkg2", "pkg3"];
+    const projects = [];
+    for (let i = 1; i <= 20; i++) {
+      const randomDaysAgo = Math.floor(Math.random() * 30); // Random days between 0-30
+      const dueDate = new Date();
+      dueDate.setDate(today.getDate() - randomDaysAgo);
+
+      projects.push({
+        project: `Project ${i}`,
+        progress: Math.floor(Math.random() * 100), // Random progress 0-100
+        dueDate: dueDate.toISOString().split("T")[0],
+        pkg: pkgs[Math.floor(Math.random() * pkgs.length)], // Random package
+      });
+    }
+    return projects;
+  };
+
+  const [projects] = useState(generateSampleProjects());
+
+  // Format date to dd/mm/yyyy
+  const formatDate = (date) => {
+    const d = new Date(date);
+    const day = d.getDate().toString().padStart(2, "0");
+    const month = (d.getMonth() + 1).toString().padStart(2, "0");
+    const year = d.getFullYear();
+    return `${day}/${month}/${year}`;
+  };
+
+  // Filter projects based on date range
+  const filteredProjects = projects.filter((project) => {
+    const projectDate = new Date(project.dueDate);
+    return projectDate >= startDate && projectDate <= endDate;
+  });
+
+  // Group data by date and package
+  const groupedData = filteredProjects.reduce((acc, project) => {
+    const date = formatDate(project.dueDate);
+    if (!acc[date]) acc[date] = { pkg1: 0, pkg2: 0, pkg3: 0 };
+    acc[date][project.pkg] += 1;
+    return acc;
+  }, {});
+
   const barChartData = {
-    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"], // Example static data
+    labels: Object.keys(groupedData),
     datasets: [
       {
-        label: "Revenue",
-        data: [1000, 1500, 2000, 1800, 2200, 2400],
-        backgroundColor: "rgba(54, 162, 235, 0.5)",
-        borderColor: "rgba(54, 162, 235, 1)",
+        label: "Pkg1",
+        data: Object.values(groupedData).map((data) => data.pkg1),
+        backgroundColor: "rgba(75, 192, 192, 0.5)",
+        borderColor: "rgba(75, 192, 192, 1)",
+        borderWidth: 1,
+      },
+      {
+        label: "Pkg2",
+        data: Object.values(groupedData).map((data) => data.pkg2),
+        backgroundColor: "rgba(255, 206, 86, 0.5)",
+        borderColor: "rgba(255, 206, 86, 1)",
+        borderWidth: 1,
+      },
+      {
+        label: "Pkg3",
+        data: Object.values(groupedData).map((data) => data.pkg3),
+        backgroundColor: "rgba(255, 99, 132, 0.5)",
+        borderColor: "rgba(255, 99, 132, 1)",
         borderWidth: 1,
       },
     ],
@@ -227,14 +287,30 @@ const Dashboard = () => {
         <div className="col-span-2 bg-white p-6 rounded-lg shadow">
           <div className="flex flex-row justify-between">
             <h3 className="text-lg font-semibold mb-4">Thống kê bài đăng</h3>
+            {/* Date Filter */}
+            <div className="flex space-x-2 items-center">
+              <DatePicker
+                selected={startDate}
+                onChange={(date) => setStartDate(date)}
+                dateFormat="dd/MM/yyyy"
+                className="px-3 py-2 border rounded"
+              />
+              <span className="text-gray-500">to</span>
+              <DatePicker
+                selected={endDate}
+                onChange={(date) => setEndDate(date)}
+                dateFormat="dd/MM/yyyy"
+                className="px-3 py-2 border rounded"
+              />
+            </div>
           </div>
-          <div className="h-48">
+          <div className="h-auto">
             <Bar data={barChartData} />
           </div>
         </div>
         <div className="bg-white p-6 rounded-lg shadow">
           <h3 className="text-lg font-semibold mb-4">Thống kê gói</h3>
-          <div className="h-48">
+          <div className="h-auto">
             <Pie data={pieChartData} />
           </div>
         </div>
@@ -274,7 +350,7 @@ const Dashboard = () => {
             </tr>
           </thead>
           <tbody>
-            {projects.map(
+            {transaction.map(
               ({ project, logo, progress, dueDate, pkg }, index) => (
                 <tr key={index} className="bg-white border-b">
                   <td className="px-6 py-4 whitespace-nowrap flex items-center">
