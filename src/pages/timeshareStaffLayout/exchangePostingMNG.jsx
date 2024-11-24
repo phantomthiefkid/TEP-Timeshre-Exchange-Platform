@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Toaster } from "react-hot-toast";
-import { FaChevronLeft, FaChevronRight, FaDotCircle } from "react-icons/fa";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { FaArrowsRotate, FaEllipsisVertical } from "react-icons/fa6";
 import SpinnerWaiting from "../../components/LoadingComponent/spinnerWaiting";
 import {

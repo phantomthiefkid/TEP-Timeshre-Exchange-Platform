@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import bgSignIn from "../../assets/bgSignInSignUp.png";
-import logoTEP from "../../assets/logoTEPblack.png";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import {
@@ -98,7 +97,7 @@ const SignInStaff = () => {
             <a href="/">
               <img
                 className="w-[200px] lg:w-[205px] mx-auto"
-                src={logoTEP}
+                src="https://unwinds.s3.ap-southeast-2.amazonaws.com/1731986300333_logoTEPblack.png"
                 alt="Logo"
               />
             </a>

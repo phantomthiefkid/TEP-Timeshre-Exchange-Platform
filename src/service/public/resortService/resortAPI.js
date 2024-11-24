@@ -30,11 +30,7 @@ const getDetailUnitType = async (unitTypeId) => {
   }
 };
 
-const getAllTimeshareCompany = async (
-  pageNo = 0,
-  pageSize = 20,
-  tsName
-) => {
+const getAllTimeshareCompany = async (pageNo = 0, pageSize = 20, tsName) => {
   try {
     return await axios.get(`${baseURL}public/timeshare-company`, {
       params: {
@@ -44,7 +40,7 @@ const getAllTimeshareCompany = async (
       },
     });
   } catch (error) {
-    console.log(error)
+    console.log(error);
     return error;
   }
 };
@@ -63,14 +59,19 @@ const getAllResort = async (pageNo = 0, pageSize = 20, resortName) => {
   }
 };
 
-const getAllResortByTsId = async (pageNo = 0, pageSize = 20, resortName, tsId) => {
+const getAllResortByTsId = async (
+  pageNo = 0,
+  pageSize = 20,
+  resortName,
+  tsId
+) => {
   try {
     return await axios.get(`${baseURL}public/resort`, {
       params: {
         pageNo,
         pageSize,
         resortName,
-        tsId
+        tsId,
       },
     });
   } catch (error) {
@@ -79,10 +80,17 @@ const getAllResortByTsId = async (pageNo = 0, pageSize = 20, resortName, tsId) =
 };
 
 const getTimeshareCompanyDetail = async (tsId) => {
-  
   try {
     return await axios.get(`${baseURL}public/timeshare-company/${tsId} 
 `);
+  } catch (error) {
+    return error;
+  }
+};
+
+const getUnitTypeByResortId = async (resortId) => {
+  try {
+    return await axios.get(`${baseURL}public/unit-types/resort/${resortId}`);
   } catch (error) {
     return error;
   }
@@ -95,5 +103,6 @@ export {
   getTimeshareCompanyDetail,
   getDetailUnitType,
   getAllResort,
-  getAllResortByTsId
+  getAllResortByTsId,
+  getUnitTypeByResortId,
 };
