@@ -36,7 +36,6 @@ const createTimeshareStaff = async (data) => {
   try {
     return await axiosConfig.post(`timeshare-company/staff`, data);
   } catch (error) {
-    console.error("Post ts staff error:", error);
     return error;
   }
 };
@@ -68,7 +67,7 @@ const getResortById = async (id) => {
 
 const updateResortBasic = async (data, resortId) => {
   try {
-    console.log(data, "api")
+    console.log(data, "api");
     return await axiosConfig.put(`timeshare-company/resort/${resortId}`, data);
   } catch (error) {
     throw error;
@@ -82,7 +81,7 @@ const updateResortUnitType = async (data, unitTypeId) => {
       data
     );
   } catch (error) {
-    console.log(error)
+    console.log(error);
     throw error;
   }
 };
@@ -130,7 +129,6 @@ const updateProfileTsCompany = async (data) => {
   }
 };
 
-
 export {
   getAllResort,
   getAllTimeshareStaff,
@@ -144,5 +142,5 @@ export {
   getTimeshareCompanyById,
   getResortById,
   getProfileTsCompany,
-  updateProfileTsCompany
+  updateProfileTsCompany,
 };
