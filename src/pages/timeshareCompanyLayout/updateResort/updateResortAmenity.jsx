@@ -6,38 +6,32 @@ import { toast, Toaster } from 'react-hot-toast';
 import Loading from '../../../components/LoadingComponent/loading';
 import SpinnerWaiting from '../../../components/LoadingComponent/spinnerWaiting';
 import { FaArrowRight, FaSave, FaSpinner } from 'react-icons/fa';
-import { data } from 'autoprefixer';
 
-const UpdateResortAmenity = () => {
+
+const UpdateResortAmenity = ({ resortSelect, flag }) => {
   const { id } = useParams();
-  const [resort, setResort] = useState({
-    resortName: '',
-    logo: '',
-    minPrice: 0,
-    maxPrice: 0,
-    status: '',
-    address: '',
-    timeshareCompanyId: 0,
-    description: '',
-    resortAmenityList: []
-  });
-  const [flag, setFlag] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [resort, setResort] = useState(resortSelect);
+  // const [flag, setFlag] = useState(false);
+
   const [amenities, setAmenities] = useState([]);
   const [onSiteFeature, setOnSiteFeature] = useState('');
   const [nearbyAttraction, setNearbyAttraction] = useState('');
   const [policy, setPolicy] = useState('');
   const [isSpinner, setIsSpinner] = useState(false);
-  const getResortDetail = async () => {
-    const data = await getResortById(id);
-    if (data.status === 200) {
-      const newResort = data.data;
-      setResort(newResort);
-      setAmenities(newResort.resortAmenityList); // Initialize amenities from resort data
-      setLoading(false);
-      console.log(newResort, "Last check")
-    }
-  };
+  // const getResortDetail = async () => {
+  //   const data = await getResortById(id);
+  //   if (data.status === 200) {
+  //     const newResort = data.data;
+  //     setResort(resortSelect);
+  //     setAmenities(resortSelect.resortAmenityList); // Initialize amenities from resort data
+
+  //     console.log(resortSelect, "Last check")
+  //   }
+  // };
+  useEffect(() => {
+    setResort(resortSelect)
+    setAmenities(resortSelect.resortAmenityList)
+  }, [resortSelect])
 
   // const getResortDetail = async () => {
   //   try {
@@ -62,9 +56,9 @@ const UpdateResortAmenity = () => {
   // };
 
 
-  useEffect(() => {
-    getResortDetail();
-  }, [id, flag]);
+  // useEffect(() => {
+  //   getResortDetail();
+  // }, [id, flag]);
 
   const handleAddAmenity = (name, type) => {
     if (name) {
@@ -80,7 +74,7 @@ const UpdateResortAmenity = () => {
   };
 
   const renderAmenitiesByType = (type) => {
-    return amenities
+    return amenities && amenities
       .filter((amenity) => amenity.type === type)
       .map((amenity) => (
         <div key={amenity.name} className="relative flex justify-center items-center rounded-full border bg-gray-100 shadow-md mt-2 p-2 transition-colors duration-200 ease-in-out hover:border-sky-500 focus-within:border-sky-500">
@@ -115,6 +109,7 @@ const UpdateResortAmenity = () => {
       await updateResortBasic(updatedResort, id).then(() => {
         toast.success("Cập nhật thành công!!!", { duration: 3000 })
         setIsSpinner(false)
+        flag()
       })
     } catch (error) {
       toast.error("Cập nhật thất bại! Vui lòng thử lại.", { duration: 3000 });
@@ -124,10 +119,7 @@ const UpdateResortAmenity = () => {
 
   };
 
-  if (loading) {
-    return (<SpinnerWaiting />)
-  }
- 
+
   return (
     <div className='border rounded shadow-md bg-white p-6'>
       <Toaster position="top-center" reverseOrder={false} />
