@@ -88,8 +88,8 @@ const detailExchangePostingModal = ({ isOpen, onClose, postingId, onSave }) => {
         priceValuation: 0,
         unitTypeId: selectedUnitType?.id || 0,
       });
-      onSave();
       toast.success("Chấp nhận bài đăng", { duration: 2000 });
+      onSave();
       handleOnClose();
     } catch (error) {
       toast.error("Đã có lỗi xảy ra", { duration: 2000 });
@@ -117,9 +117,7 @@ const detailExchangePostingModal = ({ isOpen, onClose, postingId, onSave }) => {
   };
 
   const toggleEditAmenity = () => {
-    setIsEditRoomAmenity((prev) => {
-      return !prev;
-    });
+    setIsEditRoomAmenity((prev) => !prev);
   };
 
   const handleAddAmenity = (type) => {
@@ -140,15 +138,13 @@ const detailExchangePostingModal = ({ isOpen, onClose, postingId, onSave }) => {
         updatedAmenities
       );
 
-      if (response.success) {
-        console.log("Amenities updated successfully:", response.data);
+      if (response.status === 200) {
         toast.success("Tiện ích đã được cập nhật!");
       } else {
         toast.error("Cập nhật tiện ích thất bại.");
       }
     } catch (error) {
-      console.error("Error updating amenities:", error);
-      toast.error("Có lỗi xảy ra khi cập nhật tiện ích.");
+      console.error("Update Room Amenity Error:", error);
     }
   };
 
@@ -161,7 +157,7 @@ const detailExchangePostingModal = ({ isOpen, onClose, postingId, onSave }) => {
         }
         className="col-span-2 border border-gray-300 rounded px-3 py-2"
       >
-        <option value="">Chọn tiện ích...</option>
+        <option value="">Chọn tiện ích</option>
         {amenityOptions[type].map((amenity) => (
           <option key={amenity} value={amenity}>
             {amenity}
@@ -187,7 +183,10 @@ const detailExchangePostingModal = ({ isOpen, onClose, postingId, onSave }) => {
     } else {
       setTimeout(() => setIsVisible(false), 300);
     }
-    return () => setUnitTypes([]);
+    return () => {
+      setUnitTypes([]);
+      setUpdatedAmenities([]);
+    };
   }, [isOpen, postingId]);
 
   if (!isVisible) return null;
@@ -394,108 +393,126 @@ const detailExchangePostingModal = ({ isOpen, onClose, postingId, onSave }) => {
                   <h2 className="text-2xl font-semibold mb-4">
                     Tiện ích và chính sách
                   </h2>
-                  <button
-                    className="text-gray-500 focus:outline-none flex flex-row items-center"
-                    onClick={() => toggleEditAmenity()}
-                  >
-                    {!isEditRoomAmenity ? (
-                      <div className="bg-white border-2 border-gray-300 rounded-xl p-2 hover:bg-gray-300 cursor-pointer flex flex-row">
-                        <FaEdit size={20} />
-                        <span className="ml-1">Chỉnh sửa</span>
-                      </div>
-                    ) : (
-                      <div>
-                        <button
-                          className="border border-red-500 text-red-500 px-4 py-2 rounded-xl mr-2 hover:bg-red-500 hover:text-white transition duration-150"
-                          onClick={() => setIsEditRoomAmenity(false)}
-                        >
-                          Hủy bỏ
-                        </button>
-                        <button
-                          className="bg-green-500 border-2 text-white p-2 rounded-xl hover:bg-green-600 cursor-pointer"
-                          onClick={() => handleUpdateAmenity()}
-                        >
-                          Hoàn tất
-                        </button>
-                      </div>
-                    )}
-                  </button>
+                  {postingId.roomAmenities &&
+                  postingId.roomAmenities.length > 0 ? (
+                    <button
+                      className="text-gray-500 focus:outline-none flex flex-row items-center"
+                      onClick={() => toggleEditAmenity()}
+                    >
+                      {!isEditRoomAmenity ? (
+                        <div className="bg-white border-2 border-gray-300 rounded-xl p-2 hover:bg-gray-300 cursor-pointer flex flex-row">
+                          <FaEdit size={20} />
+                          <span className="ml-1">Chỉnh sửa</span>
+                        </div>
+                      ) : (
+                        <div>
+                          <button
+                            className="border border-red-500 text-red-500 px-4 py-2 rounded-xl mr-2 hover:bg-red-500 hover:text-white transition duration-150"
+                            onClick={() => setIsEditRoomAmenity(false)}
+                          >
+                            Hủy bỏ
+                          </button>
+                          <button
+                            className="bg-green-500 border-2 text-white p-2 rounded-xl hover:bg-green-600 cursor-pointer"
+                            onClick={() => handleUpdateAmenity()}
+                          >
+                            Hoàn tất
+                          </button>
+                        </div>
+                      )}
+                    </button>
+                  ) : (
+                    <></>
+                  )}
                 </div>
-                <div className="space-y-4">
-                  {[
-                    ...new Set(updatedAmenities.map((amenity) => amenity.type)),
-                  ].map((type) => {
-                    const roomAmenitiesByType = updatedAmenities.filter(
-                      (amenity) => amenity.type === type
-                    );
-                    const label =
-                      {
-                        KITCHEN: "Tiện ích bếp",
-                        ENTERTAINMENT: "Tiện ích giải trí",
-                        FEATURES: "Đặc trưng phòng",
-                        POLICY: "Chính sách",
-                      }[type] || "Khác";
+                {/* handle change room amenity */}
+                {postingId.roomAmenities &&
+                postingId.roomAmenities.length > 0 ? (
+                  <div className="space-y-4">
+                    {[
+                      ...new Set(
+                        updatedAmenities.map((amenity) => amenity.type)
+                      ),
+                    ].map((type) => {
+                      const roomAmenitiesByType = updatedAmenities.filter(
+                        (amenity) => amenity.type === type
+                      );
+                      const label =
+                        {
+                          KITCHEN: "Tiện ích bếp",
+                          ENTERTAINMENT: "Tiện ích giải trí",
+                          FEATURES: "Đặc trưng phòng",
+                          POLICY: "Chính sách",
+                        }[type] || "Khác";
 
-                    return (
-                      <div key={type}>
-                        <h3 className="text-xl font-semibold mb-2">{label}</h3>
-                        {!isEditRoomAmenity ? (
-                          <div className="grid grid-cols-3 gap-2">
-                            {roomAmenitiesByType.length > 0 ? (
-                              roomAmenitiesByType.map((amenity) => (
-                                <div className="flex items-center">
-                                  <FaDotCircle
-                                    size={13}
-                                    className="text-blue-300 mr-2"
-                                  />
-                                  <p key={amenity.id} className="text-medium">
+                      return (
+                        <div key={type}>
+                          <h3 className="text-xl font-semibold mb-2">
+                            {label}
+                          </h3>
+                          {!isEditRoomAmenity ? (
+                            <div className="grid grid-cols-3 gap-2">
+                              {roomAmenitiesByType.length > 0 ? (
+                                roomAmenitiesByType.map((amenity) => (
+                                  <div className="flex items-center">
+                                    <FaDotCircle
+                                      size={13}
+                                      className="text-blue-300 mr-2"
+                                    />
+                                    <p key={amenity.id} className="text-medium">
+                                      {amenity.name}
+                                    </p>
+                                  </div>
+                                ))
+                              ) : (
+                                <p className="text-gray-500">
+                                  Không có tiện ích nào
+                                </p>
+                              )}
+                            </div>
+                          ) : (
+                            <div className="grid grid-cols-3 gap-4">
+                              {roomAmenitiesByType.map((amenity) => (
+                                <div
+                                  key={amenity.id}
+                                  className="flex items-center justify-between border border-gray-300 p-2 rounded-lg"
+                                >
+                                  <p className="text-medium truncate">
                                     {amenity.name}
                                   </p>
-                                </div>
-                              ))
-                            ) : (
-                              <p className="text-gray-500">
-                                Không có tiện ích nào
-                              </p>
-                            )}
-                          </div>
-                        ) : (
-                          <div className="grid grid-cols-3 gap-4">
-                            {roomAmenitiesByType.map((amenity) => (
-                              <div
-                                key={amenity.id}
-                                className="flex items-center justify-between border border-gray-300 p-2 rounded-lg"
-                              >
-                                <p className="text-medium truncate">
-                                  {amenity.name}
-                                </p>
-                                <button
-                                  onClick={() =>
-                                    setUpdatedAmenities((prev) =>
-                                      prev.filter(
-                                        (item) => item.id !== amenity.id
+                                  <button
+                                    onClick={() =>
+                                      setUpdatedAmenities((prev) =>
+                                        prev.filter(
+                                          (item) => item.id !== amenity.id
+                                        )
                                       )
-                                    )
-                                  }
-                                  className="text-red-500 hover:text-red-600 focus:outline-none"
-                                >
-                                  <FaXmark size={16} />
-                                </button>
-                              </div>
-                            ))}
-                            {renderAmenityDropdown(type)}
-                          </div>
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
+                                    }
+                                    className="text-red-500 hover:text-red-600 focus:outline-none"
+                                  >
+                                    <FaXmark size={16} />
+                                  </button>
+                                </div>
+                              ))}
+                              {renderAmenityDropdown(type)}
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                ) : (
+                  <p className="text-gray-500">Tiện ích không có sẵn</p>
+                )}
               </div>
 
               <div className="mb-4">
                 <h2 className="text-2xl font-semibold mb-3">Địa chỉ</h2>
                 <p className="text-base mb-3">{postingId.address}</p>
-                <img src={postingId.imageUrls} className="max-w-full " />
+                <img
+                  src={postingId.imageUrls}
+                  className="w-[600px] h-[300px]"
+                />
               </div>
             </div>
           </>
@@ -522,7 +539,7 @@ const detailExchangePostingModal = ({ isOpen, onClose, postingId, onSave }) => {
             </button>
             <button
               className="bg-green-500 text-white px-4 py-2 rounded-xl hover:bg-green-600 transition duration-150"
-              onClick={handleAccept}
+              onClick={() => handleAccept()}
             >
               Xác nhận
             </button>
