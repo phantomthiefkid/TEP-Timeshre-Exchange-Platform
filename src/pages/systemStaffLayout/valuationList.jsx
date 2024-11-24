@@ -145,7 +145,7 @@ const ValuationList = () => {
                     </div>
 
 
-                    <div className="flex items-center space-x-4">
+                    {/* <div className="flex items-center space-x-4">
 
 
                         <Link to={`/systemstaff/createposting`}>
@@ -155,7 +155,7 @@ const ValuationList = () => {
                             </button>
                         </Link>
 
-                    </div>
+                    </div> */}
                 </div>
                 {/* Filter Buttons */}
                 <div className="flex items-center py-4 space-x-4 mb-5">
@@ -208,7 +208,7 @@ const ValuationList = () => {
                                         className="w-12 h-12 rounded-2xl mr-5"
                                     />
                                     <div className="flex flex-col">
-                                        <h3 className="font-semibold">{posting.resortName}</h3>
+                                        <h3 className="font-light">{posting.resortName}</h3>
 
                                     </div>
                                 </td>
@@ -226,7 +226,7 @@ const ValuationList = () => {
                                     {new Intl.NumberFormat("vi-VN", {
                                         style: "currency",
                                         currency: "VND",
-                                    }).format(posting.priceValuation)}
+                                    }).format(posting.totalPrice)}
                                 </p></td>
                                 <td className="p-4">
                                     <span

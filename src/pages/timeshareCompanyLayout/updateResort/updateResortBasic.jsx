@@ -104,6 +104,7 @@ const UpdateResortBasic = () => {
       toast.error("Cập nhật thất bại! Vui lòng thử lại.", { duration: 3000 });
     } finally {
       setIsSpinner(false)
+      console.log("Check: ", resort)
     }
   };
 
