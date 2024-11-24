@@ -12,6 +12,7 @@ import { FaArrowRight } from 'react-icons/fa6';
 import { FaPlusCircle } from 'react-icons/fa';
 const CreateUnitType = ({ onUpdateData, onNext, onBack, formData }) => {
   const [selectedUnitType, setSelectedUnitType] = useState(null);
+  const { resortId } = useSelector((state) => state.resortId);
   const [isOpenModalUnitType, setIsOpenModalUnitType] = useState(false);
   const [roomTypes, setRoomTypes] = useState([]);
   const [indexSelected, setIndexSelected] = useState(-1)
@@ -47,7 +48,8 @@ const CreateUnitType = ({ onUpdateData, onNext, onBack, formData }) => {
       }
       toast.success("Tạo mới thành công!", { duration: 1000 })
       setTimeout(() => {
-        navigate('/timesharecompany/resortmanagementtsc');
+        // navigate('/timesharecompany/resortmanagementtsc');
+        navigate(`/timesharecompany/updateresort/${resortId}`);
       }, 1000);
 
     } catch (error) {

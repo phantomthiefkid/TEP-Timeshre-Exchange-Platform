@@ -84,7 +84,7 @@ const DashboardCompany = () => {
             throw error;
         }
     };
-    
+
 
     const fetchTransactions = async () => {
         try {
@@ -175,24 +175,24 @@ const DashboardCompany = () => {
         ];
         return months.map((month) => revenue[month] || 0); // Nếu không có giá trị, trả về 0
     };
-    
+
 
     const formatTransactionType = (type) => {
         switch (type) {
             case "REJECT_REQUESTEXCHANGE":
-                return { label: "Từ chối yêu cầu trao đổi", style: "text-red-500 " };
+                return { label: "Từ chối yêu cầu trao đổi", style: "text-red-500 bg-red-200 p-2 border-2 rounded-2xl px-4 text-center" };
             case "APPROVAL_REQUESTEXCHANGE":
-                return { label: "Duyệt yêu cầu trao đổi", style: " text-green-500" };
+                return { label: "Duyệt yêu cầu trao đổi", style: " text-green-500 bg-green-200 border-2 p-2 rounded-2xl px-4 text-center" };
             case "REJECT_EXCHANGEPOSTING":
-                return { label: "Từ chối bài trao đổi", style: " text-red-500" };
+                return { label: "Từ chối bài trao đổi", style: " text-red-500 bg-red-200 border-2 p-2 rounded-2xl px-4 text-center" };
             case "APPROVAL_EXCHANGEPOSTING":
-                return { label: "Duyệt bài trao đổi", style: " text-green-500" };
+                return { label: "Duyệt bài trao đổi", style: " text-green-500 bg-green-200 border-2 p-2 rounded-2xl px-4 text-center" };
             case "REJECT_RENTALPOSTING":
-                return { label: "Từ chối bài cho thuê", style: " text-red-500" };
+                return { label: "Từ chối bài cho thuê", style: " text-red-500 bg-red-200 border-2 p-2 rounded-2xl px-4 text-center" };
             case "APPROVAL_RENTAL_POSTING":
-                return { label: "Duyệt bài cho thuê", style: " text-green-500" };
+                return { label: "Duyệt bài cho thuê", style: " text-green-500 bg-green-200 border-2 p-2 rounded-2xl px-4 text-center" };
             default:
-                return { label: "Không xác định", style: "text-gray-500" };
+                return { label: "Không xác định", style: "text-gray-500 bg-gray-200 border-2 p-2 rounded-2xl px-4 text-center" };
         }
     }
 
@@ -204,14 +204,15 @@ const DashboardCompany = () => {
         datasets: [
             {
                 label: "Income",
-                data: [], // Dữ liệu ban đầu là mảng rỗng
+                data: [], // Initially empty, will be updated
                 borderColor: "rgba(75, 192, 192, 1)",
                 backgroundColor: "rgba(75, 192, 192, 0.2)",
                 tension: 0.4,
+                borderWidth: 5,
             }
         ],
     });
-    
+
 
     const generateSampleProjects = () => {
         const pkgs = ["pkg1", "pkg2", "pkg3"];
@@ -348,7 +349,8 @@ const DashboardCompany = () => {
                     className={`p-6 rounded-xl bg-gradient-to-r from-green-400 to-teal-500 text-white shadow-lg transform transition-transform duration-300 hover:scale-105 hover:shadow-xl`}
                 >
                     <div className="flex items-center justify-between">
-                        <HiUsers className="text-5xl" />
+
+                        <HiOfficeBuilding className="text-5xl" />
                         <div className="text-right">
                             <h3 className="text-lg font-semibold">Số lượng resort</h3>
                             <p className="text-3xl font-bold"><CountUp start={0} end={totalResort} duration={3} /></p>
@@ -360,7 +362,7 @@ const DashboardCompany = () => {
                     className={`p-6 rounded-xl bg-gradient-to-r from-orange-400 to-red-500 text-white shadow-lg transform transition-transform duration-300 hover:scale-105 hover:shadow-xl`}
                 >
                     <div className="flex items-center justify-between">
-                        <HiOfficeBuilding className="text-5xl" />
+                        <HiUsers className="text-5xl" />
                         <div className="text-right">
                             <h3 className="text-lg font-semibold">Số lượng nhân viên</h3>
                             <p className="text-3xl font-bold"><CountUp start={0} end={totalStaff} duration={3} /></p>
@@ -383,53 +385,15 @@ const DashboardCompany = () => {
 
 
             {/* revenue analysis */}
-            <div className="grid grid-cols-3 gap-6 border-2 shadow-xl rounded-xl">
+            <div className="grid grid-cols-1 border-2 shadow-xl rounded-xl">
+
                 <div className="bg-white p-6 rounded-lg shadow">
-                    <h3 className="text-lg font-semibold mb-4">Biến động</h3>
-                    <div className="w-full">Income out Come</div>
-                </div>
-                <div className="col-span-2 bg-white p-6 rounded-lg shadow">
                     <h3 className="text-lg font-semibold mb-4">Doanh số</h3>
-                    <div className="w-full h-[420px]">
+                    <div className="w-full h-[550px] mx-auto">
                         <Line data={lineChartData} />
                     </div>
                 </div>
             </div>
-
-            {/* Package analysis */}
-            {/* <div className="grid grid-cols-3 gap-6">
-                <div className="col-span-2 bg-white p-6 rounded-lg shadow">
-                    <div className="flex flex-row justify-between">
-                        <h3 className="text-lg font-semibold mb-4">Thống kê bài đăng</h3>
-                       
-                        <div className="flex space-x-2 items-center">
-                            <DatePicker
-                                selected={startDate}
-                                onChange={(date) => setStartDate(date)}
-                                dateFormat="dd/MM/yyyy"
-                                className="px-3 py-2 border rounded"
-                            />
-                            <span className="text-gray-500">to</span>
-                            <DatePicker
-                                selected={endDate}
-                                onChange={(date) => setEndDate(date)}
-                                dateFormat="dd/MM/yyyy"
-                                className="px-3 py-2 border rounded"
-                            />
-                        </div>
-                    </div>
-                    <div className="h-auto">
-                        <Bar data={barChartData} />
-                    </div>
-                </div>
-                <div className="bg-white p-6 rounded-lg shadow">
-                    <h3 className="text-lg font-semibold mb-4">Thống kê gói</h3>
-                    <div className="h-auto">
-                        <Pie data={pieChartData} />
-                    </div>
-                </div>
-            </div> */}
-
 
             <div className="grid grid-cols-3 gap-4">
                 {/* Transaction */}
@@ -459,9 +423,9 @@ const DashboardCompany = () => {
                             <tbody>
                                 {transactions && transactions.map(
                                     ({ transactionType, description, money, createdAt }, index) => (
-                                        <tr key={index} className="bg-white border-b hover:bg-slate-200">
+                                        <tr key={index} className="bg-white border-b hover:bg-slate-100">
 
-                                            <td className="px-2 py-4"><span className={`${formatTransactionType(transactionType).style}`}>{formatTransactionType(transactionType).label}</span></td>
+                                            <td className="px-2 py-4 text-center"><span className={`${formatTransactionType(transactionType).style}`}>{formatTransactionType(transactionType).label}</span></td>
                                             <td className="px-2 py-4">
                                                 <span className="px-2 py-4 text-left">
                                                     {description}
@@ -567,9 +531,6 @@ const DashboardCompany = () => {
                                             />
                                             {item.resortName}
                                         </td>
-
-
-
                                     </tr>
                                 )
                             )}

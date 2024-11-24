@@ -86,6 +86,16 @@ const updateResortUnitType = async (data, unitTypeId) => {
   }
 };
 
+const deactiveUnitType = async (unitTypeId) => {
+  try {
+    return await axiosConfig.put(
+      `timeshare-company/resort/unit-type/${unitTypeId}/deactivate`
+    );
+  } catch (error) {
+    throw error;
+  }
+};
+
 const getTimeshareCompanyById = async (tsId = "") => {
   try {
     return await axiosConfig.get(`admin/timeshare-company/${tsId}`, {});
@@ -192,5 +202,6 @@ export {
   getTotalResort,
   getTotalStaff,
   getAllWalletTransactions,
-  getRevenueTSC
+  getRevenueTSC,
+  deactiveUnitType
 };

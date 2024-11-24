@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import { FaPlusCircle } from 'react-icons/fa';
+import { FaPlusCircle, FaEye, FaEyeSlash } from 'react-icons/fa';
 import CreateUnitTypeForUpdateModal from '../../../components/Modal/createUnitTypeForUpdateModal';
 import UpdateResortUnitTypeModal from '../../../components/Modal/updateResortUnitTypeModal';
 import FormatCurrency from '../../../components/Validate/formatCurrency';
-
+import { deactiveUnitType } from '../../../service/tsCompanyService/tsCompanyAPI';
 const UpdateResortUnitType = ({ unitType, flag }) => {
 
   const [unitTypeList, setUnitTypeList] = useState();
@@ -23,24 +23,30 @@ const UpdateResortUnitType = ({ unitType, flag }) => {
     setUnitTypeList(unitType)
   }, [unitType])
 
+  const handleDeactive = async (unitTypeId) => {
+    await deactiveUnitType(unitTypeId)
+    
+  }
+
   return (
     <div className='min-h-screen'>
       <div className="grid grid-cols-2 gap-8 py-6 border p-8">
         {unitTypeList && unitTypeList.map((item, index) => (
           <div
             key={item.id}
-            onClick={() => handleOpen(item)}
+
             className="flex flex-col md:flex-row items-stretch gap-4 rounded-lg border shadow-md hover:shadow-lg hover:border-2 hover:border-blue-200 transition-transform relative bg-white"
           >
-            {/* Phần ảnh bên trái */}
+
             <img
               src={item.photos}
               alt="Room Image"
+              onClick={() => handleOpen(item)}
               className="w-full md:w-56 h-48 md:h-auto rounded-t-lg md:rounded-l-lg md:rounded-tr-none object-cover"
             />
 
             {/* Phần thông tin bên phải */}
-            <div className="flex-1 flex flex-col justify-between p-4">
+            <div className="flex-1 flex flex-col justify-between p-4" onClick={() => handleOpen(item)}>
               <div className="space-y-2">
                 <h3 className="text-lg md:text-xl font-semibold text-blue-500">{item.title}</h3>
                 <div className="flex flex-wrap gap-2 text-gray-700">
@@ -56,6 +62,13 @@ const UpdateResortUnitType = ({ unitType, flag }) => {
                 {FormatCurrency(item.price)}
               </p>
             </div>
+            {/* <div className="absolute top-4 right-4">
+              {item.isActive ? (
+                <FaEye className="text-green-500 text-2xl" title="Active" />
+              ) : (
+                <FaEyeSlash className="text-red-500 text-2xl" title="Inactive" />
+              )}
+            </div> */}
           </div>
         ))}
 

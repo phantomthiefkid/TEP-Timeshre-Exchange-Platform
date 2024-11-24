@@ -156,7 +156,7 @@ const UpdateResortBasic = () => {
 
 
   return (
-    <div className="bg-white p-8 rounded-lg shadow-xl mx-auto">
+    <div className="bg-white p-8 border-2 rounded-lg shadow-xl mx-auto">
       <Toaster position="top-center" reverseOrder={false} />
 
       <div className="grid grid-cols-2 gap-8">
@@ -170,7 +170,7 @@ const UpdateResortBasic = () => {
             <div className="space-y-1">
               <label className="text-gray-700 text-lg font-medium">Tên Resort*</label>
               <input
-                className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+                className="w-full border-2 border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition shadow-md"
                 type="text"
                 name="resortName"
                 value={resort.resortName}
@@ -186,7 +186,7 @@ const UpdateResortBasic = () => {
                 <div className="relative flex-1">
                   <span className="absolute left-3 top-3 text-gray-500">VND:</span>
                   <input
-                    className="pl-14 border border-gray-300 rounded-lg w-full p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+                    className="pl-14 border-2 border-gray-300 rounded-lg w-full p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition shadow-md"
                     type="number"
                     name="minPrice"
                     value={resort.minPrice}
@@ -198,7 +198,7 @@ const UpdateResortBasic = () => {
                 <div className="relative flex-1">
                   <span className="absolute left-3 top-3 text-gray-500">VND:</span>
                   <input
-                    className="pl-14 border border-gray-300 rounded-lg w-full p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+                    className="pl-14 border-2 border-gray-300 rounded-lg w-full p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition shadow-md"
                     type="number"
                     name="maxPrice"
                     value={resort.maxPrice}
@@ -215,7 +215,7 @@ const UpdateResortBasic = () => {
               <div className="relative">
                 <LocationMarkerIcon className="absolute left-3 top-4 w-5 text-red-500" />
                 <input
-                  className="pl-10 border border-gray-300 rounded-lg w-full p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+                  className="pl-10 border-2 border-gray-300 rounded-lg w-full p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition shadow-md "
                   type="text"
                   name="address"
                   value={resort.address}
@@ -227,7 +227,7 @@ const UpdateResortBasic = () => {
             <div className="space-y-1">
               <label className="text-gray-700 text-lg font-medium">Mô tả</label>
               <textarea
-                className="border border-gray-300 rounded-lg w-full p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition h-40"
+                className="border-2 border-gray-300 rounded-lg w-full p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition h-40 shadow-md"
                 name="description"
                 value={resort.description}
                 onChange={handleChange}
@@ -266,14 +266,17 @@ const UpdateResortBasic = () => {
             <div className="flex justify-center items-center mt-4">
               {resort.logo && (
                 <div className="relative flex justify-center items-center mt-6">
-                  <div className="w-36 h-36 rounded-full border-2 border-blue-300 shadow-lg overflow-hidden cursor-pointer hover:scale-105 transform transition-all relative">
-                    <img
-                      src={resort.logo}
-                      alt={`${resort.title}`}
-                      className="object-cover w-full h-full"
-                      onClick={() => handleSelectImage(resort.logo)}
-                    />
+                  <div className="w-40 h-40 rounded-full p-1 bg-gradient-to-r from-blue-400 to-purple-500 shadow-lg hover:scale-105 transform transition-all relative">
+                    <div className="w-full h-full rounded-full border-2 border-white bg-white overflow-hidden">
+                      <img
+                        src={resort.logo}
+                        alt={`${resort.title}`}
+                        className="object-cover w-full h-full"
+                        onClick={() => handleSelectImage(resort.logo)}
+                      />
+                    </div>
                   </div>
+
                   <button
                     onClick={() => setResort({ ...resort, logo: '' })} // Clear logo on click
                     className="absolute top-2 right-2 z-20 bg-red-500 text-white rounded-full p-1 hover:bg-red-600 transition-transform duration-300"
