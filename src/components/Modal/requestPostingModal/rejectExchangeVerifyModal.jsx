@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { FaXmark } from "react-icons/fa6";
 
-const rejectExchangePostingModal = ({ isOpen, onClose, onReject }) => {
+const rejectExchangeVerifyModal = ({ isOpen, onClose, onReject }) => {
   const [reason, setReason] = useState("");
 
   const handleReject = () => {
@@ -13,6 +13,7 @@ const rejectExchangePostingModal = ({ isOpen, onClose, onReject }) => {
       toast.error("Vui lòng nhập lí do từ chối.");
     }
   };
+
   if (!isOpen) return null;
   return (
     <div
@@ -70,4 +71,4 @@ const rejectExchangePostingModal = ({ isOpen, onClose, onReject }) => {
   );
 };
 
-export default rejectExchangePostingModal;
+export default rejectExchangeVerifyModal;

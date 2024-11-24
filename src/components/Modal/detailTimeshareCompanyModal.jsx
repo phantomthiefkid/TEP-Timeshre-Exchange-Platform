@@ -26,7 +26,7 @@ const DetailTimeshareCompanyModal = ({ isOpen, onClose, company }) => {
         <h2 className="text-2xl font-semibold mb-8">Thông tin chi tiết</h2>
         <button
           onClick={onClose}
-          className="absolute top-[22%] right-[34%] text-gray-500 hover:text-red-500 focus:outline-none"
+          className="absolute top-[28%] right-[34%] text-gray-500 hover:text-red-500 focus:outline-none"
         >
           <FaXmark size={24} />
         </button>
@@ -81,37 +81,6 @@ const DetailTimeshareCompanyModal = ({ isOpen, onClose, company }) => {
                   className="w-full outline-none"
                   readOnly
                 />
-              </div>
-            </div>
-            <div className="mb-4">
-              <label className="block text-gray-700 mb-2">Trạng thái</label>
-              <div className="flex items-center">
-                <input
-                  type="checkbox"
-                  checked={isActive}
-                  onChange={handleToggle} // Handle the toggle change
-                  className="sr-only peer"
-                />
-                <div className="relative w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-checked:bg-blue-500">
-                  <div
-                    className={`absolute top-0.5 start-[2px] h-5 w-5 bg-white rounded-full transition-all ${
-                      isActive ? "translate-x-full" : ""
-                    }`}
-                  ></div>
-                </div>
-                <span className="ml-3 text-sm font-medium text-gray-900">
-                  {isActive ? "Đang hoạt động" : "Đã vô hiệu hóa"}
-                </span>
-              </div>
-            </div>
-            <div className="flex justify-end mt-5">
-              <div>
-                <button className="text-gray-500 mr-4" onClick={onClose}>
-                  Hủy bỏ
-                </button>
-                <button className="bg-green-400 text-white rounded-lg px-4 py-2">
-                  Lưu thay đổi{" "}
-                </button>
               </div>
             </div>
           </div>

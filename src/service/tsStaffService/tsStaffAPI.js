@@ -199,6 +199,66 @@ const onChangeExchangeBookingById = async (bookingId, data) => {
   }
 };
 
+const getAllExchangeRequest = async (
+  pageNo = 0,
+  pageSize = 3,
+  roomInfoCode = ""
+) => {
+  try {
+    return await axiosConfig.get(`timeshare-staff/exchange/request`, {
+      params: {
+        pageNo,
+        pageSize,
+        roomInfoCode,
+      },
+    });
+  } catch (error) {
+    throw error;
+  }
+};
+
+const getExchangeRequestById = async (requestId) => {
+  try {
+    return await axiosConfig.get(
+      `timeshare-staff/exchange/request/${requestId}`
+    );
+  } catch (error) {
+    throw error;
+  }
+};
+
+const rejectExchangeRequestById = async (data, requestId) => {
+  try {
+    return await axiosConfig.post(
+      `timeshare-staff/exchange/request/reject/${requestId}`,
+      { data }
+    );
+  } catch (error) {
+    throw error;
+  }
+};
+
+const approveExchangeRequestById = async (requestId, data) => {
+  try {
+    return await axiosConfig.post(
+      `timeshare-staff/exchange/request/approval/${requestId}`,
+      data
+    );
+  } catch (error) {
+    throw error;
+  }
+};
+
+const updateRoomAmenities = async (roomId, data) => {
+  try {
+    return await axiosConfig.put(`customer/room/room-amenity/${roomId}`, {
+      roomInfoAmenities: data,
+    });
+  } catch (error) {
+    return error;
+  }
+};
+
 export {
   getAllRentalPosting,
   getRentalPostingById,
@@ -216,4 +276,9 @@ export {
   getExchangeBookingById,
   onChangeRentalBookingById,
   onChangeExchangeBookingById,
+  getAllExchangeRequest,
+  getExchangeRequestById,
+  rejectExchangeRequestById,
+  approveExchangeRequestById,
+  updateRoomAmenities,
 };

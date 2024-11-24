@@ -63,15 +63,13 @@ const employeeManagement = () => {
     try {
       if (newTimeshareStaff) {
         let data = await createTimeshareStaff(newTimeshareStaff);
-        console.log(data);
-        if (data.status === 200) {
+        if (data.status === 200 || data.status === 400) {
           toast.success("Tạo mới thành công", { duration: 2000 });
         } else {
           toast.error("Tạo mới thất bại", { duration: 2000 });
         }
       }
     } catch (error) {
-      console.log(error);
       toast.error("Có lỗi xảy ra trong lúc tạo", { duration: 2000 });
     }
   };
@@ -90,7 +88,6 @@ const employeeManagement = () => {
     try {
       const data = await getAllResort();
       if (data.status === 200) {
-        console.log("Fetched Resorts:", data.data.content); // Log resort data
         setAllResorts(data.data.content);
       }
     } catch (error) {
@@ -108,7 +105,7 @@ const employeeManagement = () => {
   }, [page, StaffName]);
 
   if (loading) {
-    return (<SpinnerWaiting />)
+    return <SpinnerWaiting />;
   }
 
   return (
@@ -121,7 +118,8 @@ const employeeManagement = () => {
               Quản lý Nhân viên - Tối ưu hóa đội ngũ
             </h1>
             <p className="text-md font-medium text-gray-600 mt-2">
-              Theo dõi thông tin nhân sự, trạng thái hoạt động và hiệu quả làm việc.
+              Theo dõi thông tin nhân sự, trạng thái hoạt động và hiệu quả làm
+              việc.
             </p>
           </div>
           <div className="flex space-x-4">
@@ -171,8 +169,8 @@ const employeeManagement = () => {
                 allTimeshareStaff.map((item, index) => (
                   <tr
                     key={index}
-                    className="border-b border-gray-200 hover:bg-slate-100">
-
+                    className="border-b border-gray-200 hover:bg-slate-100"
+                  >
                     <td className="p-4">{index + 1}</td>
                     <td className="p-4 flex items-center font-medium text-gray-700">
                       {item.userName}
@@ -205,41 +203,43 @@ const employeeManagement = () => {
             </tbody>
           </table>
 
-          {
-            allTimeshareStaff && allTimeshareStaff.length > 0 ? (
-              <div className="flex items-center justify-center space-x-2 mt-5 w-full">
-                <button
-                  onClick={handlePreviousPage}
-                  disabled={page === 0}
-                  className="w-8 h-8 flex items-center justify-center rounded-full bg-white text-gray-500"
-                >
-                  <FaChevronLeft />
-                </button>
-                <div className="flex space-x-2 bg-gray-200 rounded-full px-2 py-1">
-                  {
-                    Array.from({ length: totalPages }, (_, index) => (
-                      <button
-                        key={index}
-                        onClick={() => setPage(index)}
-                        className={`w-8 h-8 flex items-center justify-center rounded-full ${index === page ? "bg-blue-500 text-white" : "bg-white text-gray-500"}`}
-                      >
-                        {index + 1}
-                      </button>
-                    ))
-                  }
-                </div>
-                <button
-                  onClick={handleNextPage}
-                  disabled={page === totalPages - 1}
-                  className="w-8 h-8 flex items-center justify-center rounded-full bg-blue-500 text-white"
-                >
-                  <FaChevronRight />
-                </button>
+          {allTimeshareStaff && allTimeshareStaff.length > 0 ? (
+            <div className="flex items-center justify-center space-x-2 mt-5 w-full">
+              <button
+                onClick={handlePreviousPage}
+                disabled={page === 0}
+                className="w-8 h-8 flex items-center justify-center rounded-full bg-white text-gray-500"
+              >
+                <FaChevronLeft />
+              </button>
+              <div className="flex space-x-2 bg-gray-200 rounded-full px-2 py-1">
+                {Array.from({ length: totalPages }, (_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setPage(index)}
+                    className={`w-8 h-8 flex items-center justify-center rounded-full ${
+                      index === page
+                        ? "bg-blue-500 text-white"
+                        : "bg-white text-gray-500"
+                    }`}
+                  >
+                    {index + 1}
+                  </button>
+                ))}
               </div>
-            ) : (
-              <span className="flex items-center justify-center space-x-2 mt-5 w-full">Không có bài đăng nào!!!</span>
-            )
-          }
+              <button
+                onClick={handleNextPage}
+                disabled={page === totalPages - 1}
+                className="w-8 h-8 flex items-center justify-center rounded-full bg-blue-500 text-white"
+              >
+                <FaChevronRight />
+              </button>
+            </div>
+          ) : (
+            <span className="flex items-center justify-center space-x-2 mt-5 w-full">
+              Không có bài đăng nào!!!
+            </span>
+          )}
           <DetailTimeshareStaffModal
             isOpen={isDetailModalOpen}
             onClose={() => setIsDetailModalOpen(false)}
@@ -248,8 +248,6 @@ const employeeManagement = () => {
           />
         </div>
       </div>
-
-
     </>
   );
 };
