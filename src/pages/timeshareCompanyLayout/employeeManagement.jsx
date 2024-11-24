@@ -118,18 +118,19 @@ const employeeManagement = () => {
         <div className="p-6 flex justify-between items-center">
           <div>
             <h1 className="text-3xl text-gray-700 font-bold">
-              Quản lí nhân viên
+              Quản lý Nhân viên - Tối ưu hóa đội ngũ
             </h1>
             <p className="text-md font-medium text-gray-600 mt-2">
-              Quản lí nhân viên của bạn.
+              Theo dõi thông tin nhân sự, trạng thái hoạt động và hiệu quả làm việc.
             </p>
           </div>
           <div className="flex space-x-4">
-            <span className="bg-red-100 text-red-600 px-2 py-1 rounded-full text-lg font-medium">
+            <span className="bg-red-100 text-red-600 px-4 py-2 rounded-full text-lg font-medium shadow-md">
               Số lượng nhân viên: <CountUp start={0} end={count} duration={2} />
             </span>
           </div>
         </div>
+
         <div className="flex justify-end items-center px-6">
           <div className="flex space-x-4">
             <input
@@ -177,18 +178,18 @@ const employeeManagement = () => {
                       {item.userName}
                     </td>
                     <td className="p-4">
-                    <label className="flex items-center">
-                    <input
-                      type="checkbox"
-                      checked={item.isActive}
-                      className="sr-only peer"
-                      disabled
-                    />
-                    <div className="relative w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-green-500"></div>
-                    <span className="ms-3 text-sm font-medium text-gray-400 dark:text-gray-500">
-                      {item.isActive ? "Đang hoạt động" : "Đã vô hiệu hóa"}
-                    </span>
-                  </label>
+                      <label className="flex items-center">
+                        <input
+                          type="checkbox"
+                          checked={item.isActive}
+                          className="sr-only peer"
+                          disabled
+                        />
+                        <div className="relative w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-green-500"></div>
+                        <span className="ms-3 text-sm font-medium text-gray-400 dark:text-gray-500">
+                          {item.isActive ? "Đang hoạt động" : "Đã vô hiệu hóa"}
+                        </span>
+                      </label>
                     </td>
 
                     <td className="p-4 flex gap-4">

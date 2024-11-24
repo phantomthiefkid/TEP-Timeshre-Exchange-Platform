@@ -67,6 +67,8 @@ console.log("praren", formData)
 
     } catch (error) {
       console.error("Failed to create resort:", error);
+    } finally {
+      setLoading(false)
     }
 
   };
@@ -81,7 +83,7 @@ console.log("praren", formData)
 
   return (
     <div className="w-full bg-white">
-      <Toaster position="top-right" reverseOrder={false} />
+      <Toaster position="top-center" reverseOrder={false} />
 
       {/* Resort Images Section */}
       <div className="flex gap-4 mb-8">
