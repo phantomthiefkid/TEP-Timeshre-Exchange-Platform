@@ -226,14 +226,14 @@ const UpdateResortUnitTypeModal = ({ onClose, selectedUnitType, flag }) => {
                     </select>
                   </div>
                   <div className="flex flex-col col-span-2">
-                    <label className="font-medium text-gray-700 mb-1">Buildings Option:</label>
+                    <label className="font-medium text-gray-700 mb-1">Mã phòng (nếu có):</label>
                     <input
                       type="text"
                       name="buildingsOption"
                       className="border-b bg-slate-100 p-4 focus:outline-none focus:border-b-2 focus:border-blue-500 transition-all"
                       value={unitType.buildingsOption}
                       onChange={handleOnchange}
-
+                      placeholder="Nhập mã phòng"
                     />
 
                   </div>
@@ -258,25 +258,25 @@ const UpdateResortUnitTypeModal = ({ onClose, selectedUnitType, flag }) => {
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="flex flex-col col-span-2">
-                    <label className="font-medium text-gray-700 mb-1">View</label>
+                    <label className="font-medium text-gray-700 mb-1">Hướng phòng</label>
                     <input
                       type="text"
                       name="view"
                       className="border-b bg-slate-100 p-4 focus:outline-none focus:border-b-2 focus:border-blue-500 transition-all"
                       value={unitType.view}
                       onChange={handleOnchange}
-                      placeholder="Nhập view"
+                      placeholder="Nhập hướng phòng"
                     />
                   </div>
                   <div className="flex flex-col col-span-2">
-                    <label className="font-medium text-gray-700 mb-1">Khu vực</label>
+                    <label className="font-medium text-gray-700 mb-1">Diện tích:</label>
                     <input
                       type="text"
                       name="area"
                       className="border-b bg-slate-100 p-4 focus:outline-none focus:border-b-2 focus:border-blue-500 transition-all"
                       value={unitType.area}
                       onChange={handleOnchange}
-                      placeholder="Nhập khu vực"
+                      placeholder="Nhập diện tích"
                     />
                   </div>
                 </div>

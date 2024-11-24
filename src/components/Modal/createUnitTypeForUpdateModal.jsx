@@ -243,7 +243,7 @@ const CreateUnitTypeForUpdateModal = ({ onClose, flag }) => {
                                         </div>
                                     </div>
                                     <div className="flex flex-col col-span-2">
-                                        <label className="font-semibold text-md mb-2">Buildings Option:</label>
+                                        <label className="font-semibold text-md mb-2">Mẫ phòng (nếu có):</label>
                                         <input
                                             type="text"
                                             name="buildingsOption"
@@ -275,26 +275,26 @@ const CreateUnitTypeForUpdateModal = ({ onClose, flag }) => {
                                 </div>
                                 <div className="grid grid-cols-2 gap-4">
                                     <div className="flex flex-col col-span-2">
-                                        <label className="font-semibold text-md mb-2">View:</label>
+                                        <label className="font-semibold text-md mb-2">Hướng phòng:</label>
                                         <input
                                             type="text"
                                             name="view"
                                             className="border-b bg-gray-100 p-4 focus:outline-none focus:border-b-2 focus:border-blue-500 transition-all rounded-lg"
 
                                             onChange={handleOnchange}
-                                            placeholder="View"
+                                            placeholder="Hướng phòng"
                                         />
 
                                     </div>
                                     <div className="flex flex-col col-span-2">
-                                        <label className="font-semibold text-md mb-2">Khu vực:</label>
+                                        <label className="font-semibold text-md mb-2">Diện tích:</label>
                                         <input
                                             type="text"
                                             name="area"
                                             className="border-b bg-gray-100 p-4 focus:outline-none focus:border-b-2 focus:border-blue-500 transition-all rounded-lg"
 
                                             onChange={handleOnchange}
-                                            placeholder="Nhập khu vực"
+                                            placeholder="Nhập diện tích phòng..."
                                         />
 
                                     </div>

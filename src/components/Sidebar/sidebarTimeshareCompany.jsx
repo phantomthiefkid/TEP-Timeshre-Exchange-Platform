@@ -6,6 +6,7 @@ import {
   FaChevronUp,
   FaChevronDown,
   FaUserShield,
+  FaChartBar,
 } from "react-icons/fa";
 import { useDispatch } from "react-redux";
 import { setIsLogin, setRoleName } from "../../redux/UserSlice/SignIn";
@@ -85,6 +86,10 @@ const SidebarTimeshareCompany = () => {
         <img src={logoTEP} className="w-auto px-4" />
       </div>
       <div className="flex-grow space-y-2">
+        <MenuItem 
+        icon={FaChartBar}
+        title="Dashboard"
+        path="/timesharecompany/dashboardcompany"/>
         <MenuItem
           icon={FaCity}
           title="Quản lí resort"

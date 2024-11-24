@@ -49,6 +49,7 @@ import BlogListGuest from "./pages/landingpage/blog/blogListGuest";
 import BlogDetailGuest from "./pages/landingpage/blog/blogDetailGuest";
 import ProfileTsCompany from "./pages/timeshareCompanyLayout/profileTsCompany";
 import TimeshareCompanyProfile from "./pages/company/timeshareCompanyProfile";
+import DashboardCompany from "./pages/timeshareCompanyLayout/dashboardCompany";
 function App() {
   const dispatch = useDispatch();
   const { isLogin, role } = useSelector((state) => state.isLogin);
@@ -160,7 +161,7 @@ function App() {
           }
         >
           <Route path="/timesharecompany" element={<TimeshareCompanyLayout />}>
-            <Route index element={<ResortManagementTSC />} />
+            <Route index element={<DashboardCompany />} />
             <Route
               path="resortmanagementtsc"
               element={<ResortManagementTSC />}
@@ -169,6 +170,7 @@ function App() {
             <Route path="createresort" element={<CreateResort />} />
             <Route path="updateresort/:id" element={<UpdateResort />} />
             <Route path="profiletscompany" element={<ProfileTsCompany />} />
+            <Route path="dashboardcompany" element={<DashboardCompany/>}/>
           </Route>
         </Route>
         {/* Timeshare staff routes */}

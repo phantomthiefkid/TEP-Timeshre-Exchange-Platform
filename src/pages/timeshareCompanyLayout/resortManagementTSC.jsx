@@ -1,13 +1,9 @@
 import React, { useEffect, useState } from "react";
-import Header from "../../components/Header/headerOtherRole";
 import CountUp from "react-countup";
 import {
-  DocumentIcon,
-  DotsVerticalIcon,
   PlusIcon,
 } from "@heroicons/react/solid";
-import { getAllResort } from "../../service/tsCompanyService/tsCompanyAPI";
-import Loading from "../../components/LoadingComponent/loading";
+import { getAllResort, getTotalResort } from "../../service/tsCompanyService/tsCompanyAPI";
 import { Link } from "react-router-dom";
 import SpinnerWaiting from "../../components/LoadingComponent/spinnerWaiting";
 import { FaChevronLeft, FaChevronRight, FaInfoCircle, FaSearch } from "react-icons/fa";
@@ -20,6 +16,7 @@ const ResortManagementTSC = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [resortName, setResortName] = useState("");
   const [loading, setLoading] = useState(true);
+  const [totalResort, setTotalResort] = useState(0);
   const [count, setCount] = useState(0);
   const fetAllResort = async () => {
     try {
@@ -27,7 +24,6 @@ const ResortManagementTSC = () => {
       // let amount = await getAllResort(0, 100, "");
       if (data.status === 200) {
         setAllResort(data.data.content);
-        console.log(data.data.content, "check")
         setTotalPages(data.data.totalPages);
         setLoading(false);
         // setCount(amount.data.content.length);
@@ -36,6 +32,17 @@ const ResortManagementTSC = () => {
       throw error;
     } finally {
       setLoading(false)
+    }
+  };
+
+  const fetchTotalResort = async () => {
+    try {
+      let data = await getTotalResort()
+      if (data.status === 200) {
+        setTotalResort(data.data);
+      }
+    } catch (error) {
+      throw error;
     }
   };
 
@@ -62,6 +69,12 @@ const ResortManagementTSC = () => {
     fetAllResort();
   }, [page, resortName]);
 
+  useEffect(() => {
+
+    fetchTotalResort()
+
+  }, [])
+
   if (loading) {
     return <SpinnerWaiting />;
   }
@@ -69,9 +82,9 @@ const ResortManagementTSC = () => {
   return (
     <>
       <div className="container mx-auto p-4 bg-white rounded-xl shadow-xl">
-        <div className="p-6 flex justify-between items-center">
+        <div className="flex justify-between items-center">
           <div className="py-2 p-6 space-y-1">
-            <h1 className="text-4xl font-bold text-gray-600">
+            <h1 className="text-3xl font-bold text-gray-600">
               Quản lý Resort - Theo dõi và điều chỉnh thông tin
             </h1>
             <h3 className="text-xl text-gray-500">
@@ -89,7 +102,7 @@ const ResortManagementTSC = () => {
                 <path d="M12 2L2 12h3v8h14v-8h3L12 2zm5 15h-2v-4h-2v4H9v-4H7v4H5v-5.586L12 4.828l7 6.586V17h-2v-4h-2v4z" />
               </svg>
               Số lượng resort:{" "}
-              <CountUp start={0} end={count || 100} duration={4} className="ml-1" />
+              <CountUp start={0} end={totalResort} duration={4} className="ml-1" />
             </span>
           </div>
         </div>

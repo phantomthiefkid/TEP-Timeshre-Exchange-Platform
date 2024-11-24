@@ -126,7 +126,7 @@ const CreateBlog = ({ create }) => {
         {/* Submit Button */}
         <div className="text-center py-6 flex items-center justify-center">
           <button
-            className="flex items-center justify-center bg-gradient-to-r from-[#03fc9d] to-[#03fc9d] text-white font-semibold py-3 px-8 rounded-full shadow-lg hover:bg-sky-800 transition-all duration-300 transform hover:scale-105"
+            className="flex items-center justify-center bg-gradient-to-r from-[#02d39a] to-[#05b2d9] text-white font-semibold py-3 px-8 rounded-full shadow-lg hover:bg-sky-800 transition-all duration-300 transform hover:scale-105"
             onClick={handleSubmit}
           >
             <span className="mr-3">Tạo blog</span>
