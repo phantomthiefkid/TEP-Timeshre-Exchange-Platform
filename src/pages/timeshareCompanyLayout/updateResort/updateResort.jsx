@@ -21,7 +21,6 @@ const UpdateResort = () => {
         if (data.status === 200) {
             setResort(data.data)
             setUnitType(data.data.unitTypeDtoList)
-            console.log(data.data.unitTypeDtoList)
         }
     }
     useEffect(() => {
@@ -110,7 +109,7 @@ const UpdateResort = () => {
 
             <div className='mb-20 py-6'>
                 {activeTab === 'basic' && <UpdateResortBasic />}
-                {activeTab === 'amenities' && <UpdateResortAmenity />}
+                {activeTab === 'amenities' && <UpdateResortAmenity resortSelect={resort} flag={autoSetFlag}/>}
                 {activeTab === 'unitType' && <UpdateResortUnitType unitType={unitType} flag={autoSetFlag} />}
             </div>
         </div>
