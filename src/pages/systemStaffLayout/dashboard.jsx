@@ -273,18 +273,24 @@ const Dashboard = () => {
 
   const fetchAllTransaction = async () => {
     try {
+      console.log("Fetching transactions for", {
+        page,
+        size,
+        walletTransactionEnum,
+      });
       let data = await getAllTransaction(page, size, walletTransactionEnum);
+      console.log("API response:", data);
+
       if (data.status === 200) {
         setAllTransaction(data.data.content);
         setTotalPages(data.data.totalPages);
-        setLoading(false);
-        console.log(
-          `Fetching transactions for page: ${page}, size: ${size}, filter: ${walletTransactionEnum}`
-        );
-        console.log(data);
+      } else {
+        console.error("Unexpected API response status:", data.status);
       }
     } catch (error) {
-      console.log(error);
+      console.error("Error fetching transactions:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -356,10 +362,10 @@ const Dashboard = () => {
       console.error("Error fetching dashboard data", error);
     }
   };
+
   useEffect(() => {
     fetchDashboardData();
     fetchAllTransaction();
-    console.log(`Page changed to: ${page}`);
   }, [page, size, walletTransactionEnum]);
 
   if (loading) {
@@ -647,7 +653,7 @@ const Dashboard = () => {
 
             <tbody>
               {allTransaction.map((transaction, index) => (
-                <tr key={index} className="bg-white border-b">
+                <tr key={transaction.id || index} className="bg-white border-b">
                   <td className="p-4 w-[310px] flex items-center">
                     <div
                       className={`flex justify-center items-center p-2 pb-2.5 pl-2.5 rounded-full shadow-md mr-3 ${
@@ -791,7 +797,7 @@ const Dashboard = () => {
               </button>
             </div>
           ) : (
-            <div className="flex flex-col items-center justify-center mt-5 w-full min-h-[370px] border-2 border-dashed border-gray-300 rounded-lg bg-gradient-to-b from-gray-50 to-gray-100">
+            <div className="flex flex-col items-center justify-center mt-5 w-full min-h-[55vh] border-2 border-dashed border-gray-300 rounded-lg bg-gradient-to-b from-gray-50 to-gray-100">
               <FaList className="text-gray-400 text-6xl animate-pulse mb-4" />
               <span className="text-gray-600 text-lg font-medium">
                 Không có thanh toán nào có sẵn

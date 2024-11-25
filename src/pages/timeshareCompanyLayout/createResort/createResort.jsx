@@ -1,13 +1,16 @@
-import React, { useEffect, useState } from 'react';
-import CreateResortBasic from './createResortBasic.jsx';
-import CreateResortAmenity from './createResortAmenity.jsx';
-import CreateUnitType from './createUnitType.jsx';
-import { createResortByTSC, createResortUnitType } from '../../../service/tsCompanyService/tsCompanyAPI';
+import React, { useEffect, useState } from "react";
+import CreateResortBasic from "./createResortBasic.jsx";
+import CreateResortAmenity from "./createResortAmenity.jsx";
+import CreateUnitType from "./createUnitType.jsx";
+import {
+  createResortByTSC,
+  createResortUnitType,
+} from "../../../service/tsCompanyService/tsCompanyAPI";
 import { useDispatch } from "react-redux";
 import { setResortId } from "../../../redux/ResortSlice/Resort";
-import { toast, Toaster } from 'react-hot-toast';
-import SpinnerWaiting from '../../../components/LoadingComponent/spinnerWaiting';
-import { SparklesIcon } from '@heroicons/react/solid';
+import { toast, Toaster } from "react-hot-toast";
+import SpinnerWaiting from "../../../components/LoadingComponent/spinnerWaiting";
+import { SparklesIcon } from "@heroicons/react/solid";
 
 const CreateResort = () => {
   const [step, setStep] = useState(1);
@@ -18,10 +21,10 @@ const CreateResort = () => {
     logo: "",
     minPrice: 0,
     maxPrice: 0,
-    address: '',
-    description: '',
+    address: "",
+    description: "",
     resortAmenityList: [],
-    imageUrls: []
+    imageUrls: [],
   });
 
   const [unitType, setUnitType] = useState([]);
@@ -35,40 +38,37 @@ const CreateResort = () => {
 
   const updateUnitType = (newData) => {
     setUnitType(...newData);
-
   };
 
   const handleNext = async () => {
     if (step === 1) {
       setStep(2);
     } else if (step === 2) {
-
       handleCreateResort();
-
     }
   };
 
   const handleCreateResort = async () => {
     try {
       setLoading(true);
-      let data = await createResortByTSC(formData)
+      let data = await createResortByTSC(formData);
 
       if (data.status === 200) {
-        toast.success("Tạo mới thành công. Vui lòng nhập loại phòng!", { duration: 4000 });
-        setStep(3)
+        toast.success("Tạo mới thành công. Vui lòng nhập loại phòng!", {
+          duration: 4000,
+        });
+        setStep(3);
         const resortId = data.data.id;
         dispatch(setResortId(resortId));
         setLoading(false);
       } else {
         toast.error("Tạo thất bại!", { duration: 2000 });
       }
-
     } catch (error) {
       console.error("Failed to create resort:", error);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-
   };
 
   const handleBack = () => {
@@ -76,7 +76,7 @@ const CreateResort = () => {
   };
 
   if (loading) {
-    return (<SpinnerWaiting />)
+    return <SpinnerWaiting />;
   }
 
   return (
@@ -107,16 +107,29 @@ const CreateResort = () => {
         <div className="py-4 space-y-4">
           <h2 className="text-2xl font-extrabold text-sky-600 leading-tight">
             <SparklesIcon className="inline-block mr-2 h-8 w-8 text-sky-500" />
-            Thêm mới một khu nghỉ dưỡng sang trọng với đầy đủ các tiện nghi và dịch vụ
+            Thêm mới một khu nghỉ dưỡng sang trọng với đầy đủ các tiện nghi và
+            dịch vụ
           </h2>
 
           <span className="block text-lg text-gray-600 font-medium mt-4">
-            Cung cấp các thông tin chi tiết về resort bao gồm <span className="text-blue-600 hover:text-blue-800">thông tin cơ bản</span>,
-            <span className="text-blue-600 hover:text-blue-800"> tiện ích nổi bật</span>, và <span className="text-blue-600 hover:text-blue-800">các loại phòng</span> để đáp ứng nhu cầu của khách hàng.
+            Cung cấp các thông tin chi tiết về resort bao gồm{" "}
+            <span className="text-blue-600 hover:text-blue-800">
+              thông tin cơ bản
+            </span>
+            ,
+            <span className="text-blue-600 hover:text-blue-800">
+              {" "}
+              tiện ích nổi bật
+            </span>
+            , và{" "}
+            <span className="text-blue-600 hover:text-blue-800">
+              các loại phòng
+            </span>{" "}
+            để đáp ứng nhu cầu của khách hàng.
           </span>
         </div>
         <img
-          src="../src/assets/logoTEPblack.png" // Replace with your logo URL
+          src="https://unwinds.s3.ap-southeast-2.amazonaws.com/1731986300333_logoTEPblack.png"
           alt="Company Logo"
           className="w-48 object-contain"
         />
@@ -147,7 +160,6 @@ const CreateResort = () => {
         />
       )}
     </div>
-
   );
 };
 
