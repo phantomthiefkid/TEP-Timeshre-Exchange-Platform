@@ -38,8 +38,7 @@ const detailExchangeRequestModal = ({ isOpen, onClose, requestId, onSave }) => {
     setIsDetailEdit(false);
     onClose();
   };
-  const handleAccept = async (e) => {
-    e.preventDefault();
+  const handleAccept = async () => {
     try {
       await approveExchangeRequestById(requestId.id, {
         note: "",

@@ -98,8 +98,7 @@ const DetailRentalPostingModal = ({ isOpen, onClose, postingId, onSave }) => {
     return numericValue;
   };
 
-  const handleAccept = async (e) => {
-    e.preventDefault();
+  const handleAccept = async () => {
     let isValid = true;
 
     // Validate staffRefinementPrice
