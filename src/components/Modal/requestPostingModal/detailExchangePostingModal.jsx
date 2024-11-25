@@ -79,8 +79,7 @@ const detailExchangePostingModal = ({ isOpen, onClose, postingId, onSave }) => {
     setIsDetailEdit(false);
     onClose();
   };
-  const handleAccept = async (e) => {
-    e.preventDefault();
+  const handleAccept = async () => {
     try {
       await approveExchangePostingById(postingId.exchangePostingId, {
         staffRefinementPrice: 0,
