@@ -293,7 +293,6 @@ const Dashboard = () => {
       setLoading(false);
     }
   };
-
   const handleNextPage = () => {
     if (page < totalPages - 1) {
       setPage(page + 1);
@@ -305,7 +304,6 @@ const Dashboard = () => {
       setPage(page - 1);
     }
   };
-
   const transactionTypeEnum = {
     RENTALBOOKING: "Thanh toán đặt cho thuê",
     RENTALPOSTING: "Thanh toán đăng bài cho thuê",
@@ -364,9 +362,12 @@ const Dashboard = () => {
   };
 
   useEffect(() => {
-    fetchDashboardData();
     fetchAllTransaction();
   }, [page, size, walletTransactionEnum]);
+
+  useEffect(() => {
+    fetchDashboardData();
+  }, []);
 
   if (loading) {
     return <SpinnerWaiting />;
@@ -652,7 +653,7 @@ const Dashboard = () => {
             </thead>
 
             <tbody>
-              {allTransaction.map((transaction, index) => (
+              {allTransaction.slice(0, 10).map((transaction, index) => (
                 <tr key={transaction.id || index} className="bg-white border-b">
                   <td className="p-4 w-[310px] flex items-center">
                     <div
@@ -720,7 +721,7 @@ const Dashboard = () => {
                       </div>
                     </div>
                   </td>
-                  <td className="p-4 font-semibold w-72">
+                  <td className="p-4 text-sm w-72">
                     {transaction.description}
                   </td>
                 </tr>
@@ -797,10 +798,10 @@ const Dashboard = () => {
               </button>
             </div>
           ) : (
-            <div className="flex flex-col items-center justify-center mt-5 w-full min-h-[55vh] border-2 border-dashed border-gray-300 rounded-lg bg-gradient-to-b from-gray-50 to-gray-100">
+            <div className="flex flex-col items-center justify-center mt-5 w-full min-h-[370px] border-2 border-dashed border-gray-300 rounded-lg bg-gradient-to-b from-gray-50 to-gray-100">
               <FaList className="text-gray-400 text-6xl animate-pulse mb-4" />
               <span className="text-gray-600 text-lg font-medium">
-                Không có thanh toán nào có sẵn
+                Không có bài đăng cho thuê nào có sẵn
               </span>
             </div>
           )}
