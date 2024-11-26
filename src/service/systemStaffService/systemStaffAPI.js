@@ -156,12 +156,12 @@ const getTotalCompany = async () => {
   }
 };
 
-const getAllTransaction = async (pageNo, pageSize, walletTransactionEnum) => {
+const getAllTransaction = async (page, size, walletTransactionEnum) => {
   try {
     return await axiosConfig.get(`wallet/system-staff/wallet-transaction`, {
       params: {
-        pageNo,
-        pageSize,
+        page,
+        size,
         walletTransactionEnum,
       },
     });

@@ -405,12 +405,12 @@ const detailExchangePostingModal = ({ isOpen, onClose, postingId, onSave }) => {
                         </div>
                       ) : (
                         <div>
-                          <button
+                          {/* <button
                             className="border border-red-500 text-red-500 px-4 py-2 rounded-xl mr-2 hover:bg-red-500 hover:text-white transition duration-150"
                             onClick={() => setIsEditRoomAmenity(false)}
                           >
                             Hủy bỏ
-                          </button>
+                          </button> */}
                           <button
                             className="bg-green-500 border-2 text-white p-2 rounded-xl hover:bg-green-600 cursor-pointer"
                             onClick={() => handleUpdateAmenity()}
