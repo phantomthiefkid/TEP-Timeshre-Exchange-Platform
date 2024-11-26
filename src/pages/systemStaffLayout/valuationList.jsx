@@ -83,7 +83,7 @@ const ValuationList = () => {
             case "PendingPricing":
                 return {
                     label: "Chờ định giá",
-                    style: đ,
+                    style: "bg-orange-100 text-orange-500",
                     styleDot: "bg-orange-500"
                 };
             case "Closed":
