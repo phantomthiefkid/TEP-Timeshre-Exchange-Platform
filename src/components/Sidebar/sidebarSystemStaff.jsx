@@ -9,8 +9,6 @@ import {
   FaChartBar,
   FaListAlt,
   FaUserCheck,
-  FaRegFileAlt,
-  FaRegFile,
   FaList,
   FaListOl,
   FaComment,
@@ -23,20 +21,16 @@ const MenuItem = ({ icon: Icon, title, children, path }) => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
 
-  // Check if the current location's pathname matches the current path
-  const isActive = path ? location.pathname.startsWith(path) : false;
+  const isActive = path ? location.pathname === path : false;
 
-  // Check if any child is active by comparing each child's path
   const hasActiveChild = children
     ? React.Children.toArray(children).some(
-        (child) =>
-          child.props.path && location.pathname.startsWith(child.props.path)
+        (child) => child.props.path && location.pathname === child.props.path
       )
     : false;
 
   const isParentActive = isActive || hasActiveChild;
 
-  // Handle dropdown toggle for nested menu items
   const handleClick = (e) => {
     if (!path && children) {
       e.preventDefault();
@@ -119,12 +113,6 @@ const SidebarSystemStaff = () => {
           title="Quản lí phản hồi"
           path="feedbackmng"
         />
-        <MenuItem icon={FaMoneyBillAlt} title="Thanh toán">
-          <div className="space-y-2 ml-4">
-            <MenuItem icon={FaUserCheck} title="Người đăng" path="#" />
-            <MenuItem icon={FaCity} title="Công ty Timeshare" path="#" />
-          </div>
-        </MenuItem>
         {/* <MenuItem icon={FaRegFileAlt} title="Quản lí FAQs" path="#" />
         <MenuItem icon={FaRegFile} title="Quản lí chính sách" path="#" /> */}
         <MenuItem
