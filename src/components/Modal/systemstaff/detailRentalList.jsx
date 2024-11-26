@@ -2,14 +2,16 @@ import React, { useEffect, useState } from "react";
 import { toast, Toaster } from "react-hot-toast";
 import { FaEdit, FaMap, FaMapMarkerAlt, FaSpinner } from "react-icons/fa";
 import { FaLocationPin, FaPencil, FaXmark } from "react-icons/fa6";
-import { acceptNewPriceValuation } from "../../../service/systemStaffService/systemStaffAPI";
+import { acceptNewPriceValuation, getRentalPostingById } from "../../../service/systemStaffService/systemStaffAPI";
+import SpinnerWaiting from "../../LoadingComponent/spinnerWaiting";
 import FormatCurrency from "../../Validate/formatCurrency";
 const DetailRentalList = ({ isOpen, onClose, postingId, flag }) => {
   const [isVisible, setIsVisible] = useState(false);
-  const [newPriceValuation, setNewPriceValuation] = useState("");
+  const [newPriceValuation, setNewPriceValuation] = useState();
   const [editFlag, setEditFlag] = useState(false);
   const [isSpinner, setIsSpinner] = useState(false);
-  const [rentalPosting, setRentalPosting] = useState(postingId)
+  const [rentalPosting, setRentalPosting] = useState(null)
+  const [reload, setReload] = useState(false);
   useEffect(() => {
     if (isOpen) {
       setIsVisible(true);
@@ -19,8 +21,19 @@ const DetailRentalList = ({ isOpen, onClose, postingId, flag }) => {
   }, [isOpen]);
 
   useEffect(() => {
-    setRentalPosting(postingId)
-  }, [postingId])
+    const fetchRentalPostingDetail = async () => {
+      try {
+        let data = await getRentalPostingById(postingId)
+        if (data.status === 200) {
+          setRentalPosting(data.data)
+          setNewPriceValuation(data.data.priceValuation)
+        }
+      } catch (error) {
+        throw error
+      }
+    }
+    fetchRentalPostingDetail();
+  }, [postingId, reload])
 
   if (!isVisible) return null;
 
@@ -91,16 +104,24 @@ const DetailRentalList = ({ isOpen, onClose, postingId, flag }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsSpinner(true);
-    let data = await acceptNewPriceValuation(
-      postingId.rentalPostingId,
-      parseFloat(newPriceValuation)
-    );
-    if (data.status === 200) {
-      flag();
-      onClose()
+    try {
+      setIsSpinner(true);
+      let data = await acceptNewPriceValuation(
+        postingId,
+        parseFloat(newPriceValuation)
+      );
+      if (data.status === 200) {
+        setReload(!reload)
+        toast.success("Định giá thành công!", { duration: 3000 });
+        flag()
+        setEditFlag(false)
+        setIsSpinner(false)
+      }
+    } catch (error) {
+      throw error
+    } finally {
+      setEditFlag(false)
       setIsSpinner(false)
-      toast.success("Định giá thành công!", { duration: 3000 });
     }
   };
 
@@ -209,31 +230,40 @@ const DetailRentalList = ({ isOpen, onClose, postingId, flag }) => {
                 {rentalPosting.status === "PendingPricing" ? (
                   <p>
                     {editFlag ? (
-                      <p className="flex justify-start items-center gap-4">
-
-                        <input
-                          className="border-2 w-32 p-2 border-gray-300 rounded-lg py-1 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200 shadow-sm"
-                          onChange={(e) => setNewPriceValuation(e.target.value)}
-                          type="text"
-                          name="newPriceValuation"
-                          value={newPriceValuation}
-                          placeholder="Nhập giá"
-                        />
+                      <p className="flex items-center gap-4">
+                        <div className="relative">
+                          <input
+                            className="w-32 p-2 border border-gray-300 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition-all duration-300"
+                            onChange={(e) => setNewPriceValuation(e.target.value)}
+                            type="text"
+                            name="newPriceValuation"
+                            value={newPriceValuation}
+                            placeholder="Nhập giá"
+                          />
+                          <span className="absolute top-1/2 right-3 transform -translate-y-1/2 text-gray-400">
+                            VNĐ
+                          </span>
+                        </div>
                         <FaEdit
                           onClick={() => setEditFlag(false)}
                           size={24}
-                          color="#EE6457"
+                          className="cursor-pointer text-[#EE6457] hover:scale-110 transition-transform duration-200"
                         />
                       </p>
+
                     ) : (
-                      <FaEdit
-                        onClick={() => setEditFlag(true)}
-                        size={24}
-                        color="#2D99AE"
-                      />
+                      <p className="flex justify-start items-center gap-4">
+                        <p className="font-mono">{FormatCurrency(newPriceValuation)}</p>
+                        <FaEdit
+                          onClick={() => setEditFlag(true)}
+                          size={24}
+                          color="#2D99AE"
+                        />
+                      </p>
+
                     )}
                   </p>
-                ) : (<p className="font-mono">{FormatCurrency(rentalPosting.priceValuation)}</p>)}
+                ) : (<p className="font-mono">{FormatCurrency(newPriceValuation)}</p>)}
               </div>
 
               <div className="mb-4">
