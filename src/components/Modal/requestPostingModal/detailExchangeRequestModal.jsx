@@ -18,6 +18,8 @@ const detailExchangeRequestModal = ({ isOpen, onClose, requestId, onSave }) => {
   const [unitTypes, setUnitTypes] = useState([]);
   const [selectedUnitType, setSelectedUnitType] = useState("");
 
+  const [isLoading, setIsLoading] = useState(false);
+
   const modalStyles = isOpen
     ? {}
     : {
@@ -38,8 +40,10 @@ const detailExchangeRequestModal = ({ isOpen, onClose, requestId, onSave }) => {
     setIsDetailEdit(false);
     onClose();
   };
+
   const handleAccept = async () => {
     try {
+      setIsLoading(true);
       await approveExchangeRequestById(requestId.id, {
         note: "",
         unitTypeId: selectedUnitType?.id || 0,
@@ -49,6 +53,8 @@ const detailExchangeRequestModal = ({ isOpen, onClose, requestId, onSave }) => {
       handleOnClose();
     } catch (error) {
       toast.error("Đã có lỗi xảy ra", { duration: 2000 });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -269,17 +275,25 @@ const detailExchangeRequestModal = ({ isOpen, onClose, requestId, onSave }) => {
             </button>
           </div>
           <div className=" flex justify-end">
-            <button
-              className="border border-red-500 text-red-500 px-4 py-2 rounded-xl mr-2 hover:bg-red-500 hover:text-white transition duration-150"
-              onClick={() => setIsRejectModalOpen(true)}
-            >
-              Từ chối
-            </button>
+            {!isLoading && (
+              <button
+                className="border border-red-500 text-red-500 px-4 py-2 rounded-xl mr-2 hover:bg-red-500 hover:text-white transition duration-150"
+                onClick={() => setIsRejectModalOpen(true)}
+              >
+                Từ chối
+              </button>
+            )}
+
             <button
               className="bg-green-500 text-white px-4 py-2 rounded-xl hover:bg-green-600 transition duration-150"
-              onClick={handleAccept}
+              onClick={() => handleAccept()}
+              disabled={isLoading}
             >
-              Xác nhận
+              {isLoading ? (
+                <div className="spinner-border animate-spin border-t-2 border-white w-5 h-5 border-solid rounded-full" />
+              ) : (
+                "Xác nhận"
+              )}
             </button>
           </div>
         </div>
