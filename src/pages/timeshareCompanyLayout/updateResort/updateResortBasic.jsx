@@ -1,17 +1,9 @@
 import { LocationMarkerIcon } from "@heroicons/react/solid";
 import React, { useEffect, useState } from "react";
 import { toast, Toaster } from "react-hot-toast";
-import {
-  FaUpload,
-  FaMapMarkerAlt,
-  FaArrowRight,
-  FaEdit,
-  FaSave,
-  FaSpinner,
-} from "react-icons/fa";
+import { FaUpload, FaSave, FaSpinner } from "react-icons/fa";
 import { FaXmark } from "react-icons/fa6";
 import { useParams } from "react-router-dom";
-import Loading from "../../../components/LoadingComponent/loading";
 import SpinnerWaiting from "../../../components/LoadingComponent/spinnerWaiting";
 import ViewImageModal from "../../../components/Modal/tsComapny/viewImageModal";
 import {
@@ -22,7 +14,9 @@ import {
   uploadFileImage,
   uploadMultipleFileImage,
 } from "../../../service/uploadFileService/uploadFileAPI";
-
+import { MapContainer, Marker, Popup, TileLayer, useMap } from "react-leaflet";
+import { GeoSearchControl, OpenStreetMapProvider } from "leaflet-geosearch";
+import L from "leaflet";
 const UpdateResortBasic = () => {
   const { id } = useParams();
   const [resort, setResort] = useState({
@@ -31,7 +25,14 @@ const UpdateResortBasic = () => {
     minPrice: 0,
     maxPrice: 0,
     status: "",
-    address: "",
+    location: {
+      name: "",
+      displayName: "",
+      latitude: "",
+      longitude: "",
+      country: "",
+      placeId: "",
+    },
     timeshareCompanyId: 0,
     description: "",
     resortAmenityList: [],
@@ -52,7 +53,7 @@ const UpdateResortBasic = () => {
         minPrice,
         maxPrice,
         status,
-        address,
+        location: { name, displayName, latitude, longitude, country, placeId },
         timeshareCompanyId,
         description,
         resortAmenityList,
@@ -65,7 +66,14 @@ const UpdateResortBasic = () => {
         minPrice,
         maxPrice,
         status,
-        address,
+        location: {
+          name,
+          displayName,
+          latitude,
+          longitude,
+          country,
+          placeId,
+        },
         timeshareCompanyId,
         description,
         resortAmenityList,
@@ -161,6 +169,43 @@ const UpdateResortBasic = () => {
     return JSON.stringify(resort) !== JSON.stringify(originalResort);
   };
 
+  const GeoSearch = () => {
+    const map = useMap();
+
+    useEffect(() => {
+      const provider = new OpenStreetMapProvider();
+      const searchControl = new GeoSearchControl({
+        provider,
+        style: "bar",
+        showMarker: true,
+        autoClose: true,
+        keepResult: true,
+        searchLabel: "Nhập địa chỉ",
+      });
+
+      map.addControl(searchControl);
+
+      map.on("geosearch/showlocation", (event) => {
+        const { x: longitude, y: latitude, raw } = event.location;
+
+        setResort((prevResort) => ({
+          ...prevResort,
+          location: {
+            ...prevResort.location,
+            name: raw.name,
+            displayName: raw.display_name,
+            latitude,
+            longitude,
+            placeId: raw.place_id,
+          },
+        }));
+      });
+
+      return () => map.removeControl(searchControl);
+    }, [map]);
+
+    return null;
+  };
   if (loading) {
     return <SpinnerWaiting />;
   }
@@ -233,16 +278,33 @@ const UpdateResortBasic = () => {
             <label className="text-gray-700 text-lg font-medium">
               Địa chỉ*
             </label>
-            <div className="relative">
-              <LocationMarkerIcon className="absolute left-3 top-4 w-5 text-red-500" />
-              <input
-                className="pl-10 border-2 border-gray-300 rounded-lg w-full p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition shadow-md "
-                type="text"
-                name="address"
-                value={resort.address}
-                onChange={handleChange}
-                placeholder="Nhập địa chỉ resort"
-              />
+            <p className="text-gray-700">{resort.location.displayName}</p>
+            <p className="text-gray-500 text-sm">
+              Nhập địa chỉ bằng thanh tìm kiếm trên bản đồ.
+            </p>
+            <div className="w-full h-80 rounded-lg shadow-md mt-4">
+              <MapContainer
+                center={[
+                  resort.location.latitude || 21.028511,
+                  resort.location.longitude || 105.804817,
+                ]}
+                zoom={24}
+                className="h-full rounded-lg"
+              >
+                <TileLayer
+                  attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                />
+                <Marker
+                  position={[
+                    resort.location.latitude,
+                    resort.location.longitude,
+                  ]}
+                >
+                  <Popup>{resort.location.displayName}</Popup>
+                </Marker>
+                <GeoSearch />
+              </MapContainer>
             </div>
           </div>
           <div className="space-y-1">

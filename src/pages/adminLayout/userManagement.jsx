@@ -15,7 +15,13 @@ import { toast, Toaster } from "react-hot-toast";
 import DetailEditUserModal from "../../components/Modal/detailEditUserModal";
 import SpinnerWaiting from "../../components/LoadingComponent/spinnerWaiting";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa6";
-import { FaBuilding, FaLock, FaUserAlt, FaUserCog, FaUsers } from "react-icons/fa";
+import {
+  FaBuilding,
+  FaLock,
+  FaUserAlt,
+  FaUserCog,
+  FaUsers,
+} from "react-icons/fa";
 const UserManagement = () => {
   const [allUser, setAllUser] = useState([]);
   const [page, setPage] = useState(0);
@@ -39,7 +45,7 @@ const UserManagement = () => {
     tsc: 0,
     customer: 0,
     total: 0,
-  })
+  });
   const fetchAllUser = async () => {
     try {
       let data = await getAllUser(page, size, roleId, userName);
@@ -93,7 +99,13 @@ const UserManagement = () => {
     try {
       let currentPage = 0;
       let fetchedAllPages = false;
-      let roleCounts = { admin: 0, systemStaff: 0, tsc: 0, customer: 0, total: 0 };
+      let roleCounts = {
+        admin: 0,
+        systemStaff: 0,
+        tsc: 0,
+        customer: 0,
+        total: 0,
+      };
 
       while (!fetchedAllPages) {
         const data = await getAllUserForCount();
@@ -141,7 +153,7 @@ const UserManagement = () => {
 
   useEffect(() => {
     // fetchAllUserForCount();
-    fetchUserCounts()
+    fetchUserCounts();
   }, []);
 
   const handleNextPage = () => {
@@ -165,8 +177,6 @@ const UserManagement = () => {
     setUserName(e.target.value);
     setPage(0);
   };
-
- 
 
   const handleCreateUser = async (newUser) => {
     try {
@@ -237,8 +247,6 @@ const UserManagement = () => {
               <CountUp start={0} end={counts.admin} duration={4} />
             </div>
           </div>
-
-
         </div>
 
         <div className="flex justify-end items-center p-6 space-x-6">
@@ -258,10 +266,10 @@ const UserManagement = () => {
               onChange={handleRoleFilter}
             >
               <option value="">Tất cả</option>
-              <option value="4">Admin</option>
-              <option value="2">Timeshare Company</option>
-              <option value="3">System Staff</option>
-              <option value="1">Customer</option>
+              <option value="4">Quản trị viên</option>
+              <option value="2">Công ty Timeshare</option>
+              <option value="3">Nhân viên hệ thống</option>
+              <option value="1">Khách hàng</option>
             </select>
 
             {/* Add New User Button */}
@@ -273,8 +281,6 @@ const UserManagement = () => {
               <span className="font-semibold">Thêm người dùng mới</span>
             </button>
 
-
-
             <CreateUserModal
               isOpen={isModalOpen}
               onClose={() => setIsModalOpen(false)}
@@ -282,8 +288,6 @@ const UserManagement = () => {
             />
           </div>
         </div>
-
-
 
         <table className="min-w-full bg-white border border-gray-200">
           <thead>
@@ -297,51 +301,59 @@ const UserManagement = () => {
             </tr>
           </thead>
           <tbody className="bg-white">
-            {allUser && allUser.map((item, index) => (
-              <tr key={index} className="border-b border-gray-200 hover:bg-gray-200">
-                <td className="p-4">{index + 1}</td>
-                <td className="p-4 flex items-center">
-                  <img
-                    src="https://img.freepik.com/premium-vector/customer-testimonials_9206-746.jpg?semt=ais_hybrid"
-                    alt={`${item.name}'s avatar`}
-                    className="w-14 h-14 rounded-full mr-2" // Adjust size as needed
-                  />
-                  <div>
-                    <p className="font-semibold text-gray-700 text-lg">{item.userName ? item.userName : "Người dùng"}</p> {/* Display Name */}
-                    <p className="text-gray-500 text-md">{item.email}</p> {/* Display Email */}
-                  </div>
-                </td>
-                <td className="p-4">{item.email}</td>
-                <td className="p-4">{item.roleName}</td>
-                <td className="p-4 text-center">
-                  {/* <input
+            {allUser &&
+              allUser.map((item, index) => (
+                <tr
+                  key={index}
+                  className="border-b border-gray-200 hover:bg-gray-200"
+                >
+                  <td className="p-4">{index + 1}</td>
+                  <td className="p-4 flex items-center">
+                    <img
+                      src="https://img.freepik.com/premium-vector/customer-testimonials_9206-746.jpg?semt=ais_hybrid"
+                      alt={`${item.name}'s avatar`}
+                      className="w-14 h-14 rounded-full mr-2" // Adjust size as needed
+                    />
+                    <div>
+                      <p className="font-semibold text-gray-700 text-lg">
+                        {item.userName ? item.userName : "Người dùng"}
+                      </p>{" "}
+                      {/* Display Name */}
+                      <p className="text-gray-500 text-md">{item.email}</p>{" "}
+                      {/* Display Email */}
+                    </div>
+                  </td>
+                  <td className="p-4">{item.email}</td>
+                  <td className="p-4">{item.roleName}</td>
+                  <td className="p-4 text-center">
+                    {/* <input
                     type="checkbox"
                     checked={item.state}
                     className={`w-6 h-6 ${item.state ? 'bg-green-500' : 'bg-gray-300'}`}
                   /> */}
-                  <label className="flex items-center">
-                    <input
-                      type="checkbox"
-                      checked={item.isActive}
-                      className="sr-only peer"
-                      disabled
-                    />
-                    <div className="relative w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
-                    <span className="ms-3 text-sm font-medium text-gray-400 dark:text-gray-500">
-                      {item.isActive ? "Đang hoạt động" : "Đã vô hiệu hóa"}
-                    </span>
-                  </label>
-                </td>
-                <td className="p-4 flex gap-4">
-                  <button onClick={() => handleOpenUpdateModal(item)}>
-                    <DocumentIcon color="gray" className="w-6 h-6" />
-                  </button>
-                  <button>
-                    <DotsVerticalIcon className="w-6 h-6" />
-                  </button>
-                </td>
-              </tr>
-            ))}
+                    <label className="flex items-center">
+                      <input
+                        type="checkbox"
+                        checked={item.isActive}
+                        className="sr-only peer"
+                        disabled
+                      />
+                      <div className="relative w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                      <span className="ms-3 text-sm font-medium text-gray-400 dark:text-gray-500">
+                        {item.isActive ? "Đang hoạt động" : "Đã vô hiệu hóa"}
+                      </span>
+                    </label>
+                  </td>
+                  <td className="p-4 flex gap-4">
+                    <button onClick={() => handleOpenUpdateModal(item)}>
+                      <DocumentIcon color="gray" className="w-6 h-6" />
+                    </button>
+                    <button>
+                      <DotsVerticalIcon className="w-6 h-6" />
+                    </button>
+                  </td>
+                </tr>
+              ))}
           </tbody>
         </table>
 
@@ -366,10 +378,11 @@ const UserManagement = () => {
                 <button
                   key={index}
                   onClick={() => setPage(index)}
-                  className={`w-8 h-8 flex items-center justify-center rounded-full ${index === page
-                    ? "bg-blue-500 text-white"
-                    : "bg-white text-gray-500"
-                    }`}
+                  className={`w-8 h-8 flex items-center justify-center rounded-full ${
+                    index === page
+                      ? "bg-blue-500 text-white"
+                      : "bg-white text-gray-500"
+                  }`}
                 >
                   {index + 1}
                 </button>

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { FaDotCircle, FaEdit, FaMap, FaPlusCircle } from "react-icons/fa";
-import { FaXmark } from "react-icons/fa6";
+import { FaLocationPin, FaXmark } from "react-icons/fa6";
 import RejectExchangePostingModal from "../../Modal/requestPostingModal/rejectExchangePostingModal";
 import {
   approveExchangePostingById,
@@ -10,6 +10,7 @@ import {
 } from "../../../service/tsStaffService/tsStaffAPI";
 import SpinnerWaiting from "../../LoadingComponent/spinnerWaiting";
 import { getUnitTypeByResortId } from "../../../service/public/resortService/resortAPI";
+import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 
 const detailExchangePostingModal = ({ isOpen, onClose, postingId, onSave }) => {
   const [isVisible, setIsVisible] = useState(false);
@@ -64,6 +65,7 @@ const detailExchangePostingModal = ({ isOpen, onClose, postingId, onSave }) => {
         transform: "translateX(100%)",
         transition: "all 0.3s ease",
       };
+  const [isLoading, setIsLoading] = useState(false);
 
   const getStatusStyles = (status) => {
     switch (status) {
@@ -81,6 +83,8 @@ const detailExchangePostingModal = ({ isOpen, onClose, postingId, onSave }) => {
   };
   const handleAccept = async () => {
     try {
+      setIsLoading(true);
+
       await approveExchangePostingById(postingId.exchangePostingId, {
         staffRefinementPrice: 0,
         note: "",
@@ -92,6 +96,8 @@ const detailExchangePostingModal = ({ isOpen, onClose, postingId, onSave }) => {
       handleOnClose();
     } catch (error) {
       toast.error("Đã có lỗi xảy ra", { duration: 2000 });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -507,11 +513,35 @@ const detailExchangePostingModal = ({ isOpen, onClose, postingId, onSave }) => {
 
               <div className="mb-4">
                 <h2 className="text-2xl font-semibold mb-3">Địa chỉ</h2>
-                <p className="text-base mb-3">{postingId.address}</p>
-                <img
-                  src={postingId.imageUrls}
-                  className="w-[600px] h-[300px]"
-                />
+                <div className="flex flex-row">
+                  <FaLocationPin className="text-red-500 mr-2" size={18} />
+                  <p className="text-base font-semibold mb-4">
+                    {postingId.location.displayName}
+                  </p>
+                </div>
+                <div className="col-span-4 lg:col-span-4 relative h-[300px] mt-3">
+                  <MapContainer
+                    center={[
+                      postingId.location.latitude || 10.7763897,
+                      postingId.location.longitude || 106.7011391,
+                    ]}
+                    zoom={24}
+                    scrollWheelZoom={false}
+                    className="w-full h-[300px]"
+                  >
+                    <TileLayer
+                      attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                      url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                    />
+
+                    <Marker
+                      position={[
+                        postingId.location.latitude || 10.7763897,
+                        postingId.location.longitude || 106.7011391,
+                      ]}
+                    ></Marker>
+                  </MapContainer>
+                </div>
               </div>
             </div>
           </>
@@ -530,17 +560,25 @@ const detailExchangePostingModal = ({ isOpen, onClose, postingId, onSave }) => {
             </button>
           </div>
           <div className=" flex justify-end">
-            <button
-              className="border border-red-500 text-red-500 px-4 py-2 rounded-xl mr-2 hover:bg-red-500 hover:text-white transition duration-150"
-              onClick={() => setIsRejectModalOpen(true)}
-            >
-              Từ chối
-            </button>
+            {!isLoading && (
+              <button
+                className="border border-red-500 text-red-500 px-4 py-2 rounded-xl mr-2 hover:bg-red-500 hover:text-white transition duration-150"
+                onClick={() => setIsRejectModalOpen(true)}
+              >
+                Từ chối
+              </button>
+            )}
+
             <button
               className="bg-green-500 text-white px-4 py-2 rounded-xl hover:bg-green-600 transition duration-150"
               onClick={() => handleAccept()}
+              disabled={isLoading}
             >
-              Xác nhận
+              {isLoading ? (
+                <div className="spinner-border animate-spin border-t-2 border-white w-5 h-5 border-solid rounded-full" />
+              ) : (
+                "Xác nhận"
+              )}
             </button>
           </div>
         </div>

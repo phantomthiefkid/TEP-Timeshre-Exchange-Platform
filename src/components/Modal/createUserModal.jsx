@@ -127,10 +127,10 @@ const CreateUserModal = ({ isOpen, onClose, onCreate }) => {
               className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               required
             >
-              <option value="1">Customer</option>
-              <option value="2">Timeshare Company</option>
-              <option value="3">System Staff</option>
-              <option value="4">Admin</option>
+              <option value="1">Khách hàng</option>
+              <option value="2">Công ty Timeshare</option>
+              <option value="3">Nhân viên hệ thống</option>
+              <option value="4">Quản trị viên</option>
             </select>
           </div>
 
