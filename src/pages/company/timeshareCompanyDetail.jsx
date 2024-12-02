@@ -216,32 +216,52 @@ const TimeshareCompanyDetail = () => {
                 companyDetail.location.latitude || 21.028511,
                 companyDetail.location.longitude || 105.804817,
               ]}
-              zoom={24}
+              zoom={9}
               className="w-full h-screen"
             >
               <TileLayer
                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
               />
-              <Marker
-                position={[
-                  companyDetail.location.latitude || 21.028511,
-                  companyDetail.location.longitude || 105.804817,
-                ]}
-              >
-                <Popup className="flex flex-col items-center justify-center w-[300px] rounded-xl shadow-lg text-center border-2 border-blue-300 ">
-                  <div>
-                    <img
-                      className="w-full h-full mb-2"
-                      src={companyDetail.logo}
-                      alt={companyDetail.timeshareCompanyName}
-                    />
-                    <div className="text-sm font-semibold text-gray-800">
-                      {companyDetail.timeshareCompanyName}
-                    </div>
-                  </div>
-                </Popup>
-              </Marker>
+              {resorts &&
+                resorts.map((resort, index) => (
+                  <Marker
+                    key={index}
+                    position={[
+                      resort.resortLocationLatitude || 10.762622,
+                      resort.resortLocationLongitude || 106.660172,
+                    ]}
+                  >
+                    <Popup>
+                      <div className="flex flex-row justify-center w-full">
+                        <img
+                          className="h-[100px] w-1/3 mb-1 flex justify-center rounded-xl"
+                          src={resort.logo}
+                          alt={resort.resortName}
+                        />
+
+                        <div className="ml-3 mt-4 w-64 flex flex-col justify-center items-left">
+                          <span className="text-sm font-semibold text-black">
+                            {resort.resortName}
+                          </span>
+                          <div className="flex flex-row">
+                            <p className="text-sm italic text-gray-500">
+                              {new Intl.NumberFormat("vi-VN", {
+                                style: "currency",
+                                currency: "VND",
+                              }).format(resort.minPrice)}{" "}
+                              -{" "}
+                              {new Intl.NumberFormat("vi-VN", {
+                                style: "currency",
+                                currency: "VND",
+                              }).format(resort.maxPrice)}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </Popup>
+                  </Marker>
+                ))}
             </MapContainer>
           </div>
         </div>
