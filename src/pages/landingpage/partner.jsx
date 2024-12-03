@@ -29,6 +29,7 @@ const Partner = () => {
           <div className="flex justify-center">
             <div className="grid grid-cols-4 gap-4 max-w-6xl w-full">
               {tsCompany.slice(0, 8).map((item, index) => (
+               <Link to={`/timesharecompanydetail/${item.id}`}>
                 <div key={index}>
                   <img
                     src={item.logo}
@@ -36,6 +37,7 @@ const Partner = () => {
                     className="w-[370px] h-[170px] object-contain border rounded-2xl shadow-xl"
                   />
                 </div>
+               </Link>
               ))}
             </div>
           </div>

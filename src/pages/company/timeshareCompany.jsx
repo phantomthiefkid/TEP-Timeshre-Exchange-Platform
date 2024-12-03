@@ -4,6 +4,7 @@ import Footer from "../../components/Footer/footer";
 import { Link, useNavigate } from "react-router-dom";
 import { getAllTimeshareCompany } from "../../service/public/resortService/resortAPI";
 import { FaSearch } from "react-icons/fa";
+import SpinnerWaiting from "../../components/LoadingComponent/spinnerWaiting";
 
 const TimeshareCompany = () => {
   const navigate = useNavigate();
@@ -11,6 +12,7 @@ const TimeshareCompany = () => {
   const [company, setCompany] = useState([]);
   const [debounceTimeout, setDebounceTimeout] = useState(null);
   const [tsCompany, setTsCompany] = useState("");
+  const [loading, setLoading] = useState(true)
 
   const handleSearch = (e) => {
     const searchInput = e.target.value;
@@ -55,20 +57,26 @@ const TimeshareCompany = () => {
       let data = await getAllTimeshareCompany();
       if (data.status == 200) {
         setTsCompany(data.data.content);
+        setLoading(false)
       }
     } catch (error) {
       return error;
+    } finally {
+      setLoading(false)
     }
   };
 
   const handleTSCDetails = (tsId) => {
     navigate(`/timesharecompanydetail/${tsId}`);
-    console.log(tsId);
   };
 
   useEffect(() => {
     fetchTimeshareCompany();
   }, []);
+
+  if (loading) {
+    return (<SpinnerWaiting/>)
+  }
 
   return (
     <>
