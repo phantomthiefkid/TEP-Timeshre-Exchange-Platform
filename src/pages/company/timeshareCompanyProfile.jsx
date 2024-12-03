@@ -9,6 +9,13 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import { XIcon } from "@heroicons/react/solid";
+import {
+  HeartIcon,
+  LocationMarkerIcon,
+  StarIcon,
+} from "@heroicons/react/solid";
+import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
+import { FaLocationPin } from "react-icons/fa6";
 const TimeshareCompanyProfile = () => {
   const { tsId } = useParams();
   const [companyDetail, setCompanyDetail] = useState(null);
@@ -47,7 +54,6 @@ const TimeshareCompanyProfile = () => {
       </div>
     );
   }
-
   return (
     <>
       <Navigation />
@@ -96,6 +102,50 @@ const TimeshareCompanyProfile = () => {
                 />
               </div>
             ))}
+        </div>
+        <div className="mt-4">
+          <h3 className="text-2xl font-bold text-gray-800 mb-3">Địa chỉ</h3>
+          <div className="flex flex-row">
+            <FaLocationPin className="text-red-500 mr-2" size={18} />
+            <p className="text-base font-semibold mb-4">
+              {companyDetail.location.displayName}
+            </p>
+          </div>
+          <div className="col-span-4 lg:col-span-4 mt-4">
+            <MapContainer
+              center={[
+                companyDetail.location.latitude || 21.028511,
+                companyDetail.location.longitude || 105.804817,
+              ]}
+              zoom={24}
+              className="w-full h-[570px]"
+              scrollWheelZoom={false}
+            >
+              <TileLayer
+                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              />
+              <Marker
+                position={[
+                  companyDetail.location.latitude || 21.028511,
+                  companyDetail.location.longitude || 105.804817,
+                ]}
+              >
+                <Popup className="flex flex-col items-center justify-center w-[300px] rounded-xl shadow-lg text-center border-2 border-blue-300 ">
+                  <div>
+                    <img
+                      className="w-full h-full mb-2"
+                      src={companyDetail.logo}
+                      alt={companyDetail.timeshareCompanyName}
+                    />
+                    <div className="text-sm font-semibold text-gray-800">
+                      {companyDetail.timeshareCompanyName}
+                    </div>
+                  </div>
+                </Popup>
+              </Marker>
+            </MapContainer>
+          </div>
         </div>
       </section>
       {

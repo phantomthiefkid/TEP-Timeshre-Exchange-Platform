@@ -9,8 +9,11 @@ const Navigation = () => {
       <div className=" px-10 w-full flex justify-between items-center">
         <div className="flex w-1/5 justify-start">
           <a href="/">
-            {" "}
-            <img src="https://unwinds.s3.ap-southeast-2.amazonaws.com/1731302217106_logoTEP.png" alt="Unwind Logo" className="h-[50px]  mr-2" />
+            <img
+              src="https://unwinds.s3.ap-southeast-2.amazonaws.com/1731302217106_logoTEP.png"
+              alt="Unwind Logo"
+              className="h-[50px]  mr-2"
+            />
           </a>
           {/* <label className='font-bold text-3xl text-white'>Unwind</label> */}
         </div>
@@ -23,7 +26,7 @@ const Navigation = () => {
           </li>
           <li className="group">
             <a href="/timesharecompanylist" className="hover:text-gray-200">
-              Timeshare Company
+              Công ty Timeshare
             </a>
             <div className="border-b-4 border-blue-400 group-hover:scale-x-100 scale-x-0 transform transition-transform duration-300 origin-left mt-1"></div>
           </li>

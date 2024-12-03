@@ -1,12 +1,18 @@
 import React, { useEffect, useState } from "react";
 import CountUp from "react-countup";
+import { PlusIcon } from "@heroicons/react/solid";
 import {
-  PlusIcon,
-} from "@heroicons/react/solid";
-import { getAllResort, getTotalResort } from "../../service/tsCompanyService/tsCompanyAPI";
+  getAllResort,
+  getTotalResort,
+} from "../../service/tsCompanyService/tsCompanyAPI";
 import { Link } from "react-router-dom";
 import SpinnerWaiting from "../../components/LoadingComponent/spinnerWaiting";
-import { FaChevronLeft, FaChevronRight, FaInfoCircle, FaSearch } from "react-icons/fa";
+import {
+  FaChevronLeft,
+  FaChevronRight,
+  FaInfoCircle,
+  FaSearch,
+} from "react-icons/fa";
 import FormatCurrency from "../../components/Validate/formatCurrency";
 import { HiOfficeBuilding } from "react-icons/hi";
 
@@ -32,13 +38,13 @@ const ResortManagementTSC = () => {
     } catch (error) {
       throw error;
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
   };
 
   const fetchTotalResort = async () => {
     try {
-      let data = await getTotalResort()
+      let data = await getTotalResort();
       if (data.status === 200) {
         setTotalResort(data.data);
       }
@@ -71,10 +77,8 @@ const ResortManagementTSC = () => {
   }, [page, resortName]);
 
   useEffect(() => {
-
-    fetchTotalResort()
-
-  }, [])
+    fetchTotalResort();
+  }, []);
 
   if (loading) {
     return <SpinnerWaiting />;
@@ -84,27 +88,30 @@ const ResortManagementTSC = () => {
     <>
       <div className="container mx-auto p-4 bg-white rounded-xl shadow-xl">
         <div className="flex justify-between items-center mb-6">
-
           <div className="py-4 p-6 space-y-4 border-l-4 border-blue-500 bg-gray-50 rounded-lg shadow-lg">
             <h1 className="text-4xl font-bold text-gray-700">
               Quản lý Resort <span className="text-blue-600">theo dõi</span> và
               <span className="text-blue-600"> điều chỉnh thông tin</span>
             </h1>
             <h3 className="text-lg text-gray-500">
-              <span className="font-semibold text-blue-600">Hệ thống hỗ trợ quản lý</span> danh sách resort, trạng thái hoạt động và các chi tiết liên quan.
-
+              <span className="font-semibold text-blue-600">
+                Hệ thống hỗ trợ quản lý
+              </span>{" "}
+              danh sách resort, trạng thái hoạt động và các chi tiết liên quan.
             </h3>
           </div>
           <div className="p-4 flex items-center rounded-xl bg-gradient-to-r from-green-400 to-teal-500 text-white shadow-lg transform transition-transform duration-300 hover:shadow-xl">
             <div className="flex items-center justify-center gap-2">
               <HiOfficeBuilding className="text-3xl" />
               <div className="text-right">
-                <h3 className="text-lg font-semibold">Số lượng resort: <CountUp start={0} end={totalResort} duration={3} /></h3>
+                <h3 className="text-lg font-semibold">
+                  Số lượng resort:{" "}
+                  <CountUp start={0} end={totalResort} duration={3} />
+                </h3>
               </div>
             </div>
           </div>
         </div>
-
 
         <div className="flex items-center justify-between p-2 py-2 px-4">
           <div className="flex items-center border border-gray-300 rounded-lg px-4 py-2 w-full max-w-xl">
@@ -133,7 +140,7 @@ const ResortManagementTSC = () => {
                 <th className="p-4 text-left">STT</th>
                 <th className="p-4 text-left">Resort</th>
                 <th className="p-4 text-left">Giá từ</th>
-                
+
                 <th className="p-4 text-left">Địa chỉ</th>
                 <th className="p-4 text-left">Trạng thái</th>
                 <th className="p-4 text-left"></th>
@@ -161,17 +168,21 @@ const ResortManagementTSC = () => {
 
                     {/* Min Price */}
                     <td className="p-4 text-gray-700">
-                      {item.minPrice ? (FormatCurrency(item.minPrice) + " - " + FormatCurrency(item.maxPrice)): "N/A"}
+                      {item.minPrice
+                        ? FormatCurrency(item.minPrice) +
+                          " - " +
+                          FormatCurrency(item.maxPrice)
+                        : "N/A"}
                     </td>
 
                     {/* Max Price */}
-                   
 
                     {/* Address */}
-                    <td className="p-4 text-gray-700">{item.address || "N/A"}</td>
+                    <td className="p-4 text-gray-700 w-80">
+                      {item.resortLocationDisplayName || "N/A"}
+                    </td>
 
                     {/* Timeshare Company ID */}
-
 
                     {/* Status */}
                     <td className="p-4">
@@ -223,10 +234,11 @@ const ResortManagementTSC = () => {
                   <button
                     key={index}
                     onClick={() => setPage(index)}
-                    className={`w-8 h-8 flex items-center justify-center rounded-full ${index === page
-                      ? "bg-blue-500 text-white"
-                      : "bg-white text-gray-500"
-                      }`}
+                    className={`w-8 h-8 flex items-center justify-center rounded-full ${
+                      index === page
+                        ? "bg-blue-500 text-white"
+                        : "bg-white text-gray-500"
+                    }`}
                   >
                     {index + 1}
                   </button>

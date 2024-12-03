@@ -8,7 +8,7 @@ import {
   FaMap,
   FaPlusCircle,
 } from "react-icons/fa";
-import { FaXmark } from "react-icons/fa6";
+import { FaLocationPin, FaXmark } from "react-icons/fa6";
 import RejectRentalPostingModal from "../../Modal/requestPostingModal/rejectRentalPostingModal";
 import {
   approveRentalPostingById,
@@ -17,6 +17,7 @@ import {
 } from "../../../service/tsStaffService/tsStaffAPI";
 import SpinnerWaiting from "../../LoadingComponent/spinnerWaiting";
 import { getUnitTypeByResortId } from "../../../service/public/resortService/resortAPI";
+import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 
 const DetailRentalPostingModal = ({ isOpen, onClose, postingId, onSave }) => {
   const [isVisible, setIsVisible] = useState(false);
@@ -73,6 +74,7 @@ const DetailRentalPostingModal = ({ isOpen, onClose, postingId, onSave }) => {
       "Độ tuổi tối thiểu để nhận phòng: 18",
     ],
   };
+  const [isLoading, setIsLoading] = useState(false);
 
   const modalStyles = isOpen
     ? {}
@@ -130,6 +132,7 @@ const DetailRentalPostingModal = ({ isOpen, onClose, postingId, onSave }) => {
     if (!isValid) return;
 
     try {
+      setIsLoading(true);
       await approveRentalPostingById(postingId.rentalPostingId, {
         staffRefinementPrice: validatePriceInput(staffRefinementPrice),
         note: "",
@@ -141,6 +144,8 @@ const DetailRentalPostingModal = ({ isOpen, onClose, postingId, onSave }) => {
       handleClose();
     } catch (error) {
       toast.error("Đã có lỗi xảy ra", { duration: 2000 });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -434,6 +439,9 @@ const DetailRentalPostingModal = ({ isOpen, onClose, postingId, onSave }) => {
                               VNĐ
                             </p>
                           </div>
+                          <p className="text-gray-500 italic text-sm">
+                            *Nhập giá cho một đêm
+                          </p>
                           {staffRefinementError && (
                             <p className="text-red-500 text-sm mt-1">
                               {staffRefinementError}
@@ -481,6 +489,9 @@ const DetailRentalPostingModal = ({ isOpen, onClose, postingId, onSave }) => {
                               VNĐ
                             </p>
                           </div>
+                          <p className="text-gray-500 italic text-sm">
+                            *Nhập giá cho một đêm
+                          </p>
                           {priceValuationError && (
                             <p className="text-red-500 text-sm mt-1">
                               {priceValuationError}
@@ -641,12 +652,6 @@ const DetailRentalPostingModal = ({ isOpen, onClose, postingId, onSave }) => {
                         </div>
                       ) : (
                         <div>
-                          {/* <button
-                            className="border border-red-500 text-red-500 px-4 py-2 rounded-xl mr-2 hover:bg-red-500 hover:text-white transition duration-150"
-                            onClick={() => setIsEditRoomAmenity(false)}
-                          >
-                            Hủy bỏ
-                          </button> */}
                           <button
                             className="bg-green-500 border-2 text-white p-2 rounded-xl hover:bg-green-600 cursor-pointer"
                             onClick={() => handleUpdateAmenity()}
@@ -743,11 +748,35 @@ const DetailRentalPostingModal = ({ isOpen, onClose, postingId, onSave }) => {
 
               <div className="mb-4">
                 <h2 className="text-2xl font-semibold mb-3">Địa chỉ</h2>
-                <p className="text-base mb-3">{postingId.address}</p>
-                <img
-                  src="https://placehold.co/600x300"
-                  className="w-[600px] h-[300px]"
-                />
+                <div className="flex flex-row">
+                  <FaLocationPin className="text-red-500 mr-2" size={18} />
+                  <p className="text-base font-semibold mb-4">
+                    {postingId.location.displayName}
+                  </p>
+                </div>
+                <div className="col-span-4 lg:col-span-4 relative h-[300px] mt-3">
+                  <MapContainer
+                    center={[
+                      postingId.location.latitude || 10.7763897,
+                      postingId.location.longitude || 106.7011391,
+                    ]}
+                    zoom={24}
+                    scrollWheelZoom={false}
+                    className="w-full h-[300px]"
+                  >
+                    <TileLayer
+                      attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                      url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                    />
+
+                    <Marker
+                      position={[
+                        postingId.location.latitude || 10.7763897,
+                        postingId.location.longitude || 106.7011391,
+                      ]}
+                    ></Marker>
+                  </MapContainer>
+                </div>
               </div>
             </div>
           </>
@@ -766,17 +795,25 @@ const DetailRentalPostingModal = ({ isOpen, onClose, postingId, onSave }) => {
             </button>
           </div>
           <div className=" flex justify-end">
-            <button
-              className="border border-red-500 text-red-500 px-4 py-2 rounded-xl mr-2 hover:bg-red-500 hover:text-white transition duration-150"
-              onClick={() => setIsRejectModalOpen(true)}
-            >
-              Từ chối
-            </button>
+            {!isLoading && (
+              <button
+                className="border border-red-500 text-red-500 px-4 py-2 rounded-xl mr-2 hover:bg-red-500 hover:text-white transition duration-150"
+                onClick={() => setIsRejectModalOpen(true)}
+              >
+                Từ chối
+              </button>
+            )}
+
             <button
               className="bg-green-500 text-white px-4 py-2 rounded-xl hover:bg-green-600 transition duration-150"
               onClick={() => handleAccept()}
+              disabled={isLoading}
             >
-              Xác nhận
+              {isLoading ? (
+                <div className="spinner-border animate-spin border-t-2 border-white w-5 h-5 border-solid rounded-full" />
+              ) : (
+                "Xác nhận"
+              )}
             </button>
           </div>
         </div>
