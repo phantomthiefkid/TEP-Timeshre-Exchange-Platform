@@ -45,6 +45,18 @@ const Navigation = () => {
             </a>
             <div className="border-b-4 border-blue-400 group-hover:scale-x-100 scale-x-0 transform transition-transform duration-300 origin-left mt-1"></div>
           </li>
+          <li className="group">
+            <a href="/policy" className="hover:text-gray-200">
+              Chính sách
+            </a>
+            <div className="border-b-4 border-blue-400 group-hover:scale-x-100 scale-x-0 transform transition-transform duration-300 origin-left mt-1"></div>
+          </li>
+          <li className="group">
+            <a href="/faqs" className="hover:text-gray-200">
+              FAQs
+            </a>
+            <div className="border-b-4 border-blue-400 group-hover:scale-x-100 scale-x-0 transform transition-transform duration-300 origin-left mt-1"></div>
+          </li>
         </ul>
 
         <ul className="flex items-center justify-end space-x-10 text-white w-2/5 text-lg font-extralight">

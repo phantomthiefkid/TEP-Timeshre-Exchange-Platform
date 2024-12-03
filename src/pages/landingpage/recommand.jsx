@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { Navigation } from "swiper/modules";
 import "swiper/css/effect-coverflow";
+import { getResortRandom } from "../../service/public/resortService/resortAPI";
+import { Link } from "react-router-dom";
 
 const Recommand = () => {
   const resorts = [
@@ -52,6 +54,20 @@ const Recommand = () => {
     },
   ];
 
+  const [randomList, setRandomList] = useState([]);
+
+  const fetchResortRandom = async () => {
+    let data = await getResortRandom();
+    if (data.status === 200) {
+      console.log(data.data);
+      setRandomList(data.data)
+    }
+  }
+
+  useEffect(() => {
+    fetchResortRandom()
+  }, [])
+
   return (
     <div className="py-4 h-h-landing-child-3">
       <div className="text-center">
@@ -81,35 +97,45 @@ const Recommand = () => {
             slideShadows: false,
           }}
         >
-          {resorts.map((resort, index) => (
-            <SwiperSlide key={index} className="relative py-6 px-5">
-              <div className="bg-white h-h-recommend-card border border-solid border-gray-300 min-h-[400px] w-w-recommend-img shadow-lg hover:shadow-xl rounded-lg transition-shadow duration-300 ease-in-out overflow-visible">
-                <div className="relative w-w-recommend-img h-h-recommend-img rounded-lg overflow-hidden">
-                  <img
-                    src={resort.image}
-                    alt={resort.name}
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute inset-0 bg-black opacity-0 hover:opacity-30 transition-opacity duration-300 rounded-lg"></div>
-                </div>
+          {randomList &&
+            randomList.map((resort, index) => (
+              <SwiperSlide key={index} className="relative py-6 px-5">
+                <div className="bg-white h-h-recommend-card border border-solid border-gray-300 min-h-[400px] w-w-recommend-img shadow-lg hover:shadow-xl rounded-lg transition-shadow duration-300 ease-in-out overflow-visible">
+                  <div className="relative w-w-recommend-img h-h-recommend-img rounded-lg overflow-hidden">
+                    <img
+                      src={
+                        resort.logo ||
+                        "https://via.placeholder.com/400x300?text=No+Image"
+                      }
+                      alt={resort.resortName || "Resort"}
+                      className="w-full h-full object-cover"
+                    />
+                    <div className="absolute inset-0 bg-black opacity-0 hover:opacity-30 transition-opacity duration-300 rounded-lg"></div>
+                  </div>
 
-                <div className="p-4">
-                  <h3 className="text-xl font-semibold">{resort.name}</h3>
-                  <p className="text-gray-500 py-3">{resort.location}</p>
-                  <p className="text-gray-700 text-xl font-bold mt-2 flex items-center">
-                    Chỉ từ
-                    <span className="text-3xl mx-2">{resort.price}</span>
-                    VND
-                  </p>
+                  <div className="p-4 min-h-32">
+                    <h3 className="text-xl font-semibold">
+                      {resort.resortName || "Tên không khả dụng"}
+                    </h3>
+
+                    <p className="text-gray-500 text-md mt-1">
+                      Giá từ:{" "}
+                      {resort.minPrice > 0 && resort.maxPrice > 0
+                        ? `${resort.minPrice.toLocaleString()} - ${resort.maxPrice.toLocaleString()} VND`
+                        : "Liên hệ"}
+                    </p>
+                  </div>
+                  <Link to={`/resortdetail/${resort.id}`}>
+                    <div className="flex justify-center py-4">
+                      <button className="rounded-lg w-60 px-4 py-2 bg-blue-500 text-white hover:bg-blue-600 duration-300">
+                        Xem chi tiết
+                      </button>
+                    </div>
+                  </Link>
                 </div>
-                <div className="flex justify-center py-4">
-                  <button className="rounded-lg w-60 px-4 py-2 bg-blue-500 text-white hover:bg-blue-600 duration-300">
-                    Xem chi tiết
-                  </button>
-                </div>
-              </div>
-            </SwiperSlide>
-          ))}
+              </SwiperSlide>
+            ))}
+
         </Swiper>
       </div>
     </div>

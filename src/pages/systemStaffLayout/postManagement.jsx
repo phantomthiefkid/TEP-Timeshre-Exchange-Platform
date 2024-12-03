@@ -135,10 +135,12 @@ const PostManagement = () => {
     <>
       <Toaster position="top-right" reverseOrder={false} />
       <div className="container mx-auto p-4 bg-white rounded-xl shadow-xl">
-        <div className="py-4 p-6 space-y-2">
-          <h1 className="text-4xl font-bold text-gray-600">Danh sách bài đăng</h1>
-          <h3 className="text-xl text-gray-500">
-            Quản lí các bài đăng cho thuê ở đây.
+        <div className="py-6 px-8 space-y-4 border-l-8 border-blue-500 bg-gradient-to-r from-gray-50 to-gray-100 rounded-lg shadow-md">
+          <h1 className="text-4xl font-bold text-gray-800 tracking-tight">
+            Danh sách <span className="text-blue-600">bài đăng</span>
+          </h1>
+          <h3 className="text-lg text-gray-500">
+            <span className="font-semibold text-blue-600">Quản lý các bài đăng cho thuê</span> tại đây
           </h3>
         </div>
         <div className="flex items-center justify-start gap-6 p-2 mt-3 py-4">
@@ -171,7 +173,7 @@ const PostManagement = () => {
                 />
                 <label
                   htmlFor="dropdownToggle"
-                  className="bg-gradient-to-r from-blue-300 to-purple-400 text-white border border-blue-300 py-2 px-4 pr-2 rounded-xl shadow-md flex items-center justify-between cursor-pointer transition duration-300 ease-in-out transform hover:border-blue-500 focus:outline-none"
+                  className="bg-gradient-to-r from-blue-300 to-purple-400 text-white border border-blue-300 py-2 px-4 pr-2 rounded-xl shadow-md flex items-center justify-between cursor-pointer transition duration-300 ease-in-out transform focus:outline-none"
                 >
                   <span id="selectedOption">{selectedOption}</span>
                   <svg

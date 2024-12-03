@@ -6,13 +6,13 @@ import SpinnerWaiting from "../../components/LoadingComponent/spinnerWaiting";
 
 const policy = () => {
   const [policyData, setPolicyData] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   const getPolicy = async () => {
     try {
       const response = await axios.get(
-        "http://35.247.160.131/api/public/policy/general"
+        "https://unwind.id.vn/api/public/policy/general"
       );
       setPolicyData(response.data);
       setLoading(false);
@@ -22,34 +22,40 @@ const policy = () => {
     }
   };
 
+  
+  useEffect(() => {
+    getPolicy();
+  }, []);
   if (loading) {
     return <SpinnerWaiting />;
   }
 
-  useEffect(() => {
-    getPolicy();
-  }, []);
-
   return (
     <>
       <Navigation />
-      <div className="min-h-screen">
-        <h1 className="text-4xl font-bold text-left ml-10 mt-10">
-          Chính sách quyền riêng tư
-        </h1>
-        <div className="p-6 bg-white shadow-md rounded-lg m-10">
-          {policyData && policyData.length > 0 ? (
-            policyData.map((policy, index) => (
-              <div key={index}>
-                <h2 className="text-2xl font-bold mb-4">{policy.title}</h2>
-                <p className="text-lg text-gray-800">{policy.description}</p>
-              </div>
-            ))
-          ) : (
-            <p>Hiện tại chưa có chính sách quyền riêng tư</p>
-          )}
+      <div className="min-h-screen bg-gray-100">
+        <div className="max-w-6xl mx-auto p-6">
+          {/* Title Section */}
+          <h1 className="text-4xl font-semibold text-center text-gray-700 ml-10 mt-10">
+            Chính sách quyền riêng tư
+          </h1>
+
+          {/* Content Section */}
+          <div className="p-8 bg-white shadow-lg rounded-2xl mt-8 mb-8">
+            {policyData && policyData.length > 0 ? (
+              policyData.map((policy, index) => (
+                <div key={index} className="mb-6">
+                  <h2 className="text-2xl font-semibold text-gray-800 mb-4">{policy.title}</h2>
+                  <p className="text-md text-gray-600 leading-relaxed">{policy.description}</p>
+                </div>
+              ))
+            ) : (
+              <p className="text-gray-600">Hiện tại chưa có chính sách quyền riêng tư</p>
+            )}
+          </div>
         </div>
       </div>
+
       <Footer />
     </>
   );

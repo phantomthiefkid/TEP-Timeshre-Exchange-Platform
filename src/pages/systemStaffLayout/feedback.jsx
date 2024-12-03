@@ -57,10 +57,15 @@ const Feedback = () => {
   return (
     <>
       <div className="container mx-auto p-4 bg-white rounded-xl shadow-xl">
-        <div className="py-4 p-6 space-y-2">
-          <h1 className="text-4xl font-bold text-gray-700">Quản lí đánh giá từ người dùng</h1>
-          <h3 className="text-xl text-gray-500">
-            Quản lí các phản và đánh giá của người dùng từ hệ thống tại đây theo resort!
+       
+        <div className="py-4 p-6 space-y-4 border-l-4 border-blue-500 bg-gray-50 rounded-lg shadow-lg">
+          <h1 className="text-4xl font-bold text-gray-700">
+            Quản lí <span className="text-blue-600">đánh giá</span> từ người dùng
+           
+          </h1>
+          <h3 className="text-lg text-gray-500">
+          Quản lí các <span className="font-semibold text-blue-600">phản hồi</span> và <span className="font-semibold text-blue-600">đánh giá </span>của người từ từ hệ thống theo resort 
+           
           </h3>
         </div>
         <div className="flex items-center justify-between p-2 mt-3 py-4">

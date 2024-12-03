@@ -72,27 +72,29 @@ const FeedbackResortDetail = () => {
     <>
       <Toaster position="top-center" reverseOrder={false} />
       <div className="container mx-auto p-4 bg-white rounded-xl shadow-xl">
-        <div className="py-4 p-6 space-y-2">
-          <h1 className="text-4xl font-bold text-gray-700">Quản lí đánh giá từ người dùng</h1>
-          <h3 className="text-xl text-gray-500">
-            Quản lí các phản và đánh giá của người dùng từ hệ thống tại đây theo resort!
+        <div className="py-4 p-6 space-y-4 border-l-4 border-blue-500 bg-gray-50 rounded-lg shadow-lg">
+          <h1 className="text-4xl font-bold text-gray-700">
+            Quản lí <span className="text-blue-600">đánh giá</span> từ người dùng
+
+          </h1>
+          <h3 className="text-lg text-gray-500">
+            Quản lí các <span className="font-semibold text-blue-600">phản hồi</span> và <span className="font-semibold text-blue-600">đánh giá </span>của người từ từ hệ thống theo resort
+
           </h3>
         </div>
 
         <div className="flex items-center rounded-lg px-4 py-4 mb-5 space-x-2">
           <button
             onClick={() => setIsReport(true)}
-            className={`px-10 hover:scale-105 shadow-xl py-2 ${
-              isReport ? 'bg-gradient-to-r from-red-300 to-red-700 text-white' : 'bg-gray-100 text-gray-600'
-            }`}
+            className={`px-10 hover:scale-105 shadow-xl py-2 ${isReport ? 'bg-gradient-to-r from-red-300 to-red-700 text-white' : 'bg-gray-100 text-gray-600'
+              }`}
           >
             Phản hồi bị báo cáo
           </button>
           <button
             onClick={() => setIsReport(false)}
-            className={`px-8 hover:scale-105 shadow-xl py-2 ${
-              !isReport ? 'bg-gradient-to-r from-green-300 to-green-700 text-white' : 'bg-gray-100 text-gray-600'
-            }`}
+            className={`px-8 hover:scale-105 shadow-xl py-2 ${!isReport ? 'bg-gradient-to-r from-green-300 to-green-700 text-white' : 'bg-gray-100 text-gray-600'
+              }`}
           >
             Phản hồi bình thường
           </button>
@@ -149,9 +151,8 @@ const FeedbackResortDetail = () => {
                 <button
                   key={index}
                   onClick={() => setPage(index)}
-                  className={`w-8 h-8 flex items-center justify-center rounded-full ${
-                    index === page ? 'bg-blue-500 text-white' : 'bg-white text-gray-500'
-                  }`}
+                  className={`w-8 h-8 flex items-center justify-center rounded-full ${index === page ? 'bg-blue-500 text-white' : 'bg-white text-gray-500'
+                    }`}
                 >
                   {index + 1}
                 </button>
