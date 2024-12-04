@@ -113,15 +113,19 @@ const employeeManagement = () => {
       <Toaster position="top-right" reverseOrder={false} />
       <div className="container mx-auto p-4 bg-white rounded-xl shadow-xl">
         <div className="p-6 flex justify-between items-center">
-          <div>
-            <h1 className="text-3xl text-gray-700 font-bold">
-              Quản lý Nhân viên - Tối ưu hóa đội ngũ
+          <div className="py-4 p-6 space-y-4 border-l-4 border-blue-500 bg-gray-50 rounded-lg shadow-lg">
+            <h1 className="text-4xl font-bold text-gray-700">
+              Quản lý <span className="text-blue-600">nhân viên</span> và
+              <span className="text-blue-600"> tối ưu hóa đội ngũ</span>
             </h1>
-            <p className="text-md font-medium text-gray-600 mt-2">
-              Theo dõi thông tin nhân sự, trạng thái hoạt động và hiệu quả làm
-              việc.
-            </p>
+            <h3 className="text-lg text-gray-500">
+              <span className="font-semibold text-blue-600">
+                Theo dõi thông tin nhân sự,
+              </span>{" "}
+              trạng thái hoạt động và hiệu quả làm việc.
+            </h3>
           </div>
+
           <div className="flex space-x-4">
             <span className="bg-red-100 text-red-600 px-4 py-2 rounded-full text-lg font-medium shadow-md">
               Số lượng nhân viên: <CountUp start={0} end={count} duration={2} />
