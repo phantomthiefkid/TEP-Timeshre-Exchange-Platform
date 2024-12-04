@@ -58,7 +58,7 @@ const DashboardCompany = () => {
   const [totalStaff, setTotalStaff] = useState(0);
   const [transactions, setTransactions] = useState(null);
   const [pageTransactions, setPageTransactions] = useState(0);
-  const [sizeTransactions, setSizeTransactions] = useState(10);
+  const [sizeTransactions, setSizeTransactions] = useState(12);
   const [totalPagesTransactions, setTotalPagesTransactions] = useState(0);
   const [revenue, setRevenue] = useState({});
   const fetAllResort = async () => {
@@ -146,20 +146,20 @@ const DashboardCompany = () => {
 
   // Pagination handlers
   const handleNextPage = () => {
-    if (page < totalPages - 1) {
-      setPage(page + 1);
+    if (pageTransactions < totalPagesTransactions - 1) {
+      setPageTransactions(pageTransactions + 1);
     }
   };
 
   const handlePreviousPage = () => {
-    if (page > 0) {
-      setPage(page - 1);
+    if (pageTransactions > 0) {
+      setPageTransactions(pageTransactions - 1);
     }
   };
 
   useEffect(() => {
     fetAllResort();
-  }, [page]);
+  }, [pageTransactions]);
 
   useEffect(() => {
     fetchTransactions();
@@ -202,43 +202,43 @@ const DashboardCompany = () => {
         return {
           label: "Từ chối yêu cầu trao đổi",
           style:
-            "text-red-500 bg-red-200 p-2 border-2 rounded-2xl px-4 text-center",
-        };
+            "text-red-500 p-2 text-lg  rounded-2xl px-4 text-left",
+       };
       case "APPROVAL_REQUESTEXCHANGE":
         return {
           label: "Duyệt yêu cầu trao đổi",
           style:
-            " text-green-500 bg-green-200 border-2 p-2 rounded-2xl px-4 text-center",
+            " text-green-500   p-2 text-lg rounded-2xl px-4 text-left",
         };
       case "REJECT_EXCHANGEPOSTING":
         return {
           label: "Từ chối bài trao đổi",
           style:
-            " text-red-500 bg-red-200 border-2 p-2 rounded-2xl px-4 text-center",
+            " text-red-500   p-2 text-lg rounded-2xl px-4 text-left",
         };
       case "APPROVAL_EXCHANGEPOSTING":
         return {
           label: "Duyệt bài trao đổi",
           style:
-            " text-green-500 bg-green-200 border-2 p-2 rounded-2xl px-4 text-center",
+            " text-green-500   p-2 text-lg rounded-2xl px-4 text-left",
         };
       case "REJECT_RENTALPOSTING":
         return {
           label: "Từ chối bài cho thuê",
           style:
-            " text-red-500 bg-red-200 border-2 p-2 rounded-2xl px-4 text-center",
+            " text-red-500   p-2 text-lg rounded-2xl px-4 text-left",
         };
       case "APPROVAL_RENTAL_POSTING":
         return {
           label: "Duyệt bài cho thuê",
           style:
-            " text-green-500 bg-green-200 border-2 p-2 rounded-2xl px-4 text-center",
+            " text-green-500   p-2 text-lg rounded-2xl px-4 text-left",
         };
       default:
         return {
           label: "Không xác định",
           style:
-            "text-gray-500 bg-gray-200 border-2 p-2 rounded-2xl px-4 text-center",
+            "text-gray-500 p-2 text-lg rounded-2xl px-4 text-left",
         };
     }
   };
@@ -256,6 +256,7 @@ const DashboardCompany = () => {
       "Sep",
       "Oct",
       "Nov",
+      "Dec"
     ],
     datasets: [
       {
@@ -490,9 +491,8 @@ const DashboardCompany = () => {
                       >
                         <td className="px-2 py-4 text-center">
                           <span
-                            className={`${
-                              formatTransactionType(transactionType).style
-                            }`}
+                            className={`${formatTransactionType(transactionType).style
+                              }`}
                           >
                             {formatTransactionType(transactionType).label}
                           </span>
@@ -502,18 +502,24 @@ const DashboardCompany = () => {
                             {description}
                           </span>
                         </td>
-                        <td className="px-2 py-4">{FormatCurrency(money)}</td>
+                        <td className="px-2 py-4 text-center">{FormatCurrency(money)}</td>
                         <td className="px-2 py-4">{createdAt}</td>
                       </tr>
                     )
                   )}
               </tbody>
             </table>
-            <div className="flex items-center justify-end mt-4 absolute bottom-0 right-4">
+            <div className="flex items-center justify-center mt-4">
               {transactions && transactions.length > 0 && (
-                <div className="flex space-x-1">
+                <div className="flex justify-between items-center space-x-1">
                   {/* Nút Previous */}
-
+                  <button
+                    onClick={handlePreviousPage}
+                    disabled={pageTransactions === 0}
+                    className="w-10 h-10 flex items-center justify-center rounded-full bg-white text-gray-500 hover:bg-blue-500 hover:text-white transition-colors duration-300"
+                  >
+                    <FaChevronLeft />
+                  </button>
                   {/* Nút Pagination */}
                   <div className="flex space-x-2 bg-gray-200 rounded-full px-2 py-1">
                     {Array.from(
@@ -530,11 +536,10 @@ const DashboardCompany = () => {
                             <button
                               key={index}
                               onClick={() => setPageTransactions(index)}
-                              className={`w-8 h-8 flex items-center justify-center rounded-full ${
-                                index === pageTransactions
-                                  ? "bg-blue-500 text-white"
-                                  : "bg-white text-gray-500"
-                              }`}
+                              className={`w-8 h-8 flex items-center justify-center rounded-full ${index === pageTransactions
+                                ? "bg-blue-500 text-white"
+                                : "bg-white text-gray-500"
+                                }`}
                             >
                               {index + 1}
                             </button>
@@ -562,6 +567,13 @@ const DashboardCompany = () => {
                       }
                     )}
                   </div>
+                  <button
+                    onClick={handleNextPage}
+                    disabled={pageTransactions === totalPagesTransactions - 1}
+                    className="w-10 h-10 flex items-center justify-center rounded-full bg-white text-gray-500 hover:bg-blue-500 hover:text-white transition-colors duration-300"
+                  >
+                    <FaChevronRight />
+                  </button>
                 </div>
               )}
             </div>
@@ -573,11 +585,26 @@ const DashboardCompany = () => {
             <h3 className="text-lg font-semibold">Danh sách resort</h3>
             <div className="flex space-x-2">
               <Link to={`/timesharecompany/resortmanagementtsc`}>
-                <button className="px-4 py-2 bg-blue-600 text-white rounded-lg">
-                  Tất cả
+                <button className="px-4 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white font-semibold rounded-lg shadow-md hover:shadow-lg hover:from-blue-600 hover:to-indigo-700 transition-all duration-300 ease-in-out flex items-center justify-center">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="currentColor"
+                    className="w-5 h-5 mr-2"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M19.5 12h-15"
+                    />
+                  </svg>
+                  Xem tất cả
                 </button>
               </Link>
             </div>
+
           </div>
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-200">
@@ -594,11 +621,11 @@ const DashboardCompany = () => {
                     key={index}
                     className="bg-white border-b hover:bg-slate-100"
                   >
-                    <td className="px-6 py-4 whitespace-nowrap flex items-center">
+                    <td className="px-6 py-4 whitespace-nowrap flex items-center gap-2">
                       <img
                         src={item.logo}
                         alt="Project Logo"
-                        className="w-6 h-6 mr-2"
+                        className="w-8 h-8 mr-2 rounded-md"
                       />
                       {item.resortName}
                     </td>
@@ -606,57 +633,7 @@ const DashboardCompany = () => {
                 ))}
             </tbody>
           </table>
-          {/* Pagination */}
-          <div className="flex items-center justify-end mt-4 absolute bottom-2 right-4">
-            {allResort && allResort.length > 0 && (
-              <div className="flex space-x-1">
-                {/* Nút Previous */}
 
-                {/* Nút Pagination */}
-                <div className="flex space-x-2 bg-gray-200 rounded-full px-2 py-1">
-                  {Array.from({ length: totalPages }, (_, index) => {
-                    // Hiển thị trang đầu, trang cuối, trang hiện tại, và các trang gần hiện tại
-                    if (
-                      index === 0 ||
-                      index === totalPages - 1 ||
-                      (index >= page - 1 && index <= page + 1)
-                    ) {
-                      return (
-                        <button
-                          key={index}
-                          onClick={() => setPage(index)}
-                          className={`w-8 h-8 flex items-center justify-center rounded-full ${
-                            index === page
-                              ? "bg-blue-500 text-white"
-                              : "bg-white text-gray-500"
-                          }`}
-                        >
-                          {index + 1}
-                        </button>
-                      );
-                    }
-
-                    // Hiển thị dấu "..." cho các khoảng cách lớn
-                    if (
-                      (index === page - 2 && page > 2) ||
-                      (index === page + 2 && page < totalPages - 3)
-                    ) {
-                      return (
-                        <span
-                          key={index}
-                          className="w-8 h-8 flex items-center justify-center text-gray-500"
-                        >
-                          ...
-                        </span>
-                      );
-                    }
-
-                    return null; // Không hiển thị các nút khác
-                  })}
-                </div>
-              </div>
-            )}
-          </div>
         </div>
       </div>
     </div>

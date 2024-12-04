@@ -50,6 +50,8 @@ import BlogDetailGuest from "./pages/landingpage/blog/blogDetailGuest";
 import ProfileTsCompany from "./pages/timeshareCompanyLayout/profileTsCompany";
 import TimeshareCompanyProfile from "./pages/company/timeshareCompanyProfile";
 import DashboardCompany from "./pages/timeshareCompanyLayout/dashboardCompany";
+import FAQ from "./pages/faqs/faq";
+import PolicyManagement from "./pages/systemStaffLayout/policyManagement";
 function App() {
   const dispatch = useDispatch();
   const { isLogin, role } = useSelector((state) => state.isLogin);
@@ -95,7 +97,7 @@ function App() {
         <Route path="/timesharecompanyprofile/:tsId" element={<TimeshareCompanyProfile/>} />
         <Route path="/aboutus" element={<AboutUs />} />
         <Route path="/policy" element={<Policy />} />
-        <Route path="/faqs" element={<Faqs />} />
+        <Route path="/faqs" element={<FAQ />} />
         <Route path="/contact" element={<Contact />} />
 
         {/* Admin routes */}
@@ -136,7 +138,8 @@ function App() {
             <Route index element={<Dashboard />} />
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="post" element={<PostManagement />} />
-            <Route path="faqs" element={<FaqManagement />} />
+            <Route path="faqmanagement" element={<FaqManagement />} />
+            <Route path="policymanagement" element={<PolicyManagement />} />
             <Route path="createposting" element={<CreatePosting />} />
             <Route path="valuationList" element={<ValuationList />} />
             <Route path="blogmanagement" element={<BlogManagement />} />

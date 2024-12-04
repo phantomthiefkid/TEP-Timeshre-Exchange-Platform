@@ -59,6 +59,14 @@ const getAllResort = async (pageNo = 0, pageSize = 20, resortName) => {
   }
 };
 
+const getResortRandom = async () => {
+  try {
+    return await axios.get(`${baseURL}public/resort/random`)
+  } catch (error) {
+    return error
+  }
+}
+
 const getAllResortByTsId = async (
   pageNo = 0,
   pageSize = 20,
@@ -105,4 +113,5 @@ export {
   getAllResort,
   getAllResortByTsId,
   getUnitTypeByResortId,
+  getResortRandom
 };

@@ -13,6 +13,8 @@ import {
   FaListOl,
   FaComment,
   FaRegNewspaper,
+  FaRegFileAlt,
+  FaRegFile,
 } from "react-icons/fa";
 import { useDispatch } from "react-redux";
 import { setIsLogin, setRoleName } from "../../redux/UserSlice/SignIn";
@@ -113,8 +115,8 @@ const SidebarSystemStaff = () => {
           title="Quản lí phản hồi"
           path="feedbackmng"
         />
-        {/* <MenuItem icon={FaRegFileAlt} title="Quản lí FAQs" path="#" />
-        <MenuItem icon={FaRegFile} title="Quản lí chính sách" path="#" /> */}
+        <MenuItem icon={FaRegFileAlt} title="Quản lí FAQs" path="faqmanagement" />
+        <MenuItem icon={FaRegFile} title="Quản lí chính sách" path="policymanagement" />
         <MenuItem
           icon={FaRegNewspaper}
           title="Quản lí bài blog"
