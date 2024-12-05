@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Bar } from 'react-chartjs-2';
-import { FaChevronLeft, FaChevronRight, FaEllipsisV, FaStar } from 'react-icons/fa';
+import { FaChevronLeft, FaChevronRight, FaEllipsisV, FaList, FaStar } from 'react-icons/fa';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -166,12 +166,19 @@ const FeedbackList = () => {
   return (
     <div className="container mx-auto p-4 bg-white rounded-xl shadow-xl">
       <Toaster position="top-right" reverseOrder={false} />
-      <div className="py-4 p-6 space-y-2">
-        <h1 className="text-4xl font-bold text-gray-700">Quản lí đánh giá từ người dùng</h1>
-        <h3 className="text-xl text-gray-500">
-          Quản lí các phản hồi và đánh giá của người dùng từ hệ thống tại đây theo resort!
-        </h3>
+      <div className="flex justify-between items-center mb-6 w-full">
+        <div className="py-4 px-6 space-y-4 border-l-4 border-blue-500 bg-gray-50 rounded-lg shadow-lg w-full">
+          <h1 className="text-4xl font-bold text-gray-700">
+            Quản lý Đánh giá từ <span className="text-blue-600">Người dùng</span>
+          </h1>
+          <h3 className="text-lg text-gray-500">
+            Theo dõi và quản lý các{" "}
+            <span className="font-semibold text-blue-600">phản hồi</span> và{" "}
+            <span className="font-semibold text-blue-600">đánh giá</span> của người dùng theo từng resort.
+          </h3>
+        </div>
       </div>
+
 
       {/* Bố cục biểu đồ và rating trung bình */}
       <div className="grid grid-cols-3 gap-4">
@@ -197,7 +204,7 @@ const FeedbackList = () => {
 
       <h2 className='text-center text-3xl font-semibold text-gray-700'>Các đánh giá từ người dùng</h2>
       <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-6">
-        {feedbacks.length > 0 ? (
+        {feedbacks.length > 0 && (
           feedbacks.map((feedback) => (
             <div
               key={feedback.id}
@@ -253,8 +260,8 @@ const FeedbackList = () => {
                       <svg
                         key={index}
                         className={`h-5 w-5 ${index < feedback.ratingPoint
-                            ? "text-yellow-500"
-                            : "text-gray-300"
+                          ? "text-yellow-500"
+                          : "text-gray-300"
                           }`}
                         fill="currentColor"
                         viewBox="0 0 20 20"
@@ -275,8 +282,6 @@ const FeedbackList = () => {
               </div>
             </div>
           ))
-        ) : (
-          <p className="text-center text-gray-500">Không có bài đăng nào!!!</p>
         )}
       </div>
 
@@ -285,34 +290,43 @@ const FeedbackList = () => {
       }
 
       {/* Pagination */}
-      <div className="flex items-center justify-center space-x-2 mt-5 w-full">
-        <button
-          onClick={handlePreviousPage}
-          disabled={page === 0}
-          className="w-8 h-8 flex items-center justify-center rounded-full bg-white text-gray-500"
-        >
-          <FaChevronLeft />
-        </button>
-        <div className="flex space-x-2 bg-gray-200 rounded-full px-2 py-1">
-          {Array.from({ length: totalPages }, (_, index) => (
-            <button
-              key={index}
-              onClick={() => setPage(index)}
-              className={`w-8 h-8 flex items-center justify-center rounded-full ${index === page ? 'bg-blue-500 text-white' : 'bg-white text-gray-500'
-                }`}
-            >
-              {index + 1}
-            </button>
-          ))}
-        </div>
-        <button
-          onClick={handleNextPage}
-          disabled={page === totalPages - 1}
-          className="w-8 h-8 flex items-center justify-center rounded-full bg-blue-500 text-white"
-        >
-          <FaChevronRight />
-        </button>
-      </div>
+      {
+        feedbacks && feedbacks.length > 0 ? (<div className="flex items-center justify-center space-x-2 mt-5 w-full">
+          <button
+            onClick={handlePreviousPage}
+            disabled={page === 0}
+            className="w-8 h-8 flex items-center justify-center rounded-full bg-white text-gray-500"
+          >
+            <FaChevronLeft />
+          </button>
+          <div className="flex space-x-2 bg-gray-200 rounded-full px-2 py-1">
+            {Array.from({ length: totalPages }, (_, index) => (
+              <button
+                key={index}
+                onClick={() => setPage(index)}
+                className={`w-8 h-8 flex items-center justify-center rounded-full ${index === page ? 'bg-blue-500 text-white' : 'bg-white text-gray-500'
+                  }`}
+              >
+                {index + 1}
+              </button>
+            ))}
+          </div>
+          <button
+            onClick={handleNextPage}
+            disabled={page === totalPages - 1}
+            className="w-8 h-8 flex items-center justify-center rounded-full bg-blue-500 text-white"
+          >
+            <FaChevronRight />
+          </button>
+        </div>) : (
+          <div className="flex flex-col items-center justify-center mt-5 w-full min-h-[370px] border-2 border-dashed border-gray-300 rounded-lg bg-gradient-to-b from-gray-50 to-gray-100">
+            <FaList className="text-gray-400 text-6xl animate-pulse mb-4" />
+            <span className="text-gray-600 text-lg font-medium">
+              Không có đánh giá nào!!!
+            </span>
+          </div>
+        )
+      }
     </div>
   );
 };

@@ -98,7 +98,7 @@ const UpdateResortAmenity = ({ resortSelect, flag }) => {
       minPrice: resort.minPrice,
       maxPrice: resort.maxPrice, // Assuming you have a way to update this
       status: resort.status, // Assuming you have a way to update this
-      address: resort.address, // Assuming you have a way to update this
+      location: resort.location, // Assuming you have a way to update this
       timeshareCompanyId: resort.timeshareCompanyId, // Assuming you have a way to update this
       description: resort.description,
       resortAmenityList: amenities,

@@ -100,19 +100,22 @@ const resortManagement = () => {
 
         <div className="py-4 p-6 space-y-2 flex items-center justify-between">
           <div className="p-4">
-            <h1 className="text-3xl text-gray-700 font-bold">Quản lí đối tác</h1>
+            <h1 className="text-3xl text-gray-700 font-bold">
+              Quản lí <span className="text-blue-600">đối tác</span>
+            </h1>
             <p className="text-md font-medium text-gray-600 mt-2">
-              Quản lí đối tác công ty timeshare ở đây.
+              Quản lí <span className="text-blue-600">đối tác</span> công ty <span className="text-blue-600">timeshare</span> ở đây.
             </p>
           </div>
           <div className="flex items-center space-x-6">
-          <div className="flex items-center space-x-2 bg-red-100 text-red-600 px-4 py-2 rounded-lg shadow-md hover:bg-red-200 hover:shadow-lg transition-all duration-300">
-              <FaBuilding className="text-red-600" />
+            <div className="flex items-center space-x-2 bg-red-100 text-red-600 px-4 py-2 rounded-lg shadow-md hover:bg-red-200 hover:shadow-lg transition-all duration-300">
+              <FaBuilding className="text-red-600 text-lg" />
               <span className="text-sm font-medium">Tất cả: </span>
               <CountUp start={0} end={countPartner} duration={4} />
             </div>
           </div>
         </div>
+
 
         <div className="flex justify-end items-center p-6">
           <div className="flex space-x-4">
@@ -195,40 +198,40 @@ const resortManagement = () => {
           </table>
 
           {
-          allTimeshareCompany && allTimeshareCompany.length > 0 ? (
-            <div className="flex items-center justify-center space-x-2 mt-5 w-full">
-              <button
-                onClick={handlePreviousPage}
-                disabled={page === 0}
-                className="w-8 h-8 flex items-center justify-center rounded-full bg-white text-gray-500"
-              >
-                <FaChevronLeft />
-              </button>
-              <div className="flex space-x-2 bg-gray-200 rounded-full px-2 py-1">
-                {
-                  Array.from({ length: totalPages }, (_, index) => (
-                    <button
-                      key={index}
-                      onClick={() => setPage(index)}
-                      className={`w-8 h-8 flex items-center justify-center rounded-full ${index === page ? "bg-blue-500 text-white" : "bg-white text-gray-500"}`}
-                    >
-                      {index + 1}
-                    </button>
-                  ))
-                }
+            allTimeshareCompany && allTimeshareCompany.length > 0 ? (
+              <div className="flex items-center justify-center space-x-2 mt-5 w-full">
+                <button
+                  onClick={handlePreviousPage}
+                  disabled={page === 0}
+                  className="w-8 h-8 flex items-center justify-center rounded-full bg-white text-gray-500"
+                >
+                  <FaChevronLeft />
+                </button>
+                <div className="flex space-x-2 bg-gray-200 rounded-full px-2 py-1">
+                  {
+                    Array.from({ length: totalPages }, (_, index) => (
+                      <button
+                        key={index}
+                        onClick={() => setPage(index)}
+                        className={`w-8 h-8 flex items-center justify-center rounded-full ${index === page ? "bg-blue-500 text-white" : "bg-white text-gray-500"}`}
+                      >
+                        {index + 1}
+                      </button>
+                    ))
+                  }
+                </div>
+                <button
+                  onClick={handleNextPage}
+                  disabled={page === totalPages - 1}
+                  className="w-8 h-8 flex items-center justify-center rounded-full bg-blue-500 text-white"
+                >
+                  <FaChevronRight />
+                </button>
               </div>
-              <button
-                onClick={handleNextPage}
-                disabled={page === totalPages - 1}
-                className="w-8 h-8 flex items-center justify-center rounded-full bg-blue-500 text-white"
-              >
-                <FaChevronRight />
-              </button>
-            </div>
-          ) : (
-            <span className="flex items-center justify-center space-x-2 mt-5 w-full">Không có bài đăng nào!!!</span>
-          )
-        }
+            ) : (
+              <span className="flex items-center justify-center space-x-2 mt-5 w-full">Không có bài đăng nào!!!</span>
+            )
+          }
         </div>
 
         <DetailTimeshareCompanyModal

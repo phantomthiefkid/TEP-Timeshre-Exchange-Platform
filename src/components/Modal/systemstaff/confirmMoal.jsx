@@ -55,14 +55,14 @@ const ConfirmModal = ({ isOpen, onClose, onConfirm, message, isLoading }) => {
           className="px-5 py-2 text-sm bg-gray-300 hover:bg-gray-400 text-gray-700 rounded-full transition disabled:opacity-50"
           disabled={isLoading}
         >
-          Cancel
+          Hủy
         </button>
         <button
           onClick={onConfirm}
           className="px-5 py-2 text-sm bg-gradient-to-r from-blue-400 to-blue-600 hover:from-blue-500 hover:to-blue-700 text-white rounded-full transition disabled:opacity-50"
           disabled={isLoading}
         >
-          Confirm
+          Tiếp tục
         </button>
       </div>
     </div>

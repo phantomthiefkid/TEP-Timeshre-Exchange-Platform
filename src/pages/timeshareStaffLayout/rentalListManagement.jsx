@@ -135,28 +135,31 @@ const RentalListManagement = () => {
     <>
       <Toaster position="top-right" reverseOrder={false} />
       <div className="container mx-auto p-4 bg-white rounded-xl shadow-xl">
-        <div className="flex items-center justify-between p-2 mt-3">
-          <div className="mb-6">
-            <h1 className="text-4xl font-bold">Danh sách thuê</h1>
-            <h3 className="text-xl text-gray-500">
-              Quản lí các yêu cầu thuê của khách hàng.
+        <div className="flex justify-between items-center py-4 px-6 mb-6 bg-gray-50 rounded-lg shadow-lg">
+          <div className="space-y-4">
+            <h1 className="text-4xl font-bold text-gray-700">
+              Danh sách <span className="text-blue-600">Thuê</span>
+            </h1>
+            <h3 className="text-lg text-gray-500">
+              Theo dõi và quản lý các <span className="font-semibold text-blue-600">yêu cầu thuê</span> của khách hàng.
             </h3>
           </div>
           <button
-            className="flex items-center bg-blue-500 text-white rounded-md px-4 py-2"
+            className="flex items-center bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-lg px-6 py-3 font-medium shadow-md hover:shadow-lg transform transition-transform duration-300 hover:scale-105"
             onClick={() => fetchAllBooking()}
           >
-            <FaArrowsRotate className="mr-3" />
+            <FaArrowsRotate className="mr-3 text-lg" />
             Làm mới
           </button>
         </div>
 
+
         {/* Dashboard */}
         <div className="flex justify-center items-center bg-white mb-3">
           {/* Check In */}
-          <div className="flex flex-col justify-center w-[480px] h-32 bg-white shadow-md rounded-lg p-4 m-4">
+          <div className="flex flex-col justify-center w-[480px] h-32 bg-gradient-to-r from-cyan-400 to-blue-300 text-white border-2 shadow-md rounded-lg p-4 m-4">
             <div className="flex items-center justify-between w-full">
-              <div className="text-4xl font-bold text-green-600">
+              <div className="text-4xl font-bold text-white">
                 <CountUp end={checkInCount} duration={1.5} />
               </div>
               <div className="text-3xl">
@@ -169,9 +172,9 @@ const RentalListManagement = () => {
           </div>
 
           {/* Check Out */}
-          <div className="flex flex-col justify-center w-[480px] h-32 bg-white shadow-md rounded-lg p-4 m-4">
+          <div className="flex flex-col justify-center w-[480px] h-32 bg-gradient-to-r from-lime-400 to-orange-400 text-white border-2 shadow-md rounded-lg p-4 m-4">
             <div className="flex items-center justify-between w-full">
-              <div className="text-4xl font-bold text-red-600">
+              <div className="text-4xl font-bold text-white">
                 <CountUp end={checkOutCount} duration={1.5} />
               </div>
               <div className="text-3xl">
@@ -184,9 +187,9 @@ const RentalListManagement = () => {
           </div>
 
           {/* Booked */}
-          <div className="flex flex-col justify-center w-[480px] h-32 bg-white shadow-md rounded-lg p-4 m-4">
+          <div className="flex flex-col justify-center w-[480px] h-32 bg-gradient-to-r from-red-400 to-indigo-500 text-white border-2 shadow-md rounded-lg p-4 m-4">
             <div className="flex items-center justify-between w-full">
-              <div className="text-4xl font-bold text-yellow-600">
+              <div className="text-4xl font-bold text-white">
                 <CountUp end={bookedCount} duration={1.5} />
               </div>
               <div className="text-3xl">
@@ -199,9 +202,8 @@ const RentalListManagement = () => {
         {/* Day Fitler */}
         <div className="flex justify-start space-x-2 mb-1">
           <button
-            className={`px-4 py-2 text-black font-semibold bg-white transition-all duration-300 ease-out relative ${
-              selectedDateTab === "isComing" ? "text-blue-500" : "text-black"
-            }`}
+            className={`px-4 py-2 text-black font-semibold bg-white transition-all duration-300 ease-out relative ${selectedDateTab === "isComing" ? "text-blue-500" : "text-black"
+              }`}
             onClick={() => handleDateTabClick("isComing")}
           >
             Sẽ đến
@@ -210,9 +212,8 @@ const RentalListManagement = () => {
             )}
           </button>
           <button
-            className={`px-4 py-2 text-black font-semibold bg-white transition-all duration-300 ease-out relative ${
-              selectedDateTab === "today" ? "text-blue-500" : "text-black"
-            }`}
+            className={`px-4 py-2 text-black font-semibold bg-white transition-all duration-300 ease-out relative ${selectedDateTab === "today" ? "text-blue-500" : "text-black"
+              }`}
             onClick={() => handleDateTabClick("today")}
           >
             Hôm nay
@@ -221,9 +222,8 @@ const RentalListManagement = () => {
             )}
           </button>
           <button
-            className={`px-4 py-2 text-black font-semibold bg-white transition-all duration-300 ease-out relative ${
-              selectedDateTab === "willGo" ? "text-blue-500" : "text-black"
-            }`}
+            className={`px-4 py-2 text-black font-semibold bg-white transition-all duration-300 ease-out relative ${selectedDateTab === "willGo" ? "text-blue-500" : "text-black"
+              }`}
             onClick={() => handleDateTabClick("willGo")}
           >
             Sẽ đi
@@ -269,9 +269,8 @@ const RentalListManagement = () => {
                   <td className="p-4 pl-8">{booking.nights}</td>
                   <td className="p-4">
                     <span
-                      className={`text-medium px-2 py-1 w-3/4 text-center rounded-full ${
-                        getStatusStyles(booking.status).style
-                      }`}
+                      className={`text-medium px-2 py-1 w-3/4 text-center rounded-full ${getStatusStyles(booking.status).style
+                        }`}
                     >
                       {getStatusStyles(booking.status).label}
                     </span>
@@ -349,11 +348,10 @@ const RentalListManagement = () => {
                     <button
                       key={index}
                       onClick={() => setPage(index)}
-                      className={`w-10 h-10 flex items-center justify-center rounded-xl ${
-                        index === page
+                      className={`w-10 h-10 flex items-center justify-center rounded-xl ${index === page
                           ? "bg-blue-500 text-white shadow-lg font-semibold"
                           : "text-gray-500 hover:text-blue-500 hover:font-semibold"
-                      }`}
+                        }`}
                     >
                       {index + 1}
                     </button>

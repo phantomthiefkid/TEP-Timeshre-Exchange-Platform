@@ -53,7 +53,7 @@ const CreateUnitType = ({ onUpdateData, onNext, onBack, formData }) => {
       }, 1000);
 
     } catch (error) {
-      console.log('Error creating unit types:', error);
+      throw error
     } finally {
       setIsWaiting(false)
     }

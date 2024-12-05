@@ -387,10 +387,10 @@ const DashboardCompany = () => {
         <h1 className="text-3xl font-bold text-gray-600">Dashboard</h1>
       </div>
 
-      <div className="grid grid-cols-4 gap-6">
+      <div className="grid grid-cols-3 gap-4">
         {/* Revenue */}
         <div
-          className={`p-6 rounded-xl bg-gradient-to-r from-blue-500 to-indigo-500 text-white shadow-lg transform transition-transform duration-500 hover:scale-105 hover:shadow-xl`}
+          className={`p-6 rounded-xl bg-gradient-to-r from-blue-400 to-indigo-600 text-white shadow-lg transform transition-transform duration-500 hover:scale-105 hover:shadow-xl`}
         >
           <div className="flex items-center justify-between">
             <HiCurrencyDollar className="text-5xl" />
@@ -430,18 +430,7 @@ const DashboardCompany = () => {
             </div>
           </div>
         </div>
-        {/* Resort */}
-        <div
-          className={`p-6 rounded-xl bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg transform transition-transform duration-300 hover:scale-105 hover:shadow-xl`}
-        >
-          <div className="flex items-center justify-between">
-            <HiBriefcase className="text-5xl" />
-            <div className="text-right">
-              <h3 className="text-lg font-semibold">Tổng số bài đăng</h3>
-              <p className="text-3xl font-bold">233</p>
-            </div>
-          </div>
-        </div>
+       
       </div>
 
       {/* revenue analysis */}
@@ -456,12 +445,12 @@ const DashboardCompany = () => {
 
       <div className="grid grid-cols-3 gap-4">
         {/* Transaction */}
-        <div className="bg-white p-6 border-2 shadow-xl rounded-xl col-span-2 h-full flex flex-col relative">
+        <div className="bg-white p-6 border-2 shadow-xl rounded-xl col-span-2 h-full flex flex-col relative ">
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-lg font-semibold">Giao dịch</h3>
           </div>
-          <div className="flex-grow overflow-auto ">
-            <table className="min-w-full divide-y divide-gray-200">
+          <div className="flex-grow overflow-auto">
+            <table className="min-w-full divide-y divide-gray-200 mb-10">
               <thead className="bg-gray-200">
                 <tr>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -509,7 +498,7 @@ const DashboardCompany = () => {
                   )}
               </tbody>
             </table>
-            <div className="flex items-center justify-center mt-4">
+            <div className="flex items-center justify-center absolute bottom-0 left-1/3 m-4">
               {transactions && transactions.length > 0 && (
                 <div className="flex justify-between items-center space-x-1">
                   {/* Nút Previous */}
