@@ -57,7 +57,7 @@ const logs = [
     details: "Người dùng xóa dữ liệu không chính xác",
     status: "Cảnh báo",
   },
-  
+
 ];
 
 const statusIcons = {
@@ -72,11 +72,14 @@ const TrackLogManagement = () => {
     <div className="min-h-screen bg-gray-50 p-6">
       {/* Tiêu đề */}
       <div className="bg-white p-6 shadow-md rounded-md mb-6">
-        <h1 className="text-4xl font-medium text-gray-600 mb-2">Lịch sử hành động trên hệ thống</h1>
-        <p className="text-lg text-sky-500">
-          Xem các hành động đã thực hiện trên nền tảng bởi người dùng. Mỗi sự kiện sẽ được ghi lại chi tiết để dễ dàng theo dõi và xử lý.
+        <h1 className="text-4xl font-medium text-gray-600 mb-2">
+          Lịch sử <span className="text-blue-600">hành động</span> trên <span className="text-blue-600">hệ thống</span>
+        </h1>
+        <p className="text-lg text-gray-500">
+          Xem các <span className="text-blue-600">hành động</span> đã thực hiện trên nền tảng bởi <span className="text-blue-600">người dùng</span>. Mỗi sự kiện sẽ được ghi lại chi tiết để dễ dàng <span className="text-blue-600">theo dõi</span> và <span className="text-blue-600">xử lý</span>.
         </p>
       </div>
+
 
       {/* Timeline */}
       <div className="relative border-l-4 border-gray-300 pl-12 py-6 mx-6 bg-white rounded-lg shadow-lg">

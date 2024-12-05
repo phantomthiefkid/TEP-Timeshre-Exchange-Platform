@@ -86,12 +86,12 @@ const CreateUnitTypeForUpdateModal = ({ onClose, flag }) => {
     const handleSubmit = () => {
         setLoading(true)
         createResortUnitType(unitType).then(() => {
-            toast.success("Cập nhật thành công!", { duration: 2000 });
+            toast.success("Thêm mới thành công thành công!", { duration: 2000 });
             flag()
             onClose()
 
         }).catch(() => {
-            toast.error("Cập nhật thất bại!", { duration: 2000 });
+            toast.error("Thêm mới thất bại!", { duration: 2000 });
         })
             .finally(() => {
                 setLoading(false); // Tắt loading khi hoàn tất

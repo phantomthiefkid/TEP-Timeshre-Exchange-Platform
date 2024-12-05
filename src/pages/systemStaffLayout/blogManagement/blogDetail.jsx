@@ -90,7 +90,7 @@ const BlogDetail = () => {
             <div className="mt-6 flex justify-center py-6">
                 <Link to={`/systemstaff/blogmanagement`}>
                     <button
-                        className="flex items-center justify-center bg-gradient-to-r from-[#03fc9d] to-[#03fc9d] text-white font-semibold py-3 px-8 rounded-full shadow-lg hover:bg-sky-800 transition-all duration-300 transform hover:scale-105"
+                        className="flex items-center justify-center bg-gradient-to-r from-[#02d39a] to-[#05b2d9] text-white font-semibold py-3 px-8 rounded-full shadow-lg hover:bg-sky-800 transition-all duration-300 transform hover:scale-105"
 
                     >
                         <span className="mr-3">Quay về danh sách các bài blog</span>

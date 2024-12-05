@@ -207,47 +207,49 @@ const UserManagement = () => {
       <div className="container mx-auto p-4 bg-white rounded-xl shadow-xl overflow-y-auto">
         <Toaster position="top-right" reverseOrder={false} />
 
-        <div className="py-4 p-6 space-y-2 flex items-center justify-between">
-          <div className="p-4">
-            <h1 className="text-3xl text-gray-700 font-bold">
-              Quản lí người dùng
+        <div className="py-6 px-8 bg-gray-50 rounded-lg flex items-center justify-between gap-4">
+          <div>
+            <h1 className="text-4xl text-gray-700 font-bold">
+              Quản lí <span className="text-blue-600">người dùng</span>
             </h1>
-            <p className="text-md font-medium text-gray-600 mt-2">
-              Quản lí tài khoản người dùng và quyền hạn tài khoản ở đây.
+            <p className="text-lg font-medium text-gray-500 mt-2">
+              Quản lí <span className="text-blue-600">tài khoản</span> người dùng và <span className="text-blue-600">quyền hạn</span> tài khoản tại đây.
             </p>
           </div>
-          <div className="flex items-center space-x-6">
-            <div className="flex items-center space-x-2 bg-red-100 text-red-600 px-4 py-2 rounded-lg shadow-md hover:bg-red-200 hover:shadow-lg transition-all duration-300">
-              <FaUsers className="text-red-600" />
-              <span className="text-sm font-medium">Tất cả: </span>
-              <CountUp start={0} end={counts.total} duration={4} />
+
+          <div className="flex flex-wrap justify-end gap-4">
+            <div className="flex items-center space-x-3 bg-red-100 text-red-600 px-4 py-3 rounded-lg shadow-md hover:bg-red-200 hover:shadow-lg transition-all duration-300">
+              <FaUsers className="text-xl" />
+              <span className="text-base font-medium">Tất cả:</span>
+              <CountUp start={0} end={counts.total} duration={4} className="text-base font-bold" />
             </div>
 
-            <div className="flex items-center space-x-2 bg-blue-100 text-blue-600 px-4 py-2 rounded-lg shadow-md hover:bg-blue-200 hover:shadow-lg transition-all duration-300">
-              <FaUserAlt className="text-blue-600" />
-              <span className="text-sm font-medium">Customer: </span>
-              <CountUp start={0} end={counts.customer} duration={4} />
+            <div className="flex items-center space-x-3 bg-blue-100 text-blue-600 px-4 py-3 rounded-lg shadow-md hover:bg-blue-200 hover:shadow-lg transition-all duration-300">
+              <FaUserAlt className="text-xl" />
+              <span className="text-base font-medium">Customer:</span>
+              <CountUp start={0} end={counts.customer} duration={4} className="text-base font-bold" />
             </div>
 
-            <div className="flex items-center space-x-2 bg-green-100 text-green-600 px-4 py-2 rounded-lg shadow-md hover:bg-green-200 hover:shadow-lg transition-all duration-300">
-              <FaUserCog className="text-green-600" />
-              <span className="text-sm font-medium">System Staff: </span>
-              <CountUp start={0} end={counts.systemStaff} duration={4} />
+            <div className="flex items-center space-x-3 bg-green-100 text-green-600 px-4 py-3 rounded-lg shadow-md hover:bg-green-200 hover:shadow-lg transition-all duration-300">
+              <FaUserCog className="text-xl" />
+              <span className="text-base font-medium">System Staff:</span>
+              <CountUp start={0} end={counts.systemStaff} duration={4} className="text-base font-bold" />
             </div>
 
-            <div className="flex items-center space-x-2 bg-yellow-100 text-yellow-600 px-4 py-2 rounded-lg shadow-md hover:bg-yellow-200 hover:shadow-lg transition-all duration-300">
-              <FaBuilding className="text-yellow-600" />
-              <span className="text-sm font-medium">Timeshare Company: </span>
-              <CountUp start={0} end={counts.tsc} duration={4} />
+            <div className="flex items-center space-x-3 bg-yellow-100 text-yellow-600 px-4 py-3 rounded-lg shadow-md hover:bg-yellow-200 hover:shadow-lg transition-all duration-300">
+              <FaBuilding className="text-xl" />
+              <span className="text-base font-medium">Timeshare Company:</span>
+              <CountUp start={0} end={counts.tsc} duration={4} className="text-base font-bold" />
             </div>
 
-            <div className="flex items-center space-x-2 bg-blue-100 text-blue-600 px-4 py-2 rounded-lg shadow-md hover:bg-blue-200 hover:shadow-lg transition-all duration-300">
-              <FaLock className="text-blue-600" />
-              <span className="text-sm font-medium">Admin: </span>
-              <CountUp start={0} end={counts.admin} duration={4} />
+            <div className="flex items-center space-x-3 bg-indigo-100 text-indigo-600 px-4 py-3 rounded-lg shadow-md hover:bg-indigo-200 hover:shadow-lg transition-all duration-300">
+              <FaLock className="text-xl" />
+              <span className="text-base font-medium">Admin:</span>
+              <CountUp start={0} end={counts.admin} duration={4} className="text-base font-bold" />
             </div>
           </div>
         </div>
+
 
         <div className="flex justify-end items-center p-6 space-x-6">
           <div className="flex space-x-4">
@@ -378,11 +380,10 @@ const UserManagement = () => {
                 <button
                   key={index}
                   onClick={() => setPage(index)}
-                  className={`w-8 h-8 flex items-center justify-center rounded-full ${
-                    index === page
-                      ? "bg-blue-500 text-white"
-                      : "bg-white text-gray-500"
-                  }`}
+                  className={`w-8 h-8 flex items-center justify-center rounded-full ${index === page
+                    ? "bg-blue-500 text-white"
+                    : "bg-white text-gray-500"
+                    }`}
                 >
                   {index + 1}
                 </button>

@@ -212,7 +212,7 @@ const UpdateResortBasic = () => {
 
   return (
     <div className="bg-white p-8 border-2 rounded-lg shadow-xl mx-auto">
-      <Toaster position="top-center" reverseOrder={false} />
+      <Toaster position="top-right" reverseOrder={false} />
 
       <div className="grid grid-cols-2 gap-8">
         {/* Left Column */}

@@ -62,23 +62,26 @@ const exchangePostingMNG = () => {
     <>
       <Toaster position="top-right" reverseOrder={false} />
       <div className="container mx-auto p-4 bg-white rounded-xl shadow-xl">
-        <div className="flex items-center justify-between p-2 mt-3">
-          <div className="mb-6">
-            <h1 className="text-4xl font-bold">Bài đăng trao đổi</h1>
-            <h3 className="text-xl text-gray-500">
-              Quản lí các bài đăng trao đổi ở đây.
+        <div className="flex justify-between items-center py-4 px-6 mb-6 bg-gray-50 rounded-lg shadow-lg">
+          <div className="space-y-4">
+            <h1 className="text-4xl font-bold text-gray-700">
+              Bài đăng <span className="text-blue-600">Trao đổi</span>
+            </h1>
+            <h3 className="text-lg text-gray-500">
+              Theo dõi và quản lý các bài đăng trao đổi tại đây.
             </h3>
           </div>
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center gap-4">
             <button
-              className="flex items-center bg-blue-500 text-white rounded-md px-4 py-2"
+              className="flex items-center bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-lg px-6 py-3 font-medium shadow-md hover:shadow-lg transform transition-transform duration-300 hover:scale-105"
               onClick={() => fetchAllExchangePosting()}
             >
-              <FaArrowsRotate className="mr-3" />
+              <FaArrowsRotate className="mr-3 text-lg" />
               Làm mới
             </button>
           </div>
         </div>
+
 
         <table className="min-w-full bg-white border border-gray-200 ">
           <thead>
@@ -169,11 +172,10 @@ const exchangePostingMNG = () => {
                     <button
                       key={index}
                       onClick={() => setPage(index)}
-                      className={`w-10 h-10 flex items-center justify-center rounded-xl ${
-                        index === page
+                      className={`w-10 h-10 flex items-center justify-center rounded-xl ${index === page
                           ? "bg-blue-500 text-white shadow-lg font-semibold"
                           : "text-gray-500 hover:text-blue-500 hover:font-semibold"
-                      }`}
+                        }`}
                     >
                       {index + 1}
                     </button>
