@@ -124,6 +124,15 @@ const getBlogById = async (id) => {
   }
 };
 
+const deActivateBlog = async (id) => {
+  try {
+    const response = await axiosConfig.put(`system-staff/blog/${id}/deactivate`);
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
 const getTotalResorts = async () => {
   try {
     return await axiosConfig.get(`/system-staff/total-resorts`);
@@ -249,5 +258,6 @@ export {
   getAllPolicies,
   updatePolicyById,
   createPolicy,
-  createFaq
+  createFaq,
+  deActivateBlog
 };

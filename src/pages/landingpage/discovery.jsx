@@ -81,7 +81,7 @@ const Discovery = ({ onExploreClick }) => {
                                             "https://media-cdn.tripadvisor.com/media/photo-s/28/fd/37/ed/pearl-farm-beach-resort.jpg"
                                         }
                                         alt={item.resortName}
-                                        className="w-full h-full object-cover rounded"
+                                        className="w-full h-full object-cover rounded-xl"
                                     />
                                 </div>
                             </SwiperSlide>

@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
+import { toast, Toaster } from 'react-hot-toast';
 import { FaPlusCircle, FaEye, FaEyeSlash } from 'react-icons/fa';
 import CreateUnitTypeForUpdateModal from '../../../components/Modal/createUnitTypeForUpdateModal';
+import ConfirmModal from '../../../components/Modal/systemstaff/confirmMoal';
 import UpdateResortUnitTypeModal from '../../../components/Modal/updateResortUnitTypeModal';
 import FormatCurrency from '../../../components/Validate/formatCurrency';
 import { deactiveUnitType } from '../../../service/tsCompanyService/tsCompanyAPI';
@@ -10,6 +12,8 @@ const UpdateResortUnitType = ({ unitType, flag }) => {
   const [openUnitTypeModal, setOpenUnitTypeModal] = useState(false);
   const [openUnitTypeCreateModal, setOpenUnitTyCreatepeModal] = useState(false);
   const [selectedUnitType, setSelectedUnitType] = useState({});
+  const [modalOpen, setModalOpen] = useState(false);
+  const [unitTypeIdSelected, setUnitTypeIdSelected] = useState(null);
   const handleOpen = (item) => {
     setOpenUnitTypeModal(true)
     setSelectedUnitType(item)
@@ -23,18 +27,31 @@ const UpdateResortUnitType = ({ unitType, flag }) => {
     setUnitTypeList(unitType)
   }, [unitType])
 
-  const handleDeactive = async (unitTypeId) => {
-    await deactiveUnitType(unitTypeId)
-    
+  const openConfirmDelete = (unitTypeId) => {
+    setModalOpen(true)
+    setUnitTypeIdSelected(unitTypeId)
+  }
+
+  const handleDeactive = async () => {
+    try {
+      await deactiveUnitType(unitTypeIdSelected)
+      toast.success("Vô hiệu hóa thành công!!!", { duration: 3000 })
+      flag()
+      setModalOpen(false)
+    } catch (error) {
+      toast.error("Đã xảy ra lỗi, vui lòng thử lại!");
+    } finally {
+      setModalOpen(false); // Close modal after action
+    }
   }
 
   return (
     <div className='min-h-screen'>
+      <Toaster position="top-right" reverseOrder={false} />
       <div className="grid grid-cols-2 gap-8 py-6 border p-8">
         {unitTypeList && unitTypeList.map((item, index) => (
           <div
             key={item.id}
-
             className="flex flex-col md:flex-row items-stretch gap-4 rounded-lg border shadow-md hover:shadow-lg hover:border-2 hover:border-blue-200 transition-transform relative bg-white"
           >
 
@@ -62,13 +79,24 @@ const UpdateResortUnitType = ({ unitType, flag }) => {
                 {FormatCurrency(item.price)}
               </p>
             </div>
-            {/* <div className="absolute top-4 right-4">
+            <div className="absolute top-4 right-4">
               {item.isActive ? (
-                <FaEye className="text-green-500 text-2xl" title="Active" />
+                <button
+                  onClick={() => openConfirmDelete(item.id)}
+                  className="flex items-center justify-center w-10 h-10 bg-green-100 hover:bg-green-200 rounded-full shadow-md transition-transform duration-200 hover:scale-105"
+                >
+                  <FaEye className="text-green-500 text-2xl" title="Active" />
+                </button>
               ) : (
-                <FaEyeSlash className="text-red-500 text-2xl" title="Inactive" />
+                <div
+                  className="flex items-center justify-center w-10 h-10 bg-red-100 rounded-full shadow-md"
+                  title="Inactive"
+                >
+                  <FaEyeSlash className="text-red-500 text-2xl" />
+                </div>
               )}
-            </div> */}
+            </div>
+
           </div>
         ))}
 
@@ -85,7 +113,13 @@ const UpdateResortUnitType = ({ unitType, flag }) => {
         </div>
 
       </div>
+      <ConfirmModal
+        isOpen={modalOpen}
+        onClose={() => setModalOpen(false)}
+        onConfirm={handleDeactive}
+        message="Bạn có chắc chắn muốn vô hiệu hóa loại phòng này?"
 
+      />
     </div>
 
   )

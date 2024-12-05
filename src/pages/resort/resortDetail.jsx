@@ -504,18 +504,18 @@ const ResortDetail = () => {
                   {resort.address}
                 </Popup>
 
-                <Popup className="flex flex-col items-center justify-center w-[300px] rounded-xl shadow-lg text-center border-2 border-blue-300 ">
+                {/* <Popup className="flex flex-col items-center justify-center w-[300px] rounded-xl shadow-lg text-center border-2 border-blue-300 ">
                   <div>
                     <img
                       className="w-full h-full mb-2"
-                      src={companyDetail.logo}
-                      alt={companyDetail.timeshareCompanyName}
+                      src={resort.logo}
+                      alt={resort.timeshareCompanyName}
                     />
                     <div className="text-sm font-semibold text-gray-800">
-                      {companyDetail.timeshareCompanyName}
+                      {resort.timeshareCompanyName}
                     </div>
                   </div>
-                </Popup>
+                </Popup> */}
               </Marker>
             </MapContainer>
           </div>
