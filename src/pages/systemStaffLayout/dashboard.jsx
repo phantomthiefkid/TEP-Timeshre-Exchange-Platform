@@ -26,6 +26,7 @@ import SpinnerWaiting from "../../components/LoadingComponent/spinnerWaiting";
 import {
   getAllRentalPosting,
   getAllTransaction,
+  getPackageByDate,
   getTotalCompany,
   getTotalCustomers,
   getTotalPackages,
@@ -64,6 +65,10 @@ const Dashboard = () => {
   const [allTransaction, setAllTransaction] = useState([]);
   const [totalPages, setTotalPages] = useState(1);
   const [walletTransactionEnum, setWalletTransactionEnum] = useState(null);
+
+  const [totalRentalPackageChart, setTotalRentalPackageChart] = useState(0);
+  const [totalExchangePackageChart, setTotalExchangePackageChart] = useState(0);
+  const [totalMemberPackageChart, setTotalMemberPackageChart] = useState(0);
 
   const today = new Date();
   const defaultStartDate = new Date(today);
@@ -178,27 +183,25 @@ const Dashboard = () => {
   }, {});
 
   const barChartData = {
-    labels: Object.keys(groupedData),
+    labels: ["Gói cho thuê", "Gói trao đổi", "Gói thành viên"],
     datasets: [
       {
-        label: "Gói trao đổi",
-        data: Object.values(groupedData).map((data) => data.Exchange_Package),
-        backgroundColor: "rgba(0, 176, 155, 0.5)",
-        borderColor: "rgba(0, 176, 155, 1)",
-        borderWidth: 1,
-      },
-      {
-        label: "Gói thành viên",
-        data: Object.values(groupedData).map((data) => data.Member_Package),
-        backgroundColor: "rgba(54, 162, 235, 0.5)",
-        borderColor: "rgba(54, 162, 235, 1)",
-        borderWidth: 1,
-      },
-      {
-        label: "Gói cho thuê",
-        data: Object.values(groupedData).map((data) => data.Rental_Package),
-        backgroundColor: "rgba(255, 159, 64, 0.5)",
-        borderColor: "rgba(255, 159, 64, 1)",
+        label: "Số lượng",
+        data: [
+          totalRentalPackageChart,
+          totalExchangePackageChart,
+          totalMemberPackageChart,
+        ],
+        backgroundColor: [
+          "rgba(54, 162, 235, 0.5)",
+          "rgba(0, 176, 155, 0.5)",
+          "rgba(255, 159, 64, 0.5)",
+        ],
+        borderColor: [
+          "rgba(54, 162, 235, 1)",
+          "rgba(0, 176, 155, 1)",
+          "rgba(255, 159, 64, 1)",
+        ],
         borderWidth: 1,
       },
     ],
@@ -249,37 +252,31 @@ const Dashboard = () => {
   };
   const incomeDoughnutOption = {
     responsive: true,
-    maintainAspectRatio: false, // Allows resizing within custom dimensions
-    rotation: -90, // Rotate the chart to start at the top
-    circumference: 180, // Only show 50% of the chart (half-doughnut)
+    maintainAspectRatio: false,
+    rotation: -90,
+    circumference: 180,
     plugins: {
       legend: {
-        display: false, // Disable legend (optional)
+        display: false,
       },
       tooltip: {
         callbacks: {
           label: (tooltipItem) => {
-            const value = tooltipItem.raw; // Get raw value
+            const value = tooltipItem.raw;
             return new Intl.NumberFormat("vi-VN", {
               style: "currency",
               currency: "VND",
-            }).format(value); // Format as VND currency
+            }).format(value);
           },
         },
       },
     },
-    cutout: "80%", // Adjust inner radius (for the "donut hole")
+    cutout: "80%",
   };
 
   const fetchAllTransaction = async () => {
     try {
-      console.log("Fetching transactions for", {
-        page,
-        size,
-        walletTransactionEnum,
-      });
       let data = await getAllTransaction(page, size, walletTransactionEnum);
-      console.log("API response:", data);
 
       if (data.status === 200) {
         setAllTransaction(data.data.content);
@@ -361,6 +358,25 @@ const Dashboard = () => {
     }
   };
 
+  const fetchPackageAnalysisData = async () => {
+    setLoading(true);
+    try {
+      const response = await getPackageByDate(startDate, endDate);
+      console.log(response.data);
+
+      if (response.status === 200) {
+        const data = response.data;
+        setTotalRentalPackageChart(data.totalRentalPackageChart);
+        setTotalExchangePackageChart(data.totalExchangePackageChart);
+        setTotalMemberPackageChart(data.totalMemberPackageChart);
+      }
+    } catch (error) {
+      console.error("Error fetching package analysis data:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     fetchAllTransaction();
   }, [page, size, walletTransactionEnum]);
@@ -368,6 +384,10 @@ const Dashboard = () => {
   useEffect(() => {
     fetchDashboardData();
   }, []);
+
+  useEffect(() => {
+    fetchPackageAnalysisData();
+  }, [startDate, endDate]);
 
   if (loading) {
     return <SpinnerWaiting />;
@@ -537,51 +557,21 @@ const Dashboard = () => {
         <div className="col-span-2 bg-white p-6 rounded-lg shadow-lg border-2 border-gray-200">
           <div className="flex flex-row justify-between mb-4">
             <h3 className="text-2xl font-semibold mb-4">Thống kê bài đăng</h3>
-            {/* Date Filter */}
             <div className="flex space-x-2 items-center">
               <span className="text-gray-500">Từ ngày</span>
-
-              <div className="relative">
-                <DatePicker
-                  selected={startDate}
-                  onChange={(date) => setStartDate(date)}
-                  dateFormat="dd/MM/yyyy"
-                  className="px-3 py-1 border rounded w-full"
-                />
-                <span
-                  className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 cursor-pointer"
-                  onClick={() =>
-                    document
-                      .querySelector(".react-datepicker__input-container input")
-                      .click()
-                  }
-                >
-                  <FaCalendarAlt className="text-gray-500" />
-                </span>
-              </div>
-
+              <DatePicker
+                selected={startDate}
+                onChange={(date) => setStartDate(date)}
+                dateFormat="dd/MM/yyyy"
+                className="px-3 py-1 border rounded w-full"
+              />
               <span className="text-gray-500">đến</span>
-
-              <div className="relative">
-                <DatePicker
-                  selected={endDate}
-                  onChange={(date) => setEndDate(date)}
-                  dateFormat="dd/MM/yyyy"
-                  className="px-3 py-1 border rounded w-full"
-                />
-                <span
-                  className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 cursor-pointer"
-                  onClick={() =>
-                    document
-                      .querySelectorAll(
-                        ".react-datepicker__input-container input"
-                      )[1]
-                      .click()
-                  }
-                >
-                  <FaCalendarAlt className="text-gray-500" />
-                </span>
-              </div>
+              <DatePicker
+                selected={endDate}
+                onChange={(date) => setEndDate(date)}
+                dateFormat="dd/MM/yyyy"
+                className="px-3 py-1 border rounded w-full"
+              />
             </div>
           </div>
           <div className="h-auto">
