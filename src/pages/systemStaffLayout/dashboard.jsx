@@ -37,6 +37,7 @@ import { FaHouseCircleCheck, FaUserGroup } from "react-icons/fa6";
 import CountUp from "react-countup";
 import { Link } from "react-router-dom";
 import { format } from "date-fns";
+import toast, { Toaster } from "react-hot-toast";
 
 ChartJS.register(
   CategoryScale,
@@ -392,6 +393,22 @@ const Dashboard = () => {
     }
   };
 
+  const handleStartDateChange = (date) => {
+    if (endDate < date) {
+      toast.error("Ngày bắt đầu phải nhỏ hơn ngày kết thúc!");
+      return;
+    }
+    setStartDate(date);
+  };
+
+  const handleEndDateChange = (date) => {
+    if (startDate > date) {
+      toast.error("Ngày kết thúc phải lớn hơn ngày bắt đầu!");
+      return;
+    }
+    setEndDate(date);
+  };
+
   useEffect(() => {
     fetchAllTransaction();
   }, [page, size, walletTransactionEnum]);
@@ -410,6 +427,7 @@ const Dashboard = () => {
 
   return (
     <div className="container mx-auto p-4 bg-white space-y-6">
+      <Toaster position="top-center" reverseOrder={false} />
       <div className="grid grid-cols-4 gap-6">
         {/* Revenue */}
         <div className="relative p-6 rounded-2xl bg-gradient-to-r from-blue-500 to-blue-700 text-white h-48">
@@ -577,7 +595,7 @@ const Dashboard = () => {
               <div className="relative">
                 <DatePicker
                   selected={startDate}
-                  onChange={(date) => setStartDate(date)}
+                  onChange={handleStartDateChange}
                   dateFormat="dd/MM/yyyy"
                   className="px-3 py-1 border rounded w-full"
                   open={showStartDatePicker}
@@ -593,7 +611,7 @@ const Dashboard = () => {
               <div className="relative">
                 <DatePicker
                   selected={endDate}
-                  onChange={(date) => setEndDate(date)}
+                  onChange={handleEndDateChange}
                   dateFormat="dd/MM/yyyy"
                   className="px-3 py-1 border rounded w-full"
                   open={showEndDatePicker}
