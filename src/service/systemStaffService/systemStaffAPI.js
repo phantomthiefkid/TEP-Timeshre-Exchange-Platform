@@ -126,7 +126,9 @@ const getBlogById = async (id) => {
 
 const deActivateBlog = async (id) => {
   try {
-    const response = await axiosConfig.put(`system-staff/blog/${id}/deactivate`);
+    const response = await axiosConfig.put(
+      `system-staff/blog/${id}/deactivate`
+    );
     return response;
   } catch (error) {
     throw error;
@@ -181,62 +183,77 @@ const getAllTransaction = async (page, size, walletTransactionEnum) => {
 
 const getAllFAQs = async () => {
   try {
-    return await axiosConfig.get(`system-staff/faq/all`)
+    return await axiosConfig.get(`system-staff/faq/all`);
   } catch (error) {
-    return error
+    return error;
   }
-}
+};
 
 const updateFAQById = async (data) => {
   try {
     const updateData = {
       title: data.title,
       description: data.description,
-      type: data.type
-    }
-    return await axiosConfig.put(`system-staff/faq/${data.faqId}`, updateData)
+      type: data.type,
+    };
+    return await axiosConfig.put(`system-staff/faq/${data.faqId}`, updateData);
   } catch (error) {
-    return error
+    return error;
   }
-}
+};
 
 const getAllPolicies = async () => {
   try {
-    return await axiosConfig.get(`system-staff/policy/all`)
+    return await axiosConfig.get(`system-staff/policy/all`);
   } catch (error) {
-    return error
+    return error;
   }
-}
+};
 const createFaq = async (data) => {
   try {
-    return await axiosConfig.post(`system-staff/faq`, data)
+    return await axiosConfig.post(`system-staff/faq`, data);
   } catch (error) {
-    return error
+    return error;
   }
-}
-
+};
 
 const updatePolicyById = async (data) => {
   try {
-    console.log(data)
+    console.log(data);
     const updateData = {
       title: data.title,
       description: data.description,
-      type: data.type
-    }
-    return await axiosConfig.put(`system-staff/policy/${data.policyId}`, updateData)
+      type: data.type,
+    };
+    return await axiosConfig.put(
+      `system-staff/policy/${data.policyId}`,
+      updateData
+    );
   } catch (error) {
-    return error
+    return error;
   }
-}
+};
 
 const createPolicy = async (data) => {
   try {
-    return await axiosConfig.post(`system-staff/policy`, data)
+    return await axiosConfig.post(`system-staff/policy`, data);
   } catch (error) {
-    return error
+    return error;
   }
-}
+};
+
+const getPackageByDate = async (startDate, endDate) => {
+  try {
+    return await axiosConfig.get(`system-staff/total-packages/date`, {
+      params: {
+        startDate,
+        endDate,
+      },
+    });
+  } catch (error) {
+    return error;
+  }
+};
 
 export {
   getAllRentalPosting,
@@ -259,5 +276,6 @@ export {
   updatePolicyById,
   createPolicy,
   createFaq,
-  deActivateBlog
+  deActivateBlog,
+  getPackageByDate,
 };

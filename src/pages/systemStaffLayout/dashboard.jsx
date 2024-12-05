@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Line, Bar, Doughnut } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -15,6 +15,7 @@ import {
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import {
+  FaCalendar,
   FaCalendarAlt,
   FaChevronLeft,
   FaChevronRight,
@@ -26,6 +27,7 @@ import SpinnerWaiting from "../../components/LoadingComponent/spinnerWaiting";
 import {
   getAllRentalPosting,
   getAllTransaction,
+  getPackageByDate,
   getTotalCompany,
   getTotalCustomers,
   getTotalPackages,
@@ -34,6 +36,7 @@ import {
 import { FaHouseCircleCheck, FaUserGroup } from "react-icons/fa6";
 import CountUp from "react-countup";
 import { Link } from "react-router-dom";
+import { format } from "date-fns";
 
 ChartJS.register(
   CategoryScale,
@@ -65,12 +68,22 @@ const Dashboard = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [walletTransactionEnum, setWalletTransactionEnum] = useState(null);
 
+  const [totalRentalPackageChart, setTotalRentalPackageChart] = useState(0);
+  const [totalExchangePackageChart, setTotalExchangePackageChart] = useState(0);
+  const [totalMemberPackageChart, setTotalMemberPackageChart] = useState(0);
+
+  const [showStartDatePicker, setShowStartDatePicker] = useState(false);
+  const [showEndDatePicker, setShowEndDatePicker] = useState(false);
+
   const today = new Date();
+
   const defaultStartDate = new Date(today);
-  defaultStartDate.setDate(today.getDate() - 5);
+  const defaultEndDate = new Date(today);
+  defaultStartDate.setDate(today.getDate() - 3);
+  defaultEndDate.setDate(today.getDate() + 3);
 
   const [startDate, setStartDate] = useState(defaultStartDate);
-  const [endDate, setEndDate] = useState(today);
+  const [endDate, setEndDate] = useState(defaultEndDate);
 
   const lineChartData = {
     labels: [
@@ -133,78 +146,76 @@ const Dashboard = () => {
     },
   };
 
-  const generateSampleProjects = () => {
-    const pkgs = ["Exchange_Package", "Member_Package", "Rental_Package"];
-    const projects = [];
-    for (let i = 1; i <= 20; i++) {
-      const randomDaysAgo = Math.floor(Math.random() * 30); // Random days between 0-30
-      const dueDate = new Date();
-      dueDate.setDate(today.getDate() - randomDaysAgo);
+  // const generateDateLabels = (startDate, endDate) => {
+  //   const labels = [];
+  //   let currentDate = new Date(startDate);
 
-      projects.push({
-        project: `Project ${i}`,
-        progress: Math.floor(Math.random() * 100), // Random progress 0-100
-        dueDate: dueDate.toISOString().split("T")[0],
-        pkg: pkgs[Math.floor(Math.random() * pkgs.length)], // Random package
-      });
-    }
-    return projects;
+  //   // Loop through each date from startDate to endDate
+  //   while (currentDate <= endDate) {
+  //     labels.push(format(currentDate, "dd/MM/yyyy"));
+  //     currentDate.setDate(currentDate.getDate() + 1);  // Move to the next day
+  //   }
+
+  //   return labels;
+  // };
+
+  const barChartData = useMemo(
+    () => ({
+      // labels: generateDateLabels(startDate, endDate),
+      labels: [
+        startDate.getTime() === endDate.getTime()
+          ? format(startDate, "dd/MM/yyyy")
+          : `${format(startDate, "dd/MM/yyyy")} - ${format(
+              endDate,
+              "dd/MM/yyyy"
+            )}`,
+      ],
+      datasets: [
+        {
+          label: "Gói cho thuê",
+          data: [totalRentalPackageChart],
+          backgroundColor: "rgba(54, 162, 235, 0.5)",
+          borderColor: "rgba(54, 162, 235, 1)",
+          borderWidth: 1,
+        },
+        {
+          label: "Gói trao đổi",
+          data: [totalExchangePackageChart],
+          backgroundColor: "rgba(0, 176, 155, 0.5)",
+          borderColor: "rgba(0, 176, 155, 1)",
+          borderWidth: 1,
+        },
+        {
+          label: "Gói thành viên",
+          data: [totalMemberPackageChart],
+          backgroundColor: "rgba(255, 159, 64, 0.5)",
+          borderColor: "rgba(255, 159, 64, 1)",
+          borderWidth: 1,
+        },
+      ],
+    }),
+    [
+      startDate,
+      endDate,
+      totalRentalPackageChart,
+      totalExchangePackageChart,
+      totalMemberPackageChart,
+    ]
+  );
+
+  const barChartOptions = {
+    responsive: true,
+    plugins: {
+      legend: {
+        display: true,
+        position: "top",
+      },
+      tooltip: {
+        enabled: true,
+      },
+    },
   };
 
-  const [projects] = useState(generateSampleProjects());
-
-  // Format date to dd/mm/yyyy
-  const formatDate = (date) => {
-    const d = new Date(date);
-    const day = d.getDate().toString().padStart(2, "0");
-    const month = (d.getMonth() + 1).toString().padStart(2, "0");
-    const year = d.getFullYear();
-    return `${day}/${month}/${year}`;
-  };
-
-  // Filter projects based on date range
-  const filteredProjects = projects.filter((project) => {
-    const projectDate = new Date(project.dueDate);
-    return projectDate >= startDate && projectDate <= endDate;
-  });
-
-  // Group data by date and package
-  const groupedData = filteredProjects.reduce((acc, project) => {
-    const date = formatDate(project.dueDate);
-    if (!acc[date])
-      acc[date] = { Exchange_Package: 0, Member_Package: 0, Rental_Package: 0 };
-    acc[date][project.pkg] += 1;
-    return acc;
-  }, {});
-
-  const barChartData = {
-    labels: Object.keys(groupedData),
-    datasets: [
-      {
-        label: "Gói trao đổi",
-        data: Object.values(groupedData).map((data) => data.Exchange_Package),
-        backgroundColor: "rgba(0, 176, 155, 0.5)",
-        borderColor: "rgba(0, 176, 155, 1)",
-        borderWidth: 1,
-      },
-      {
-        label: "Gói thành viên",
-        data: Object.values(groupedData).map((data) => data.Member_Package),
-        backgroundColor: "rgba(54, 162, 235, 0.5)",
-        borderColor: "rgba(54, 162, 235, 1)",
-        borderWidth: 1,
-      },
-      {
-        label: "Gói cho thuê",
-        data: Object.values(groupedData).map((data) => data.Rental_Package),
-        backgroundColor: "rgba(255, 159, 64, 0.5)",
-        borderColor: "rgba(255, 159, 64, 1)",
-        borderWidth: 1,
-      },
-    ],
-  };
-
-  // Data for Doughnut Chart
   const doughnutChartData = {
     labels: ["Gói trao đổi", "Gói cho thuê", "Gói thành viên"],
     datasets: [
@@ -249,37 +260,31 @@ const Dashboard = () => {
   };
   const incomeDoughnutOption = {
     responsive: true,
-    maintainAspectRatio: false, // Allows resizing within custom dimensions
-    rotation: -90, // Rotate the chart to start at the top
-    circumference: 180, // Only show 50% of the chart (half-doughnut)
+    maintainAspectRatio: false,
+    rotation: -90,
+    circumference: 180,
     plugins: {
       legend: {
-        display: false, // Disable legend (optional)
+        display: false,
       },
       tooltip: {
         callbacks: {
           label: (tooltipItem) => {
-            const value = tooltipItem.raw; // Get raw value
+            const value = tooltipItem.raw;
             return new Intl.NumberFormat("vi-VN", {
               style: "currency",
               currency: "VND",
-            }).format(value); // Format as VND currency
+            }).format(value);
           },
         },
       },
     },
-    cutout: "80%", // Adjust inner radius (for the "donut hole")
+    cutout: "80%",
   };
 
   const fetchAllTransaction = async () => {
     try {
-      console.log("Fetching transactions for", {
-        page,
-        size,
-        walletTransactionEnum,
-      });
       let data = await getAllTransaction(page, size, walletTransactionEnum);
-      console.log("API response:", data);
 
       if (data.status === 200) {
         setAllTransaction(data.data.content);
@@ -361,6 +366,32 @@ const Dashboard = () => {
     }
   };
 
+  const fetchPackageAnalysisData = async () => {
+    try {
+      const startIsoDate = startDate.toISOString();
+      const endIsoDate = endDate.toISOString();
+
+      const response = await getPackageByDate(startIsoDate, endIsoDate);
+
+      if (response.status === 200) {
+        const data = response.data;
+        console.log(
+          data.totalRentalPackage,
+          data.totalExchangePackage,
+          data.totalMemberShip
+        );
+
+        setTotalRentalPackageChart(data.totalRentalPackage);
+        setTotalExchangePackageChart(data.totalExchangePackage);
+        setTotalMemberPackageChart(data.totalMemberShip);
+      }
+    } catch (error) {
+      console.error("Error fetching package analysis data:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     fetchAllTransaction();
   }, [page, size, walletTransactionEnum]);
@@ -368,6 +399,10 @@ const Dashboard = () => {
   useEffect(() => {
     fetchDashboardData();
   }, []);
+
+  useEffect(() => {
+    fetchPackageAnalysisData();
+  }, [startDate, endDate]);
 
   if (loading) {
     return <SpinnerWaiting />;
@@ -537,55 +572,43 @@ const Dashboard = () => {
         <div className="col-span-2 bg-white p-6 rounded-lg shadow-lg border-2 border-gray-200">
           <div className="flex flex-row justify-between mb-4">
             <h3 className="text-2xl font-semibold mb-4">Thống kê bài đăng</h3>
-            {/* Date Filter */}
             <div className="flex space-x-2 items-center">
               <span className="text-gray-500">Từ ngày</span>
-
               <div className="relative">
                 <DatePicker
                   selected={startDate}
                   onChange={(date) => setStartDate(date)}
                   dateFormat="dd/MM/yyyy"
                   className="px-3 py-1 border rounded w-full"
+                  open={showStartDatePicker}
+                  onClickOutside={() => setShowStartDatePicker(false)}
+                  disabled
                 />
-                <span
-                  className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 cursor-pointer"
-                  onClick={() =>
-                    document
-                      .querySelector(".react-datepicker__input-container input")
-                      .click()
-                  }
-                >
-                  <FaCalendarAlt className="text-gray-500" />
-                </span>
+                <FaCalendar
+                  className="absolute right-2 top-1/2 transform -translate-y-1/2 cursor-pointer"
+                  onClick={() => setShowStartDatePicker(!showStartDatePicker)}
+                />
               </div>
-
               <span className="text-gray-500">đến</span>
-
               <div className="relative">
                 <DatePicker
                   selected={endDate}
                   onChange={(date) => setEndDate(date)}
                   dateFormat="dd/MM/yyyy"
                   className="px-3 py-1 border rounded w-full"
+                  open={showEndDatePicker}
+                  onClickOutside={() => setShowEndDatePicker(false)}
+                  disabled
                 />
-                <span
-                  className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 cursor-pointer"
-                  onClick={() =>
-                    document
-                      .querySelectorAll(
-                        ".react-datepicker__input-container input"
-                      )[1]
-                      .click()
-                  }
-                >
-                  <FaCalendarAlt className="text-gray-500" />
-                </span>
+                <FaCalendar
+                  className="absolute right-2 top-1/2 transform -translate-y-1/2 cursor-pointer"
+                  onClick={() => setShowEndDatePicker(!showEndDatePicker)}
+                />
               </div>
             </div>
           </div>
           <div className="h-auto">
-            <Bar data={barChartData} />
+            <Bar data={barChartData} options={barChartOptions} />
           </div>
         </div>
         <div className="bg-white p-6 rounded-lg shadow-lg border-2 border-gray-200">
