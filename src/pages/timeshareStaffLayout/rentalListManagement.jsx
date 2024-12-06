@@ -141,7 +141,9 @@ const RentalListManagement = () => {
               Danh sách <span className="text-blue-600">Thuê</span>
             </h1>
             <h3 className="text-lg text-gray-500">
-              Theo dõi và quản lý các <span className="font-semibold text-blue-600">yêu cầu thuê</span> của khách hàng.
+              Theo dõi và quản lý các{" "}
+              <span className="font-semibold text-blue-600">yêu cầu thuê</span>{" "}
+              của khách hàng.
             </h3>
           </div>
           <button
@@ -152,7 +154,6 @@ const RentalListManagement = () => {
             Làm mới
           </button>
         </div>
-
 
         {/* Dashboard */}
         <div className="flex justify-center items-center bg-white mb-3">
@@ -202,8 +203,9 @@ const RentalListManagement = () => {
         {/* Day Fitler */}
         <div className="flex justify-start space-x-2 mb-1">
           <button
-            className={`px-4 py-2 text-black font-semibold bg-white transition-all duration-300 ease-out relative ${selectedDateTab === "isComing" ? "text-blue-500" : "text-black"
-              }`}
+            className={`px-4 py-2 text-black font-semibold bg-white transition-all duration-300 ease-out relative ${
+              selectedDateTab === "isComing" ? "text-blue-500" : "text-black"
+            }`}
             onClick={() => handleDateTabClick("isComing")}
           >
             Sẽ đến
@@ -212,8 +214,9 @@ const RentalListManagement = () => {
             )}
           </button>
           <button
-            className={`px-4 py-2 text-black font-semibold bg-white transition-all duration-300 ease-out relative ${selectedDateTab === "today" ? "text-blue-500" : "text-black"
-              }`}
+            className={`px-4 py-2 text-black font-semibold bg-white transition-all duration-300 ease-out relative ${
+              selectedDateTab === "today" ? "text-blue-500" : "text-black"
+            }`}
             onClick={() => handleDateTabClick("today")}
           >
             Hôm nay
@@ -222,8 +225,9 @@ const RentalListManagement = () => {
             )}
           </button>
           <button
-            className={`px-4 py-2 text-black font-semibold bg-white transition-all duration-300 ease-out relative ${selectedDateTab === "willGo" ? "text-blue-500" : "text-black"
-              }`}
+            className={`px-4 py-2 text-black font-semibold bg-white transition-all duration-300 ease-out relative ${
+              selectedDateTab === "willGo" ? "text-blue-500" : "text-black"
+            }`}
             onClick={() => handleDateTabClick("willGo")}
           >
             Sẽ đi
@@ -255,6 +259,7 @@ const RentalListManagement = () => {
                     <img
                       src={booking.renterLegalAvatar}
                       className="w-12 h-12 rounded-2xl mr-5"
+                      alt={booking.renterFullLegalName}
                     />
                     <div className="flex flex-col">
                       <h3 className="font-semibold flex flex-row">
@@ -269,8 +274,9 @@ const RentalListManagement = () => {
                   <td className="p-4 pl-8">{booking.nights}</td>
                   <td className="p-4">
                     <span
-                      className={`text-medium px-2 py-1 w-3/4 text-center rounded-full ${getStatusStyles(booking.status).style
-                        }`}
+                      className={`text-medium px-2 py-1 w-3/4 text-center rounded-full ${
+                        getStatusStyles(booking.status).style
+                      }`}
                     >
                       {getStatusStyles(booking.status).label}
                     </span>
@@ -348,10 +354,11 @@ const RentalListManagement = () => {
                     <button
                       key={index}
                       onClick={() => setPage(index)}
-                      className={`w-10 h-10 flex items-center justify-center rounded-xl ${index === page
+                      className={`w-10 h-10 flex items-center justify-center rounded-xl ${
+                        index === page
                           ? "bg-blue-500 text-white shadow-lg font-semibold"
                           : "text-gray-500 hover:text-blue-500 hover:font-semibold"
-                        }`}
+                      }`}
                     >
                       {index + 1}
                     </button>

@@ -325,6 +325,9 @@ const Dashboard = () => {
     REJECT_REQUESTEXCHANGE: "Từ chối yêu cầu trao đổi",
     DEPOSITMONEY: "Nạp tiền vào ví hệ thống",
     RENTALPACKAGE04: "Thanh toán gói trao đổi 4",
+    APPROVAL_RENTALPOSTING: "Chấp thuận bài đăng cho thuê",
+    EXCHANGEREQUEST: "Yêu cầu trao đổi",
+    EXCHANGEREQUEST_VALUATION: "Thanh toán bù trừ trao đổi",
   };
 
   const fetchDashboardData = async () => {
