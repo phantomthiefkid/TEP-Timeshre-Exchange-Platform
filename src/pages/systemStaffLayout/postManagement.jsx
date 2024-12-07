@@ -29,7 +29,13 @@ const PostManagement = () => {
   const [resortName, setResortName] = useState("");
   const fetchAllRentalPostings = async () => {
     try {
-      let data = await getAllRentalPackagePosting(page, size, resortName, packageId, filterStatus);
+      let data = await getAllRentalPackagePosting(
+        page,
+        size,
+        resortName,
+        packageId,
+        filterStatus
+      );
       if (data.status === 200) {
         setLoading(false);
         setRentalPostings(data.data.content);
@@ -40,7 +46,7 @@ const PostManagement = () => {
     }
   };
 
-  console.log(rentalPostings)
+  console.log(rentalPostings);
   const handlePackageSelect = (value, label) => {
     setSelectedOption(label); // Cập nhật tên hiển thị
     setPackageId(value); // Cập nhật ID gói
@@ -87,45 +93,61 @@ const PostManagement = () => {
   const getStatusStyles = (status) => {
     switch (status) {
       case "PendingApproval":
-        return { label: "Đang chờ", style: "bg-blue-100 text-blue-500", styleDot: "bg-blue-500" };
+        return {
+          label: "Đang chờ",
+          style: "bg-blue-100 text-blue-500",
+          styleDot: "bg-blue-500",
+        };
       case "Processing":
-        return { label: "Đã duyệt", style: "bg-green-100 text-green-500", styleDot: "bg-green-500" };
+        return {
+          label: "Đã duyệt",
+          style: "bg-green-100 text-green-500",
+          styleDot: "bg-green-500",
+        };
       case "AwaitingConfirmation":
         return {
           label: "Chờ xác nhận giá",
           style: "bg-yellow-100 text-yellow-500",
-          styleDot: "bg-yellow-500"
+          styleDot: "bg-yellow-500",
         };
       case "PendingPricing":
         return {
           label: "Chờ định giá",
           style: "bg-yellow-200 text-orange-400",
-          styleDot: "bg-orange-500"
+          styleDot: "bg-orange-500",
         };
       case "Closed":
         return {
-          label: "Từ chối", style: "bg-red-100 text-red-500",
-          styleDot: "bg-red-500"
+          label: "Từ chối",
+          style: "bg-red-100 text-red-500",
+          styleDot: "bg-red-500",
         };
       case "Expired":
         return {
-          label: "Hết hạn", style: "bg-gray-100 text-gray-500",
-          styleDot: "bg-red-500"
+          label: "Hết hạn",
+          style: "bg-gray-100 text-gray-500",
+          styleDot: "bg-red-500",
         };
       case "RejectPrice":
         return {
-          label: "Từ chối giá", style: "bg-red-100 text-red-500",
-          styleDot: "bg-red-500"
+          label: "Từ chối giá",
+          style: "bg-red-100 text-red-500",
+          styleDot: "bg-red-500",
         };
       case "Completed":
         return {
-          label: "Đã thuê", style: "bg-green-100 text-green-500",
-          styleDot: "bg-blue-500"
+          label: "Đã thuê",
+          style: "bg-green-100 text-green-500",
+          styleDot: "bg-blue-500",
         };
       default:
-        return { label: "Không xác định", style: "bg-gray-100 text-gray-500", styleDot: "bg-gray-500" };
+        return {
+          label: "Không xác định",
+          style: "bg-gray-100 text-gray-500",
+          styleDot: "bg-gray-500",
+        };
     }
-  }
+  };
 
   if (loading) {
     return <SpinnerWaiting />;
@@ -140,7 +162,10 @@ const PostManagement = () => {
             Danh sách <span className="text-blue-600">bài đăng</span>
           </h1>
           <h3 className="text-lg text-gray-500">
-            <span className="font-semibold text-blue-600">Quản lý các bài đăng cho thuê</span> tại đây
+            <span className="font-semibold text-blue-600">
+              Quản lý các bài đăng cho thuê
+            </span>{" "}
+            tại đây
           </h3>
         </div>
         <div className="flex items-center justify-start gap-6 p-2 mt-3 py-4">
@@ -196,10 +221,8 @@ const PostManagement = () => {
                       {label}
                     </label>
                   ))}
-
                 </div>
               </div>
-
             </div>
 
             {/* <Link to={`/systemstaff/createposting`}>
@@ -208,36 +231,71 @@ const PostManagement = () => {
                 Thêm mới
               </button>
             </Link> */}
-
           </div>
         </div>
         {/* Filter Buttons */}
         <div className="flex items-center py-4 space-x-4 mb-5">
           {[
-            { label: "Tất cả", status: null, color: "bg-gradient-to-r from-blue-400 to-blue-600" },
-            { label: "Đang chờ", status: "PendingApproval", color: "bg-gradient-to-r from-blue-200 to-blue-400" },
-            { label: "Đã thuê", status: "Completed", color: "bg-gradient-to-r from-green-300 to-green-400" },
-            { label: "Chờ xác nhận giá", status: "AwaitingConfirmation", color: "bg-gradient-to-r from-orange-200 to-orange-400" },
-            { label: "Chờ định giá", status: "PendingPricing", color: "bg-gradient-to-r from-yellow-200 to-yellow-400" },
-            { label: "Từ chối giá", status: "RejectPrice", color: "bg-gradient-to-r from-red-200 to-red-400" },
-            { label: "Đã duyệt", status: "Processing", color: "bg-gradient-to-r from-green-300 to-green-400" },
-            { label: "Từ chối", status: "Closed", color: "bg-gradient-to-r from-red-200 to-red-400" },
-            { label: "Hết hạn", status: "Expired", color: "bg-gradient-to-r from-gray-200 to-gray-400" },
-          ]
-            .map(({ label, status, color }) => (
-              <button
-                key={status}
-                onClick={() => setFilterStatus(status)}
-                className={`px-6 py-3 rounded-full font-medium transition-all duration-300 ease-in-out
-                ${filterStatus === status
+            {
+              label: "Tất cả",
+              status: null,
+              color: "bg-gradient-to-r from-blue-400 to-blue-600",
+            },
+            {
+              label: "Đang chờ",
+              status: "PendingApproval",
+              color: "bg-gradient-to-r from-blue-200 to-blue-400",
+            },
+            {
+              label: "Đã thuê",
+              status: "Completed",
+              color: "bg-gradient-to-r from-green-300 to-green-400",
+            },
+            {
+              label: "Chờ xác nhận giá",
+              status: "AwaitingConfirmation",
+              color: "bg-gradient-to-r from-orange-200 to-orange-400",
+            },
+            {
+              label: "Chờ định giá",
+              status: "PendingPricing",
+              color: "bg-gradient-to-r from-yellow-200 to-yellow-400",
+            },
+            {
+              label: "Từ chối giá",
+              status: "RejectPrice",
+              color: "bg-gradient-to-r from-red-200 to-red-400",
+            },
+            {
+              label: "Đã duyệt",
+              status: "Processing",
+              color: "bg-gradient-to-r from-green-300 to-green-400",
+            },
+            {
+              label: "Từ chối",
+              status: "Closed",
+              color: "bg-gradient-to-r from-red-200 to-red-400",
+            },
+            {
+              label: "Hết hạn",
+              status: "Expired",
+              color: "bg-gradient-to-r from-gray-200 to-gray-400",
+            },
+          ].map(({ label, status, color }) => (
+            <button
+              key={status}
+              onClick={() => setFilterStatus(status)}
+              className={`px-6 py-3 rounded-full font-medium transition-all duration-300 ease-in-out
+                ${
+                  filterStatus === status
                     ? `${color} text-white shadow-lg border-transparent`
                     : `bg-gray-100 text-gray-700 border border-gray-300 hover:${color} hover:text-white hover:shadow-lg`
-                  }
+                }
             `}
-              >
-                {label}
-              </button>
-            ))}
+            >
+              {label}
+            </button>
+          ))}
         </div>
 
         <table className="min-w-full bg-white border border-gray-200 ">
@@ -257,11 +315,15 @@ const PostManagement = () => {
                 <tr key={index} className="border-b border-gray-200">
                   <td className="p-4 flex items-center w-72">
                     <img
-                      src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/412883158.jpg?k=a220ece8f04054da35466bd13ee87342354cc18122b73eb0fbdcfef850115325&o=&hp=1"
+                      src={
+                        posting.resortImage
+                          ? posting.resortImage
+                          : "https://cf.bstatic.com/xdata/images/hotel/max1024x768/412883158.jpg?k=a220ece8f04054da35466bd13ee87342354cc18122b73eb0fbdcfef850115325&o=&hp=1"
+                      }
                       className="w-12 h-12 rounded-2xl mr-5"
                     />
                     <div className="flex flex-col">
-                      <h3 className="font-light">{posting.resortName}</h3>
+                      <h3 className="">{posting.resortName}</h3>
                     </div>
                   </td>
 
@@ -270,7 +332,9 @@ const PostManagement = () => {
                   <td className="p-4">{FormatCurrency(posting.totalPrice)}</td>
                   <td className="p-4">
                     <span
-                      className={`flex items-center hover:scale-105 transition-all duration-200 py-1 px-2 rounded-full w-44 text-center ${getStatusStyles(posting.status).style}`}
+                      className={`flex items-center hover:scale-105 transition-all duration-200 py-1 px-2 rounded-full w-44 text-center ${
+                        getStatusStyles(posting.status).style
+                      }`}
                     >
                       <FaDotCircle className="mr-2" />
                       {getStatusStyles(posting.status).label}
@@ -311,10 +375,11 @@ const PostManagement = () => {
                 <button
                   key={index}
                   onClick={() => setPage(index)}
-                  className={`w-8 h-8 flex items-center justify-center rounded-full ${index === page
-                    ? "bg-blue-500 text-white"
-                    : "bg-white text-gray-500"
-                    }`}
+                  className={`w-8 h-8 flex items-center justify-center rounded-full ${
+                    index === page
+                      ? "bg-blue-500 text-white"
+                      : "bg-white text-gray-500"
+                  }`}
                 >
                   {index + 1}
                 </button>

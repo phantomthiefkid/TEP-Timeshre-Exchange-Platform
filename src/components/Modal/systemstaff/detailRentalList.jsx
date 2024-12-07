@@ -2,7 +2,10 @@ import React, { useEffect, useState } from "react";
 import { toast, Toaster } from "react-hot-toast";
 import { FaEdit, FaMap, FaMapMarkerAlt, FaSpinner } from "react-icons/fa";
 import { FaLocationPin, FaPencil, FaXmark } from "react-icons/fa6";
-import { acceptNewPriceValuation, getRentalPostingById } from "../../../service/systemStaffService/systemStaffAPI";
+import {
+  acceptNewPriceValuation,
+  getRentalPostingById,
+} from "../../../service/systemStaffService/systemStaffAPI";
 import SpinnerWaiting from "../../LoadingComponent/spinnerWaiting";
 import FormatCurrency from "../../Validate/formatCurrency";
 const DetailRentalList = ({ isOpen, onClose, postingId, flag }) => {
@@ -10,7 +13,7 @@ const DetailRentalList = ({ isOpen, onClose, postingId, flag }) => {
   const [newPriceValuation, setNewPriceValuation] = useState();
   const [editFlag, setEditFlag] = useState(false);
   const [isSpinner, setIsSpinner] = useState(false);
-  const [rentalPosting, setRentalPosting] = useState(null)
+  const [rentalPosting, setRentalPosting] = useState(null);
   const [reload, setReload] = useState(false);
   useEffect(() => {
     if (isOpen) {
@@ -23,27 +26,27 @@ const DetailRentalList = ({ isOpen, onClose, postingId, flag }) => {
   useEffect(() => {
     const fetchRentalPostingDetail = async () => {
       try {
-        let data = await getRentalPostingById(postingId)
+        let data = await getRentalPostingById(postingId);
         if (data.status === 200) {
-          setRentalPosting(data.data)
-          setNewPriceValuation(data.data.priceValuation)
+          setRentalPosting(data.data);
+          setNewPriceValuation(data.data.priceValuation);
         }
       } catch (error) {
-        throw error
+        throw error;
       }
-    }
+    };
     fetchRentalPostingDetail();
-  }, [postingId, reload])
+  }, [postingId, reload]);
 
   if (!isVisible) return null;
 
   const modalStyles = isOpen
     ? {}
     : {
-      opacity: 0,
-      transform: "translateX(100%)",
-      transition: "all 0.3s ease",
-    };
+        opacity: 0,
+        transform: "translateX(100%)",
+        transition: "all 0.3s ease",
+      };
 
   const getStatusStyles = (status) => {
     switch (status) {
@@ -85,13 +88,15 @@ const DetailRentalList = ({ isOpen, onClose, postingId, flag }) => {
         };
       case "RejectPrice":
         return {
-          label: "Từ chối giá", style: "bg-red-100 text-red-500",
-          styleDot: "bg-red-500"
+          label: "Từ chối giá",
+          style: "bg-red-100 text-red-500",
+          styleDot: "bg-red-500",
         };
       case "Completed":
         return {
-          label: "Đã thuê", style: "bg-blue-100 text-blue-500",
-          styleDot: "bg-blue-500"
+          label: "Đã thuê",
+          style: "bg-blue-100 text-blue-500",
+          styleDot: "bg-blue-500",
         };
       default:
         return {
@@ -111,17 +116,17 @@ const DetailRentalList = ({ isOpen, onClose, postingId, flag }) => {
         parseFloat(newPriceValuation)
       );
       if (data.status === 200) {
-        setReload(!reload)
+        setReload(!reload);
         toast.success("Định giá thành công!", { duration: 3000 });
-        flag()
-        setEditFlag(false)
-        setIsSpinner(false)
+        flag();
+        setEditFlag(false);
+        setIsSpinner(false);
       }
     } catch (error) {
-      throw error
+      throw error;
     } finally {
-      setEditFlag(false)
-      setIsSpinner(false)
+      setEditFlag(false);
+      setIsSpinner(false);
     }
   };
 
@@ -140,7 +145,9 @@ const DetailRentalList = ({ isOpen, onClose, postingId, flag }) => {
         {/* Header Section */}
         <div className="p-5 border-b flex justify-between items-center bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-t-lg shadow-md">
           <h1 className="text-lg font-semibold tracking-wide">
-            <span className="bg-white/20 py-1 px-3 rounded-md">Thông tin chi tiết</span>
+            <span className="bg-white/20 py-1 px-3 rounded-md">
+              Thông tin chi tiết
+            </span>
           </h1>
           <button
             onClick={onClose}
@@ -151,13 +158,16 @@ const DetailRentalList = ({ isOpen, onClose, postingId, flag }) => {
           </button>
         </div>
 
-
         {rentalPosting ? (
           <>
             <div className="border-b">
               <div className="flex items-center p-4 m-3 border border-gray-200 rounded-lg shadow-md transition duration-200 relative bg-white">
                 <img
-                  src="https://cdn5.redweek.com/photos/full-preview/3/0/3/303804.jpg?1"
+                  src={
+                    rentalPosting.resortImage
+                      ? rentalPosting.resortImage
+                      : "https://cdn5.redweek.com/photos/full-preview/3/0/3/303804.jpg?1"
+                  }
                   alt="Hotel Thumbnail"
                   className="w-24 h-24 rounded-lg mr-4 object-cover shadow-sm"
                 />
@@ -180,44 +190,53 @@ const DetailRentalList = ({ isOpen, onClose, postingId, flag }) => {
 
                 {/* Status label at the bottom-right with circular indicator */}
                 <span
-                  className={`absolute bottom-2 right-2 flex items-center px-3 py-1 font-medium text-sm ${getStatusStyles(rentalPosting.status).style
-                    } rounded-full shadow-md`}
+                  className={`absolute bottom-2 right-2 flex items-center px-3 py-1 font-medium text-sm ${
+                    getStatusStyles(rentalPosting.status).style
+                  } rounded-full shadow-md`}
                 >
                   <span
-                    className={`inline-block w-2.5 h-2.5 mr-1 ${getStatusStyles(rentalPosting.status).styleDot
-                      } rounded-full`}
+                    className={`inline-block w-2.5 h-2.5 mr-1 ${
+                      getStatusStyles(rentalPosting.status).styleDot
+                    } rounded-full`}
                   ></span>
                   {getStatusStyles(rentalPosting.status).label}
                 </span>
               </div>
             </div>
 
-
             <div className="flex-1 overflow-y-auto p-8">
               <h2 className="text-xl font-semibold mb-3 text-gray-700">
                 Thông tin
               </h2>
               <div className="grid grid-cols-4 gap-4 mb-6 mr-6 px-6 p-2">
-                <p className="text-medium font-mono text-gray-500 mr-4">Tên phòng: </p>
+                <p className="text-medium font-mono text-gray-500 mr-4">
+                  Tên phòng:{" "}
+                </p>
                 <p className="font-medium text-left">
                   {rentalPosting.roomName}
                 </p>
 
-                <p className="text-medium font-mono text-gray-500 mr-4">Đăng bởi: </p>
+                <p className="text-medium font-mono text-gray-500 mr-4">
+                  Đăng bởi:{" "}
+                </p>
 
                 <p className="font-mono">{rentalPosting.ownerName}</p>
 
                 <p className="text-medium font-mono text-gray-500 mr-4">
                   Ngày nhận phòng:{" "}
                 </p>
-                <p className="font-mono text-left">{rentalPosting.checkinDate}</p>
+                <p className="font-mono text-left">
+                  {rentalPosting.checkinDate}
+                </p>
 
                 <p className="text-medium font-mono text-gray-500 mr-4">
                   Ngày trả phòng:{" "}
                 </p>
                 <p className=" ">{rentalPosting.checkoutDate}</p>
 
-                <p className="text-medium font-mono text-gray-500 mr-4">Giá phòng: </p>
+                <p className="text-medium font-mono text-gray-500 mr-4">
+                  Giá phòng:{" "}
+                </p>
                 <p className=" text-left font-mono">
                   {new Intl.NumberFormat("vi-VN", {
                     style: "currency",
@@ -225,7 +244,9 @@ const DetailRentalList = ({ isOpen, onClose, postingId, flag }) => {
                   }).format(rentalPosting.totalPrice)}
                 </p>
 
-                <p className="text-medium font-mono text-gray-500 mr-4">Định giá: </p>
+                <p className="text-medium font-mono text-gray-500 mr-4">
+                  Định giá:{" "}
+                </p>
 
                 {rentalPosting.status === "PendingPricing" ? (
                   <p>
@@ -234,7 +255,9 @@ const DetailRentalList = ({ isOpen, onClose, postingId, flag }) => {
                         <div className="relative">
                           <input
                             className="w-32 p-2 border border-gray-300 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition-all duration-300"
-                            onChange={(e) => setNewPriceValuation(e.target.value)}
+                            onChange={(e) =>
+                              setNewPriceValuation(e.target.value)
+                            }
                             type="text"
                             name="newPriceValuation"
                             value={newPriceValuation}
@@ -250,20 +273,24 @@ const DetailRentalList = ({ isOpen, onClose, postingId, flag }) => {
                           className="cursor-pointer text-[#EE6457] hover:scale-110 transition-transform duration-200"
                         />
                       </p>
-
                     ) : (
                       <p className="flex justify-start items-center gap-4">
-                        <p className="font-mono">{FormatCurrency(newPriceValuation)}</p>
+                        <p className="font-mono">
+                          {FormatCurrency(newPriceValuation)}
+                        </p>
                         <FaEdit
                           onClick={() => setEditFlag(true)}
                           size={24}
                           color="#2D99AE"
                         />
                       </p>
-
                     )}
                   </p>
-                ) : (<p className="font-mono">{FormatCurrency(newPriceValuation)}</p>)}
+                ) : (
+                  <p className="font-mono">
+                    {FormatCurrency(newPriceValuation)}
+                  </p>
+                )}
               </div>
 
               <div className="mb-4">
@@ -394,9 +421,7 @@ const DetailRentalList = ({ isOpen, onClose, postingId, flag }) => {
                 <h2 className="text-lg font-semibold mb-4">Chính sách</h2>
                 <div className="grid grid-cols-3 gap-2">
                   {rentalPosting.resortAmenities
-                    .filter(
-                      (amenity) => amenity.type === "POLICY"
-                    )
+                    .filter((amenity) => amenity.type === "POLICY")
                     .map((amenity) => (
                       <p
                         key={amenity.id}
@@ -407,7 +432,6 @@ const DetailRentalList = ({ isOpen, onClose, postingId, flag }) => {
                     ))}
                 </div>
               </div>
-
             </div>
           </>
         ) : (
@@ -440,7 +464,6 @@ const DetailRentalList = ({ isOpen, onClose, postingId, flag }) => {
               )}
             </div>
           )}
-
         </div>
       </div>
     </div>
