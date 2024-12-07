@@ -114,7 +114,11 @@ const DetailCheckinModal = ({ isOpen, onClose, bookingId, onSave }) => {
             <div className="mb-0 ">
               <div className="flex items-center p-4 border rounded-lg shadow-sm w-full mb-6">
                 <img
-                  src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/412883158.jpg?k=a220ece8f04054da35466bd13ee87342354cc18122b73eb0fbdcfef850115325&o=&hp=1"
+                  src={
+                    bookingId.rentalPosting.roomInfo.resortLogo
+                      ? bookingId.rentalPosting.roomInfo.resortLogo
+                      : "https://cf.bstatic.com/xdata/images/hotel/max1024x768/412883158.jpg?k=a220ece8f04054da35466bd13ee87342354cc18122b73eb0fbdcfef850115325&o=&hp=1"
+                  }
                   className="w-24 h-24 rounded-lg object-cover"
                   alt="Room Thumbnail"
                 />
@@ -238,7 +242,11 @@ const DetailCheckinModal = ({ isOpen, onClose, bookingId, onSave }) => {
             <div className="mb-0 ">
               <div className="flex items-center p-4 border rounded-lg shadow-sm w-full mb-6">
                 <img
-                  src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/412883158.jpg?k=a220ece8f04054da35466bd13ee87342354cc18122b73eb0fbdcfef850115325&o=&hp=1"
+                  src={
+                    bookingId.roomInfo.resortLogo
+                      ? bookingId.roomInfo.resortLogo
+                      : "https://cf.bstatic.com/xdata/images/hotel/max1024x768/412883158.jpg?k=a220ece8f04054da35466bd13ee87342354cc18122b73eb0fbdcfef850115325&o=&hp=1"
+                  }
                   className="w-24 h-24 rounded-lg object-cover"
                   alt="Room Thumbnail"
                 />
