@@ -254,7 +254,11 @@ const ValuationList = () => {
                 >
                   <td className="p-4 flex items-center w-72">
                     <img
-                      src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/412883158.jpg?k=a220ece8f04054da35466bd13ee87342354cc18122b73eb0fbdcfef850115325&o=&hp=1"
+                      src={
+                        posting.resortImage
+                          ? posting.resortImage
+                          : "https://cf.bstatic.com/xdata/images/hotel/max1024x768/412883158.jpg?k=a220ece8f04054da35466bd13ee87342354cc18122b73eb0fbdcfef850115325&o=&hp=1"
+                      }
                       className="w-12 h-12 rounded-2xl mr-5"
                     />
                     <div className="flex flex-col">

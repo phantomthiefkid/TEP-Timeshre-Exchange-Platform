@@ -16,7 +16,6 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import {
   FaCalendar,
-  FaCalendarAlt,
   FaChevronLeft,
   FaChevronRight,
   FaCreditCard,

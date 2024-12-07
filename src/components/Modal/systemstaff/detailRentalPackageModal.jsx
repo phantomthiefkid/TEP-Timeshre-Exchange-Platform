@@ -129,7 +129,11 @@ const DetaillRentalPackageModal = ({ isOpen, onClose, postingId, flag }) => {
             <div className="border-b">
               <div className="flex items-center p-4 m-3 border border-gray-200 rounded-lg shadow-md transition duration-200 relative bg-white">
                 <img
-                  src="https://cdn5.redweek.com/photos/full-preview/3/0/3/303804.jpg?1"
+                  src={
+                    postingId.resortImage
+                      ? postingId.resortImage
+                      : "https://cdn5.redweek.com/photos/full-preview/3/0/3/303804.jpg?1"
+                  }
                   alt="Hotel Thumbnail"
                   className="w-24 h-24 rounded-lg mr-4 object-cover shadow-sm"
                 />
