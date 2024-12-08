@@ -292,7 +292,7 @@ const DetailRentalPostingModal = ({ isOpen, onClose, postingId, onSave }) => {
               {postingId.rentalPackageId === 3 ? (
                 <div className="flex items-center p-4 m-3 border-2 border-red-500 rounded-xl">
                   <img
-                    src={postingId.imageUrls}
+                    src={postingId.resortImage}
                     alt="Hotel Thumbnail"
                     className="w-20 h-20 rounded-lg mr-4"
                   />
@@ -308,7 +308,7 @@ const DetailRentalPostingModal = ({ isOpen, onClose, postingId, onSave }) => {
                             style={{ color: "blue" }}
                           />
                           <p className="text-base text-blue-500 w-3/4">
-                            {postingId.address}
+                            {postingId.location.displayName}
                           </p>
                         </div>
                       </div>
@@ -323,7 +323,7 @@ const DetailRentalPostingModal = ({ isOpen, onClose, postingId, onSave }) => {
               ) : postingId.rentalPackageId === 4 ? (
                 <div className="flex items-center p-4 m-3 border-2 border-yellow-500 rounded-xl">
                   <img
-                    src={postingId.imageUrls}
+                    src={postingId.resortImage}
                     alt="Hotel Thumbnail"
                     className="w-20 h-20 rounded-lg mr-4"
                   />
@@ -339,7 +339,7 @@ const DetailRentalPostingModal = ({ isOpen, onClose, postingId, onSave }) => {
                             style={{ color: "blue" }}
                           />
                           <p className="text-base text-blue-500 w-3/4">
-                            {postingId.address}
+                            {postingId.location.displayName}
                           </p>
                         </div>
                       </div>
@@ -354,7 +354,7 @@ const DetailRentalPostingModal = ({ isOpen, onClose, postingId, onSave }) => {
               ) : (
                 <div className="flex items-center p-4 m-3 border border-gray-300 rounded-xl">
                   <img
-                    src={postingId.imageUrls}
+                    src={postingId.resortImage}
                     alt="Hotel Thumbnail"
                     className="w-20 h-20 rounded-lg mr-4"
                   />
@@ -370,7 +370,7 @@ const DetailRentalPostingModal = ({ isOpen, onClose, postingId, onSave }) => {
                             style={{ color: "blue" }}
                           />
                           <p className="text-base text-blue-500 w-3/4">
-                            {postingId.address}
+                            {postingId.location.displayName}
                           </p>
                         </div>
                       </div>
@@ -400,7 +400,7 @@ const DetailRentalPostingModal = ({ isOpen, onClose, postingId, onSave }) => {
                   <p className="text-medium text-gray-500">Đăng bởi</p>
                   <div className="flex flex-row items-center">
                     <img
-                      src={postingId.imageUrls}
+                      src={postingId.resortImage}
                       alt="Hotel Thumbnail"
                       className="w-12 h-12 rounded-full mr-4 border border-blue-400"
                     />

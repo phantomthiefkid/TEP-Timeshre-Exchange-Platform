@@ -6,7 +6,7 @@ import { getAllResortByName } from "../../service/public/resortService/resortAPI
 const Search = () => {
   const [keyword, setKeyword] = useState("");
   const [resort, setResort] = useState([]);
-  const [debounceTimeout, setDebounceTimeout] = useState(null); 
+  const [debounceTimeout, setDebounceTimeout] = useState(null);
 
   const handleSearch = (e) => {
     const searchInput = e.target.value;
@@ -14,16 +14,16 @@ const Search = () => {
 
     if (!searchInput) {
       setResort([]);
-      clearTimeout(debounceTimeout); 
+      clearTimeout(debounceTimeout);
     }
 
     if (debounceTimeout) {
-      clearTimeout(debounceTimeout); 
+      clearTimeout(debounceTimeout);
     }
 
     const timeout = setTimeout(() => {
       fetchResortList(searchInput);
-    }, 300); 
+    }, 300);
 
     setDebounceTimeout(timeout);
   };
@@ -71,18 +71,17 @@ const Search = () => {
                 value={keyword}
                 onChange={handleSearch}
               />
-
             </div>
             <button className="flex items-center bg-blue-500 justify-center px-4 border-l w-14">
               {/* <Link to={"/resortsearchlist"}> */}
-                <svg
-                  className="h-4 w-4 text-grey-dark"
-                  fill="white"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                >
-                  <path d="M16.32 14.9l5.39 5.4a1 1 0 0 1-1.42 1.4l-5.38-5.38a8 8 0 1 1 1.41-1.41zM10 16a6 6 0 1 0 0-12 6 6 0 0 0 0 12z" />
-                </svg>
+              <svg
+                className="h-4 w-4 text-grey-dark"
+                fill="white"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+              >
+                <path d="M16.32 14.9l5.39 5.4a1 1 0 0 1-1.42 1.4l-5.38-5.38a8 8 0 1 1 1.41-1.41zM10 16a6 6 0 1 0 0-12 6 6 0 0 0 0 12z" />
+              </svg>
               {/* </Link> */}
             </button>
           </div>
@@ -98,7 +97,7 @@ const Search = () => {
                       to={`/resortdetail/${item.id}`}
                       className="text-black hover:text-blue-800"
                     >
-                      {item.resortName} - {item.address}
+                      {item.resortName} - {item.location.displayName}
                     </Link>
                   </li>
                 ))}

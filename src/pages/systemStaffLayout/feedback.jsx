@@ -1,11 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Toaster } from "react-hot-toast";
 import { Link } from "react-router-dom";
-import {
-  FaChevronLeft,
-  FaChevronRight,
-  FaSearch
-} from "react-icons/fa";
+import { FaChevronLeft, FaChevronRight, FaSearch } from "react-icons/fa";
 
 import { FaMapMarkerAlt, FaHotel } from "react-icons/fa";
 import { getAllResortByName } from "../../service/public/resortService/resortAPI";
@@ -16,25 +12,24 @@ const Feedback = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [resortName, setResortName] = useState("");
   const [size, setSize] = useState(20);
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(true);
   const fetchAllResort = async () => {
     try {
       let data = await getAllResortByName(page, size, resortName);
       if (data.status === 200) {
         setResorts(data.data.content);
-        setTotalPages(data.data.totalPages)
-        setLoading(false)
+        setTotalPages(data.data.totalPages);
+        setLoading(false);
       }
     } catch (error) {
-      throw error
+      throw error;
     }
-
-  }
+  };
 
   const handleSearch = (e) => {
     setResortName(e.target.value);
-    setPage(0)
-  }
+    setPage(0);
+  };
 
   const handleNextPage = () => {
     if (page < totalPages - 1) {
@@ -49,23 +44,24 @@ const Feedback = () => {
   };
 
   useEffect(() => {
-    fetchAllResort()
-  }, [page, resortName])
+    fetchAllResort();
+  }, [page, resortName]);
   if (loading) {
-    return <SpinnerWaiting />
+    return <SpinnerWaiting />;
   }
   return (
     <>
       <div className="container mx-auto p-4 bg-white rounded-xl shadow-xl">
-       
         <div className="py-4 p-6 space-y-4 border-l-4 border-blue-500 bg-gray-50 rounded-lg shadow-lg">
           <h1 className="text-4xl font-bold text-gray-700">
-            Quản lí <span className="text-blue-600">đánh giá</span> từ người dùng
-           
+            Quản lí <span className="text-blue-600">đánh giá</span> từ người
+            dùng
           </h1>
           <h3 className="text-lg text-gray-500">
-          Quản lí các <span className="font-semibold text-blue-600">phản hồi</span> và <span className="font-semibold text-blue-600">đánh giá </span>của người từ từ hệ thống theo resort 
-           
+            Quản lí các{" "}
+            <span className="font-semibold text-blue-600">phản hồi</span> và{" "}
+            <span className="font-semibold text-blue-600">đánh giá </span>của
+            người từ từ hệ thống theo resort
           </h3>
         </div>
         <div className="flex items-center justify-between p-2 mt-3 py-4">
@@ -79,7 +75,6 @@ const Feedback = () => {
               className="outline-none bg-transparent w-full text-gray-600 placeholder-gray-500"
             />
           </div>
-
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-6 bg-slate-50 px-4 py-8">
           {resorts && resorts.length > 0 ? (
@@ -110,7 +105,7 @@ const Feedback = () => {
                     {/* Address */}
                     <div className="flex items-center text-sm text-gray-600 space-x-2">
                       <FaMapMarkerAlt className="text-red-400" />
-                      <p className="truncate">{resort.address}</p>
+                      <p className="truncate">{resort.location.displayName}</p>
                     </div>
 
                     {/* Button */}
@@ -128,46 +123,48 @@ const Feedback = () => {
           )}
         </div>
 
-        {
-          resorts && resorts.length > 0 ? (
-            <div className="flex items-center justify-center space-x-2 mt-5 w-full">
-              <button
-                onClick={handlePreviousPage}
-                disabled={page === 0}
-                className="w-8 h-8 flex items-center justify-center rounded-full bg-white text-gray-500"
-              >
-                <FaChevronLeft />
-              </button>
-              <div className="flex space-x-2 bg-gray-200 rounded-full px-2 py-1">
-                {
-                  Array.from({ length: totalPages }, (_, index) => (
-                    <button
-                      key={index}
-                      onClick={() => setPage(index)}
-                      className={`w-8 h-8 flex items-center justify-center rounded-full ${index === page ? "bg-blue-500 text-white" : "bg-white text-gray-500"}`}
-                    >
-                      {index + 1}
-                    </button>
-                  ))
-                }
-              </div>
-              <button
-                onClick={handleNextPage}
-                disabled={page === totalPages - 1}
-                className="w-8 h-8 flex items-center justify-center rounded-full bg-blue-500 text-white"
-              >
-                <FaChevronRight />
-              </button>
+        {resorts && resorts.length > 0 ? (
+          <div className="flex items-center justify-center space-x-2 mt-5 w-full">
+            <button
+              onClick={handlePreviousPage}
+              disabled={page === 0}
+              className="w-8 h-8 flex items-center justify-center rounded-full bg-white text-gray-500"
+            >
+              <FaChevronLeft />
+            </button>
+            <div className="flex space-x-2 bg-gray-200 rounded-full px-2 py-1">
+              {Array.from({ length: totalPages }, (_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setPage(index)}
+                  className={`w-8 h-8 flex items-center justify-center rounded-full ${
+                    index === page
+                      ? "bg-blue-500 text-white"
+                      : "bg-white text-gray-500"
+                  }`}
+                >
+                  {index + 1}
+                </button>
+              ))}
             </div>
-          ) : (
-            <div className="min-h-screen">
-              <span className="flex items-center justify-center space-x-2 mt-5 w-full">Không có resort nào!!!</span>
-            </div>
-          )
-        }
+            <button
+              onClick={handleNextPage}
+              disabled={page === totalPages - 1}
+              className="w-8 h-8 flex items-center justify-center rounded-full bg-blue-500 text-white"
+            >
+              <FaChevronRight />
+            </button>
+          </div>
+        ) : (
+          <div className="min-h-screen">
+            <span className="flex items-center justify-center space-x-2 mt-5 w-full">
+              Không có resort nào!!!
+            </span>
+          </div>
+        )}
       </div>
     </>
-  )
-}
+  );
+};
 
-export default Feedback
+export default Feedback;
