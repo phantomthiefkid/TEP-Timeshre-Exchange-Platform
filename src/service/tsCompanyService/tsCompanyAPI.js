@@ -1,6 +1,6 @@
 import axiosConfig from "../../util/axiosCustomize/axiosConfig";
 
-const getAllResort = async (pageNo = 0, pageSize = 3, resortName = "") => {
+const getAllResort = async (pageNo = 0, pageSize = 10, resortName = "") => {
   try {
     return await axiosConfig.get(`timeshare-company/resort`, {
       params: {
@@ -165,12 +165,15 @@ const getTotalStaff = async () => {
 
 const getAllWalletTransactions = async (page, size) => {
   try {
-    return await axiosConfig.get(`wallet/timeshare-company/wallet-transaction/money-received`, {
-      params: {
-        page,
-        size
+    return await axiosConfig.get(
+      `wallet/timeshare-company/wallet-transaction/money-received`,
+      {
+        params: {
+          page,
+          size,
+        },
       }
-    });
+    );
   } catch (error) {
     return error;
   }
@@ -203,5 +206,5 @@ export {
   getTotalStaff,
   getAllWalletTransactions,
   getRevenueTSC,
-  deactiveUnitType
+  deactiveUnitType,
 };
