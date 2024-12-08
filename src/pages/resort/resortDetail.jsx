@@ -44,6 +44,7 @@ const ResortDetail = () => {
       if (data && data.status === 200) {
         setResort(data.data);
         console.log(data.data);
+
         setLoading(false);
         setSelectedImage(data.data.logo);
       }
@@ -51,8 +52,6 @@ const ResortDetail = () => {
       throw error;
     }
   };
-
-  console.log(resort);
 
   useEffect(() => {
     if (id) {
@@ -89,7 +88,7 @@ const ResortDetail = () => {
         <div className="flex justify-between py-4">
           <p className="font-medium flex items-center gap-2">
             <LocationMarkerIcon className="w-8 h-8 text-red-500" />
-            {resort ? resort.address : ""}
+            {resort ? resort.location.displayName : ""}
           </p>
           <span className="flex gap-2 items-center">
             <StarIcon className="w-6 h-6" color="yellow" />
@@ -377,7 +376,7 @@ const ResortDetail = () => {
           <span className="text-2xl flex items-center gap-2 font-semibold">
             <StarIcon className="w-12" color="yellow" />
             <span className="text-3xl">
-              {(resort && resort.averageRating && "/5") || "N/A"}
+              {resort.averageRating + "/5" || "N/A"}
             </span>
             <span className="text-gray-400 text-xl mt-1 font-light">
               {resort && resort.totalRating} đánh giá
@@ -398,7 +397,7 @@ const ResortDetail = () => {
                       <div className="flex items-center gap-4">
                         <div>
                           <img
-                            src="https://scontent.fsgn2-6.fna.fbcdn.net/v/t39.30808-6/315873108_1547775398968586_291388187145697786_n.jpg?_nc_cat=111&ccb=1-7&_nc_sid=a5f93a&_nc_ohc=2V78iXS9vMQQ7kNvgF9WUhL&_nc_zt=23&_nc_ht=scontent.fsgn2-6.fna&_nc_gid=ApeT9Xgi8oLUPfNsLgTDe7Z&oh=00_AYBElDZMRDh4ekuLpuaWk42oOL-oY8MbC-l_MyIJkiANqQ&oe=67350D93"
+                            src={item.user.avatar}
                             alt="Avatar"
                             className="w-20 h-20 border-4 border-green-400 rounded-full"
                           />
@@ -475,7 +474,9 @@ const ResortDetail = () => {
           <div className="flex flex-row">
             <FaLocationPin className="text-red-500 mr-2" size={18} />
             <p className="text-base font-semibold mb-4">
-              {resort.location.displayName}
+              {resort.location.displayName
+                ? resort.location.displayName
+                : "Không có địa chỉ"}
             </p>
           </div>
           <div className="col-span-4 lg:col-span-4 relative h-[570px]">
@@ -503,19 +504,6 @@ const ResortDetail = () => {
                   {resort.resortName} <br />
                   {resort.address}
                 </Popup>
-
-                {/* <Popup className="flex flex-col items-center justify-center w-[300px] rounded-xl shadow-lg text-center border-2 border-blue-300 ">
-                  <div>
-                    <img
-                      className="w-full h-full mb-2"
-                      src={resort.logo}
-                      alt={resort.timeshareCompanyName}
-                    />
-                    <div className="text-sm font-semibold text-gray-800">
-                      {resort.timeshareCompanyName}
-                    </div>
-                  </div>
-                </Popup> */}
               </Marker>
             </MapContainer>
           </div>

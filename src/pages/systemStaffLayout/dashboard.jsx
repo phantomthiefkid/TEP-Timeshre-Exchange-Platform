@@ -16,7 +16,6 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import {
   FaCalendar,
-  FaCalendarAlt,
   FaChevronLeft,
   FaChevronRight,
   FaCreditCard,
@@ -69,22 +68,16 @@ const Dashboard = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [walletTransactionEnum, setWalletTransactionEnum] = useState(null);
 
-  const [totalRentalPackageChart, setTotalRentalPackageChart] = useState(0);
-  const [totalExchangePackageChart, setTotalExchangePackageChart] = useState(0);
-  const [totalMemberPackageChart, setTotalMemberPackageChart] = useState(0);
-
   const [showStartDatePicker, setShowStartDatePicker] = useState(false);
   const [showEndDatePicker, setShowEndDatePicker] = useState(false);
 
-  const today = new Date();
-
-  const defaultStartDate = new Date(today);
-  const defaultEndDate = new Date(today);
-  defaultStartDate.setDate(today.getDate() - 3);
-  defaultEndDate.setDate(today.getDate() + 3);
-
-  const [startDate, setStartDate] = useState(defaultStartDate);
-  const [endDate, setEndDate] = useState(defaultEndDate);
+  const [packageData, setPackageData] = useState([]);
+  const [startDate, setStartDate] = useState(() => {
+    const today = new Date();
+    today.setDate(today.getDate() - 3);
+    return today;
+  });
+  const [endDate, setEndDate] = useState(new Date());
 
   const lineChartData = {
     labels: [
@@ -147,62 +140,34 @@ const Dashboard = () => {
     },
   };
 
-  // const generateDateLabels = (startDate, endDate) => {
-  //   const labels = [];
-  //   let currentDate = new Date(startDate);
-
-  //   // Loop through each date from startDate to endDate
-  //   while (currentDate <= endDate) {
-  //     labels.push(format(currentDate, "dd/MM/yyyy"));
-  //     currentDate.setDate(currentDate.getDate() + 1);  // Move to the next day
-  //   }
-
-  //   return labels;
-  // };
-
-  const barChartData = useMemo(
-    () => ({
-      // labels: generateDateLabels(startDate, endDate),
-      labels: [
-        startDate.getTime() === endDate.getTime()
-          ? format(startDate, "dd/MM/yyyy")
-          : `${format(startDate, "dd/MM/yyyy")} - ${format(
-              endDate,
-              "dd/MM/yyyy"
-            )}`,
-      ],
-      datasets: [
-        {
-          label: "Gói cho thuê",
-          data: [totalRentalPackageChart],
-          backgroundColor: "rgba(54, 162, 235, 0.5)",
-          borderColor: "rgba(54, 162, 235, 1)",
-          borderWidth: 1,
-        },
-        {
-          label: "Gói trao đổi",
-          data: [totalExchangePackageChart],
-          backgroundColor: "rgba(0, 176, 155, 0.5)",
-          borderColor: "rgba(0, 176, 155, 1)",
-          borderWidth: 1,
-        },
-        {
-          label: "Gói thành viên",
-          data: [totalMemberPackageChart],
-          backgroundColor: "rgba(255, 159, 64, 0.5)",
-          borderColor: "rgba(255, 159, 64, 1)",
-          borderWidth: 1,
-        },
-      ],
-    }),
-    [
-      startDate,
-      endDate,
-      totalRentalPackageChart,
-      totalExchangePackageChart,
-      totalMemberPackageChart,
-    ]
-  );
+  const barChartData = {
+    labels: packageData.map((item) =>
+      format(new Date(item.date), "dd/MM/yyyy")
+    ),
+    datasets: [
+      {
+        label: "Gói cho thuê",
+        data: packageData.map((item) => item.totalRentalPackage),
+        backgroundColor: "rgba(54, 162, 235, 0.5)",
+        borderColor: "rgba(54, 162, 235, 1)",
+        borderWidth: 1,
+      },
+      {
+        label: "Gói trao đổi",
+        data: packageData.map((item) => item.totalExchangePackage),
+        backgroundColor: "rgba(0, 176, 155, 0.5)",
+        borderColor: "rgba(0, 176, 155, 1)",
+        borderWidth: 1,
+      },
+      {
+        label: "Gói thành viên",
+        data: packageData.map((item) => item.totalMemberShip),
+        backgroundColor: "rgba(255, 159, 64, 0.5)",
+        borderColor: "rgba(255, 159, 64, 1)",
+        borderWidth: 1,
+      },
+    ],
+  };
 
   const barChartOptions = {
     responsive: true,
@@ -325,6 +290,9 @@ const Dashboard = () => {
     REJECT_REQUESTEXCHANGE: "Từ chối yêu cầu trao đổi",
     DEPOSITMONEY: "Nạp tiền vào ví hệ thống",
     RENTALPACKAGE04: "Thanh toán gói trao đổi 4",
+    APPROVAL_RENTALPOSTING: "Chấp thuận bài đăng cho thuê",
+    EXCHANGEREQUEST: "Yêu cầu trao đổi",
+    EXCHANGEREQUEST_VALUATION: "Thanh toán bù trừ trao đổi",
   };
 
   const fetchDashboardData = async () => {
@@ -373,18 +341,8 @@ const Dashboard = () => {
       const endIsoDate = endDate.toISOString();
 
       const response = await getPackageByDate(startIsoDate, endIsoDate);
-
       if (response.status === 200) {
-        const data = response.data;
-        console.log(
-          data.totalRentalPackage,
-          data.totalExchangePackage,
-          data.totalMemberShip
-        );
-
-        setTotalRentalPackageChart(data.totalRentalPackage);
-        setTotalExchangePackageChart(data.totalExchangePackage);
-        setTotalMemberPackageChart(data.totalMemberShip);
+        setPackageData(response.data || []);
       }
     } catch (error) {
       console.error("Error fetching package analysis data:", error);

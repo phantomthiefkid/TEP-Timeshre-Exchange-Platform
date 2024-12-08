@@ -14,7 +14,9 @@ const detailTimeshareStaffModal = ({ isOpen, onSave, onClose, tsStaff }) => {
   const fetchResort = async () => {
     try {
       const data = await getAllResort();
+
       if (data.status === 200) {
+        console.log(data.data);
         setResortList(data.data.content);
       }
     } catch (error) {

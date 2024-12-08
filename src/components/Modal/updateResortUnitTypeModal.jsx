@@ -1,29 +1,35 @@
-import { XCircleIcon, XIcon } from '@heroicons/react/solid'
-import React, { useState } from 'react'
-import { toast, Toaster } from 'react-hot-toast';
-import { FaBook, FaCouch, FaGamepad, FaPlus, FaPlusCircle, FaUpload, FaUtensils } from 'react-icons/fa';
-import { FaXmark } from 'react-icons/fa6';
-import { updateResortUnitType } from '../../service/tsCompanyService/tsCompanyAPI';
-import { uploadFileImage } from '../../service/uploadFileService/uploadFileAPI';
-import Loading from '../LoadingComponent/loading';
-import LoadingWaitingComponent from '../LoadingComponent/loadingWaitingComponent';
+import { XCircleIcon, XIcon } from "@heroicons/react/solid";
+import React, { useState } from "react";
+import { toast, Toaster } from "react-hot-toast";
+import {
+  FaBook,
+  FaCouch,
+  FaGamepad,
+  FaPlus,
+  FaPlusCircle,
+  FaUpload,
+  FaUtensils,
+} from "react-icons/fa";
+import { FaXmark } from "react-icons/fa6";
+import { updateResortUnitType } from "../../service/tsCompanyService/tsCompanyAPI";
+import { uploadFileImage } from "../../service/uploadFileService/uploadFileAPI";
+import Loading from "../LoadingComponent/loading";
+import LoadingWaitingComponent from "../LoadingComponent/loadingWaitingComponent";
 
 const UpdateResortUnitTypeModal = ({ onClose, selectedUnitType, flag }) => {
   const [picture, setPicture] = useState([]);
-  const [unitType, setUnitType] = useState(selectedUnitType)
+  const [unitType, setUnitType] = useState(selectedUnitType);
   const [amenity, setAmenity] = useState({ name: "", type: "" });
   const [loading, setLoading] = useState(false);
   const handleAmenityChange = (e) => {
     const { name, value } = e.target;
     setAmenity({ ...amenity, [name]: value });
-    console.log(name, value)
-
+    console.log(name, value);
   };
   const handleOnchange = (e) => {
     const { name, value } = e.target;
-    setUnitType({ ...unitType, [name]: value })
-
-  }
+    setUnitType({ ...unitType, [name]: value });
+  };
 
   const handleAddAmenity = () => {
     if (amenity.name && amenity.type) {
@@ -31,9 +37,9 @@ const UpdateResortUnitTypeModal = ({ onClose, selectedUnitType, flag }) => {
         ...unitType,
         unitTypeAmenitiesList: [...unitType.unitTypeAmenitiesList, amenity],
       });
-      setAmenity({ name: '', type: '' });
+      setAmenity({ name: "", type: "" });
     }
-  }
+  };
 
   const handleRemoveAmenity = (name) => {
     setUnitType((prevState) => ({
@@ -44,57 +50,53 @@ const UpdateResortUnitTypeModal = ({ onClose, selectedUnitType, flag }) => {
     }));
   };
 
-
   const handleUploadFileImage = async (e) => {
     const file = e.target.files[0];
     const formData = new FormData();
-    formData.append("file", file)
+    formData.append("file", file);
     const response = await uploadFileImage(formData);
     if (response.status === 200) {
       setUnitType({ ...unitType, photos: response.data[0] });
-      console.log("Link: ", response.data[0])
+      console.log("Link: ", response.data[0]);
     }
-  }
+  };
 
   const handleRemoveImage = async (e) => {
-    setUnitType({ ...unitType, photos: "" })
-  }
-
+    setUnitType({ ...unitType, photos: "" });
+  };
 
   const handleUpdate = () => {
-    const {
-      id,
-      unitTypeAmenitiesList,
-      ...otherFields
-    } = unitType;
+    const { id, unitTypeAmenitiesList, ...otherFields } = unitType;
 
-    const unitTypeAmenitiesDTOS = unitTypeAmenitiesList.map(({ isActive, ...rest }) => rest);
-
+    const unitTypeAmenitiesDTOS = unitTypeAmenitiesList.map(
+      ({ isActive, ...rest }) => rest
+    );
 
     const updatedResort = {
       ...otherFields,
-      unitTypeAmenitiesDTOS
+      unitTypeAmenitiesDTOS,
     };
 
-    setLoading(true)
+    setLoading(true);
 
-    updateResortUnitType(updatedResort, selectedUnitType.id).then(() => {
-      // onClose()
-      flag()
-      toast.success("Cập nhật thành công!", { duration: 2000 });
-    }).catch(() => {
-      toast.error("Cập nhật thất bại!", { duration: 2000 });
-    })
+    updateResortUnitType(updatedResort, selectedUnitType.id)
+      .then(() => {
+        // onClose()
+        flag();
+        toast.success("Cập nhật thành công!", { duration: 2000 });
+      })
+      .catch(() => {
+        toast.error("Cập nhật thất bại!", { duration: 2000 });
+      })
       .finally(() => {
         setLoading(false);
       });
-
   };
 
   const renderAmenitiesByType = (type) => {
-    const amenities = unitType && unitType.unitTypeAmenitiesList.filter(
-      (amenity) => amenity.type === type
-    )
+    const amenities =
+      unitType &&
+      unitType.unitTypeAmenitiesList.filter((amenity) => amenity.type === type);
 
     return (
       <div>
@@ -105,7 +107,9 @@ const UpdateResortUnitTypeModal = ({ onClose, selectedUnitType, flag }) => {
                 key={`${type}-${index}`}
                 className="relative bg-gray-100 shadow-md p-1 flex justify-between items-center rounded-full border-2 transition-colors duration-200 ease-in-out hover:border-sky-500"
               >
-                <span className="text-gray-500 px-2 font-normal">{amenity.name}</span>
+                <span className="text-gray-500 px-2 font-normal">
+                  {amenity.name}
+                </span>
                 <button
                   type="button"
                   onClick={() => handleRemoveAmenity(amenity.name)}
@@ -125,32 +129,37 @@ const UpdateResortUnitTypeModal = ({ onClose, selectedUnitType, flag }) => {
 
   return (
     <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center">
-      <Toaster toastOptions={{
-        style: {
-          fontSize: '18px',
-          padding: '16px',
-          maxWidth: '600px',
-        },
-        success: {
-          iconTheme: {
-            primary: 'green',
-            secondary: 'white',
+      <Toaster
+        toastOptions={{
+          style: {
+            fontSize: "18px",
+            padding: "16px",
+            maxWidth: "600px",
           },
-        },
-        error: {
-          iconTheme: {
-            primary: 'red',
-            secondary: 'white',
+          success: {
+            iconTheme: {
+              primary: "green",
+              secondary: "white",
+            },
           },
-        },
-      }} position="top-center" reverseOrder={false} />
+          error: {
+            iconTheme: {
+              primary: "red",
+              secondary: "white",
+            },
+          },
+        }}
+        position="top-center"
+        reverseOrder={false}
+      />
       <div className="bg-white rounded-xl shadow-lg w-full max-w-7xl">
         <div className="relative bg-blue-900 text-gray-100 py-4 px-6 rounded-t-xl shadow-lg">
           {/* Background Image/Overlay */}
           <div
             className="absolute inset-0 opacity-20 bg-cover bg-center rounded-t-xl"
             style={{
-              backgroundImage: 'url(https://unwinds.s3.ap-southeast-2.amazonaws.com/1732163006058_unitType.jpg)'
+              backgroundImage:
+                "url(https://unwinds.s3.ap-southeast-2.amazonaws.com/1732163006058_unitType.jpg)",
             }}
           ></div>
 
@@ -167,11 +176,8 @@ const UpdateResortUnitTypeModal = ({ onClose, selectedUnitType, flag }) => {
           </div>
 
           {/* Decorative Bottom Arc */}
-          <div
-            className="absolute bottom-0 left-0 w-full h-6 bg-gradient-to-t from-blue-900 to-transparent rounded-b-xl"
-          ></div>
+          <div className="absolute bottom-0 left-0 w-full h-6 bg-gradient-to-t from-blue-900 to-transparent rounded-b-xl"></div>
         </div>
-
 
         <div className="max-h-[800px] overflow-auto p-2">
           {/* Two-column layout */}
@@ -184,7 +190,9 @@ const UpdateResortUnitTypeModal = ({ onClose, selectedUnitType, flag }) => {
                   Thông tin cơ bản
                 </h4>
                 <div className="flex flex-col">
-                  <label className="font-medium text-gray-700 mb-1">Tên loại phòng *</label>
+                  <label className="font-medium text-gray-700 mb-1">
+                    Tên loại phòng *
+                  </label>
                   <input
                     type="text"
                     name="title"
@@ -196,14 +204,16 @@ const UpdateResortUnitTypeModal = ({ onClose, selectedUnitType, flag }) => {
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="font-medium text-gray-700 mb-1">Số phòng ngủ</label>
+                    <label className="font-medium text-gray-700 mb-1">
+                      Số phòng ngủ
+                    </label>
                     <select
                       name="bedrooms"
                       className="w-full rounded-lg bg-gray-50 py-2 px-4 border focus:outline-none focus:ring-2 focus:ring-blue-400"
                       value={unitType.bedrooms}
                       onChange={handleOnchange}
                     >
-                      {[0, 1, 2, 3, 4, 5, 6].map(option => (
+                      {[0, 1, 2, 3, 4, 5, 6].map((option) => (
                         <option key={option} value={option}>
                           {option}
                         </option>
@@ -211,14 +221,16 @@ const UpdateResortUnitTypeModal = ({ onClose, selectedUnitType, flag }) => {
                     </select>
                   </div>
                   <div>
-                    <label className="font-medium text-gray-700 mb-1">Số người ở</label>
+                    <label className="font-medium text-gray-700 mb-1">
+                      Số người ở
+                    </label>
                     <select
                       name="sleeps"
                       className="w-full bg-gray-50 rounded-lg py-2 px-4 border focus:outline-none focus:ring-2 focus:ring-blue-400"
                       value={unitType.sleeps}
                       onChange={handleOnchange}
                     >
-                      {[0, 1, 2, 3, 4, 5, 6].map(option => (
+                      {[0, 1, 2, 3, 4, 5, 6].map((option) => (
                         <option key={option} value={option}>
                           {option}
                         </option>
@@ -226,7 +238,9 @@ const UpdateResortUnitTypeModal = ({ onClose, selectedUnitType, flag }) => {
                     </select>
                   </div>
                   <div className="flex flex-col col-span-2">
-                    <label className="font-medium text-gray-700 mb-1">Mã phòng (nếu có):</label>
+                    <label className="font-medium text-gray-700 mb-1">
+                      Mã phòng (nếu có):
+                    </label>
                     <input
                       type="text"
                       name="buildingsOption"
@@ -235,7 +249,6 @@ const UpdateResortUnitTypeModal = ({ onClose, selectedUnitType, flag }) => {
                       onChange={handleOnchange}
                       placeholder="Nhập mã phòng"
                     />
-
                   </div>
                 </div>
               </div>
@@ -246,7 +259,9 @@ const UpdateResortUnitTypeModal = ({ onClose, selectedUnitType, flag }) => {
                   Chi tiết loại phòng
                 </h4>
                 <div className="flex flex-col col-span-2">
-                  <label className="font-medium text-gray-700 mb-1">Mô tả</label>
+                  <label className="font-medium text-gray-700 mb-1">
+                    Mô tả
+                  </label>
                   <textarea
                     rows={5}
                     name="description"
@@ -258,7 +273,9 @@ const UpdateResortUnitTypeModal = ({ onClose, selectedUnitType, flag }) => {
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="flex flex-col col-span-2">
-                    <label className="font-medium text-gray-700 mb-1">Hướng phòng</label>
+                    <label className="font-medium text-gray-700 mb-1">
+                      Hướng phòng
+                    </label>
                     <input
                       type="text"
                       name="view"
@@ -269,7 +286,9 @@ const UpdateResortUnitTypeModal = ({ onClose, selectedUnitType, flag }) => {
                     />
                   </div>
                   <div className="flex flex-col col-span-2">
-                    <label className="font-medium text-gray-700 mb-1">Diện tích:</label>
+                    <label className="font-medium text-gray-700 mb-1">
+                      Diện tích:
+                    </label>
                     <input
                       type="text"
                       name="area"
@@ -295,7 +314,9 @@ const UpdateResortUnitTypeModal = ({ onClose, selectedUnitType, flag }) => {
                     className="w-full h-44 flex flex-col justify-center items-center border-dashed border-4 border-gray-300 rounded-lg cursor-pointer hover:border-blue-400 hover:bg-gray-50 transition"
                   >
                     <FaUpload size={40} className="text-gray-400 mb-2" />
-                    <span className="text-gray-500 font-medium">Tải lên ảnh loại phòng</span>
+                    <span className="text-gray-500 font-medium">
+                      Tải lên ảnh loại phòng
+                    </span>
                     <input
                       id="upload-room-images"
                       type="file"
@@ -324,14 +345,16 @@ const UpdateResortUnitTypeModal = ({ onClose, selectedUnitType, flag }) => {
             </div>
           </div>
 
-
-
           {/* Single column section below */}
-          <div className='border-2 py-4 mt-4 rounded-lg'>
-            <label className='font-semibold text-gray-700 text-xl tracking-wide p-6'>Các loại giường</label>
+          <div className="border-2 py-4 mt-4 rounded-lg">
+            <label className="font-semibold text-gray-700 text-xl tracking-wide p-6">
+              Các loại giường
+            </label>
             <div className="grid grid-cols-3 gap-6 mt-4 px-4 p-6 m-5">
               <div className="flex flex-col">
-                <label className="font-semibold text-gray-700 mb-2 text-md tracking-tight">Số bedking:</label>
+                <label className="font-semibold text-gray-700 mb-2 text-md tracking-tight">
+                  Số giường King:
+                </label>
                 <select
                   name="bedsKing"
                   className="appearance-none w-full bg-gray-100 text-gray-700 py-2 px-4 pr-8 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all cursor-pointer"
@@ -347,7 +370,9 @@ const UpdateResortUnitTypeModal = ({ onClose, selectedUnitType, flag }) => {
               </div>
 
               <div className="flex flex-col">
-                <label className="font-semibold text-gray-700 mb-2 text-md tracking-tight">Số bedfull:</label>
+                <label className="font-semibold text-gray-700 mb-2 text-md tracking-tight">
+                  Số giường lớn:
+                </label>
                 <select
                   name="bedsFull"
                   className="appearance-none w-full bg-gray-100 text-gray-700 py-2 px-4 pr-8 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all cursor-pointer"
@@ -363,7 +388,9 @@ const UpdateResortUnitTypeModal = ({ onClose, selectedUnitType, flag }) => {
               </div>
 
               <div className="flex flex-col">
-                <label className="font-semibold text-gray-700 mb-2 text-md tracking-tight">Số bed sofa:</label>
+                <label className="font-semibold text-gray-700 mb-2 text-md tracking-tight">
+                  Số giường sofa:
+                </label>
                 <select
                   name="bedsSofa"
                   className="appearance-none w-full bg-gray-100 text-gray-700 py-2 px-4 pr-8 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all cursor-pointer"
@@ -378,12 +405,15 @@ const UpdateResortUnitTypeModal = ({ onClose, selectedUnitType, flag }) => {
                 </select>
               </div>
               <div className="flex flex-col">
-                <label className="font-semibold text-gray-700 mb-2 text-md tracking-tight">Số bedsMurphy:</label>
+                <label className="font-semibold text-gray-700 mb-2 text-md tracking-tight">
+                  Số giường gấp:
+                </label>
                 <select
                   name="bedsMurphy"
                   value={unitType.bedsMurphy}
                   onChange={handleOnchange}
-                  className="appearance-none w-full bg-gray-100 text-gray-700 py-2 px-4 pr-8 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all cursor-pointer">
+                  className="appearance-none w-full bg-gray-100 text-gray-700 py-2 px-4 pr-8 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all cursor-pointer"
+                >
                   {[0, 1, 2, 3, 4, 5, 6].map((option) => (
                     <option key={option} value={option}>
                       {option}
@@ -393,12 +423,15 @@ const UpdateResortUnitTypeModal = ({ onClose, selectedUnitType, flag }) => {
               </div>
 
               <div className="flex flex-col">
-                <label className="font-semibold text-gray-700 mb-2 text-md tracking-tight">Số bedsQueen:</label>
+                <label className="font-semibold text-gray-700 mb-2 text-md tracking-tight">
+                  Số giường Queen:
+                </label>
                 <select
                   name="bedsQueen"
                   value={unitType.bedsQueen}
                   onChange={handleOnchange}
-                  className="appearance-none w-full bg-gray-100 text-gray-700 py-2 px-4 pr-8 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all cursor-pointer">
+                  className="appearance-none w-full bg-gray-100 text-gray-700 py-2 px-4 pr-8 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all cursor-pointer"
+                >
                   {[0, 1, 2, 3, 4, 5, 6].map((option) => (
                     <option key={option} value={option}>
                       {option}
@@ -407,7 +440,9 @@ const UpdateResortUnitTypeModal = ({ onClose, selectedUnitType, flag }) => {
                 </select>
               </div>
               <div className="flex flex-col">
-                <label className="font-semibold text-gray-700 mb-2 text-md tracking-tight">Số giường đôi:</label>
+                <label className="font-semibold text-gray-700 mb-2 text-md tracking-tight">
+                  Số giường đôi:
+                </label>
                 <select
                   name="bedsTwin"
                   className="appearance-none w-full bg-gray-100 text-gray-700 py-2 px-4 pr-8 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all cursor-pointer"
@@ -424,9 +459,11 @@ const UpdateResortUnitTypeModal = ({ onClose, selectedUnitType, flag }) => {
             </div>
           </div>
 
-          <div className='grid grid-cols-2 gap-4 mt-4 p-6 border-2 py-4 rounded-lg'>
+          <div className="grid grid-cols-2 gap-4 mt-4 p-6 border-2 py-4 rounded-lg">
             <div className="flex flex-col">
-              <label className="font-semibold text-gray-700 mb-2 text-lg tracking-wide">Số phòng tắm:</label>
+              <label className="font-semibold text-gray-700 mb-2 text-lg tracking-wide">
+                Số phòng tắm:
+              </label>
               <select
                 name="bathrooms"
                 className="appearance-none w-full bg-gray-100 text-gray-700 py-2 px-4 pr-8 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all cursor-pointer"
@@ -441,28 +478,36 @@ const UpdateResortUnitTypeModal = ({ onClose, selectedUnitType, flag }) => {
               </select>
             </div>
             <div className="flex flex-col mb-2">
-              <label className="font-semibold text-gray-700 mb-2 text-lg tracking-wide">Nhà bếp:</label>
+              <label className="font-semibold text-gray-700 mb-2 text-lg tracking-wide">
+                Nhà bếp:
+              </label>
               <div className="flex gap-2">
-                {["Không có", "Bếp chung", "Bếp riêng", "Bếp ngoài trời"].map((option) => (
-                  <label
-                    key={option}
-                    className={`flex items-center text-gray-900 p-2 cursor-pointer border-2 rounded-full
-            ${unitType.kitchen === option ? 'border-blue-500 bg-gradient-to-r from-blue-200 to-purple-200 text-gray-600' : 'border-gray-300 bg-white'} 
+                {["Không có", "Bếp chung", "Bếp riêng", "Bếp ngoài trời"].map(
+                  (option) => (
+                    <label
+                      key={option}
+                      className={`flex items-center text-gray-900 p-2 cursor-pointer border-2 rounded-full
+            ${
+              unitType.kitchen === option
+                ? "border-blue-500 bg-gradient-to-r from-blue-200 to-purple-200 text-gray-600"
+                : "border-gray-300 bg-white"
+            } 
             hover:border-blue-400 hover:bg-blue-50`}
-                  >
-                    <input
-                      type="radio"
-                      name="kitchen"
-                      value={option}
-                      onChange={handleOnchange}
-                      className="hidden" // Hide the default radio button
-                    />
-                    <span className="ml-2">{option}</span>
-                  </label>
-                ))}
+                    >
+                      <input
+                        type="radio"
+                        name="kitchen"
+                        value={option}
+                        onChange={handleOnchange}
+                        className="hidden" // Hide the default radio button
+                      />
+                      <span className="ml-2">{option}</span>
+                    </label>
+                  )
+                )}
               </div>
             </div>
-            <div className='flex flex-col mb-4'>
+            <div className="flex flex-col mb-4">
               <label className="font-semibold text-gray-700 mb-2 text-lg tracking-wide">
                 Giá:
               </label>
@@ -477,15 +522,14 @@ const UpdateResortUnitTypeModal = ({ onClose, selectedUnitType, flag }) => {
                   placeholder="Nhập giá"
                 />
               </div>
-
             </div>
-
-
           </div>
 
           {/* Amenities section */}
           <div className="py-6 px-8 bg-white border-2 mt-4 rounded-lg">
-            <h4 className="font-bold text-xl text-gray-800 mb-6">Tiện ích (Amenities)</h4>
+            <h4 className="font-bold text-xl text-gray-800 mb-6">
+              Tiện ích (Amenities)
+            </h4>
 
             {/* Form thêm tiện ích */}
             <div className="flex flex-wrap gap-4 mb-8 items-center">
@@ -503,7 +547,9 @@ const UpdateResortUnitTypeModal = ({ onClose, selectedUnitType, flag }) => {
                 onChange={handleAmenityChange}
                 className="border border-gray-300 rounded-lg px-4 py-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
-                <option value="" disabled>Chọn loại tiện ích</option>
+                <option value="" disabled>
+                  Chọn loại tiện ích
+                </option>
                 <option value="KITCHEN">Bếp</option>
                 <option value="ENTERTAINMENT">Giải trí</option>
                 <option value="FEATURES">Tiện nghi</option>
@@ -534,7 +580,9 @@ const UpdateResortUnitTypeModal = ({ onClose, selectedUnitType, flag }) => {
                 <h5 className="font-semibold text-lg text-purple-600 flex items-center gap-2">
                   <FaGamepad /> Giải trí
                 </h5>
-                <div className="mt-4">{renderAmenitiesByType("ENTERTAINMENT")}</div>
+                <div className="mt-4">
+                  {renderAmenitiesByType("ENTERTAINMENT")}
+                </div>
               </div>
 
               {/* Features */}
@@ -554,9 +602,6 @@ const UpdateResortUnitTypeModal = ({ onClose, selectedUnitType, flag }) => {
               </div>
             </div>
           </div>
-
-
-
 
           <div className="flex justify-end space-x-4 py-4 mb-2 px-8">
             <button
@@ -581,7 +626,13 @@ const UpdateResortUnitTypeModal = ({ onClose, selectedUnitType, flag }) => {
                     viewBox="0 0 24 24"
                     stroke="currentColor"
                   >
-                    <circle className="opacity-25" cx="12" cy="12" r="10" strokeWidth="4"></circle>
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      strokeWidth="4"
+                    ></circle>
                     <path
                       className="opacity-75"
                       fill="currentColor"
@@ -594,14 +645,12 @@ const UpdateResortUnitTypeModal = ({ onClose, selectedUnitType, flag }) => {
                 "Cập nhật"
               )}
             </button>
-
           </div>
         </div>
-
       </div>
       {/* {loading && (<LoadingWaitingComponent />)} */}
     </div>
-  )
-}
+  );
+};
 
-export default UpdateResortUnitTypeModal
+export default UpdateResortUnitTypeModal;
