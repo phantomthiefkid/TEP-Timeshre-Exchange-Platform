@@ -6,7 +6,8 @@ import { FaBell } from "react-icons/fa6";
 import NotificationDropdown from "../Modal/notification/notificationModal";
 import { subcribeToken } from "../../service/notificationService/notiicationAPI";
 import { listenForMessages } from "../../util/firebaseConfig/notification";
-const HeaderTimeshareStaff = () => {
+import NotificationModalSystemStaff from "../Modal/notification/notificationModalSystemStaff";
+const HeaderSystemStaff = () => {
   const token = localStorage.getItem("token");
   const decodeToken = jwtDecode(token);
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
@@ -21,7 +22,7 @@ const HeaderTimeshareStaff = () => {
 
   const subcribe = async () => {
     try {
-      let response = await subcribeToken(FCM_TOKEN, `resort${decodeToken.resortId}`)
+      let response = await subcribeToken(FCM_TOKEN, `systemstaff`)
       if (response) {
         console.log("Check response: ", response)
       }
@@ -63,7 +64,7 @@ const HeaderTimeshareStaff = () => {
               </span>
               {isNotificationOpen && (
 
-                <div className="absolute top-6 z-50"><NotificationDropdown onClose={toggleNotificationDropdown} content={list} /></div>
+                <div className="absolute top-6 z-50"><NotificationModalSystemStaff onClose={toggleNotificationDropdown} content={list} /></div>
 
               )}
             </div>
@@ -141,4 +142,4 @@ const HeaderTimeshareStaff = () => {
   );
 };
 
-export default HeaderTimeshareStaff;
+export default HeaderSystemStaff;

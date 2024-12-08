@@ -1,103 +1,73 @@
-import React, { useCallback, useRef, useEffect, useState } from 'react';
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
+import React, { useEffect } from "react";
+import { initializeApp } from "firebase/app";
+import { getMessaging, getToken, onMessage } from "firebase/messaging";
 
-const Test = ({ className = '' }) => {
-    const [editorValue, setEditorValue] = useState('');
-    const quillRef = useRef(null);
+// Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyCH89jlk8GNA0YEEUhlIS0rH1SLOULro0o",
+  authDomain: "unwind-7cfdb.firebaseapp.com",
+  projectId: "unwind-7cfdb",
+  storageBucket: "unwind-7cfdb.firebasestorage.app",
+  messagingSenderId: "685904756369",
+  appId: "1:685904756369:web:6579655c8f485fafc3c930",
+  measurementId: "G-WE3DEFPWZZ",
+};
 
-    const compressImage = async (file) => {
-        return new Promise((resolve) => {
-            const reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onload = (event) => {
-                const img = new Image();
-                img.src = event.target.result;
-                img.onload = () => {
-                    const canvas = document.createElement('canvas');
-                    const MAX_WIDTH = 800;
-                    const MAX_HEIGHT = 600;
-                    let width = img.width;
-                    let height = img.height;
+const Test = () => {
+  useEffect(() => {
+    // Initialize Firebase app
+    const app = initializeApp(firebaseConfig);
+    const messaging = getMessaging(app);
 
-                    if (width > height) {
-                        if (width > MAX_WIDTH) {
-                            height *= MAX_WIDTH / width;
-                            width = MAX_WIDTH;
-                        }
-                    } else {
-                        if (height > MAX_HEIGHT) {
-                            width *= MAX_HEIGHT / height;
-                            height = MAX_HEIGHT;
-                        }
-                    }
-
-                    canvas.width = width;
-                    canvas.height = height;
-
-                    const ctx = canvas.getContext('2d');
-                    ctx.drawImage(img, 0, 0, width, height);
-
-                    const compressedBase64 = canvas.toDataURL('image/jpeg', 0.7);
-                    resolve(compressedBase64);
-                };
-            };
+    // Register the Firebase messaging service worker
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker
+        .register(`/firebase-messaging-sw.js`)
+        .then((registration) => {
+          console.log("Service Worker registered:", registration);
+          messaging.useServiceWorker(registration);
+        })
+        .catch((err) => {
+          console.error("Service Worker registration failed:", err);
         });
-    };
+    }
 
-    const imageHandler = useCallback(() => {
-        const input = document.createElement('input');
-        input.setAttribute('type', 'file');
-        input.setAttribute('accept', 'image/*');
-        input.click();
+    // Request permission and retrieve FCM token
+    const requestFCMToken = async () => {
+      try {
+        const currentToken = await getToken(messaging, {
+          vapidKey: "BMKNTrOYz0oeDq1_AoSe5jVDBcBpyRrO2dF7Ueoj_s7ufBnDZfupn6yrfEfPWHhGZkZMLI4BTOOf8k2Rd7XTYxA",
+        });
 
-        input.onchange = async () => {
-            const file = input.files[0];
-            if (file) {
-                try {
-                    const compressedBase64 = await compressImage(file);
-
-                    const editor = quillRef.current.getEditor();
-                    const range = editor.getSelection();
-                    editor.insertEmbed(range.index, 'image', compressedBase64);
-                } catch (error) {
-                    console.error('Error processing image:', error);
-                }
-            }
-        };
-    }, []);
-
-    const modules = {
-        toolbar: {
-            container: [
-                [{ header: '1' }, { header: '2' }, { font: [] }],
-                [{ size: [] }],
-                ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-                [{ list: 'ordered' }, { list: 'bullet' }],
-                ['link', 'image', 'video'],
-                ['clean']
-            ],
-            handlers: {
-                image: imageHandler
-            }
+        if (currentToken) {
+          console.log("FCM Token:", currentToken);
+        } else {
+          console.error("No registration token available.");
         }
+      } catch (err) {
+        console.error("An error occurred while retrieving token.", err);
+      }
     };
 
-    // Log value when it changes
-    useEffect(() => {
-        console.log('Editor content (HTML):', editorValue);
-    }, [editorValue]);
+    // Listen for incoming messages in the foreground
+    const listenForMessages = () => {
+      onMessage(messaging, (payload) => {
+        console.log("Message received:", payload);
+        alert(`Notification received: ${payload.notification.title}`);
+      });
+    };
 
-    return (
-        <ReactQuill
-            ref={quillRef}
-            theme="snow"
-            value={editorValue}
-            onChange={setEditorValue}
-            className={`h-full ${className}`}
-            modules={modules}
-        />
-    );
+    // Call the functions to request token and listen for messages
+    requestFCMToken();
+    listenForMessages();
+  }, []);
+
+  return (
+    <div>
+      <h1>FCM Test Component</h1>
+      <p>Check your console for FCM token and notifications!</p>
+    </div>
+  );
 };
 
 export default Test;

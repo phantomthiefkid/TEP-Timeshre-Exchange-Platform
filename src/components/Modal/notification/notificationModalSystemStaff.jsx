@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { listenForMessages } from "../../../util/firebaseConfig/notification";
 
-const NotificationDropdown = ({ onClose, content }) => {
+
+const NotificationModalSystemStaff = ({ onClose, content }) => {
     const [notifications, setNotifications] = useState([]); // State to store notifications
 
   
@@ -49,4 +49,4 @@ const NotificationDropdown = ({ onClose, content }) => {
     );
 };
 
-export default NotificationDropdown;
+export default NotificationModalSystemStaff;

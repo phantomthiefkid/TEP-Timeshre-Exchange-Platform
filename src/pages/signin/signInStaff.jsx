@@ -14,6 +14,7 @@ import { getAllTimeshareCompany } from "../../service/public/resortService/resor
 import { staffLogin } from "../../service/accountAPI/accountService";
 import { FaLock, FaUser } from "react-icons/fa";
 import { FaBuildingUser } from "react-icons/fa6";
+import { listenForMessages, requestFCMToken } from "../../util/firebaseConfig/notification";
 
 const SignInStaff = () => {
   const [userName, setUserName] = useState("");
@@ -30,7 +31,6 @@ const SignInStaff = () => {
         const data = await getAllTimeshareCompany();
         if (data && data.status === 200) {
           setCompanyList(data.data.content);
-          console.log(data)
         }
       } catch (error) {
         console.error("Error fetching companies:", error);
@@ -68,6 +68,7 @@ const SignInStaff = () => {
 
         if (roleName === "TIMESHARECOMPANYSTAFF") {
           navigate("/timesharestaff");
+          requestFCMToken();
         } else {
           navigate("/");
         }
