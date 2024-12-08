@@ -86,15 +86,15 @@ const RentalPostingMNG = () => {
           </button>
         </div>
 
-
         {/* Filter Buttons */}
         <div className="flex items-center space-x-1 mb-5">
           <button
             onClick={() => setFilterPackageId(null)} // Set to null to fetch all
-            className={`px-4 py-2 rounded-md ${filterPackageId === null
+            className={`px-4 py-2 rounded-md ${
+              filterPackageId === null
                 ? "bg-blue-500 text-white"
                 : "bg-gray-100 text-gray-700 hover:bg-blue-500 hover:text-white"
-              }`}
+            }`}
           >
             Tất cả gói đăng
           </button>
@@ -105,10 +105,11 @@ const RentalPostingMNG = () => {
                 setFilterPackageId(id);
                 setPage(0);
               }}
-              className={`px-4 py-2 rounded-md ${filterPackageId === id
+              className={`px-4 py-2 rounded-md ${
+                filterPackageId === id
                   ? "bg-blue-500 text-white"
                   : "bg-gray-100 text-gray-700 hover:bg-blue-500 hover:text-white"
-                }`}
+              }`}
             >
               Gói đăng bài {id}
             </button>
@@ -134,7 +135,7 @@ const RentalPostingMNG = () => {
                 <tr key={index} className="border-b border-gray-200">
                   <td className="p-4 w-auto flex items-center space-x-4">
                     <img
-                      src={post.image}
+                      src={post.resortImage}
                       className="w-12 h-12 rounded-2xl object-cover"
                     />
                     <div className="flex flex-col justify-center">
@@ -235,10 +236,11 @@ const RentalPostingMNG = () => {
                     <button
                       key={index}
                       onClick={() => setPage(index)}
-                      className={`w-10 h-10 flex items-center justify-center rounded-xl ${index === page
+                      className={`w-10 h-10 flex items-center justify-center rounded-xl ${
+                        index === page
                           ? "bg-blue-500 text-white shadow-lg font-semibold"
                           : "text-gray-500 hover:text-blue-500 hover:font-semibold"
-                        }`}
+                      }`}
                     >
                       {index + 1}
                     </button>

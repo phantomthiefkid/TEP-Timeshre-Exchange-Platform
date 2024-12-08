@@ -144,7 +144,7 @@ const DetaillRentalPackageModal = ({ isOpen, onClose, postingId, flag }) => {
                     </h2>
                     <div className="flex items-center text-blue-500 text-sm mt-1">
                       <FaLocationPin size={18} color="red" className="mr-2" />
-                      <p>{postingId.address}</p>
+                      <p>{postingId.location.displayName}</p>
                     </div>
                   </div>
                   <div className="absolute top-2 right-2">

@@ -33,7 +33,7 @@ const resortManagement = () => {
         setLoading(false);
       }
       if (data.status === 200) {
-        setCountPartner(count.data.content.length)
+        setCountPartner(count.data.content.length);
       }
     } catch (error) {
       console.log(error);
@@ -104,7 +104,8 @@ const resortManagement = () => {
               Quản lí <span className="text-blue-600">đối tác</span>
             </h1>
             <p className="text-md font-medium text-gray-600 mt-2">
-              Quản lí <span className="text-blue-600">đối tác</span> công ty <span className="text-blue-600">timeshare</span> ở đây.
+              Quản lí <span className="text-blue-600">đối tác</span> công ty{" "}
+              <span className="text-blue-600">timeshare</span> ở đây.
             </p>
           </div>
           <div className="flex items-center space-x-6">
@@ -115,7 +116,6 @@ const resortManagement = () => {
             </div>
           </div>
         </div>
-
 
         <div className="flex justify-end items-center p-6">
           <div className="flex space-x-4">
@@ -148,7 +148,6 @@ const resortManagement = () => {
               <tr className="w-full bg-gray-300 border-b border-gray-200">
                 <th className="p-4 text-left ml-3">STT</th>
                 <th className="text-left p-4">Tên đối tác</th>
-                <th className="text-left p-4">Địa chỉ</th>
                 <th className="text-left p-4">Trạng thái</th>
                 <th className="text-left p-4"></th>
               </tr>
@@ -156,7 +155,10 @@ const resortManagement = () => {
             <tbody className="bg-white">
               {allTimeshareCompany &&
                 allTimeshareCompany.map((item, index) => (
-                  <tr key={index} className="border-b border-gray-200 hover:bg-gray-200">
+                  <tr
+                    key={index}
+                    className="border-b border-gray-200 hover:bg-gray-200"
+                  >
                     <td className="p-4">{index + 1}</td>
                     <td className="p-4 flex items-center">
                       <img
@@ -172,7 +174,6 @@ const resortManagement = () => {
                         <p className="text-gray-500 text-md">{item.contact}</p>{" "}
                       </div>
                     </td>
-                    <td className="p-4">{item.address}</td>
                     <td className="p-4 text-center">
                       <label className="flex items-center">
                         <input
@@ -197,41 +198,43 @@ const resortManagement = () => {
             </tbody>
           </table>
 
-          {
-            allTimeshareCompany && allTimeshareCompany.length > 0 ? (
-              <div className="flex items-center justify-center space-x-2 mt-5 w-full">
-                <button
-                  onClick={handlePreviousPage}
-                  disabled={page === 0}
-                  className="w-8 h-8 flex items-center justify-center rounded-full bg-white text-gray-500"
-                >
-                  <FaChevronLeft />
-                </button>
-                <div className="flex space-x-2 bg-gray-200 rounded-full px-2 py-1">
-                  {
-                    Array.from({ length: totalPages }, (_, index) => (
-                      <button
-                        key={index}
-                        onClick={() => setPage(index)}
-                        className={`w-8 h-8 flex items-center justify-center rounded-full ${index === page ? "bg-blue-500 text-white" : "bg-white text-gray-500"}`}
-                      >
-                        {index + 1}
-                      </button>
-                    ))
-                  }
-                </div>
-                <button
-                  onClick={handleNextPage}
-                  disabled={page === totalPages - 1}
-                  className="w-8 h-8 flex items-center justify-center rounded-full bg-blue-500 text-white"
-                >
-                  <FaChevronRight />
-                </button>
+          {allTimeshareCompany && allTimeshareCompany.length > 0 ? (
+            <div className="flex items-center justify-center space-x-2 mt-5 w-full">
+              <button
+                onClick={handlePreviousPage}
+                disabled={page === 0}
+                className="w-8 h-8 flex items-center justify-center rounded-full bg-white text-gray-500"
+              >
+                <FaChevronLeft />
+              </button>
+              <div className="flex space-x-2 bg-gray-200 rounded-full px-2 py-1">
+                {Array.from({ length: totalPages }, (_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setPage(index)}
+                    className={`w-8 h-8 flex items-center justify-center rounded-full ${
+                      index === page
+                        ? "bg-blue-500 text-white"
+                        : "bg-white text-gray-500"
+                    }`}
+                  >
+                    {index + 1}
+                  </button>
+                ))}
               </div>
-            ) : (
-              <span className="flex items-center justify-center space-x-2 mt-5 w-full">Không có bài đăng nào!!!</span>
-            )
-          }
+              <button
+                onClick={handleNextPage}
+                disabled={page === totalPages - 1}
+                className="w-8 h-8 flex items-center justify-center rounded-full bg-blue-500 text-white"
+              >
+                <FaChevronRight />
+              </button>
+            </div>
+          ) : (
+            <span className="flex items-center justify-center space-x-2 mt-5 w-full">
+              Không có bài đăng nào!!!
+            </span>
+          )}
         </div>
 
         <DetailTimeshareCompanyModal

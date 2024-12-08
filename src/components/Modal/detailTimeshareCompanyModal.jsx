@@ -63,7 +63,7 @@ const DetailTimeshareCompanyModal = ({ isOpen, onClose, company }) => {
                 <FaLocationDot className="mr-2" />
                 <input
                   type="text"
-                  value={company.address}
+                  value={company.location.displayName}
                   className="w-full outline-none"
                   readOnly
                 />

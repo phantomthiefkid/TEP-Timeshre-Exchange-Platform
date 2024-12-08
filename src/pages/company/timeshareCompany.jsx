@@ -12,7 +12,7 @@ const TimeshareCompany = () => {
   const [company, setCompany] = useState([]);
   const [debounceTimeout, setDebounceTimeout] = useState(null);
   const [tsCompany, setTsCompany] = useState("");
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(true);
 
   const handleSearch = (e) => {
     const searchInput = e.target.value;
@@ -57,12 +57,12 @@ const TimeshareCompany = () => {
       let data = await getAllTimeshareCompany();
       if (data.status == 200) {
         setTsCompany(data.data.content);
-        setLoading(false)
+        setLoading(false);
       }
     } catch (error) {
       return error;
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
   };
 
@@ -75,7 +75,7 @@ const TimeshareCompany = () => {
   }, []);
 
   if (loading) {
-    return (<SpinnerWaiting/>)
+    return <SpinnerWaiting />;
   }
 
   return (
@@ -119,7 +119,8 @@ const TimeshareCompany = () => {
                       to={`/timesharecompanydetail/${item.id}`}
                       className="text-black hover:text-blue-800"
                     >
-                      Công ty: {item.timeshareCompanyName} - {item.address}
+                      Công ty: {item.timeshareCompanyName} -{" "}
+                      {item.location.displayName}
                     </Link>
                   </li>
                 ))}
