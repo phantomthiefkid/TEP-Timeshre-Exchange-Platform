@@ -116,60 +116,60 @@ const HeaderSystemStaff = () => {
             </div>
           </div>
 
-          {/* Language Switcher */}
+        
           <div className="cursor-pointer bg-blue-200 p-3 rounded-full shadow-lg transition duration-300 hover:bg-blue-300">
             <GlobeIcon className="h-7 w-7 text-blue-600" />
           </div>
         </div>
         {notification && (
-        <div className="fixed top-6 right-6 max-w-xs bg-gradient-to-r from-indigo-400 via-indigo-500 to-indigo-400 text-white rounded-xl shadow-xl p-5 z-50 animate-fadeIn">
-          <div className="flex items-start space-x-4">
-            {/* Icon */}
-            <div className="flex items-center justify-center w-10 h-10 bg-white bg-opacity-20 rounded-full">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={2}
-                stroke="currentColor"
-                className="w-6 h-6 text-white"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M12 9v2m0 4h.01M12 17h0M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                />
-              </svg>
-            </div>
+          <div className="fixed top-6 right-6 max-w-xs bg-gradient-to-r from-indigo-400 via-indigo-500 to-indigo-400 text-white rounded-xl shadow-xl p-5 z-50 animate-fadeIn">
+            <div className="flex items-start space-x-4">
+              {/* Icon */}
+              <div className="flex items-center justify-center w-10 h-10 bg-white bg-opacity-20 rounded-full">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={2}
+                  stroke="currentColor"
+                  className="w-6 h-6 text-white"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M12 9v2m0 4h.01M12 17h0M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
+              </div>
 
-            {/* Notification Content */}
-            <div className="flex-1">
-              <h3 className="text-lg font-semibold">{notification.title}</h3>
-              <p className="text-sm mt-1">{notification.body}</p>
-            </div>
+              
+              <div className="flex-1">
+                <h3 className="text-lg font-semibold">{notification.title}</h3>
+                <p className="text-sm mt-1">{notification.body}</p>
+              </div>
 
-            {/* Close Button */}
-            <button
-              className="text-white hover:text-gray-200 transition-opacity focus:outline-none"
-              onClick={() => setNotification(null)}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={2}
-                stroke="currentColor"
-                className="w-6 h-6"
+             
+              <button
+                className="text-white hover:text-gray-200 transition-opacity focus:outline-none"
+                onClick={() => setNotification(null)}
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              </svg>
-            </button>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={2}
+                  stroke="currentColor"
+                  className="w-6 h-6"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              </button>
+            </div>
           </div>
-        </div>
         )}
       </header>
     </>

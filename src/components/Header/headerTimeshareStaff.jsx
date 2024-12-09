@@ -40,11 +40,8 @@ const HeaderTimeshareStaff = () => {
     }
   }
   subcribe()
-  useEffect(() => {
-    // Listen for messages
-    listenForMessages(setNotification);
-
-    // Check and subscribe if FCM_TOKEN exists
+  useEffect(() => {   
+    listenForMessages(setNotification);   
 
   }, [FCM_TOKEN]);
 
@@ -79,13 +76,11 @@ const HeaderTimeshareStaff = () => {
             </div>
 
           </div>
-
-          {/* Settings Icon */}
+        
           <div className="relative bg-blue-200 rounded-full p-3 shadow-lg cursor-pointer transition duration-300 hover:bg-blue-300">
             <FaCog className="h-6 w-6 text-blue-600" />
           </div>
-
-          {/* Profile Section */}
+         
           <div className="flex items-center space-x-4 p-4 rounded-lg">
             <img
               src="https://cdn3.iconfinder.com/data/icons/30-office-business-sticker-icons-part-1/202/Businesman-512.png"
@@ -100,9 +95,7 @@ const HeaderTimeshareStaff = () => {
                 {decodeToken ? decodeToken.email : ""}
               </p>
             </div>
-          </div>
-
-          {/* Language Switcher */}
+          </div>         
           <div className="cursor-pointer bg-blue-200 p-3 rounded-full shadow-lg transition duration-300 hover:bg-blue-300">
             <GlobeIcon className="h-7 w-7 text-blue-600" />
           </div>
@@ -126,15 +119,11 @@ const HeaderTimeshareStaff = () => {
                     d="M12 9v2m0 4h.01M12 17h0M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                   />
                 </svg>
-              </div>
-
-              {/* Notification Content */}
+              </div>      
               <div className="flex-1">
                 <h3 className="text-lg font-semibold">{notification.title}</h3>
                 <p className="text-sm mt-1">{notification.body}</p>
-              </div>
-
-              {/* Close Button */}
+              </div>       
               <button
                 className="text-white hover:text-gray-200 transition-opacity focus:outline-none"
                 onClick={() => setNotification(null)}
