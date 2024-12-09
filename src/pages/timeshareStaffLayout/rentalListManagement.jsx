@@ -38,6 +38,7 @@ const RentalListManagement = () => {
       let data = await getAllBooking(page, size, isComing, willGo);
       if (data.status === 200) {
         setAllBooking(data.data.content);
+        console.log(data.data.content)
         setTotalPages(data.data.totalPages);
         if (isComing === false && willGo === false) {
           setBookedCount(

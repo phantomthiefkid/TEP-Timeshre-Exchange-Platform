@@ -3,8 +3,7 @@ import { jwtDecode } from 'jwt-decode';
 import React, { useEffect, useState } from "react";
 import { FaCog } from "react-icons/fa";
 import { FaBell } from "react-icons/fa6";
-import NotificationDropdown from "../Modal/notification/notificationModal";
-import { subcribeToken } from "../../service/notificationService/notiicationAPI";
+import { getNotificationByTopic, markReadByTopic, subcribeToken } from "../../service/notificationService/notiicationAPI";
 import { listenForMessages } from "../../util/firebaseConfig/notification";
 import NotificationModalSystemStaff from "../Modal/notification/notificationModalSystemStaff";
 const HeaderSystemStaff = () => {
@@ -16,16 +15,24 @@ const HeaderSystemStaff = () => {
   const FCM_TOKEN = localStorage.getItem("FCM_TOKEN")
 
 
-  const toggleNotificationDropdown = () => {
-    setIsNotificationOpen((prev) => !prev);
+  const toggleNotificationDropdown = async () => {
+    try {
+      let data = await getNotificationByTopic("systemstaff", 0, 10);
+      if (data.status === 200) {
+        setList(data.data.content)
+
+      }
+    } catch (error) {
+      throw error
+    } finally {
+      setIsNotificationOpen((prev) => !prev);
+    }
+
   };
 
   const subcribe = async () => {
     try {
-      let response = await subcribeToken(FCM_TOKEN, `systemstaff`)
-      if (response) {
-        console.log("Check response: ", response)
-      }
+      await subcribeToken(FCM_TOKEN, `systemstaff`)
     } catch (error) {
       throw error
     }
@@ -36,8 +43,24 @@ const HeaderSystemStaff = () => {
     listenForMessages(setNotification);
 
     // Check and subscribe if FCM_TOKEN exists
-    
+
   }, [FCM_TOKEN]);
+
+  const handleMarkAll = async () => {
+    try {
+      // Mark all notifications as read
+      await markReadByTopic("systemstaff");
+
+      // Fetch the updated notifications list
+      let updatedData = await getNotificationByTopic("systemstaff", 0, 10);
+      if (updatedData.status === 200) {
+        setList(updatedData.data.content);
+      }
+    } catch (error) {
+      console.error("Error marking all notifications as read: ", error);
+    }
+  };
+
 
   return (
     <>
@@ -64,7 +87,7 @@ const HeaderSystemStaff = () => {
               </span>
               {isNotificationOpen && (
 
-                <div className="absolute top-6 z-50"><NotificationModalSystemStaff onClose={toggleNotificationDropdown} content={list} /></div>
+                <div className="absolute top-6 z-50"><NotificationModalSystemStaff onClose={() => setIsNotificationOpen(false)} content={list} onMarkAllRead={handleMarkAll} /></div>
 
               )}
             </div>
@@ -99,43 +122,54 @@ const HeaderSystemStaff = () => {
           </div>
         </div>
         {notification && (
-          <div className="fixed top-6 right-6 max-w-xs bg-blue-500 text-white rounded-lg shadow-lg p-4 z-50 animate-fadeIn">
-            <div className="flex items-start">
-              {/* Icon */}
-              <div className="mr-3">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={2}
-                  stroke="currentColor"
-                  className="w-6 h-6 text-white"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M12 9v2m0 4h.01M12 17h0M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                  />
-                </svg>
-              </div>
-
-              {/* Notification Content */}
-              <div className="flex-1">
-                <h3 className="font-bold text-lg">{notification.title}</h3>
-                <p className="text-sm mt-1">{notification.body}</p>
-              </div>
-
-              {/* Close Button */}
-              <button
-                className="ml-3 text-lg font-bold hover:opacity-80 focus:outline-none"
-                onClick={() => setNotification(null)}
+        <div className="fixed top-6 right-6 max-w-xs bg-gradient-to-r from-indigo-400 via-indigo-500 to-indigo-400 text-white rounded-xl shadow-xl p-5 z-50 animate-fadeIn">
+          <div className="flex items-start space-x-4">
+            {/* Icon */}
+            <div className="flex items-center justify-center w-10 h-10 bg-white bg-opacity-20 rounded-full">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={2}
+                stroke="currentColor"
+                className="w-6 h-6 text-white"
               >
-                ✕
-              </button>
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M12 9v2m0 4h.01M12 17h0M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
             </div>
+
+            {/* Notification Content */}
+            <div className="flex-1">
+              <h3 className="text-lg font-semibold">{notification.title}</h3>
+              <p className="text-sm mt-1">{notification.body}</p>
+            </div>
+
+            {/* Close Button */}
+            <button
+              className="text-white hover:text-gray-200 transition-opacity focus:outline-none"
+              onClick={() => setNotification(null)}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={2}
+                stroke="currentColor"
+                className="w-6 h-6"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </button>
           </div>
-
-
+        </div>
         )}
       </header>
     </>

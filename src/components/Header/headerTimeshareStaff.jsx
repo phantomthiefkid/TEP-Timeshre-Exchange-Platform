@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { FaCog } from "react-icons/fa";
 import { FaBell } from "react-icons/fa6";
 import NotificationDropdown from "../Modal/notification/notificationModal";
-import { subcribeToken } from "../../service/notificationService/notiicationAPI";
+import { getNotificationByTopic, subcribeToken } from "../../service/notificationService/notiicationAPI";
 import { listenForMessages } from "../../util/firebaseConfig/notification";
 const HeaderTimeshareStaff = () => {
   const token = localStorage.getItem("token");
@@ -15,8 +15,18 @@ const HeaderTimeshareStaff = () => {
   const FCM_TOKEN = localStorage.getItem("FCM_TOKEN")
 
 
-  const toggleNotificationDropdown = () => {
-    setIsNotificationOpen((prev) => !prev);
+  const toggleNotificationDropdown = async () => {
+    try {
+      let data = await getNotificationByTopic(`resort${decodeToken.resortId}`, 0, 20);
+      if (data.status === 200) {
+        setList(data.data.content)
+        console.log(data.data)
+      }
+    } catch (error) {
+      throw error
+    } finally {
+      setIsNotificationOpen((prev) => !prev);
+    }
   };
 
   const subcribe = async () => {
@@ -35,7 +45,7 @@ const HeaderTimeshareStaff = () => {
     listenForMessages(setNotification);
 
     // Check and subscribe if FCM_TOKEN exists
-    
+
   }, [FCM_TOKEN]);
 
   return (
@@ -98,10 +108,10 @@ const HeaderTimeshareStaff = () => {
           </div>
         </div>
         {notification && (
-          <div className="fixed top-6 right-6 max-w-xs bg-blue-500 text-white rounded-lg shadow-lg p-4 z-50 animate-fadeIn">
-            <div className="flex items-start">
+          <div className="fixed top-6 right-6 max-w-xs bg-gradient-to-r from-indigo-400 via-indigo-500 to-indigo-400 text-white rounded-xl shadow-xl p-5 z-50 animate-fadeIn">
+            <div className="flex items-start space-x-4">
               {/* Icon */}
-              <div className="mr-3">
+              <div className="flex items-center justify-center w-10 h-10 bg-white bg-opacity-20 rounded-full">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -120,21 +130,32 @@ const HeaderTimeshareStaff = () => {
 
               {/* Notification Content */}
               <div className="flex-1">
-                <h3 className="font-bold text-lg">{notification.title}</h3>
+                <h3 className="text-lg font-semibold">{notification.title}</h3>
                 <p className="text-sm mt-1">{notification.body}</p>
               </div>
 
               {/* Close Button */}
               <button
-                className="ml-3 text-lg font-bold hover:opacity-80 focus:outline-none"
+                className="text-white hover:text-gray-200 transition-opacity focus:outline-none"
                 onClick={() => setNotification(null)}
               >
-                ✕
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={2}
+                  stroke="currentColor"
+                  className="w-6 h-6"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
               </button>
             </div>
           </div>
-
-
         )}
       </header>
     </>

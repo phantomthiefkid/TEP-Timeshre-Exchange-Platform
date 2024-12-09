@@ -30,6 +30,7 @@ const RentalPostingMNG = () => {
       );
       if (data.status === 200) {
         setAllRentalPosts(data.data.content);
+        console.log(data.data.content)
         setTotalPages(data.data.totalPages);
         setLoading(false);
       }
@@ -134,7 +135,7 @@ const RentalPostingMNG = () => {
                 <tr key={index} className="border-b border-gray-200">
                   <td className="p-4 w-auto flex items-center space-x-4">
                     <img
-                      src={post.image}
+                      src={post.resortImage}
                       className="w-12 h-12 rounded-2xl object-cover"
                     />
                     <div className="flex flex-col justify-center">
