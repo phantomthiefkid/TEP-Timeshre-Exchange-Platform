@@ -105,7 +105,9 @@ const Feedback = () => {
                     {/* Address */}
                     <div className="flex items-center text-sm text-gray-600 space-x-2">
                       <FaMapMarkerAlt className="text-red-400" />
-                      <p className="truncate">{resort.location.displayName}</p>
+                      <p className="truncate">
+                        {resort.resortLocationDisplayName}
+                      </p>
                     </div>
 
                     {/* Button */}
