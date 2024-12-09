@@ -819,20 +819,23 @@ const Dashboard = () => {
               Xem tất cả
             </Link>
           </div>
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
-              <tr>
-                <th className="px-6 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">
-                  Tên Resort
-                </th>
-                <th className="px-6 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">
-                  Định giá
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {rentalPostings &&
-                rentalPostings
+          {rentalPostings &&
+          rentalPostings.filter(
+            (post) => post.status === "AwaitingConfirmation"
+          ).length > 0 ? (
+            <table className="min-w-full divide-y divide-gray-200">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th className="px-6 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">
+                    Tên Resort
+                  </th>
+                  <th className="px-6 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">
+                    Định giá
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {rentalPostings
                   .filter((post) => post.status === "AwaitingConfirmation")
                   .slice(0, 10)
                   .map((post) => (
@@ -851,8 +854,16 @@ const Dashboard = () => {
                       </td>
                     </tr>
                   ))}
-            </tbody>
-          </table>
+              </tbody>
+            </table>
+          ) : (
+            <div className="flex flex-col items-center justify-center mt-5 w-full min-h-[100vh] border-2 border-dashed border-gray-300 rounded-lg bg-gradient-to-b from-gray-50 to-gray-100">
+              <FaList className="text-gray-400 text-6xl animate-pulse mb-4" />
+              <span className="text-gray-600 text-lg font-medium">
+                Không có yêu cầu định giá nào có sẵn
+              </span>
+            </div>
+          )}
         </div>
       </div>
     </div>
