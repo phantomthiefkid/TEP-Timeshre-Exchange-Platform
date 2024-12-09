@@ -201,44 +201,37 @@ const DashboardCompany = () => {
       case "REJECT_REQUESTEXCHANGE":
         return {
           label: "Từ chối yêu cầu trao đổi",
-          style:
-            "text-red-500 p-2 text-lg  rounded-2xl px-4 text-left",
-       };
+          style: "text-red-500 p-2 text-lg  rounded-2xl px-4 text-left",
+        };
       case "APPROVAL_REQUESTEXCHANGE":
         return {
           label: "Duyệt yêu cầu trao đổi",
-          style:
-            " text-green-500   p-2 text-lg rounded-2xl px-4 text-left",
+          style: " text-green-500   p-2 text-lg rounded-2xl px-4 text-left",
         };
       case "REJECT_EXCHANGEPOSTING":
         return {
           label: "Từ chối bài trao đổi",
-          style:
-            " text-red-500   p-2 text-lg rounded-2xl px-4 text-left",
+          style: " text-red-500   p-2 text-lg rounded-2xl px-4 text-left",
         };
       case "APPROVAL_EXCHANGEPOSTING":
         return {
           label: "Duyệt bài trao đổi",
-          style:
-            " text-green-500   p-2 text-lg rounded-2xl px-4 text-left",
+          style: " text-green-500   p-2 text-lg rounded-2xl px-4 text-left",
         };
       case "REJECT_RENTALPOSTING":
         return {
           label: "Từ chối bài cho thuê",
-          style:
-            " text-red-500   p-2 text-lg rounded-2xl px-4 text-left",
+          style: " text-red-500   p-2 text-lg rounded-2xl px-4 text-left",
         };
       case "APPROVAL_RENTAL_POSTING":
         return {
           label: "Duyệt bài cho thuê",
-          style:
-            " text-green-500   p-2 text-lg rounded-2xl px-4 text-left",
+          style: " text-green-500   p-2 text-lg rounded-2xl px-4 text-left",
         };
       default:
         return {
           label: "Không xác định",
-          style:
-            "text-gray-500 p-2 text-lg rounded-2xl px-4 text-left",
+          style: "text-gray-500 p-2 text-lg rounded-2xl px-4 text-left",
         };
     }
   };
@@ -256,7 +249,7 @@ const DashboardCompany = () => {
       "Sep",
       "Oct",
       "Nov",
-      "Dec"
+      "Dec",
     ],
     datasets: [
       {
@@ -430,14 +423,13 @@ const DashboardCompany = () => {
             </div>
           </div>
         </div>
-       
       </div>
 
       {/* revenue analysis */}
       <div className="grid grid-cols-1 border-2 shadow-xl rounded-xl">
         <div className="bg-white p-6 rounded-lg shadow">
           <h3 className="text-lg font-semibold mb-4">Doanh số</h3>
-          <div className="w-full h-[550px] mx-auto">
+          <div className="w-full h-auto mx-auto">
             <Line data={lineChartData} />
           </div>
         </div>
@@ -480,8 +472,9 @@ const DashboardCompany = () => {
                       >
                         <td className="px-2 py-4 text-center">
                           <span
-                            className={`${formatTransactionType(transactionType).style
-                              }`}
+                            className={`${
+                              formatTransactionType(transactionType).style
+                            }`}
                           >
                             {formatTransactionType(transactionType).label}
                           </span>
@@ -491,7 +484,9 @@ const DashboardCompany = () => {
                             {description}
                           </span>
                         </td>
-                        <td className="px-2 py-4 text-center">{FormatCurrency(money)}</td>
+                        <td className="px-2 py-4 text-center">
+                          {FormatCurrency(money)}
+                        </td>
                         <td className="px-2 py-4">{createdAt}</td>
                       </tr>
                     )
@@ -525,10 +520,11 @@ const DashboardCompany = () => {
                             <button
                               key={index}
                               onClick={() => setPageTransactions(index)}
-                              className={`w-8 h-8 flex items-center justify-center rounded-full ${index === pageTransactions
-                                ? "bg-blue-500 text-white"
-                                : "bg-white text-gray-500"
-                                }`}
+                              className={`w-8 h-8 flex items-center justify-center rounded-full ${
+                                index === pageTransactions
+                                  ? "bg-blue-500 text-white"
+                                  : "bg-white text-gray-500"
+                              }`}
                             >
                               {index + 1}
                             </button>
@@ -593,7 +589,6 @@ const DashboardCompany = () => {
                 </button>
               </Link>
             </div>
-
           </div>
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-200">
@@ -622,7 +617,6 @@ const DashboardCompany = () => {
                 ))}
             </tbody>
           </table>
-
         </div>
       </div>
     </div>
