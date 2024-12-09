@@ -30,6 +30,7 @@ const RentalPostingMNG = () => {
       );
       if (data.status === 200) {
         setAllRentalPosts(data.data.content);
+        console.log(data.data.content)
         setTotalPages(data.data.totalPages);
         setLoading(false);
       }

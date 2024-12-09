@@ -3,10 +3,10 @@ import { jwtDecode } from 'jwt-decode';
 import React, { useEffect, useState } from "react";
 import { FaCog } from "react-icons/fa";
 import { FaBell } from "react-icons/fa6";
-import NotificationDropdown from "../Modal/notification/notificationModal";
-import { getNotificationByTopic, subcribeToken } from "../../service/notificationService/notiicationAPI";
+import { getNotificationByTopic, markReadByTopic, subcribeToken } from "../../service/notificationService/notiicationAPI";
 import { listenForMessages } from "../../util/firebaseConfig/notification";
-const HeaderTimeshareStaff = () => {
+import NotificationModalSystemStaff from "../Modal/notification/notificationModalSystemStaff";
+const HeaderSystemStaff = () => {
   const token = localStorage.getItem("token");
   const decodeToken = jwtDecode(token);
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
@@ -17,33 +17,50 @@ const HeaderTimeshareStaff = () => {
 
   const toggleNotificationDropdown = async () => {
     try {
-      let data = await getNotificationByTopic(`resort${decodeToken.resortId}`, 0, 20);
+      let data = await getNotificationByTopic("systemstaff", 0, 10);
       if (data.status === 200) {
         setList(data.data.content)
-        console.log(data.data)
+
       }
     } catch (error) {
       throw error
     } finally {
       setIsNotificationOpen((prev) => !prev);
     }
+
   };
 
   const subcribe = async () => {
     try {
-      let response = await subcribeToken(FCM_TOKEN, `resort${decodeToken.resortId}`)
-      if (response) {
-        console.log("Check response: ", response)
-      }
+      await subcribeToken(FCM_TOKEN, `systemstaff`)
     } catch (error) {
       throw error
     }
   }
   subcribe()
-  useEffect(() => {   
-    listenForMessages(setNotification);   
+  useEffect(() => {
+    // Listen for messages
+    listenForMessages(setNotification);
+
+    // Check and subscribe if FCM_TOKEN exists
 
   }, [FCM_TOKEN]);
+
+  const handleMarkAll = async () => {
+    try {
+      // Mark all notifications as read
+      await markReadByTopic("systemstaff");
+
+      // Fetch the updated notifications list
+      let updatedData = await getNotificationByTopic("systemstaff", 0, 10);
+      if (updatedData.status === 200) {
+        setList(updatedData.data.content);
+      }
+    } catch (error) {
+      console.error("Error marking all notifications as read: ", error);
+    }
+  };
+
 
   return (
     <>
@@ -70,17 +87,19 @@ const HeaderTimeshareStaff = () => {
               </span>
               {isNotificationOpen && (
 
-                <div className="absolute top-6 z-50"><NotificationDropdown onClose={toggleNotificationDropdown} content={list} /></div>
+                <div className="absolute top-6 z-50"><NotificationModalSystemStaff onClose={() => setIsNotificationOpen(false)} content={list} onMarkAllRead={handleMarkAll} /></div>
 
               )}
             </div>
 
           </div>
-        
+
+          {/* Settings Icon */}
           <div className="relative bg-blue-200 rounded-full p-3 shadow-lg cursor-pointer transition duration-300 hover:bg-blue-300">
             <FaCog className="h-6 w-6 text-blue-600" />
           </div>
-         
+
+          {/* Profile Section */}
           <div className="flex items-center space-x-4 p-4 rounded-lg">
             <img
               src="https://cdn3.iconfinder.com/data/icons/30-office-business-sticker-icons-part-1/202/Businesman-512.png"
@@ -95,7 +114,9 @@ const HeaderTimeshareStaff = () => {
                 {decodeToken ? decodeToken.email : ""}
               </p>
             </div>
-          </div>         
+          </div>
+
+        
           <div className="cursor-pointer bg-blue-200 p-3 rounded-full shadow-lg transition duration-300 hover:bg-blue-300">
             <GlobeIcon className="h-7 w-7 text-blue-600" />
           </div>
@@ -119,11 +140,15 @@ const HeaderTimeshareStaff = () => {
                     d="M12 9v2m0 4h.01M12 17h0M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                   />
                 </svg>
-              </div>      
+              </div>
+
+              
               <div className="flex-1">
                 <h3 className="text-lg font-semibold">{notification.title}</h3>
                 <p className="text-sm mt-1">{notification.body}</p>
-              </div>       
+              </div>
+
+             
               <button
                 className="text-white hover:text-gray-200 transition-opacity focus:outline-none"
                 onClick={() => setNotification(null)}
@@ -151,4 +176,4 @@ const HeaderTimeshareStaff = () => {
   );
 };
 
-export default HeaderTimeshareStaff;
+export default HeaderSystemStaff;
