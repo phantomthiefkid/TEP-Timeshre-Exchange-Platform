@@ -502,7 +502,7 @@ const ResortDetail = () => {
               >
                 <Popup className="flex flex-col items-center justify-center w-[300px] rounded-xl shadow-lg text-center border-2 border-blue-300 ">
                   {resort.resortName} <br />
-                  {resort.address}
+                  {resort.location.displayName}
                 </Popup>
               </Marker>
             </MapContainer>

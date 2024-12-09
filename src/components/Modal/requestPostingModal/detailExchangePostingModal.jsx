@@ -233,7 +233,7 @@ const detailExchangePostingModal = ({ isOpen, onClose, postingId, onSave }) => {
             <div className="border-b">
               <div className="flex items-center p-4 m-3 border border-gray-300 rounded-xl">
                 <img
-                  src={postingId.imageUrls}
+                  src={postingId.resortImage}
                   alt="Hotel Thumbnail"
                   className="w-20 h-20 rounded-lg mr-4"
                 />
@@ -249,7 +249,7 @@ const detailExchangePostingModal = ({ isOpen, onClose, postingId, onSave }) => {
                           style={{ color: "blue" }}
                         />
                         <p className="text-base text-blue-500 w-3/4">
-                          {postingId.address}
+                          {postingId.location.displayName}
                         </p>
                       </div>
                     </div>

@@ -82,7 +82,6 @@ const exchangePostingMNG = () => {
           </div>
         </div>
 
-
         <table className="min-w-full bg-white border border-gray-200 ">
           <thead>
             <tr className="w-full bg-gray-100 border-b border-gray-200">
@@ -101,7 +100,7 @@ const exchangePostingMNG = () => {
                 <tr key={index} className="border-b border-gray-200">
                   <td className="p-4 w-auto flex items-center space-x-4">
                     <img
-                      src={post.image}
+                      src={post.resortImage}
                       className="w-12 h-12 rounded-2xl object-cover"
                     />
                     <div className="flex flex-col justify-center">
@@ -172,10 +171,11 @@ const exchangePostingMNG = () => {
                     <button
                       key={index}
                       onClick={() => setPage(index)}
-                      className={`w-10 h-10 flex items-center justify-center rounded-xl ${index === page
+                      className={`w-10 h-10 flex items-center justify-center rounded-xl ${
+                        index === page
                           ? "bg-blue-500 text-white shadow-lg font-semibold"
                           : "text-gray-500 hover:text-blue-500 hover:font-semibold"
-                        }`}
+                      }`}
                     >
                       {index + 1}
                     </button>
