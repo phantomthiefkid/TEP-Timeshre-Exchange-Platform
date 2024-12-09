@@ -155,7 +155,7 @@ const TimeshareCompanyDetail = () => {
                         </Link>
                         <p className="text-gray-600 mb-4 flex gap-2">
                           <LocationMarkerIcon className="w-5 h-5" color="red" />
-                          {item.location.displayName ||
+                          {item.resortLocationDisplayName ||
                             "Địa chỉ không xác định"}
                         </p>
                         <div className="flex items-center absolute bottom-4 left-4">
