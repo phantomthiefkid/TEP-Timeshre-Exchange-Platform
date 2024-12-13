@@ -141,9 +141,12 @@ const Dashboard = () => {
   };
 
   const barChartData = {
-    labels: packageData.map((item) =>
-      format(new Date(item.date), "dd/MM/yyyy")
-    ),
+    labels: packageData.map((item) => {
+      const parsedDate = new Date(item.date);
+      return isNaN(parsedDate)
+        ? "Invalid Date"
+        : format(parsedDate, "dd/MM/yyyy");
+    }),
     datasets: [
       {
         label: "Gói cho thuê",
