@@ -19,6 +19,7 @@ const Feedback = () => {
       if (data.status === 200) {
         setResorts(data.data.content);
         setTotalPages(data.data.totalPages);
+        console.log(data.data.content)
         setLoading(false);
       }
     } catch (error) {
@@ -105,7 +106,7 @@ const Feedback = () => {
                     {/* Address */}
                     <div className="flex items-center text-sm text-gray-600 space-x-2">
                       <FaMapMarkerAlt className="text-red-400" />
-                      <p className="truncate">{resort.location.displayName}</p>
+                      <p className="truncate">{resort.resortLocationDisplayName}</p>
                     </div>
 
                     {/* Button */}
