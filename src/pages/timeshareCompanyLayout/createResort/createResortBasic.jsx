@@ -89,7 +89,7 @@ const CreateResortBasic = ({ onNext, onUpdateData, formData }) => {
       console.error("Error uploading logo image:", error);
     }
   };
-
+console.log(resortData)
   const handleRemoveLogo = () => {
     setResortData((prevData) => ({ ...prevData, logo: null }));
     onUpdateData({
@@ -342,7 +342,7 @@ const CreateResortBasic = ({ onNext, onUpdateData, formData }) => {
             <label className="block mb-2 font-medium">Logo resort</label>
 
             {/* Upload button with icon */}
-            {!imageResort.logo && (
+            {!resortData.logo && (
               <label
                 htmlFor="upload-room-images"
                 className="w-full h-32 border-dashed border-2 border-gray-300 rounded-lg flex flex-col items-center justify-center cursor-pointer bg-gradient-to-r from-gray-50 to-gray-100 hover:shadow-lg hover:border-blue-400 transition-all duration-300"
@@ -414,7 +414,7 @@ const CreateResortBasic = ({ onNext, onUpdateData, formData }) => {
                 />
               </div>
               {resortData.imageUrls && resortData.imageUrls.length > 0 && (
-                <div className="grid grid-cols-6 gap-4">
+                <div className="grid grid-cols-6 gap-4 border border-gray-300">
                   {resortData.imageUrls.map((url, index) => (
                     <div
                       key={index}

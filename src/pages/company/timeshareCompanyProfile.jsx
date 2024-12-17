@@ -108,14 +108,14 @@ const TimeshareCompanyProfile = () => {
           <div className="flex flex-row">
             <FaLocationPin className="text-red-500 mr-2" size={18} />
             <p className="text-base font-semibold mb-4">
-              {companyDetail.location.displayName}
+              {companyDetail?.location?.displayName || "Không xác định"}
             </p>
           </div>
           <div className="col-span-4 lg:col-span-4 mt-4">
             <MapContainer
               center={[
-                companyDetail.location.latitude || 21.028511,
-                companyDetail.location.longitude || 105.804817,
+                companyDetail?.location?.latitude || 21.028511,
+                companyDetail?.location?.longitude || 105.804817,
               ]}
               zoom={24}
               className="w-full h-[570px]"

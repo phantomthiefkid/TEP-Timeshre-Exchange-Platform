@@ -127,6 +127,7 @@ const DetailRentalList = ({ isOpen, onClose, postingId, flag }) => {
     } finally {
       setEditFlag(false);
       setIsSpinner(false);
+      onClose()
     }
   };
 
@@ -448,7 +449,7 @@ const DetailRentalList = ({ isOpen, onClose, postingId, flag }) => {
               Đóng
             </button>
           </div>
-          {editFlag && rentalPosting.status === "PendingPricing" && (
+          {rentalPosting && rentalPosting.status === "PendingPricing" && (
             <div className="border-t flex justify-end items-center gap-4">
               {isSpinner ? (
                 <button className="bg-green-500 text-white px-8 py-2 rounded-xl hover:bg-green-600 transition duration-150">

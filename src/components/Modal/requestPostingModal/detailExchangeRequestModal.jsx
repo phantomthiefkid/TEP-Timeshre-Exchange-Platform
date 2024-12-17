@@ -107,13 +107,6 @@ const detailExchangeRequestModal = ({ isOpen, onClose, requestId, onSave }) => {
         <div className="p-4 border-b flex justify-between items-center">
           <h1 className="text-xl font-bold">Thông tin chi tiết</h1>
           <div className="flex items-center">
-            <div className="bg-white border-2 border-gray-300 rounded-xl p-2 mr-2 hover:bg-gray-300 cursor-pointer">
-              <button className="text-gray-500 focus:outline-none flex flex-row items-center">
-                <FaEdit size={20} />
-                <span className="ml-2">Chỉnh sửa</span>
-              </button>
-            </div>
-
             <button
               onClick={() => handleOnClose()}
               className="text-gray-500 hover:text-zinc-300 focus:outline-none"

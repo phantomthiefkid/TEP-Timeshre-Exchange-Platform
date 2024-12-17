@@ -36,8 +36,13 @@ const Header = () => {
     };
 
     fetchProfile();
-  }, [decodeToken]); 
+  }, [decodeToken]);
 
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("roleName");
+    
+  }
 
   return (
     <>
@@ -51,15 +56,15 @@ const Header = () => {
 
         <div className="flex items-center w-1/2 justify-end space-x-6">
           {/* Notification Icon */}
-          <div className="relative">
+          {/* <div className="relative">
             <div className="relative bg-blue-200 rounded-full p-3 shadow-lg cursor-pointer transition duration-300 hover:bg-blue-300">
               <FaBell className="h-6 w-6 text-blue-600" />
               <span className="absolute top-0 right-0 bg-red-500 text-white text-xs font-semibold rounded-full w-5 h-5 flex items-center justify-center animate-bounce">3</span>
             </div>
-          </div>
+          </div> */}
 
           {/* Settings Icon */}
-          <div className="relative">
+          <div className="relative" ref={dropdownRef}>
             {/* Settings Icon */}
             <div
               className="bg-blue-200 rounded-full p-3 shadow-lg cursor-pointer transition duration-300 hover:bg-blue-300"
@@ -75,12 +80,19 @@ const Header = () => {
               >
                 <ul>
                   <Link to={`/timesharecompany/profiletscompany`}>
-                    <li onClick={() => setDropdownOpen(false)}
+                    <li
+                      onClick={() => setDropdownOpen(false)}
                       className="px-4 py-2 text-gray-700 hover:bg-blue-100 cursor-pointer"
                     >
                       Chỉnh sửa hồ sơ công ty
-                    </li></Link>
+                    </li>
+                  </Link>
                   <li
+                    onClick={() => {
+                      setDropdownOpen(false);
+                      localStorage.removeItem("token");
+                      window.location.reload();
+                    }}
                     className="px-4 py-2 text-gray-700 hover:bg-blue-100 cursor-pointer"
                   >
                     Đăng xuất
