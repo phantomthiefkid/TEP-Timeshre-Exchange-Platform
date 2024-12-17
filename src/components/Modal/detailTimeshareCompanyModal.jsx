@@ -6,7 +6,7 @@ const DetailTimeshareCompanyModal = ({ isOpen, onClose, company }) => {
   const [isActive, setIsActive] = useState(company?.isActive || false); // Track the toggle status
 
   if (!isOpen) return null;
-
+console.log(company)
   // Function to handle the toggle switch
   const handleToggle = () => {
     setIsActive(!isActive); // Toggle the active state
@@ -63,7 +63,7 @@ const DetailTimeshareCompanyModal = ({ isOpen, onClose, company }) => {
                 <FaLocationDot className="mr-2" />
                 <input
                   type="text"
-                  value={company.location.displayName}
+                  value={company.location.displayName || "N/A"}
                   className="w-full outline-none"
                   readOnly
                 />

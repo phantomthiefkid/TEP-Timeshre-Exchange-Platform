@@ -42,9 +42,15 @@ const HeaderSystemStaff = () => {
     // Listen for messages
     listenForMessages(setNotification);
 
-    // Check and subscribe if FCM_TOKEN exists
+    const timer = setTimeout(() => {
+      // Trigger notification or perform some action
+      setNotification(null);
+    }, 5000);
 
-  }, [FCM_TOKEN]);
+    // Cleanup the timer when the component unmounts or FCM_TOKEN changes
+    return () => clearTimeout(timer);
+
+  }, [FCM_TOKEN, setNotification]);
 
   const handleMarkAll = async () => {
     try {
@@ -60,6 +66,8 @@ const HeaderSystemStaff = () => {
       console.error("Error marking all notifications as read: ", error);
     }
   };
+
+ 
 
 
   return (
@@ -82,12 +90,12 @@ const HeaderSystemStaff = () => {
               className="relative bg-blue-200 rounded-full p-3 shadow-lg cursor-pointer transition duration-300 hover:bg-blue-300"
             >
               <FaBell className="h-6 w-6 text-blue-600" />
-              <span className="absolute top-0 right-0 bg-red-500 text-white text-xs font-semibold rounded-full w-5 h-5 flex items-center justify-center animate-bounce">
-                3
+              <span className="absolute top-0 right-0 bg-red-500 text-white text-xs font-semibold rounded-full w-4 h-4 flex items-center justify-center animate-bounce">
+
               </span>
               {isNotificationOpen && (
 
-                <div className="absolute top-6 z-50"><NotificationModalSystemStaff onClose={() => setIsNotificationOpen(false)} content={list} onMarkAllRead={handleMarkAll} /></div>
+                <div className="absolute top-6 right-16 z-50"><NotificationModalSystemStaff onClose={() => setIsNotificationOpen(false)} content={list} onMarkAllRead={handleMarkAll} /></div>
 
               )}
             </div>
@@ -95,9 +103,9 @@ const HeaderSystemStaff = () => {
           </div>
 
           {/* Settings Icon */}
-          <div className="relative bg-blue-200 rounded-full p-3 shadow-lg cursor-pointer transition duration-300 hover:bg-blue-300">
+          {/* <div className="relative bg-blue-200 rounded-full p-3 shadow-lg cursor-pointer transition duration-300 hover:bg-blue-300">
             <FaCog className="h-6 w-6 text-blue-600" />
-          </div>
+          </div> */}
 
           {/* Profile Section */}
           <div className="flex items-center space-x-4 p-4 rounded-lg">
@@ -116,39 +124,27 @@ const HeaderSystemStaff = () => {
             </div>
           </div>
 
-        
+
           <div className="cursor-pointer bg-blue-200 p-3 rounded-full shadow-lg transition duration-300 hover:bg-blue-300">
             <GlobeIcon className="h-7 w-7 text-blue-600" />
           </div>
         </div>
         {notification && (
-          <div className="fixed top-6 right-6 max-w-xs bg-gradient-to-r from-indigo-400 via-indigo-500 to-indigo-400 text-white rounded-xl shadow-xl p-5 z-50 animate-fadeIn">
+          <div className="fixed top-6 right-6 max-w-xs bg-indigo-400 text-white rounded-xl shadow-xl p-5 z-50 animate-fadeIn">
             <div className="flex items-start space-x-4">
               {/* Icon */}
               <div className="flex items-center justify-center w-10 h-10 bg-white bg-opacity-20 rounded-full">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={2}
-                  stroke="currentColor"
-                  className="w-6 h-6 text-white"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M12 9v2m0 4h.01M12 17h0M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                  />
-                </svg>
+
+                <FaBell className="w-6 h-6 text-yellow-300" />
               </div>
 
-              
+
               <div className="flex-1">
                 <h3 className="text-lg font-semibold">{notification.title}</h3>
                 <p className="text-sm mt-1">{notification.body}</p>
               </div>
 
-             
+
               <button
                 className="text-white hover:text-gray-200 transition-opacity focus:outline-none"
                 onClick={() => setNotification(null)}

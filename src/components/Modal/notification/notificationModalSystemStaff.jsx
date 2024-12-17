@@ -1,9 +1,8 @@
-import React from "react";
 import { Link } from "react-router-dom";
 import { markReadById } from "../../../service/notificationService/notiicationAPI";
-
+import React, { useRef, useEffect } from "react";
 const NotificationModalSystemStaff = ({ onClose, content, onMarkAllRead }) => {
-
+    const modalRef = useRef(null);
     const handleMarkRead = async (notiId) => {
         try {
             await markReadById(notiId)
@@ -13,9 +12,23 @@ const NotificationModalSystemStaff = ({ onClose, content, onMarkAllRead }) => {
         }
 
     }
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (modalRef.current && !modalRef.current.contains(event.target)) {
+                onClose(); // Close the modal if clicked outside
+            }
+        };
 
+        document.addEventListener("mousedown", handleClickOutside);
+
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, [onClose]);
     return (
-        <div className="absolute left-6 top-6 right-0 w-96 bg-slate-50 border-2 rounded-lg shadow-xl z-50">
+        <div
+            ref={modalRef}
+            className="absolute left-6 top-6 right-0 w-96 bg-slate-50 border-2 rounded-lg shadow-xl z-50">
             <div className="p-4 border-b flex justify-between items-center">
                 <h2 className="text-lg font-bold text-gray-800">Thông báo hệ thống</h2>
                 <button

@@ -19,6 +19,7 @@ const Feedback = () => {
       if (data.status === 200) {
         setResorts(data.data.content);
         setTotalPages(data.data.totalPages);
+        console.log(data.data.content)
         setLoading(false);
       }
     } catch (error) {

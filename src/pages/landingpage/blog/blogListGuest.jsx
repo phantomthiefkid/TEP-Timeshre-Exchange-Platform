@@ -13,7 +13,7 @@ const BlogListGuest = () => {
     const [totalPages, setTotalPages] = useState(1); // Total pages
     const [loading, setLoading] = useState(true);
     const [isVisible, setIsVisible] = useState(false);
-   
+
     const toggleVisibility = () => {
         if (window.scrollY > 300) {
             setIsVisible(true);
@@ -59,54 +59,55 @@ const BlogListGuest = () => {
         {
             "name": "Hạ Long",
             "img": "https://vcdn1-dulich.vnecdn.net/2022/05/07/vinhHaLongQuangNinh-1651912066-8789-1651932294.jpg?w=0&h=0&q=100&dpr=2&fit=crop&s=bAYE9-ifwt-9mB2amIjnqg",
-            "description": "Hạ Long Bay, located in northeastern Vietnam, is famous for its emerald waters and thousands of towering limestone islands topped with rainforests."
+            "description": "Vịnh Hạ Long, nằm ở phía đông bắc Việt Nam, nổi tiếng với làn nước màu ngọc lục bảo và hàng ngàn đảo đá vôi cao chót vót được bao phủ bởi rừng mưa."
         },
         {
             "name": "Đà Nẵng",
             "img": "https://vcdn1-dulich.vnecdn.net/2022/06/03/cauvang-1654247842-9403-1654247849.jpg?w=1200&h=0&q=100&dpr=1&fit=crop&s=Swd6JjpStebEzT6WARcoOA",
-            "description": "Đà Nẵng is a coastal city known for its sandy beaches, the Marble Mountains, and the iconic Golden Bridge held up by giant stone hands."
+            "description": "Đà Nẵng là một thành phố ven biển nổi tiếng với những bãi biển cát trắng, Ngũ Hành Sơn, và Cầu Vàng mang tính biểu tượng được nâng đỡ bởi đôi bàn tay khổng lồ."
         },
         {
             "name": "Hội An",
             "img": "https://cdn3.ivivu.com/2023/10/du-lich-hoi-an-ivivu-img1.jpg",
-            "description": "Hội An is a well-preserved ancient town famous for its traditional wooden houses, narrow streets, and lantern-lit evenings."
+            "description": "Hội An là một phố cổ được bảo tồn tốt, nổi tiếng với những ngôi nhà gỗ truyền thống, các con phố hẹp và buổi tối rực rỡ ánh đèn lồng."
         },
         {
             "name": "Sapa",
             "img": "https://divui.com/blog/wp-content/uploads/2018/10/sapa.jpg",
-            "description": "Sapa, located in the northwest of Vietnam, is known for its terraced rice fields, ethnic minorities, and breathtaking mountain views."
+            "description": "Sapa, nằm ở phía tây bắc Việt Nam, nổi tiếng với những thửa ruộng bậc thang, cộng đồng dân tộc thiểu số và phong cảnh núi non hùng vĩ."
         },
         {
             "name": "Phú Quốc",
             "img": "https://anhdulich.vn/storage/album-anh/phu-quoc/phuquoc1-vepp.jpg",
-            "description": "Phú Quốc is an island paradise with clear blue waters, pristine beaches, and a laid-back atmosphere, ideal for relaxation and water sports."
+            "description": "Phú Quốc là một hòn đảo thiên đường với làn nước trong xanh, bãi biển hoang sơ và bầu không khí thư giãn, lý tưởng để nghỉ ngơi và tham gia các môn thể thao dưới nước."
         },
         {
             "name": "Nha Trang",
             "img": "https://angialand.com.vn/wp-content/uploads/2022/02/Anh-thu-te-hoang-hon-Vega-City-Nha-Trang-1.jpg",
-            "description": "Nha Trang is a coastal resort city known for its beautiful beaches, hot springs, and a vibrant nightlife."
+            "description": "Nha Trang là một thành phố nghỉ dưỡng ven biển nổi tiếng với những bãi biển đẹp, suối nước nóng và cuộc sống về đêm sôi động."
         },
         {
             "name": "Mũi Né",
             "img": "https://malibumuineresort.com/Uploads/images/BaiViet/we.jpeg",
-            "description": "Mũi Né is famous for its vast sand dunes, beaches, and windsurfing spots along the coast of southern Vietnam."
+            "description": "Mũi Né nổi tiếng với những đồi cát rộng lớn, bãi biển và các điểm lướt ván dọc theo bờ biển phía nam Việt Nam."
         },
         {
             "name": "Ninh Bình",
             "img": "https://onevivu.vn/wp-content/uploads/2020/10/Du-lich-Trang-An-Ninh-Binh-1.jpg",
-            "description": "Ninh Bình is known for its natural landscapes, including limestone karsts, caves, and tranquil river tours in the Trang An Scenic Landscape Complex."
+            "description": "Ninh Bình nổi tiếng với phong cảnh thiên nhiên, bao gồm các dãy núi đá vôi, hang động và các chuyến tham quan sông yên bình trong Quần thể danh thắng Tràng An."
         },
         {
             "name": "Vũng Tàu",
             "img": "https://locphatland.com/wp-content/uploads/2021/08/ba-ria-vung-tau.jpeg",
-            "description": "Vũng Tàu is a coastal city offering beautiful beaches, seafood, and historical sites such as the Christ of Vũng Tàu statue."
+            "description": "Vũng Tàu là một thành phố ven biển với những bãi biển đẹp, hải sản tươi ngon và các di tích lịch sử như tượng Chúa Kitô Vua ở Vũng Tàu."
         },
         {
             "name": "Huế",
             "img": "https://huedailytour.net/wp-content/uploads/2023/02/DAI-NOI.jpeg",
-            "description": "Huế is an ancient city rich in culture and history, home to the Imperial City, ancient temples, and royal tombs."
+            "description": "Huế là một thành phố cổ giàu văn hóa và lịch sử, nổi tiếng với Kinh Thành Huế, các ngôi chùa cổ kính và lăng tẩm hoàng gia."
         }
-    ];
+    ]
+        ;
 
 
 
@@ -261,7 +262,7 @@ const BlogListGuest = () => {
                                     className="w-full h-72 object-cover transition duration-300 group-hover:blur-sm"
                                 />
                                 <div className="absolute inset-0 bg-black bg-opacity-30 group-hover:bg-opacity-50 transition"></div>
-                               
+
                                 {/* Show description on hover */}
                                 <div className="absolute inset-0 flex justify-center items-center opacity-0 group-hover:opacity-100 transition-all duration-300 p-4">
                                     <p className="text-white  p-4 rounded-md text-xs sm:text-sm">

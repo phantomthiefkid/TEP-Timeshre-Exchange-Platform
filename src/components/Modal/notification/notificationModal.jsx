@@ -16,12 +16,12 @@ const NotificationDropdown = ({ onClose, content }) => {
         <div className="absolute left-6 top-6 right-0 w-96 bg-slate-50 border-2 rounded-lg shadow-xl z-50">
             <div className="p-4 border-b flex justify-between items-center">
                 <h2 className="text-lg font-bold text-gray-800">Thông báo hệ thống</h2>
-                <button
-
+                <h3
+                   
                     className="text-sm text-blue-600 hover:underline"
                 >
                     Đánh dấu tất cả đã xem
-                </button>
+                </h3>
             </div>
             <div className="p-4 space-y-3">
                 {content.length > 0 ? (
@@ -31,7 +31,7 @@ const NotificationDropdown = ({ onClose, content }) => {
                                 key={index}
                                 className="bg-gray-50 relative p-4 rounded-lg shadow-sm hover:bg-slate-100 flex items-start space-x-3"
                             >
-                             
+
                                 <img
                                     src="https://unwinds.s3.ap-southeast-2.amazonaws.com/1732484223950_2 (2).png"
                                     alt="Logo"
@@ -42,14 +42,14 @@ const NotificationDropdown = ({ onClose, content }) => {
                                     <h3 className="text-sm font-bold text-gray-800">{item.title}</h3>
                                     <Link
                                         onClick={() => {
-                                            if (!item.isRead) handleMarkRead(item.id); 
+                                            if (!item.isRead) handleMarkRead(item.id);
                                         }}
                                         to={
                                             item.type === "RentalPosting"
                                                 ? "/timesharestaff/rentalpostingmanagement"
                                                 : item.type === "ExchangePosting"
                                                     ? "/timesharestaff/exchangepostingmanagement"
-                                                    : "/timesharestaff/exchangeverifymanagement" 
+                                                    : "/timesharestaff/exchangeverifymanagement"
                                         }
                                     >
                                         <p className="text-sm text-gray-600">{item.content}</p>

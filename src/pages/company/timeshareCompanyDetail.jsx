@@ -32,6 +32,7 @@ const TimeshareCompanyDetail = () => {
       const response = await getTimeshareCompanyDetail(tsId);
       if (response.status === 200) {
         setCompanyDetail(response.data);
+        console.log(response.data)
         setLoading(false);
       }
     } catch (error) {
@@ -47,6 +48,7 @@ const TimeshareCompanyDetail = () => {
       if (resortList.status === 200) {
         setResort(resortList.data.content);
         setTotalPages(resortList.data.totalPages);
+        console.log(resortList.data.content)
       }
     } catch (error) {
       throw error;
@@ -214,8 +216,8 @@ const TimeshareCompanyDetail = () => {
           <div className="col-span-4 lg:col-span-4 relative h-screen">
             <MapContainer
               center={[
-                companyDetail.location.latitude || 21.028511,
-                companyDetail.location.longitude || 105.804817,
+                companyDetail.location && companyDetail.location.latitude || 21.028511,
+                companyDetail.location && companyDetail.location.longitude || 105.804817,
               ]}
               zoom={9}
               className="w-full h-screen"

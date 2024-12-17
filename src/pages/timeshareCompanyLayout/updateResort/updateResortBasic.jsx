@@ -79,7 +79,6 @@ const UpdateResortBasic = () => {
         resortAmenityList,
         imageUrls,
       };
-      console.log(newResort, "123");
 
       // Update both current resort data and the original resort data for comparison
       setResort(newResort);
@@ -111,6 +110,7 @@ const UpdateResortBasic = () => {
       }));
     }
   };
+
 
   const handleUpdate = async () => {
     setIsSpinner(true);

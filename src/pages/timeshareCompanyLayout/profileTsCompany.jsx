@@ -27,13 +27,14 @@ import {
   XIcon,
 } from "@heroicons/react/solid";
 import SpinnerWaiting from "../../components/LoadingComponent/spinnerWaiting";
-
+import { MapContainer, Marker, Popup, TileLayer, useMap } from "react-leaflet";
+import { GeoSearchControl, OpenStreetMapProvider } from "leaflet-geosearch";
 const ProfileTsCompany = () => {
   const [profile, setProfile] = useState({});
   const [isEditing, setIsEditing] = useState(false);
   const [updatedCompanyName, setUpdatedCompanyName] = useState("");
   const [description, setDescription] = useState("");
-  const [address, setAddress] = useState("");
+  const [address, setAddress] = useState(null);
   const [contact, setContact] = useState("");
   const [logo, setLogo] = useState("");
   const [originalLogo, setOriginalLogo] = useState("");
@@ -43,6 +44,7 @@ const ProfileTsCompany = () => {
   const [selectedImage, setSelectedImage] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [waitingProfile, setWaitingProfile] = useState(true);
+  const [isSpinner, setIsSpinner] = useState(false);
   const fetchProfileTsCompany = async () => {
     try {
       let data = await getProfileTsCompany();
@@ -50,33 +52,33 @@ const ProfileTsCompany = () => {
         const {
           timeshareCompanyName,
           logo,
-          address,
+          location,
           description,
           contact,
           imageUrls,
         } = data.data;
-
         setUpdatedCompanyName(timeshareCompanyName);
         setDescription(description);
-        setAddress(address);
+        setAddress(location);
         setContact(contact);
         setImageUrls(imageUrls);
         setImageUrlsOrigin(imageUrls);
         setLogo(logo);
         setOriginalLogo(logo);
-
         setProfile({
           timeshareCompanyName,
           logo,
-          address,
+          location,
           description,
           contact,
           imageUrls,
         });
-        setWaitingProfile(false);
+
       }
     } catch (error) {
       throw error;
+    } finally {
+      setWaitingProfile(false);
     }
   };
 
@@ -89,12 +91,42 @@ const ProfileTsCompany = () => {
     setIsEditing(true);
   };
 
-  const handleSaveClick = () => {
-    setProfile((prev) => ({
-      ...prev,
-      timeshareCompanyName: updatedCompanyName,
-    }));
-    setIsEditing(false);
+  const GeoSearch = () => {
+    const map = useMap();
+
+    useEffect(() => {
+      const provider = new OpenStreetMapProvider();
+      const searchControl = new GeoSearchControl({
+        provider,
+        style: "bar",
+        showMarker: true,
+        autoClose: true,
+        keepResult: true,
+        searchLabel: "Nhập địa chỉ",
+      });
+
+      map.addControl(searchControl);
+
+      map.on("geosearch/showlocation", (event) => {
+        const { x: longitude, y: latitude, raw } = event.location;
+
+        setProfile((prevProfile) => ({
+          ...prevProfile,
+          location: {
+            ...prevProfile.location,
+            name: raw.name,
+            displayName: raw.display_name,
+            latitude,
+            longitude,
+            placeId: raw.place_id,
+          },
+        }));
+      });
+
+      return () => map.removeControl(searchControl);
+    }, [map]);
+
+    return null;
   };
 
   useEffect(() => {
@@ -102,11 +134,12 @@ const ProfileTsCompany = () => {
   }, []);
 
   const handleUpdateProfileCompany = async () => {
-    setIsLoading(true);
+    // setIsLoading(true);
+    setIsSpinner(true)
     const dataUpdate = {
       timeshareCompanyName: updatedCompanyName,
       description: description,
-      address: address,
+      location: profile.location,
       contact: contact,
       logo: logo,
       imageUrls: imageUrls,
@@ -119,6 +152,7 @@ const ProfileTsCompany = () => {
         setIsEditing(false);
         fetchProfileTsCompany();
         toast.success("Cập nhật thành công!!", { duration: 3000 });
+        setIsSpinner(false)
       } else {
         console.error("Error updating profile.");
         toast.error("Xảy ra lỗi!!", { duration: 3000 });
@@ -127,7 +161,9 @@ const ProfileTsCompany = () => {
       throw error;
     } finally {
       setIsLoading(false); // Kết thúc quá trình lưu
+      setIsSpinner(false)
     }
+
   };
 
   const handleFileUpload = async (e) => {
@@ -139,7 +175,7 @@ const ProfileTsCompany = () => {
       if (response.status === 200) {
         setLogo(response.data[0]);
       }
-    } catch (error) {}
+    } catch (error) { }
   };
 
   const handleSelectAndUploadImages = async (e) => {
@@ -186,7 +222,7 @@ const ProfileTsCompany = () => {
         <div className="absolute top-4 right-4">
           {!isEditing ? (
             <button
-              className="flex items-center gap-3 px-10 py-3 bg-gradient-to-r from-lime-300 to-green-700 text-white rounded-full shadow-lg hover:scale-105 hover:shadow-2xl transition"
+              className="flex items-center gap-3 px-10 py-3 bg-gradient-to-r from-sky-400 to-blue-600 text-white rounded-full shadow-lg hover:scale-105 hover:shadow-2xl transition"
               onClick={handleEditClick}
             >
               <FaEdit className="h-5 w-5" />
@@ -208,8 +244,8 @@ const ProfileTsCompany = () => {
                 {isLoading ? (
                   <FaSpinner className="h-5 w-5 animate-spin" /> // Spinner khi đang tải
                 ) : (
-                  <span className="text-md flex gap-4 items-center">
-                    <FaSave className="h-5 w-5" /> Lưu thay đổi
+                  <span className={`text-md flex gap-4 items-center ${isSpinner ? "animate-spin" : "hover:scale-110"}`}>
+                    {isSpinner ? (<FaSpinner className="h-5 w-5" />) : (<FaSave className="h-5 w-5" />)}
                   </span>
                 )}
               </button>
@@ -240,50 +276,28 @@ const ProfileTsCompany = () => {
                       type="text"
                       value={updatedCompanyName}
                       onChange={(e) => setUpdatedCompanyName(e.target.value)}
-                      className="w-full border-2 border-sky-300 rounded-md py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-200 text-sm text-gray-700"
+                      className="w-full border-2 rounded-md py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-200 text-lg text-gray-700"
                     />
                   </div>
                 )}
               </h1>
 
-              {/* Địa chỉ */}
-              <p className="text-lg mt-6">
-                {!isEditing ? (
-                  <span className="flex items-center gap-2 text-gray-700">
-                    <LocationMarkerIcon className="w-6 h-6 text-red-500" />
-                    <strong>Địa chỉ:</strong>{" "}
-                    {profile.address || "Không có thông tin"}
-                  </span>
-                ) : (
-                  <div className="flex flex-col">
-                    <label
-                      htmlFor="address"
-                      className="text-xl font-semibold text-gray-700 mb-2"
-                    >
-                      Địa chỉ:
-                    </label>
-                    <input
-                      id="address"
-                      type="text"
-                      value={address}
-                      onChange={(e) => setAddress(e.target.value)}
-                      className="w-full border-2 border-sky-300 rounded-md py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-200 text-sm text-gray-700"
-                    />
-                  </div>
-                )}
-              </p>
-
               {/* Giới thiệu */}
               <p className="text-lg mt-6">
                 {!isEditing ? (
-                  <span className="text-gray-700  gap-2">
-                    <strong className="flex gap-2">
-                      {" "}
-                      <InformationCircleIcon className="w-6 h-6 text-blue-500" />
-                      Giới thiệu
-                    </strong>{" "}
-                    {profile.description || "Không có thông tin"}
-                  </span>
+                  <p className="flex flex-col text-gray-700">
+                    <div className="flex items-center gap-2">
+                      <strong className="flex gap-2">
+                        {" "}
+                        <InformationCircleIcon className="w-6 h-6 text-blue-500" />
+                        Giới thiệu
+                      </strong>{" "}
+                    </div>
+
+                    <span className="pl-8">
+                      {profile.description || "Không có thông tin"}
+                    </span>
+                  </p>
                 ) : (
                   <div className="flex flex-col">
                     <label
@@ -298,7 +312,7 @@ const ProfileTsCompany = () => {
                       rows={4}
                       value={description}
                       onChange={(e) => setDescription(e.target.value)}
-                      className="w-full border-2 border-sky-300 rounded-md py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-200 text-sm text-gray-700"
+                      className="w-full border-2 rounded-md py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-200 text-lg text-gray-700"
                     />
                   </div>
                 )}
@@ -324,7 +338,7 @@ const ProfileTsCompany = () => {
                       type="text"
                       value={contact}
                       onChange={(e) => setContact(e.target.value)}
-                      className="w-full border-2 border-sky-300 rounded-md py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-200 text-xl text-gray-700"
+                      className="w-full border-2 rounded-md py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-200 text-lg text-gray-700"
                     />
                   </div>
                 )}
@@ -371,55 +385,55 @@ const ProfileTsCompany = () => {
                   </div>
                 )
               ) : // During editing, show the current image and the "X" icon to remove
-              logo ? (
-                <div className="relative flex flex-col items-center">
-                  <img
-                    src={logo || "https://via.placeholder.com/300"}
-                    alt={profile.timeshareCompanyName || "Current Logo"}
-                    className="w-full h-auto object-contain mt-10 rounded-lg shadow-lg border-2"
-                  />
-                  <button
-                    onClick={() => setLogo("")}
-                    className="absolute top-14 right-2 bg-red-500 text-white rounded-full p-2 hover:bg-red-600 transition"
-                    title="Remove Image"
-                  >
-                    <FaTimes />
-                  </button>
-                </div>
-              ) : (
-                <div className="flex flex-col items-center justify-center space-y-4 mt-10 w-full">
-                  <p className="text-lg text-gray-600 font-medium">
-                    Chưa có logo. Vui lòng tải lên.
-                  </p>
-
-                  <div className="flex flex-col items-center space-y-4">
-                    <button
-                      onClick={() =>
-                        document.getElementById("logo-upload-input").click()
-                      }
-                      className="flex items-center px-6 py-3 bg-gradient-to-r from-teal-400 to-teal-600 text-white font-semibold rounded-lg shadow-lg transform transition-all hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-teal-300 space-x-3"
-                    >
-                      <FaUpload className="w-5 h-5 text-white" />
-                      <span>Tải logo lên</span>
-                    </button>
-
-                    <input
-                      type="file"
-                      id="logo-upload-input"
-                      className="hidden"
-                      accept="image/*"
-                      onChange={handleFileUpload}
+                logo ? (
+                  <div className="relative flex flex-col items-center">
+                    <img
+                      src={logo || "https://via.placeholder.com/300"}
+                      alt={profile.timeshareCompanyName || "Current Logo"}
+                      className="w-full h-auto object-contain mt-10 rounded-lg shadow-lg border-2"
                     />
+                    <button
+                      onClick={() => setLogo("")}
+                      className="absolute top-14 right-2 bg-red-500 text-white rounded-full p-2 hover:bg-red-600 transition"
+                      title="Remove Image"
+                    >
+                      <FaTimes />
+                    </button>
                   </div>
-
-                  <div className="text-sm text-gray-500 mt-2">
-                    <p className="italic">
-                      Chúng tôi hỗ trợ các định dạng hình ảnh như PNG, JPEG,
-                      hoặc JPG.
+                ) : (
+                  <div className="flex flex-col items-center justify-center space-y-4 mt-10 w-full">
+                    <p className="text-lg text-gray-600 font-medium">
+                      Chưa có logo. Vui lòng tải lên.
                     </p>
+
+                    <div className="flex flex-col items-center space-y-4">
+                      <button
+                        onClick={() =>
+                          document.getElementById("logo-upload-input").click()
+                        }
+                        className="flex items-center px-6 py-3 bg-gradient-to-r from-teal-400 to-teal-600 text-white font-semibold rounded-lg shadow-lg transform transition-all hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-teal-300 space-x-3"
+                      >
+                        <FaUpload className="w-5 h-5 text-white" />
+                        <span>Tải logo lên</span>
+                      </button>
+
+                      <input
+                        type="file"
+                        id="logo-upload-input"
+                        className="hidden"
+                        accept="image/*"
+                        onChange={handleFileUpload}
+                      />
+                    </div>
+
+                    <div className="text-sm text-gray-500 mt-2">
+                      <p className="italic">
+                        Chúng tôi hỗ trợ các định dạng hình ảnh như PNG, JPEG,
+                        hoặc JPG.
+                      </p>
+                    </div>
                   </div>
-                </div>
-              )}
+                )}
             </div>
           </div>
         </div>
@@ -435,6 +449,9 @@ const ProfileTsCompany = () => {
               <label
                 htmlFor="photo-upload-input"
                 className="inline-flex items-center gap-2 cursor-pointer"
+                onClick={() =>
+                  document.getElementById("photo-upload-input").click()
+                }
               >
                 <input
                   type="file"
@@ -510,11 +527,10 @@ const ProfileTsCompany = () => {
                       <SwiperSlide key={index}>
                         <img
                           src={image}
-                          className={`h-[100px] w-full object-cover rounded-lg cursor-pointer ${
-                            selectedImage === index
-                              ? "border-4 border-blue-500"
-                              : ""
-                          }`} // Highlight the selected image
+                          className={`h-[100px] w-full object-cover rounded-lg cursor-pointer ${selectedImage === index
+                            ? "border-4 border-blue-500"
+                            : ""
+                            }`} // Highlight the selected image
                           alt={`Thumbnail ${index}`}
                           onClick={() => setSelectedImage(image)} // Set image on click
                         />
@@ -525,6 +541,53 @@ const ProfileTsCompany = () => {
             </div>
           )}
         </div>
+        <div className="w-full z-0">
+          <div className="bg-white shadow-md rounded-lg p-4 flex flex-col space-y-2">
+            <div className="flex items-center gap-3">
+              <div className="flex items-center justify-center w-10 h-10 bg-red-100 text-red-600 rounded-full">
+                <LocationMarkerIcon className="w-6 h-6" />
+              </div>
+              <div>
+                <p className="text-base font-semibold text-gray-800">
+                  {profile.location.displayName || "Chưa có địa chỉ"}
+                </p>
+                
+              </div>
+            </div>
+            {isEditing && (<p className="text-gray-500 text-sm text-center">
+              Nhập địa chỉ bằng thanh tìm kiếm trên bản đồ để cập nhật.
+            </p>)}
+          </div>
+
+          <div className="w-full h-80 rounded-lg shadow-md mt-4 z-0">
+            <MapContainer
+              center={[
+                profile.location.latitude || 21.028511,
+                profile.location.longitude || 105.804817,
+              ]}
+              zoom={24}
+              className="h-full rounded-lg z-51"
+            >
+              <TileLayer
+                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              />
+              {profile.location && (
+                <Marker
+                  className="z-0"
+                  position={[
+                    profile.location.latitude,
+                    profile.location.longitude,
+                  ]}
+                >
+                  <Popup>{profile.location.displayName}</Popup>
+                </Marker>
+              )}
+              {isEditing && (<GeoSearch />)}
+            </MapContainer>
+          </div>
+        </div>
+
       </div>
     </div>
   );

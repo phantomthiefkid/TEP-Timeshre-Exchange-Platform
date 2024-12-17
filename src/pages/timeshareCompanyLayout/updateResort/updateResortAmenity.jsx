@@ -240,7 +240,7 @@ const UpdateResortAmenity = ({ resortSelect, flag }) => {
             {isSpinner ? "Đợi trong giây lát..." : "Cập nhật"}
           </span>
           <span
-            className={`text-white w-8 h-8 flex items-center justify-center rounded-full shadow-md transform transition-all duration-300 ${isSpinner ? "animate-spin" : "hover:scale-110"
+            className={`${isSpinner ? "animate-spin" : "hover:scale-110"} text-white w-8 h-8 flex items-center justify-center rounded-full shadow-md transform transition-all duration-300 ${isSpinner ? "animate-spin" : "hover:scale-110"
               }`}
           >
             {isSpinner ? <FaSpinner /> : <FaSave />}
