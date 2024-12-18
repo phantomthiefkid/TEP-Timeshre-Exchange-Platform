@@ -63,7 +63,7 @@ const employeeManagement = () => {
     try {
       if (newTimeshareStaff) {
         let data = await createTimeshareStaff(newTimeshareStaff);
-        if (data.status === 200 || data.status === 400) {
+        if (data.status === 200) {
           toast.success("Tạo mới thành công", { duration: 2000 });
         } else {
           toast.error("Tạo mới thất bại", { duration: 2000 });
@@ -115,12 +115,14 @@ const employeeManagement = () => {
         <div className="flex justify-between items-center mb-6">
           <div className="py-4 px-6 space-y-4 border-l-4 border-blue-500 bg-gray-50 rounded-lg shadow-lg">
             <h1 className="text-4xl font-bold text-gray-700">
-              Quản lý Nhân viên <span className="text-blue-600">tối ưu</span> đội ngũ
+              Quản lý Nhân viên <span className="text-blue-600">tối ưu</span>{" "}
+              đội ngũ
             </h1>
             <h3 className="text-lg text-gray-500">
               <span className="font-semibold text-blue-600">
                 Theo dõi thông tin nhân sự
-              </span>, trạng thái hoạt động và hiệu quả làm việc.
+              </span>
+              , trạng thái hoạt động và hiệu quả làm việc.
             </h3>
           </div>
           <div className="p-4 flex items-center rounded-xl bg-gradient-to-r from-green-400 to-teal-500 text-white shadow-lg transform transition-transform duration-300 hover:shadow-xl">
@@ -135,7 +137,6 @@ const employeeManagement = () => {
             </div>
           </div>
         </div>
-
 
         <div className="flex justify-end items-center px-6">
           <div className="flex space-x-4">
@@ -225,10 +226,11 @@ const employeeManagement = () => {
                   <button
                     key={index}
                     onClick={() => setPage(index)}
-                    className={`w-8 h-8 flex items-center justify-center rounded-full ${index === page
+                    className={`w-8 h-8 flex items-center justify-center rounded-full ${
+                      index === page
                         ? "bg-blue-500 text-white"
                         : "bg-white text-gray-500"
-                      }`}
+                    }`}
                   >
                     {index + 1}
                   </button>

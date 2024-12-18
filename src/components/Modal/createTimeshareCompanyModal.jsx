@@ -80,7 +80,7 @@ const createTimeshareCompanyModal = ({ isOpen, onClose, onCreate }) => {
 
     try {
       let response = await createTimeshareCompany(newTimeshareCompany);
-      if (response.status === 200) {
+      if (response.status === 200 || response.status === 400) {
         toast.success("Tạo mới thành công", { duration: 2000 });
       } else {
         toast.error("Tạo mới thất bại", { duration: 2000 });
@@ -125,7 +125,6 @@ const createTimeshareCompanyModal = ({ isOpen, onClose, onCreate }) => {
       map.addControl(searchControl);
 
       map.on("geosearch/showlocation", (event) => {
-        console.log("Search Result:", event);
         const { x: longitude, y: latitude, raw } = event.location;
 
         setLocation({
@@ -136,7 +135,6 @@ const createTimeshareCompanyModal = ({ isOpen, onClose, onCreate }) => {
           placeId: raw.place_id,
         });
       });
-      console.log("affter", location);
 
       return () => map.removeControl(searchControl);
     }, [map, setLocation]);

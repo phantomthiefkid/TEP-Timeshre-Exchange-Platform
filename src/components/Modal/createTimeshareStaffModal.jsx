@@ -12,32 +12,19 @@ const createTimeshareStaffModal = ({ isOpen, onClose, onCreate }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
 
-  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Pass form data to the parent component for further processing
     const newTimeshareStaff = {
       userName,
       password,
     };
+    onCreate(newTimeshareStaff);
+    setUserName("");
+    setPassword("");
 
-    try {
-      let response = await createTimeshareStaff(newTimeshareStaff);
-      if (response.status === 200) {
-        toast.success("Tạo mới thành công", { duration: 2000 });
-      } else {
-        toast.error("Tạo mới thất bại", { duration: 2000 });
-      }
-      onCreate(response.data);
-      setUserName("");
-      setPassword("");
-
-      onClose();
-    } catch (error) {
-      console.error("Error creating staff:", error.response || error);
-      setError("Failed to create staff. Please try again.");
-    }
+    // Close modal
+    onClose();
   };
 
   if (!isOpen) return null;
@@ -52,7 +39,7 @@ const createTimeshareStaffModal = ({ isOpen, onClose, onCreate }) => {
         <div className="flex justify-center mb-4 py-4">
           <button
             onClick={onClose}
-            className="absolute top-[20%] right-[39%] text-gray-500 hover:text-red-500 focus:outline-none"
+            className="absolute top-[30%] right-[39%] text-gray-500 hover:text-red-500 focus:outline-none"
           >
             <FaXmark size={24} />
           </button>
