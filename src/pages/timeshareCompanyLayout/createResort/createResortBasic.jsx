@@ -424,7 +424,7 @@ const CreateResortBasic = ({ onNext, onUpdateData, formData }) => {
                       <img
                         src={url}
                         alt={`Resort Image ${index + 1}`}
-                        className="w-28 h-24 object-cover border-4 border-white rounded-md transition-transform duration-300 ease-in-out transform hover:scale-105"
+                        className="w-28 h-24 object-cover border-white rounded-md transition-transform duration-300 ease-in-out transform hover:scale-105"
                       />
 
                       {/* Icon xóa */}

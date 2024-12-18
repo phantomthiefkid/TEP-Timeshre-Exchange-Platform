@@ -68,6 +68,7 @@ const CreateResort = () => {
         const resortId = data.data.id;
         dispatch(setResortId(resortId));
         setLoading(false);
+        
       } else {
         toast.error("Tạo thất bại!", { duration: 2000 });
       }
