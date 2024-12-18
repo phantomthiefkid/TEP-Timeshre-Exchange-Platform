@@ -23,13 +23,13 @@ export const menuAdminItem = [
     visible: true,
     color: "#C49A68",
   },
-  {
-    path: "tracklogmanagement",
-    name: "Track log",
-    icon: <ClipboardCheckIcon className="h-6 w-6" />,
-    visible: true,
-    color: "#4361EE",
-  },
+  // {
+  //   path: "tracklogmanagement",
+  //   name: "Track log",
+  //   icon: <ClipboardCheckIcon className="h-6 w-6" />,
+  //   visible: true,
+  //   color: "#4361EE",
+  // },
 ];
 
 export const menuSystemStaffItem = [

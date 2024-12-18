@@ -167,6 +167,14 @@ const getTotalCompany = async () => {
   }
 };
 
+const getTotalRevenue = async () => {
+  try {
+    return await axiosConfig.get(`system-staff/dashboard/revuenue`);
+  } catch (error) {
+    return error;
+  }
+};
+
 const getAllTransaction = async (page, size, walletTransactionEnum) => {
   try {
     return await axiosConfig.get(`wallet/system-staff/wallet-transaction`, {
@@ -278,4 +286,5 @@ export {
   createFaq,
   deActivateBlog,
   getPackageByDate,
+  getTotalRevenue,
 };
