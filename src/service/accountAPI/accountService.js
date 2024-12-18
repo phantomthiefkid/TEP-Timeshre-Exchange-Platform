@@ -11,10 +11,10 @@ const postLogin = async (userCredentials) => {
 
 const getAccountInfo = async (userId) => {
   try {
-    console.log("Redux", userId);
+    
     return await axiosConfig.get(`/admin/users/${userId}`);
   } catch (error) {
-    console.error("Login error:", error);
+    
     return error.response;
   }
 };

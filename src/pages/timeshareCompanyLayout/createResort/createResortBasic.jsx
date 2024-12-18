@@ -63,7 +63,7 @@ const CreateResortBasic = ({ onNext, onUpdateData, formData }) => {
   };
 
   const handleNext = () => {
-    console.log(resortData);
+   
     onNext();
   };
 
@@ -89,7 +89,7 @@ const CreateResortBasic = ({ onNext, onUpdateData, formData }) => {
       console.error("Error uploading logo image:", error);
     }
   };
-console.log(resortData)
+
   const handleRemoveLogo = () => {
     setResortData((prevData) => ({ ...prevData, logo: null }));
     onUpdateData({
@@ -100,14 +100,14 @@ console.log(resortData)
     const files = Array.from(e.target.files);
     const urls = files.map((file) => URL.createObjectURL(file));
 
-    // Cập nhật URL tạm thời để hiển thị trước khi upload
+ 
     setlistUrlImage((prevUrls) => [...prevUrls, ...urls]);
 
-    // Tạo bản sao của imageUrls hiện có
+    
     const updatedImageUrls = [...resortData.imageUrls];
 
     try {
-      // Lặp qua từng file, upload và cập nhật URL
+     
       for (const file of files) {
         const formData = new FormData();
         formData.append("file", file);
@@ -424,7 +424,7 @@ console.log(resortData)
                       <img
                         src={url}
                         alt={`Resort Image ${index + 1}`}
-                        className="w-28 h-24 object-cover border-4 border-white rounded-md transition-transform duration-300 ease-in-out transform hover:scale-105"
+                        className="w-28 h-24 object-cover border-white rounded-md transition-transform duration-300 ease-in-out transform hover:scale-105"
                       />
 
                       {/* Icon xóa */}

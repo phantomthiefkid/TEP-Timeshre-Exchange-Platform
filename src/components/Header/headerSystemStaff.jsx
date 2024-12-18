@@ -13,7 +13,7 @@ const HeaderSystemStaff = () => {
   const [list, setList] = useState([])
   const [notification, setNotification] = useState(null);
   const FCM_TOKEN = localStorage.getItem("FCM_TOKEN")
-
+  
 
   const toggleNotificationDropdown = async () => {
     try {
@@ -39,25 +39,24 @@ const HeaderSystemStaff = () => {
   }
   subcribe()
   useEffect(() => {
-    // Listen for messages
+    
     listenForMessages(setNotification);
 
     const timer = setTimeout(() => {
-      // Trigger notification or perform some action
+     
       setNotification(null);
     }, 5000);
 
-    // Cleanup the timer when the component unmounts or FCM_TOKEN changes
     return () => clearTimeout(timer);
 
-  }, [FCM_TOKEN, setNotification]);
+  }, [FCM_TOKEN, notification]);
 
   const handleMarkAll = async () => {
     try {
-      // Mark all notifications as read
+      
       await markReadByTopic("systemstaff");
 
-      // Fetch the updated notifications list
+      
       let updatedData = await getNotificationByTopic("systemstaff", 0, 10);
       if (updatedData.status === 200) {
         setList(updatedData.data.content);
@@ -68,7 +67,9 @@ const HeaderSystemStaff = () => {
   };
 
  
-
+  const handleOnClose = () => {
+    setIsNotificationOpen((prev) => prev);
+  }
 
   return (
     <>
@@ -95,7 +96,7 @@ const HeaderSystemStaff = () => {
               </span>
               {isNotificationOpen && (
 
-                <div className="absolute top-6 right-16 z-50"><NotificationModalSystemStaff onClose={() => setIsNotificationOpen(false)} content={list} onMarkAllRead={handleMarkAll} /></div>
+                <div className="absolute top-6 right-16 z-50"><NotificationModalSystemStaff onClose={handleOnClose} content={list} onMarkAllRead={handleMarkAll} onClick={() => setIsNotificationOpen(false)}/></div>
 
               )}
             </div>

@@ -5,24 +5,24 @@ import { FaArrowLeft, FaArrowRight, FaSpinner } from 'react-icons/fa6';
 const CreateResortAmenity = ({ onUpdateData, onNext, onBack, formData }) => {
   const [amenities, setAmenities] = useState([]);
 
-  // Separate states for each section
+  
   const [onSiteFeature, setOnSiteFeature] = useState('');
   const [nearbyAttraction, setNearbyAttraction] = useState('');
   const [policy, setPolicy] = useState('');
 
-  // Handle adding amenity based on type
+
   const handleAddAmenity = (name, type) => {
     if (name) {
       setAmenities([...amenities, { name, type }]);
 
-      // Clear the corresponding input field based on type
+     
       if (type === 'AMENITIES') setOnSiteFeature('');
       else if (type === 'NEARBY_ATTRACTIONS') setNearbyAttraction('');
       else if (type === 'POLICY') setPolicy('');
     }
   };
 
-  // Handle removing an amenity by name
+  
   const handleRemoveAmenity = (name) => {
     const updatedAmenities = amenities.filter((amenity) => amenity.name !== name);
     setAmenities(updatedAmenities);
@@ -35,7 +35,7 @@ const CreateResortAmenity = ({ onUpdateData, onNext, onBack, formData }) => {
     });
   }, [amenities])
 
-  // Handle form submit
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if (onNext) {

@@ -2,20 +2,19 @@ import axiosConfig from "../../util/axiosCustomize/axiosConfig"
 
 const subcribeToken = async (token, topic) => {
   try {
-    // Gửi params thông qua URL, đồng thời gửi token trong header
+  
     const response = await axiosConfig.post(
       `notification/staff/subscribe-token`,
-      null, // Không cần body vì params sẽ được gửi qua URL
+      null, 
       {
         params: {
-          token, // Gửi token như một tham số trong URL
-          topic, // Gửi topic vào URL dưới dạng params
+          token, 
+          topic, 
         }
       }
     );
     return response;
   } catch (error) {
-    console.error("Subscription failed:", error);
     return error.response ? error.response : error;
   }
 };
@@ -63,7 +62,7 @@ const markReadById = async (notiId) => {
 
 const markReadByTopic = async (topic) => {
   try {
-    const response = await axiosConfig.post(`notification/mark-read/all/topic`, {
+    const response = await axiosConfig.post(`notification/mark-read/all/topic`, {}, {
       params: {
         topic
       }
