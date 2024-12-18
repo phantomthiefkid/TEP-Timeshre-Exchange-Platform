@@ -78,34 +78,23 @@ const createTimeshareCompanyModal = ({ isOpen, onClose, onCreate }) => {
       isActive: true,
     };
 
-    try {
-      let response = await createTimeshareCompany(newTimeshareCompany);
-      if (response.status === 200 || response.status === 400) {
-        toast.success("Tạo mới thành công", { duration: 2000 });
-      } else {
-        toast.error("Tạo mới thất bại", { duration: 2000 });
-      }
-      onCreate(response.data);
-      setTimeshareCompanyName("");
-      setLogo("");
-      setLocation({
-        name: "",
-        displayName: "",
-        latitude: null,
-        longitude: null,
-        country: "",
-        placeId: "",
-      });
-      setDescription("");
-      setOwnerId("");
-      setContact("");
+    onCreate(newTimeshareCompany);
+    setTimeshareCompanyName("");
+    setLogo("");
+    setLocation({
+      name: "",
+      displayName: "",
+      latitude: null,
+      longitude: null,
+      country: "",
+      placeId: "",
+    });
+    setDescription("");
+    setOwnerId("");
+    setContact("");
 
-      // Close modal
-      onClose();
-    } catch (error) {
-      console.error("Error creating company:", error.response || error);
-      setError("Failed to create company. Please try again.");
-    }
+    // Close modal
+    onClose();
   };
 
   const GeoSearch = ({ setLocation }) => {
