@@ -35,7 +35,7 @@ import {
 import { FaHouseCircleCheck, FaUserGroup } from "react-icons/fa6";
 import CountUp from "react-countup";
 import { Link } from "react-router-dom";
-import { format } from "date-fns";
+import { differenceInDays, format, parse } from "date-fns";
 import toast, { Toaster } from "react-hot-toast";
 
 ChartJS.register(
@@ -142,9 +142,9 @@ const Dashboard = () => {
 
   const barChartData = {
     labels: packageData.map((item) => {
-      const parsedDate = new Date(item.date);
+      const parsedDate = parse(item.date, "dd-MM-yyyy", new Date());
       return isNaN(parsedDate)
-        ? "Invalid Date"
+        ? "Ngày không hợp lệ"
         : format(parsedDate, "dd/MM/yyyy");
     }),
     datasets: [
@@ -185,38 +185,6 @@ const Dashboard = () => {
     },
   };
 
-  const doughnutChartData = {
-    labels: ["Gói trao đổi", "Gói cho thuê", "Gói thành viên"],
-    datasets: [
-      {
-        label: "Số lượng",
-        data: [totalExchangePackage, totalMemberPackage, totalRentalPackage],
-        backgroundColor: [
-          "rgba(0, 176, 155, 0.5)",
-          "rgba(54, 162, 235, 0.5)",
-          "rgba(255, 159, 64, 0.5)",
-        ],
-        borderColor: [
-          "#4a5352",
-          "rgba(54, 162, 235, 1)",
-          "rgba(255, 159, 64, 1)",
-        ],
-        borderWidth: 1,
-      },
-    ],
-  };
-  const doughnutChartOptions = {
-    plugins: {
-      legend: {
-        position: "bottom",
-        labels: {
-          font: {
-            size: 16,
-          },
-        },
-      },
-    },
-  };
   const incomeDoughnutData = {
     labels: ["Gói cho thuê", "Gói trao đổi", "Gói thành viên"],
     datasets: [
@@ -345,6 +313,8 @@ const Dashboard = () => {
 
       const response = await getPackageByDate(startIsoDate, endIsoDate);
       if (response.status === 200) {
+        console.log(response.data);
+
         setPackageData(response.data || []);
       }
     } catch (error) {
@@ -355,6 +325,11 @@ const Dashboard = () => {
   };
 
   const handleStartDateChange = (date) => {
+    const dayDifference = differenceInDays(endDate, date);
+    if (dayDifference > 6) {
+      toast.error("Vui lòng chọn trong 7 ngày!");
+      return;
+    }
     if (endDate < date) {
       toast.error("Ngày bắt đầu phải nhỏ hơn ngày kết thúc!");
       return;
@@ -363,6 +338,12 @@ const Dashboard = () => {
   };
 
   const handleEndDateChange = (date) => {
+    const dayDifference = differenceInDays(date, startDate);
+
+    if (dayDifference > 6) {
+      toast.error("Vui lòng chọn trong 7 ngày!");
+      return;
+    }
     if (startDate > date) {
       toast.error("Ngày kết thúc phải lớn hơn ngày bắt đầu!");
       return;
@@ -539,16 +520,6 @@ const Dashboard = () => {
           </div>
         </div>
         <div className="col-span-2 bg-white p-6 rounded-lg shadow-lg border-2 border-gray-200">
-          <h3 className="text-2xl font-semibold mb-4">Doanh số</h3>
-          <div className="w-full h-auto">
-            <Line data={lineChartData} options={lineChartOption} />
-          </div>
-        </div>
-      </div>
-
-      {/* Package analysis */}
-      <div className="grid grid-cols-3 gap-6">
-        <div className="col-span-2 bg-white p-6 rounded-lg shadow-lg border-2 border-gray-200">
           <div className="flex flex-row justify-between mb-4">
             <h3 className="text-2xl font-semibold mb-4">Thống kê bài đăng</h3>
             <div className="flex space-x-2 items-center">
@@ -588,12 +559,6 @@ const Dashboard = () => {
           </div>
           <div className="h-auto">
             <Bar data={barChartData} options={barChartOptions} />
-          </div>
-        </div>
-        <div className="bg-white p-6 rounded-lg shadow-lg border-2 border-gray-200">
-          <h3 className="text-2xl font-semibold mb-4">Thống kê gói</h3>
-          <div className="h-auto">
-            <Doughnut data={doughnutChartData} options={doughnutChartOptions} />
           </div>
         </div>
       </div>
