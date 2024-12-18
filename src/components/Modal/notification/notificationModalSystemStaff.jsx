@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { markReadById } from "../../../service/notificationService/notiicationAPI";
 import React, { useRef, useEffect } from "react";
-const NotificationModalSystemStaff = ({ onClose, content, onMarkAllRead }) => {
+const NotificationModalSystemStaff = ({ onClose, content, onMarkAllRead, onClick }) => {
     const modalRef = useRef(null);
     const handleMarkRead = async (notiId) => {
         try {
@@ -15,7 +15,7 @@ const NotificationModalSystemStaff = ({ onClose, content, onMarkAllRead }) => {
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (modalRef.current && !modalRef.current.contains(event.target)) {
-                onClose(); // Close the modal if clicked outside
+                onClick(); // Close the modal if clicked outside
             }
         };
 
@@ -24,7 +24,7 @@ const NotificationModalSystemStaff = ({ onClose, content, onMarkAllRead }) => {
         return () => {
             document.removeEventListener("mousedown", handleClickOutside);
         };
-    }, [onClose]);
+    }, [onClick]);
     return (
         <div
             ref={modalRef}
@@ -32,7 +32,11 @@ const NotificationModalSystemStaff = ({ onClose, content, onMarkAllRead }) => {
             <div className="p-4 border-b flex justify-between items-center">
                 <h2 className="text-lg font-bold text-gray-800">Thông báo hệ thống</h2>
                 <button
-                    onClick={onMarkAllRead}
+                    onClick={(event) => {
+                        event.stopPropagation(); // Prevent modal from closing
+                        // Logic to mark all notifications as read
+                        onMarkAllRead()
+                    }}
                     className="text-sm text-blue-600 hover:underline"
                 >
                     Đánh dấu tất cả đã xem

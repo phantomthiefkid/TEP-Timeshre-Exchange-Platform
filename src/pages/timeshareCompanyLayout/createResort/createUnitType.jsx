@@ -63,7 +63,7 @@ const CreateUnitType = ({ onUpdateData, onNext, onBack, formData }) => {
 
   return (
     <div>
-      <Toaster position="top-right" reverseOrder={false} />
+      
       <div className=" p-6 ">
         <div className="py-6 space-y-3">
           <h1 className="text-2xl font-semibold text-gray-600">

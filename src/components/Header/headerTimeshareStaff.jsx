@@ -4,8 +4,9 @@ import React, { useEffect, useState } from "react";
 import { FaCog } from "react-icons/fa";
 import { FaBell } from "react-icons/fa6";
 import NotificationDropdown from "../Modal/notification/notificationModal";
-import { getNotificationByTopic, subcribeToken } from "../../service/notificationService/notiicationAPI";
+import { getNotificationByTopic, markReadByTopic, subcribeToken } from "../../service/notificationService/notiicationAPI";
 import { listenForMessages } from "../../util/firebaseConfig/notification";
+
 const HeaderTimeshareStaff = () => {
   const token = localStorage.getItem("token");
   const decodeToken = jwtDecode(token);
@@ -20,7 +21,6 @@ const HeaderTimeshareStaff = () => {
       let data = await getNotificationByTopic(`resort${decodeToken.resortId}`, 0, 20);
       if (data.status === 200) {
         setList(data.data.content)
-        console.log(data.data)
       }
     } catch (error) {
       throw error
@@ -31,19 +31,43 @@ const HeaderTimeshareStaff = () => {
 
   const subcribe = async () => {
     try {
-      let response = await subcribeToken(FCM_TOKEN, `resort${decodeToken.resortId}`)
-      if (response) {
-        console.log("Check response: ", response)
-      }
+      await subcribeToken(FCM_TOKEN, `resort${decodeToken.resortId}`)
+     
     } catch (error) {
       throw error
     }
   }
   subcribe()
-  useEffect(() => {   
-    listenForMessages(setNotification);   
+  useEffect(() => {
+    listenForMessages(setNotification);
+    const timer = setTimeout(() => {
+     
+      setNotification(null);
+    }, 5000);
 
-  }, [FCM_TOKEN]);
+   
+    return () => clearTimeout(timer);
+  }, [FCM_TOKEN, notification]);
+
+  const handleMarkAll = async () => {
+    try {
+    
+      await markReadByTopic(`resort${decodeToken.resortId}`);
+
+      
+      let updatedData = await getNotificationByTopic(`resort${decodeToken.resortId}`, 0, 10);
+      console.log(updatedData, "123")
+      if (updatedData.status === 200) {
+        setList(updatedData.data.content);
+      }
+    } catch (error) {
+      console.error("Error marking all notifications as read: ", error);
+    }
+  };
+
+  const handleOnClose = () => {
+    setIsNotificationOpen((prev) => prev);
+  }
 
   return (
     <>
@@ -58,29 +82,29 @@ const HeaderTimeshareStaff = () => {
         </div>
 
         <div className="flex items-center w-1/2 justify-end space-x-6">
-          {/* Notification Icon */}
+          
           <div className="relative">
             <div
               onClick={toggleNotificationDropdown}
               className="relative bg-blue-200 rounded-full p-3 shadow-lg cursor-pointer transition duration-300 hover:bg-blue-300"
             >
               <FaBell className="h-6 w-6 text-blue-600" />
-              <span className="absolute top-0 right-0 bg-red-500 text-white text-xs font-semibold rounded-full w-5 h-5 flex items-center justify-center animate-bounce">
-                3
+              <span className="absolute top-0 right-0 bg-red-500 text-white text-xs font-semibold rounded-full w-4 h-4 flex items-center justify-center animate-bounce">
+                
               </span>
               {isNotificationOpen && (
 
-                <div className="absolute top-6 z-50"><NotificationDropdown onClose={toggleNotificationDropdown} content={list} /></div>
+                <div className="absolute top-6 z-50"><NotificationDropdown onClose={handleOnClose} content={list} onMarkAllRead={handleMarkAll} onClick={() => setIsNotificationOpen(false)} /></div>
 
               )}
             </div>
 
           </div>
-        
+
           <div className="relative bg-blue-200 rounded-full p-3 shadow-lg cursor-pointer transition duration-300 hover:bg-blue-300">
             <FaCog className="h-6 w-6 text-blue-600" />
           </div>
-         
+
           <div className="flex items-center space-x-4 p-4 rounded-lg">
             <img
               src="https://cdn3.iconfinder.com/data/icons/30-office-business-sticker-icons-part-1/202/Businesman-512.png"
@@ -95,35 +119,23 @@ const HeaderTimeshareStaff = () => {
                 {decodeToken ? decodeToken.email : ""}
               </p>
             </div>
-          </div>         
+          </div>
           <div className="cursor-pointer bg-blue-200 p-3 rounded-full shadow-lg transition duration-300 hover:bg-blue-300">
             <GlobeIcon className="h-7 w-7 text-blue-600" />
           </div>
         </div>
         {notification && (
-          <div className="fixed top-6 right-6 max-w-xs bg-gradient-to-r from-indigo-400 via-indigo-500 to-indigo-400 text-white rounded-xl shadow-xl p-5 z-50 animate-fadeIn">
+          <div className="fixed top-6 right-6 max-w-xs bg-indigo-400 text-white rounded-xl shadow-xl p-5 z-50 animate-fadeIn">
             <div className="flex items-start space-x-4">
               {/* Icon */}
               <div className="flex items-center justify-center w-10 h-10 bg-white bg-opacity-20 rounded-full">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={2}
-                  stroke="currentColor"
-                  className="w-6 h-6 text-white"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M12 9v2m0 4h.01M12 17h0M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                  />
-                </svg>
-              </div>      
+
+                <FaBell className="w-6 h-6 text-yellow-300" />
+              </div>
               <div className="flex-1">
                 <h3 className="text-lg font-semibold">{notification.title}</h3>
                 <p className="text-sm mt-1">{notification.body}</p>
-              </div>       
+              </div>
               <button
                 className="text-white hover:text-gray-200 transition-opacity focus:outline-none"
                 onClick={() => setNotification(null)}

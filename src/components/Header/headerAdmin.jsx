@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { GlobeIcon, BellIcon } from '@heroicons/react/solid';
+import { GlobeIcon } from '@heroicons/react/solid';
 import { getAccountInfo } from '../../service/accountAPI/accountService';
 import { useSelector } from 'react-redux';
 import { FaBell, FaCog } from 'react-icons/fa';
@@ -23,7 +23,6 @@ const HeaderAdmin = () => {
 
   useEffect(() => {
     if (userId) {
-      console.log("UserId is now set, fetching account info");
       fetchAccountInfo();
     }
   }, [userId]);  // Gọi lại useEffect khi userId được thay đổi
@@ -42,20 +41,20 @@ const HeaderAdmin = () => {
       </div>
   
       <div className="flex items-center w-1/2 justify-end space-x-6">
-        {/* Notification Icon */}
+        
         <div className="relative bg-blue-200 rounded-full p-3 shadow-lg cursor-pointer transition duration-300 hover:bg-blue-300">
           <FaBell className="h-6 w-6 text-blue-600" />
-          <span className="absolute top-0 right-0 bg-red-500 text-white text-xs font-semibold rounded-full w-5 h-5 flex items-center justify-center animate-bounce">
-            3
+          <span className="absolute top-0 right-0 bg-red-500 text-white text-xs font-semibold rounded-full w-4 h-4 flex items-center justify-center animate-bounce">
+            
           </span>
         </div>
   
-        {/* Settings Icon */}
+        
         <div className="relative bg-blue-200 rounded-full p-3 shadow-lg cursor-pointer transition duration-300 hover:bg-blue-300">
           <FaCog className="h-6 w-6 text-blue-600" />
         </div>
   
-        {/* Profile Section */}
+        
         <div className="flex items-center space-x-4 p-4 ">
           <img
             src="https://cdn-icons-png.flaticon.com/512/9703/9703596.png"

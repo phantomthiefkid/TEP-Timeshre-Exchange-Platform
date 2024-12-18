@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { listenForMessages } from "../../../util/firebaseConfig/notification";
 import { markReadById } from "../../../service/notificationService/notiicationAPI";
-const NotificationDropdown = ({ onClose, content }) => {
+const NotificationDropdown = ({ onClose, content, onMarkAllRead, onClick }) => {
+    const modalRef = useRef(null);
     const handleMarkRead = async (notiId) => {
         try {
             await markReadById(notiId)
@@ -12,16 +12,32 @@ const NotificationDropdown = ({ onClose, content }) => {
         }
 
     }
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (modalRef.current && !modalRef.current.contains(event.target)) {
+                onClick(); 
+            }
+        };
+
+        document.addEventListener("mousedown", handleClickOutside);
+
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, [onClick]);
     return (
-        <div className="absolute left-6 top-6 right-0 w-96 bg-slate-50 border-2 rounded-lg shadow-xl z-50">
+        <div ref={modalRef} className="absolute left-6 top-6 right-0 w-96 bg-slate-50 border-2 rounded-lg shadow-xl z-50">
             <div className="p-4 border-b flex justify-between items-center">
                 <h2 className="text-lg font-bold text-gray-800">Thông báo hệ thống</h2>
-                <h3
-                   
+                <button
+                    onClick={(event) => {
+                        event.stopPropagation();
+                        onMarkAllRead()
+                    }}
                     className="text-sm text-blue-600 hover:underline"
                 >
                     Đánh dấu tất cả đã xem
-                </h3>
+                </button>
             </div>
             <div className="p-4 space-y-3">
                 {content.length > 0 ? (
