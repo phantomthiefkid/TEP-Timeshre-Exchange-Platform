@@ -28,6 +28,7 @@ import {
   getAllTransaction,
   getPackageByDate,
   getTotalCompany,
+  getTotalRevenue,
   getTotalCustomers,
   getTotalPackages,
   getTotalResorts,
@@ -59,7 +60,11 @@ const Dashboard = () => {
   const [rentalPostings, setRentalPostings] = useState([]);
   const [totalResorts, setTotalResorts] = useState(0);
   const [totalTSComps, setTotalTSComps] = useState(0);
-  const [totalRevenue, setTotalRevenue] = useState(0);
+  const [totalRevuenue, setTotalRevuenue] = useState(0);
+  const [totalMembershipRevuenue, setMembershipRevuenue] = useState(0);
+  const [totalRentalPostingRevuenue, setRentalPostingRevuenue] = useState(0);
+  const [totalExchangePostingRevuenue, setExchangePostingRevuenue] =
+    useState(0);
   const [totalCustomers, setTotalCustomers] = useState(0);
   const [totalRentalPackage, setTotalRentalPackage] = useState(0);
   const [totalExchangePackage, setTotalExchangePackage] = useState(0);
@@ -78,67 +83,6 @@ const Dashboard = () => {
     return today;
   });
   const [endDate, setEndDate] = useState(new Date());
-
-  const lineChartData = {
-    labels: [
-      "Tháng 1",
-      "Tháng 2",
-      "Tháng 3",
-      "Tháng 4",
-      "Tháng 5",
-      "Tháng 6",
-      "Tháng 7",
-      "Tháng 8",
-      "Tháng 9",
-      "Tháng 10",
-      "Tháng 11",
-      "Tháng 12",
-    ],
-    datasets: [
-      {
-        label: "Doanh thu",
-        data: [
-          3000, 4000, 3500, 4500, 5000, 6000, 7000, 8000, 7500, 8500, 9000,
-          9500,
-        ],
-        borderColor: "rgba(54, 162, 235, 1)",
-        backgroundColor: "rgba(0, 153, 255, 0.2)",
-        tension: 0.4,
-      },
-      {
-        label: "Chi phí",
-        data: [
-          2000, 2500, 2400, 2600, 3000, 3200, 3500, 3700, 3600, 4000, 4200,
-          4500,
-        ],
-        borderColor: "rgba(255, 0, 0, 1)",
-        backgroundColor: "rgba(255, 0, 0, 0.2)",
-        tension: 0.4,
-      },
-    ],
-  };
-  const lineChartOption = {
-    plugins: {
-      legend: {
-        labels: {
-          font: {
-            size: 16,
-          },
-        },
-      },
-      tooltip: {
-        callbacks: {
-          label: (tooltipItem) => {
-            const value = tooltipItem.raw;
-            return new Intl.NumberFormat("vi-VN", {
-              style: "currency",
-              currency: "VND",
-            }).format(value);
-          },
-        },
-      },
-    },
-  };
 
   const barChartData = {
     labels: packageData.map((item) => {
@@ -189,7 +133,11 @@ const Dashboard = () => {
     labels: ["Gói cho thuê", "Gói trao đổi", "Gói thành viên"],
     datasets: [
       {
-        data: [374820, 241600, 213420],
+        data: [
+          totalRentalPostingRevuenue || 374820,
+          totalExchangePostingRevuenue || 241600,
+          totalMembershipRevuenue || 213420,
+        ],
         backgroundColor: ["#2196F3", "#009688", "#FF9800"],
         borderWidth: 0,
       },
@@ -274,12 +222,14 @@ const Dashboard = () => {
         customersData,
         packagesData,
         totalCompanyData,
+        totalRevenueData,
       ] = await Promise.all([
         getAllRentalPosting(),
         getTotalResorts(),
         getTotalCustomers(),
         getTotalPackages(),
         getTotalCompany(),
+        getTotalRevenue(),
       ]);
 
       if (rentalPostingsData.status === 200) {
@@ -299,6 +249,16 @@ const Dashboard = () => {
       if (totalCompanyData.status === 200) {
         setTotalTSComps(totalCompanyData.data);
       }
+      if (totalRevenueData.status === 200) {
+        console.log(totalRevenueData.data);
+
+        setTotalRevuenue(totalRevenueData.data.totalRevuenue);
+        setMembershipRevuenue(totalRevenueData.data.membershipRevuenue);
+        setRentalPostingRevuenue(totalRevenueData.data.rentalPostingRevuenue);
+        setExchangePostingRevuenue(
+          totalRevenueData.data.exchangePostingRevuenue
+        );
+      }
 
       setLoading(false);
     } catch (error) {
@@ -313,8 +273,6 @@ const Dashboard = () => {
 
       const response = await getPackageByDate(startIsoDate, endIsoDate);
       if (response.status === 200) {
-        console.log(response.data);
-
         setPackageData(response.data || []);
       }
     } catch (error) {
@@ -381,7 +339,7 @@ const Dashboard = () => {
             <p className="text-3xl font-bold">
               <CountUp
                 start={0}
-                end={totalRevenue || 829840}
+                end={totalRevuenue || 829840}
                 duration={2}
                 separator=","
                 prefix="₫ "
@@ -452,7 +410,7 @@ const Dashboard = () => {
             <p className="text-3xl font-semibold mt-2 ">
               <CountUp
                 start={0}
-                end={829840}
+                end={totalRevuenue || 829840}
                 duration={2}
                 separator=","
                 prefix="₫ "
@@ -470,7 +428,7 @@ const Dashboard = () => {
                 <p className="text-2xl font-semibold mt-2">
                   <CountUp
                     start={0}
-                    end={374820}
+                    end={totalRentalPostingRevuenue || 374820}
                     duration={2}
                     separator=","
                     prefix="₫ "
@@ -486,7 +444,7 @@ const Dashboard = () => {
                 <p className="text-2xl font-semibold mt-2">
                   <CountUp
                     start={0}
-                    end={241600}
+                    end={totalExchangePostingRevuenue || 241600}
                     duration={2}
                     separator=","
                     prefix="₫ "
@@ -502,7 +460,7 @@ const Dashboard = () => {
                 <p className="text-2xl font-semibold mt-2">
                   <CountUp
                     start={0}
-                    end={213420}
+                    end={totalMembershipRevuenue || 213420}
                     duration={2}
                     separator=","
                     prefix="₫ "
