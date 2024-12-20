@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { toast } from 'react-hot-toast';
 import { FaPlusCircle, FaImage, FaRegNewspaper, FaImages, FaArrowLeft, FaTimes } from 'react-icons/fa';
 import QuillEditor from '../../../components/Blog/QuillEditor';
 import { createBlog } from '../../../service/systemStaffService/systemStaffAPI';
@@ -38,11 +39,12 @@ const CreateBlog = ({ create }) => {
     let data = await createBlog(blogData);
     if (data.status === 200) {
       create();
+      toast.success("Tạo blog thành công", {duration: 2000})
     }
   }
 
   return (
-    <div className="w-2/3 mx-auto p-8 bg-slate-100 shadow-xl rounded-lg mb-20 border">
+    <div className="max-w-6xl mx-auto p-8 bg-slate-100 shadow-xl rounded-lg mb-20 border">
       <div className="space-y-8 border-2 border-white p-6">
         {/* Title Input */}
         <div>

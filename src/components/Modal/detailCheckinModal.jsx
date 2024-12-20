@@ -40,10 +40,10 @@ const DetailCheckinModal = ({ isOpen, onClose, bookingId, onSave }) => {
   const modalStyles = isOpen
     ? {}
     : {
-        opacity: 0,
-        transform: "translateX(100%)",
-        transition: "all 0.3s ease",
-      };
+      opacity: 0,
+      transform: "translateX(100%)",
+      transition: "all 0.3s ease",
+    };
 
   const handleOnChangeStatus = async (e, source) => {
     const newStatus = e.target.value;
@@ -97,21 +97,22 @@ const DetailCheckinModal = ({ isOpen, onClose, bookingId, onSave }) => {
         onClick={onClose}
       ></div>
       <div
-        className="bg-white rounded-lg shadow-lg p-6 w-full max-w-2xl flex flex-col"
+        className="bg-white rounded-lg shadow-lg w-full max-w-2xl flex flex-col"
         style={{ zIndex: 1000, ...modalStyles }}
       >
-        <h2 className="text-2xl font-semibold mb-8">Thông tin chi tiết</h2>
+        <div className="p-5 border-b flex justify-between items-center bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-t-lg shadow-md">
+          <h2 className="text-2xl font-semibold mb-4">Thông tin chi tiết</h2>
 
-        <button
-          onClick={onClose}
-          className="absolute top-7 right-7 text-gray-500 hover:text-zinc-300 focus:outline-none"
-        >
-          <FaXmark size={28} />
-        </button>
-
+          <button
+            onClick={onClose}
+            className="absolute top-7 right-7 text-white hover:text-zinc-300 focus:outline-none"
+          >
+            <FaXmark size={28} />
+          </button>
+        </div>
         {bookingId && source === "rental" ? (
           <>
-            <div className="mb-0 ">
+            <div className="mb-0 p-2">
               <div className="flex items-center p-4 border rounded-lg shadow-sm w-full mb-6">
                 <img
                   src={
@@ -186,7 +187,7 @@ const DetailCheckinModal = ({ isOpen, onClose, bookingId, onSave }) => {
               </div>
             </div>
 
-            <div className="mb-5">
+            <div className="mb-5 p-6 border">
               <h2 className="text-xl font-semibold mb-5">Chi tiết cho thuê</h2>
               <div className="space-y-3">
                 <div className="flex justify-between">
@@ -208,9 +209,8 @@ const DetailCheckinModal = ({ isOpen, onClose, bookingId, onSave }) => {
                 <div className="flex justify-between">
                   <span className="font-medium">Trạng thái</span>
                   <span
-                    className={`flex items-center px-2 py-1 text-center rounded-xl ${
-                      getStatusStyles(bookingId.status).style
-                    }`}
+                    className={`flex items-center px-2 py-1 text-center rounded-xl ${getStatusStyles(bookingId.status).style
+                      }`}
                   >
                     {getStatusStyles(bookingId.status).label}
                   </span>
@@ -218,7 +218,7 @@ const DetailCheckinModal = ({ isOpen, onClose, bookingId, onSave }) => {
               </div>
             </div>
 
-            <div>
+            <div className="p-4 border">
               <h2 className="text-xl font-semibold mb-5">
                 Thông tin khách hàng
               </h2>
@@ -315,9 +315,8 @@ const DetailCheckinModal = ({ isOpen, onClose, bookingId, onSave }) => {
                 <div className="flex justify-between">
                   <span className="font-medium">Trạng thái</span>
                   <span
-                    className={`flex items-center px-2 py-1 text-center rounded-xl ${
-                      getStatusStyles(bookingId.status).style
-                    }`}
+                    className={`flex items-center px-2 py-1 text-center rounded-xl ${getStatusStyles(bookingId.status).style
+                      }`}
                   >
                     {getStatusStyles(bookingId.status).label}
                   </span>
@@ -348,7 +347,7 @@ const DetailCheckinModal = ({ isOpen, onClose, bookingId, onSave }) => {
           <SpinnerWaiting />
         )}
 
-        <div className="mt-auto flex justify-end mt-5">
+        <div className="mt-24 flex justify-end">
           <button
             className="bg-blue-500 text-white border border-blue-500 hover:bg-blue-700 hover:text-white hover:shadow-lg hover:shadow-blue-300 transition-all duration-300 ease-in-out mr-4 px-4 py-2 rounded"
             onClick={onClose}

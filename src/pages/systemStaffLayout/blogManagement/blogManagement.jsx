@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Toaster } from 'react-hot-toast';
 import Bloglist from "./blogList";
 import CreateBlog from './createBlog';
 
@@ -12,6 +13,7 @@ const BlogManagement = () => {
     return (
         <>
             <div className="w-full relative">
+            <Toaster position="top-right" reverseOrder={false} />
                 <div className="py-4 p-6 space-y-4 border-l-4 border-blue-500 bg-gray-50 rounded-lg shadow-lg">
                     <h1 className="text-4xl font-bold text-gray-700">
                         Danh sách <span className="text-blue-600">bài blog</span> và

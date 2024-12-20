@@ -339,7 +339,7 @@ const Dashboard = () => {
             <p className="text-3xl font-bold">
               <CountUp
                 start={0}
-                end={totalRevuenue || 829840}
+                end={totalRevuenue || 0}
                 duration={2}
                 separator=","
                 prefix="₫ "

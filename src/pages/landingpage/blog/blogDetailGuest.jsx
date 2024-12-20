@@ -24,10 +24,9 @@ const BlogDetailGuest = () => {
     };
     const fetchAllBlogs = async () => {
         try {
-            let data = await getAllBlog("", 0, 8);
+            let data = await getAllBlog("", 0, 4);
             if (data.status === 200) {
                 setBlogs(data.data.content);
-                console.log(data.data.content)
             }
         } catch (error) {
             console.error("Error fetching blogs:", error);

@@ -90,10 +90,10 @@ const ResortDetail = () => {
             <LocationMarkerIcon className="w-8 h-8 text-red-500" />
             {resort ? resort.location.displayName : ""}
           </p>
-          <span className="flex gap-2 items-center">
+          {/* <span className="flex gap-2 items-center">
             <StarIcon className="w-6 h-6" color="yellow" />
             4.6 (16 đánh giá)
-          </span>
+          </span> */}
         </div>
 
         {/* Image Grid with 6:4 ratio */}
@@ -376,7 +376,7 @@ const ResortDetail = () => {
           <span className="text-2xl flex items-center gap-2 font-semibold">
             <StarIcon className="w-12" color="yellow" />
             <span className="text-3xl">
-              {resort.averageRating + "/5" || "N/A"}
+              {resort.averageRating? `${resort.averageRating}/` : `0/`}
             </span>
             <span className="text-gray-400 text-xl mt-1 font-light">
               {resort && resort.totalRating} đánh giá

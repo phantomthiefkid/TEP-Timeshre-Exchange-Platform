@@ -68,7 +68,7 @@ const RentalPostingMNG = () => {
   return (
     <>
       <Toaster position="top-right" reverseOrder={false} />
-      <div className="container mx-auto p-4 bg-white rounded-xl shadow-xl">
+      <div className="container mx-auto p-4 bg-white rounded-xl shadow-xl min-h-[700px] relative">
         <div className="flex justify-between items-center py-4 px-6 mb-6 bg-gray-50 rounded-lg shadow-lg">
           <div className="space-y-4">
             <h1 className="text-4xl font-bold text-gray-700">
@@ -207,7 +207,7 @@ const RentalPostingMNG = () => {
 
         {/* Pagination */}
         {allRentalPosts && allRentalPosts.length > 0 ? (
-          <div className="flex justify-between items-center p-6">
+          <div className="flex justify-center items-center p-6 absolute bottom-0 right-1/2">
             <button
               onClick={handlePreviousPage}
               disabled={page === 0}

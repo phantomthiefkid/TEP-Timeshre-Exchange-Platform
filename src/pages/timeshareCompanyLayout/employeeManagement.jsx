@@ -163,13 +163,13 @@ const employeeManagement = () => {
           </div>
         </div>
 
-        <div className="p-6">
+        <div className="p-6 min-h-[650px] relative">
           <table className="min-w-full bg-white border border-gray-200 ">
             <thead className="bg-gray-100 rounded-lg">
               <tr className="w-full bg-gray-300 border-b border-gray-200">
                 <th className="p-4 text-left ml-3">STT</th>
-                <th className="p-4">Tên nhân viên</th>
-                <th className="p-4">Trạng thái</th>
+                <th className="p-4 text-left">Tên nhân viên</th>
+                <th className="p-4 text-left">Trạng thái</th>
                 <th className="p-4 text-left"></th>
               </tr>
             </thead>
@@ -213,7 +213,7 @@ const employeeManagement = () => {
           </table>
 
           {allTimeshareStaff && allTimeshareStaff.length > 0 ? (
-            <div className="flex items-center justify-center space-x-2 mt-5 w-full">
+            <div className="flex items-center justify-center space-x-2 mt-5 w-full absolute bottom-2">
               <button
                 onClick={handlePreviousPage}
                 disabled={page === 0}
@@ -246,7 +246,7 @@ const employeeManagement = () => {
             </div>
           ) : (
             <span className="flex items-center justify-center space-x-2 mt-5 w-full">
-              Không có bài đăng nào!!!
+              Không tìm thấy nhân viên nào!
             </span>
           )}
           <DetailTimeshareStaffModal
