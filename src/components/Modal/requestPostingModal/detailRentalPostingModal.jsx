@@ -79,10 +79,10 @@ const DetailRentalPostingModal = ({ isOpen, onClose, postingId, onSave }) => {
   const modalStyles = isOpen
     ? {}
     : {
-        opacity: 0,
-        transform: "translateX(100%)",
-        transition: "all 0.3s ease",
-      };
+      opacity: 0,
+      transform: "translateX(100%)",
+      transition: "all 0.3s ease",
+    };
 
   const getStatusStyles = (status) => {
     switch (status) {
@@ -274,14 +274,18 @@ const DetailRentalPostingModal = ({ isOpen, onClose, postingId, onSave }) => {
         style={{ zIndex: 1000, ...modalStyles }}
       >
         {/* Header Section */}
-        <div className="p-4 border-b flex justify-between items-center">
-          <h1 className="text-xl font-bold">Thông tin chi tiết</h1>
+        <div className="p-5 border-b flex justify-between items-center bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-t-lg shadow-md">
+          <h1 className="text-lg font-semibold tracking-wide">
+            <span className="bg-white/20 py-1 px-3 rounded-md">
+              Thông tin chi tiết
+            </span>
+          </h1>
           <div className="flex items-center">
             <button
               onClick={() => handleClose()}
-              className="text-gray-500 hover:text-zinc-300 focus:outline-none"
+              className="flex items-center justify-center p-2 rounded-full bg-white/20 hover:bg-white/30 transition duration-200"
             >
-              <FaXmark size={28} />
+              <FaXmark size={24} className="text-white" />
             </button>
           </div>
         </div>
@@ -290,7 +294,7 @@ const DetailRentalPostingModal = ({ isOpen, onClose, postingId, onSave }) => {
           <>
             <div className="border-b">
               {postingId.rentalPackageId === 3 ? (
-                <div className="flex items-center p-4 m-3 border-2 border-red-500 rounded-xl">
+                <div className="flex items-center p-4 m-3 border border-red-500 rounded-xl">
                   <img
                     src={postingId.resortImage}
                     alt="Hotel Thumbnail"
@@ -302,18 +306,18 @@ const DetailRentalPostingModal = ({ isOpen, onClose, postingId, onSave }) => {
                         <h2 className="text-xl font-bold mb-2">
                           {postingId.resortName}
                         </h2>
-                        <div className="flex flex-row">
-                          <FaMap
+                        <div className="flex flex-row gap-2">
+                          <FaLocationPin
                             className="text-gray-500 mr-2 mt-1"
-                            style={{ color: "blue" }}
+                            style={{ color: "red" }}
                           />
-                          <p className="text-base text-blue-500 w-3/4">
+                          <p className="text-sm text-blue-500 w-3/4">
                             {postingId.location.displayName}
                           </p>
                         </div>
                       </div>
                     </div>
-                    <div className="flex justify-end w-1/3">
+                    <div className="flex justify-end w-1/2">
                       <span className="text-medium px-2 py-1 w-auto text-center rounded-full bg-red-100 text-red-500">
                         Hỗ trợ định giá
                       </span>
@@ -321,7 +325,7 @@ const DetailRentalPostingModal = ({ isOpen, onClose, postingId, onSave }) => {
                   </div>
                 </div>
               ) : postingId.rentalPackageId === 4 ? (
-                <div className="flex items-center p-4 m-3 border-2 border-yellow-500 rounded-xl">
+                <div className="flex items-center p-4 m-3 border border-yellow-500 rounded-xl">
                   <img
                     src={postingId.resortImage}
                     alt="Hotel Thumbnail"
@@ -338,13 +342,13 @@ const DetailRentalPostingModal = ({ isOpen, onClose, postingId, onSave }) => {
                             className="text-gray-500 mr-2 mt-1"
                             style={{ color: "blue" }}
                           />
-                          <p className="text-base text-blue-500 w-3/4">
+                          <p className="text-sm text-blue-500 w-3/4">
                             {postingId.location.displayName}
                           </p>
                         </div>
                       </div>
                     </div>
-                    <div className="flex justify-end w-1/3">
+                    <div className="flex justify-end w-1/2">
                       <span className="text-medium px-2 py-1 w-auto text-center rounded-full bg-yellow-100 text-yellow-500">
                         Chờ định giá
                       </span>
@@ -377,9 +381,8 @@ const DetailRentalPostingModal = ({ isOpen, onClose, postingId, onSave }) => {
                     </div>
                     <div className="flex justify-end w-1/3">
                       <span
-                        className={`text-medium px-2 py-1 w-3/4 text-center rounded-full ${
-                          getStatusStyles(postingId.status).style
-                        }`}
+                        className={`text-medium px-2 py-1 w-3/4 text-center rounded-full ${getStatusStyles(postingId.status).style
+                          }`}
                       >
                         {getStatusStyles(postingId.status).label}
                       </span>
@@ -389,7 +392,7 @@ const DetailRentalPostingModal = ({ isOpen, onClose, postingId, onSave }) => {
               )}
             </div>
 
-            <div className="flex-1 overflow-y-auto p-4">
+            <div className="flex-1 overflow-y-auto p-8">
               <h2 className="text-2xl font-semibold mb-3">Chi tiết bài đăng</h2>
               <div className="grid grid-cols-2 gap-4 mb-6">
                 <div className="space-y-2">
@@ -431,9 +434,8 @@ const DetailRentalPostingModal = ({ isOpen, onClose, postingId, onSave }) => {
                                 )
                               }
                               placeholder="Nhập giá hỗ trợ"
-                              className={`border rounded px-2 py-1 w-44 ${
-                                staffRefinementError ? "border-red-500" : ""
-                              }`}
+                              className={`border rounded px-2 py-1 w-44 ${staffRefinementError ? "border-red-500" : ""
+                                }`}
                             />
                             <p className="ml-0.5 border bg-[#1793FF] p-1 rounded-md text-white">
                               VNĐ
@@ -481,9 +483,8 @@ const DetailRentalPostingModal = ({ isOpen, onClose, postingId, onSave }) => {
                                 )
                               }
                               placeholder="Nhập giá định giá"
-                              className={`border rounded px-2 py-1 w-44 ${
-                                priceValuationError ? "border-red-500" : ""
-                              }`}
+                              className={`border rounded px-2 py-1 w-44 ${priceValuationError ? "border-red-500" : ""
+                                }`}
                             />
                             <p className="ml-0.5 border bg-[#1793FF] p-1 rounded-md text-white">
                               VNĐ
@@ -640,7 +641,7 @@ const DetailRentalPostingModal = ({ isOpen, onClose, postingId, onSave }) => {
                     Tiện ích và chính sách
                   </h2>
                   {postingId.roomAmenities &&
-                  postingId.roomAmenities.length > 0 ? (
+                    postingId.roomAmenities.length > 0 ? (
                     <button
                       className="text-gray-500 focus:outline-none flex flex-row items-center"
                       onClick={() => toggleEditAmenity()}
@@ -667,7 +668,7 @@ const DetailRentalPostingModal = ({ isOpen, onClose, postingId, onSave }) => {
                 </div>
                 {/* handle change room amenity */}
                 {postingId.roomAmenities &&
-                postingId.roomAmenities.length > 0 ? (
+                  postingId.roomAmenities.length > 0 ? (
                   <div className="space-y-4">
                     {[
                       ...new Set(

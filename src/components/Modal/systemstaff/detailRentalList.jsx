@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { toast, Toaster } from "react-hot-toast";
-import { FaEdit, FaMap, FaMapMarkerAlt, FaSpinner } from "react-icons/fa";
-import { FaLocationPin, FaPencil, FaXmark } from "react-icons/fa6";
+import { FaEdit, FaMapMarkerAlt, FaSpinner } from "react-icons/fa";
+import { FaLocationPin, FaXmark } from "react-icons/fa6";
 import {
   acceptNewPriceValuation,
   getRentalPostingById,
@@ -132,7 +132,7 @@ const DetailRentalList = ({ isOpen, onClose, postingId, flag }) => {
   };
 
   return (
-    <div className="fixed inset-0 flex justify-end p-3 h-full">
+    <div className="fixed inset-0 flex justify-end p-3 h-full"  style={{ zIndex: 1000, ...modalStyles }}>
       <Toaster position="top-right" reverseOrder={false} />
 
       <div
