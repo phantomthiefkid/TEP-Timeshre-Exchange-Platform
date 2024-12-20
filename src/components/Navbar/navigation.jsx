@@ -64,7 +64,14 @@ const Navigation = () => {
 
         <ul className="flex items-center justify-end space-x-10 text-white w-2/5 text-lg font-extralight">
           <li>
-            <Link to={"/"} className="hover:text-gray-200 flex">
+            <Link
+              to={
+                "https://drive.usercontent.google.com/download?id=1eybD8OyLPAGQYXltY4781q25V3xdctk4&export=download&authuser=3"
+              }
+              className="hover:text-gray-200 flex"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <FaDownload className="h-5 w-5 mr-3 mt-1" />
               Tải ứng dụng
             </Link>
