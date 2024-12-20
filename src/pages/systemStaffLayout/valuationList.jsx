@@ -172,19 +172,8 @@ const ValuationList = () => {
             />
           </div>
 
-          {/* <div className="flex items-center space-x-4">
-
-
-                        <Link to={`/systemstaff/createposting`}>
-                            <button className="flex items-center bg-green-500 text-white rounded-lg px-4 py-2">
-                                <FaPlus className="mr-3" />
-                                Thêm mới
-                            </button>
-                        </Link>
-
-                    </div> */}
         </div>
-        {/* Filter Buttons */}
+
         <div className="flex items-center py-4 space-x-4 mb-5">
           {[
             {
