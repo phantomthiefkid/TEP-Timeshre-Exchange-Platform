@@ -97,7 +97,7 @@ const Search = () => {
                       to={`/resortdetail/${item.id}`}
                       className="text-black hover:text-blue-800"
                     >
-                      {item.resortName} - {item.location.displayName}
+                      {item.resortName} - {item.resortLocationDisplayName}
                     </Link>
                   </li>
                 ))}
