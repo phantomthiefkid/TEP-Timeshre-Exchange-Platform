@@ -127,7 +127,7 @@ const DetailRentalList = ({ isOpen, onClose, postingId, flag }) => {
     } finally {
       setEditFlag(false);
       setIsSpinner(false);
-      onClose()
+      onClose();
     }
   };
 
@@ -246,34 +246,38 @@ const DetailRentalList = ({ isOpen, onClose, postingId, flag }) => {
                 </p>
 
                 <p className="text-medium font-mono text-gray-500 mr-4">
-                  Định giá:{" "}
+                  Định giá:
                 </p>
 
                 {rentalPosting.status === "PendingPricing" ? (
                   <p>
                     {editFlag ? (
-                      <p className="flex items-center gap-4">
-                        <div className="relative">
+                      <div className="flex flex-col">
+                        <div className="flex flex-row ">
                           <input
-                            className="w-32 p-2 border border-gray-300 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition-all duration-300"
+                            type="text"
+                            value={newPriceValuation}
                             onChange={(e) =>
                               setNewPriceValuation(e.target.value)
                             }
-                            type="text"
-                            name="newPriceValuation"
-                            value={newPriceValuation}
-                            placeholder="Nhập giá"
+                            placeholder="Nhập giá định giá"
+                            className="w-32 p-2 border border-gray-300 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition-all duration-300"
                           />
-                          <span className="absolute top-1/2 right-3 transform -translate-y-1/2 text-gray-400">
+                          <p className="ml-0.5 border bg-[#1793FF] p-1 rounded-md text-white flex justify-center items-center">
                             VNĐ
-                          </span>
+                          </p>
+                          <div className="ml-2 flex justify-center items-center">
+                            <FaEdit
+                              onClick={() => setEditFlag(false)}
+                              size={24}
+                              className="cursor-pointer text-[#EE6457] hover:scale-110 transition-transform duration-200"
+                            />
+                          </div>
                         </div>
-                        <FaEdit
-                          onClick={() => setEditFlag(false)}
-                          size={24}
-                          className="cursor-pointer text-[#EE6457] hover:scale-110 transition-transform duration-200"
-                        />
-                      </p>
+                        <p className="text-gray-500 italic text-sm">
+                          *Nhập giá cho một đêm
+                        </p>
+                      </div>
                     ) : (
                       <p className="flex justify-start items-center gap-4">
                         <p className="font-mono">
