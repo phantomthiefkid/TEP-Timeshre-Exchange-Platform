@@ -234,7 +234,7 @@ const ExperiencePackage = () => {
                 </p>
                 <div className="py-8">
                   <p className="border-b-2 border-sky-400 flex items-center">
-                    <h3 className="text-2xl font-semibold mb-2">159,000 đ</h3>
+                    <h3 className="text-2xl font-semibold mb-2">149,000 đ</h3>
                     /tháng
                   </p>
                   <div className="space-y-4 py-6 text-lg p-4">
@@ -271,7 +271,7 @@ const ExperiencePackage = () => {
                 </p>
                 <div className="py-8">
                   <p className="border-b-2 border-sky-400 flex items-center">
-                    <h3 className="text-2xl font-semibold mb-2">219,000 đ</h3>
+                    <h3 className="text-2xl font-semibold mb-2">199,000 đ</h3>
                     /tháng
                   </p>
                   <div className="space-y-4 py-6 text-lg p-4">

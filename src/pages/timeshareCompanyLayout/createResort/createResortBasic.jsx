@@ -339,7 +339,7 @@ const CreateResortBasic = ({ onNext, onUpdateData, formData }) => {
         {/* Column 2 */}
         <div className="space-y-4">
           <div className="space-y-4">
-            <label className="block mb-2 font-medium">Logo resort</label>
+            <label className="block mb-2 font-medium">Ảnh chính</label>
 
             {/* Upload button with icon */}
             {!resortData.logo && (

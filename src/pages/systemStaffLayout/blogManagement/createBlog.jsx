@@ -42,7 +42,7 @@ const CreateBlog = ({ create }) => {
   }
 
   return (
-    <div className="w-2/3 mx-auto p-8 bg-slate-100 shadow-lg rounded-lg mb-20">
+    <div className="w-2/3 mx-auto p-8 bg-slate-100 shadow-xl rounded-lg mb-20 border">
       <div className="space-y-8 border-2 border-white p-6">
         {/* Title Input */}
         <div>
@@ -63,7 +63,7 @@ const CreateBlog = ({ create }) => {
         </div>
 
         {/* Image Upload */}
-        <div>
+        <div className='text-center'>
           <label
             htmlFor="image"
             className="block text-xl font-semibold text-gray-800 mb-2"
@@ -71,10 +71,10 @@ const CreateBlog = ({ create }) => {
             Thêm ảnh bìa
           </label>
           {
-            !image && (<div className="flex items-center justify-between gap-4">
+            !image && (<div className="flex items-center justify-center gap-4">
               <button
                 onClick={() => document.getElementById('image').click()}
-                className="bg-blue-500 text-white px-5 py-2 rounded-lg shadow-md hover:bg-blue-600 transition flex items-center space-x-2"
+                className="w-full h-44 border-dashed border-4 border-blue-400 rounded-lg flex flex-col justify-center items-center cursor-pointer transition hover:border-blue-600 hover:bg-blue-100"
               >
                 <FaImage className="text-lg" />
                 <span>Chọn ảnh</span>

@@ -326,7 +326,7 @@ const UpdateResortBasic = () => {
           {/* Logo Upload Section */}
           <div className="border p-6 shadow-lg space-y-6">
             <label className="text-gray-700 text-lg font-medium">
-              Logo Resort:
+            Ảnh chính
             </label>
 
             {/* Upload Button */}

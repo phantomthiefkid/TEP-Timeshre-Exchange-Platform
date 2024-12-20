@@ -132,7 +132,7 @@ const DetailRentalList = ({ isOpen, onClose, postingId, flag }) => {
   };
 
   return (
-    <div className="fixed inset-0 flex justify-end p-3 h-full">
+    <div className="fixed inset-0 flex justify-end p-3 h-full"  style={{ zIndex: 1000, ...modalStyles }}>
       <Toaster position="top-right" reverseOrder={false} />
 
       <div

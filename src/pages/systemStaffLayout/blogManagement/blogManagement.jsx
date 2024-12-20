@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
-import Bloglist from "./blogList"
+import Bloglist from "./blogList";
 import CreateBlog from './createBlog';
 
 const BlogManagement = () => {
-    // State to track which component to display
     const [activeComponent, setActiveComponent] = useState('blogList');
 
-    // Function to handle button click to switch components
     const handleButtonClick = (component) => {
         setActiveComponent(component);
     };
@@ -14,41 +12,48 @@ const BlogManagement = () => {
     return (
         <>
             <div className="w-full relative">
-                {/* Image */}
-                <img
-                    src="https://marketplace.canva.com/EAD0X2Vero8/1/0/1600w/canva-%C4%91%C6%91n-gi%E1%BA%A3n-thi%C3%A2n-nhi%C3%A2n-%E1%BA%A3nh-kh%C3%A1m-ph%C3%A1-b%C3%A0i-%C4%91%C4%83ng-twitter-N4UXG6Nb33w.jpg"
-                    alt="Featured Image"
-                    className="w-full h-96 object-cover"
-                />
-                {/* Overlay Text */}
-                <div className="absolute top-1/4 left-1/2 px-4 transform -translate-x-1/2 -translate-y-1/2 text-white text-3xl font-bold p-1 border-4 transition-all duration-300 ease-in-out hover:text-slate-200 hover:bg-[rgba(0,0,0,0.25)] bg-transparent">
-                    <div className="p-1">
-                        Travel Blog
+                <div className="py-4 p-6 space-y-4 border-l-4 border-blue-500 bg-gray-50 rounded-lg shadow-lg">
+                    <h1 className="text-4xl font-bold text-gray-700">
+                        Danh sách <span className="text-blue-600">bài blog</span> và
+                        <span className="text-blue-600"> quản lý nội dung</span>
+                    </h1>
+                    <h3 className="text-lg text-gray-500">
+                        <span className="font-semibold text-blue-600">Quản lý</span> tất cả các bài blog hiện có và
+                        <span className="font-semibold text-blue-600"> cập nhật nội dung</span> dễ dàng tại đây.
+                    </h3>
+                </div>
+            </div>
+
+            <div className="flex justify-end items-center py-4 mx-auto w-full mt-6 gap-8">
+                {activeComponent !== 'blogList' && (
+                    <div
+                    className="relative rounded-xl text-center text-lg font-semibold px-8 py-4 cursor-pointer bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 text-white shadow-lg hover:shadow-xl transition-transform transform hover:scale-105"
+                        onClick={() => handleButtonClick('blogList')}
+                    >
+                        <span className=" flex items-center justify-center gap-2">
+                            📜 Danh sách các bài blog
+                        </span>
+                        <div className="absolute inset-0 bg-gradient-to-r from-white/40 to-white/10 opacity-0 hover:opacity-100 transition-opacity"></div>
                     </div>
-                </div>
+                )}
+
+                {activeComponent !== 'createBlog' && (
+                    <div
+                        className="relative rounded-xl text-center text-lg font-semibold px-8 py-4 cursor-pointer bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 text-white shadow-lg hover:shadow-xl transition-transform transform hover:scale-105"
+                        onClick={() => handleButtonClick('createBlog')}
+                    >
+                        <span className="flex items-center justify-center gap-2">
+                            ✍️ Thêm mới một bài blog
+                        </span>
+                        <div className="absolute inset-0 bg-gradient-to-r from-white/40 to-white/10 opacity-0 hover:opacity-100 transition-opacity"></div>
+                    </div>
+                )}
             </div>
 
-            {/* Button Container */}
-            <div className='flex justify-center items-center py-8 mx-auto w-full mt-6 gap-4'>
-                <div
-                    className="text-center hover:text-slate-200 hover:bg-[rgba(0,0,0,0.25)] text-gray-500 text-xl font-bold px-4 p-2 border-2 border-gray-500 hover:border-white cursor-pointer"
-                    onClick={() => handleButtonClick('blogList')}
-                >
-                    Danh sách các bài blog
-                </div>
-                <div
-                    className="text-center hover:text-slate-200 hover:bg-[rgba(0,0,0,0.25)] text-gray-500 text-xl font-bold px-4 p-2 border-2 border-gray-500 hover:border-white cursor-pointer"
-                    onClick={() => handleButtonClick('createBlog')}
-                >
-                    Thêm mới một bài blog
-                </div>
-            </div>
-
-            <div className="py-6">
+            <div>
                 {activeComponent === 'blogList' && <Bloglist />}
                 {activeComponent === 'createBlog' && <CreateBlog create={() => setActiveComponent("blogList")} />}
             </div>
-
         </>
     );
 };
