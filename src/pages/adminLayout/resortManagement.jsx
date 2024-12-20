@@ -71,7 +71,7 @@ const resortManagement = () => {
   const handleCreateNewTimeshareCompany = async (newTimeshareCompany) => {
     try {
       if (newTimeshareCompany) {
-        // Replace this with your API call function to create a new timeshare company
+      
         let response = await createTimeshareCompany(newTimeshareCompany);
         if (response.status === 200) {
           setFlag(!flag)

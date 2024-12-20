@@ -59,41 +59,7 @@ const UserManagement = () => {
     }
   };
 
-  // const fetchAllUserForCount = async () => {
-  //   try {
-  //     let data = await getAllUserForCount();
-  //     if (data.status === 200) {
-  //       let admin =
-  //         data.data.content &&
-  //         data.data.content.filter((item) => {
-  //           return item.roleId === 4;
-  //         });
-  //       let systemstaff =
-  //         data.data.content &&
-  //         data.data.content.filter((item) => {
-  //           return item.roleId === 3;
-  //         });
-  //       let tsc =
-  //         data.data.content &&
-  //         data.data.content.filter((item) => {
-  //           return item.roleId === 2;
-  //         });
-  //       let customer =
-  //         data.data.content &&
-  //         data.data.content.filter((item) => {
-  //           return item.roleId === 1;
-  //         });
-
-  //       setCountAdmin(admin.length);
-  //       setCountCustomer(customer.length);
-  //       setCountSystemStaff(systemstaff.length);
-  //       setCountTSC(tsc.length);
-  //       setCountAll(data.data.content.length);
-  //     }
-  //   } catch (error) {
-  //     throw error;
-  //   }
-  // };
+ 
 
   const fetchUserCounts = async () => {
     try {
