@@ -390,7 +390,7 @@ const DashboardCompany = () => {
             <div className="text-right">
               <h3 className="text-lg font-semibold">Ví tiền</h3>
               <p className="text-3xl font-bold">
-                <CountUp  prefix="₫ " start={0} end={totalMoney || 25950000} duration={3} />
+                <CountUp  prefix="₫ " start={0} end={totalMoney || 0} duration={3} />
               </p>
             </div>
           </div>

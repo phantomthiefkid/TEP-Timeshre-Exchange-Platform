@@ -10,6 +10,7 @@ import { toast, Toaster } from "react-hot-toast";
 import SpinnerWaiting from "../../../components/LoadingComponent/spinnerWaiting";
 import { FaArrowRight } from "react-icons/fa6";
 import { FaPlusCircle } from "react-icons/fa";
+import FormatCurrency from "../../../components/Validate/formatCurrency";
 const CreateUnitType = ({ onUpdateData, onNext, onBack, formData }) => {
   const [selectedUnitType, setSelectedUnitType] = useState(null);
   const { resortId } = useSelector((state) => state.resortId);
@@ -107,7 +108,7 @@ const CreateUnitType = ({ onUpdateData, onNext, onBack, formData }) => {
                   Phòng tắm: {room.bathrooms}
                 </p>
                 <p className="text-lg font-medium text-blue-600 absolute bottom-2 right-2">
-                  Giá: {room.price} VND
+                  Giá: {FormatCurrency(room.price)}
                 </p>
               </div>
 

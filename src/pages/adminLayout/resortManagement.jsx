@@ -23,6 +23,7 @@ const resortManagement = () => {
   const [selectedCompany, setSelectedCompany] = useState(null);
   const [loading, setLoading] = useState(true);
   const [countPartner, setCountPartner] = useState(0);
+  const [flag, setFlag] = useState(false);
   const fetchAllTimeshareCompany = async () => {
     try {
       let data = await getAllTimeshareCompany(page, size, timeshareCompanyName);
@@ -73,8 +74,7 @@ const resortManagement = () => {
         // Replace this with your API call function to create a new timeshare company
         let response = await createTimeshareCompany(newTimeshareCompany);
         if (response.status === 200) {
-          console.log(response.data);
-
+          setFlag(!flag)
           toast.success("Tạo mới thành công", { duration: 2000 });
         } else {
           toast.error("Tạo mới thất bại", { duration: 2000 });
@@ -88,7 +88,7 @@ const resortManagement = () => {
 
   useEffect(() => {
     fetchAllTimeshareCompany();
-  }, [page, timeshareCompanyName]);
+  }, [page, timeshareCompanyName, flag]);
 
   if (loading) {
     return <SpinnerWaiting />;
@@ -96,7 +96,7 @@ const resortManagement = () => {
 
   return (
     <>
-      <div className="container mx-auto p-4 bg-white rounded-xl shadow-xl overflow-y-auto">
+      <div className="container mx-auto p-4 bg-white rounded-xl shadow-xl ">
         <Toaster position="top-right" reverseOrder={false} />
 
         <div className="py-4 p-6 space-y-2 flex items-center justify-between">
@@ -143,7 +143,7 @@ const resortManagement = () => {
           </div>
         </div>
 
-        <div className="p-6">
+        <div className="p-6 min-h-[650px] relative">
           <table className="min-w-full bg-white border border-gray-200">
             <thead>
               <tr className="w-full bg-gray-300 border-b border-gray-200">
@@ -200,7 +200,7 @@ const resortManagement = () => {
           </table>
 
           {allTimeshareCompany && allTimeshareCompany.length > 0 ? (
-            <div className="flex items-center justify-center space-x-2 mt-5 w-full">
+            <div className="flex items-center justify-center space-x-2 mt-5 w-full absolute bottom-0">
               <button
                 onClick={handlePreviousPage}
                 disabled={page === 0}

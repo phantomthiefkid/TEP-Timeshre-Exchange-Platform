@@ -7,7 +7,7 @@
   color: #3f4140; /* Màu chữ tối để dễ đọc */
   text-transform: capitalize; /* Chữ hoa hóa từng từ */
   text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); /* Đổ bóng nhẹ */
-  font-family: 'Georgia', serif; /* Sử dụng font serif để tăng tính trang trọng */
+  font-family: 'Times New Roman', serif; /* Sử dụng font serif để tăng tính trang trọng */
   text-align: center;
 }
 
@@ -19,7 +19,7 @@
   color: #3f4140;  /* Màu chữ tối để dễ đọc */
   text-transform: capitalize; /* Chữ hoa hóa từng từ */
   text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); /* Đổ bóng nhẹ */
-  font-family: 'Georgia', serif; /* Sử dụng font serif để tăng tính trang trọng */
+  font-family: 'Times New Roman', serif; /* Sử dụng font serif để tăng tính trang trọng */
   text-align: left;
 }
 
@@ -28,7 +28,7 @@
   color: #515352;  /* Màu chữ tối để dễ đọc */
   text-transform: capitalize; /* Chữ hoa hóa từng từ */
   text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); /* Đổ bóng nhẹ */
-  font-family: 'Georgia', serif; /* Sử dụng font serif để tăng tính trang trọng */
+  font-family: 'Times New Roman', serif; /* Sử dụng font serif để tăng tính trang trọng */
   text-align: left;
   margin: 5px 0px;
 }

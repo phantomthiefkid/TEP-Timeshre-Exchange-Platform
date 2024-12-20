@@ -29,8 +29,8 @@ const BlogDetail = () => {
     }
 
     return (
-        <div className='bg-slate-50 mb-20 border-2 max-w-7xl mx-auto'>
-            <div className='relative w-full'>
+        <div className='bg-slate-50 mb-20 border-2 max-w-7xl mx-auto rounded-lg'>
+            {/* <div className='relative w-full'>
                 <img
                     alt='cover photo'
                     src='https://unwinds.s3.ap-southeast-2.amazonaws.com/1731728788447_coverphotos.jpg'
@@ -41,7 +41,7 @@ const BlogDetail = () => {
                         Travel Blog
                     </div>
                 </div>
-            </div>
+            </div> */}
 
             <div className='w-3/4 mx-auto'>
                 <div className='mx-auto py-4'>

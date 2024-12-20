@@ -254,12 +254,12 @@ const FeedbackList = () => {
                   >
                     Báo cáo
                   </button>
-                  <button className="w-full text-left px-2 py-1 hover:bg-gray-100">
+                  {/* <button className="w-full text-left px-2 py-1 hover:bg-gray-100">
                     Chi tiết
                   </button>
                   <button className="w-full text-left px-2 py-1 hover:bg-gray-100">
                     Khác
-                  </button>
+                  </button> */}
                 </div>
               )}
 

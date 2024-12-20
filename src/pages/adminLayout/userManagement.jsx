@@ -184,6 +184,7 @@ const UserManagement = () => {
         let data = await createUser(newUser);
         if (data.status === 200) {
           toast.success("Tạo mới thành công", { duration: 2000 });
+          setFlag(!flag)
         } else {
           toast.error("Tạo mới thất bại", { duration: 2000 });
         }

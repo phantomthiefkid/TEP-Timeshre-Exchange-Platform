@@ -158,7 +158,7 @@ const CreateUnitTypeForUpdateModal = ({ onClose, flag }) => {
 
   return (
     <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center">
-      <Toaster position="top-center" reverseOrder={false} />
+ 
       <div className="bg-white rounded-xl shadow-lg w-full max-w-7xl">
         <div className="relative bg-blue-900 text-gray-100 py-4 px-6 rounded-t-xl shadow-lg">
           {/* Background Image/Overlay */}
