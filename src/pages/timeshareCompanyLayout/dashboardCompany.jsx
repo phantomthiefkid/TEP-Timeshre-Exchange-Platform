@@ -223,7 +223,7 @@ const DashboardCompany = () => {
           label: "Từ chối bài cho thuê",
           style: " text-red-500   p-2 text-lg rounded-2xl px-4 text-left",
         };
-      case "APPROVAL_RENTAL_POSTING":
+      case "APPROVAL_RENTALPOSTING":
         return {
           label: "Duyệt bài cho thuê",
           style: " text-green-500   p-2 text-lg rounded-2xl px-4 text-left",
@@ -390,7 +390,12 @@ const DashboardCompany = () => {
             <div className="text-right">
               <h3 className="text-lg font-semibold">Ví tiền</h3>
               <p className="text-3xl font-bold">
-                <CountUp  prefix="₫ " start={0} end={totalMoney || 0} duration={3} />
+                <CountUp
+                  prefix="₫ "
+                  start={0}
+                  end={totalMoney || 0}
+                  duration={3}
+                />
               </p>
             </div>
           </div>
@@ -471,13 +476,19 @@ const DashboardCompany = () => {
                         className="bg-white border-b hover:bg-slate-100"
                       >
                         <td className="px-2 py-4 text-center">
-                          <span
-                            className={`${
+                          <div
+                            className={`border rounded-full flex items-center p-2 border-blue-300 bg-slate-50  ${
                               formatTransactionType(transactionType).style
                             }`}
+                            style={{
+                              width: "240px",
+                              height: "50px",
+                            }}
                           >
-                            {formatTransactionType(transactionType).label}
-                          </span>
+                            <span className="text-center w-full font-semibold">
+                              {formatTransactionType(transactionType).label}
+                            </span>
+                          </div>
                         </td>
                         <td className="px-2 py-4">
                           <span className="px-2 py-4 text-left">
